@@ -1,16 +1,16 @@
 import { Splitter, SplitterPanel } from "primereact/splitter";
 
-export default function Home() {
+export default function Splitters() {
   return (
     <Splitter className="h-100">
       <SplitterPanel>
-          Telescope
+        Telescope
       </SplitterPanel>
       <SplitterPanel>
-          Wavefront Sensors
+        Wavefront Sensors
       </SplitterPanel>
       <SplitterPanel>
-          Guider
+        Guider
       </SplitterPanel>
     </Splitter>
   )

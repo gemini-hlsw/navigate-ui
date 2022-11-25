@@ -39,7 +39,16 @@ export default function Navbar() {
     <nav className="top-bar">
       <div className="left">
         <Link to="/">
-          <Button label="Navigate" icon="pi pi-map" iconPos="left" className="p-button-text nav-btn main-title" />
+          <Button icon="pi pi-map" iconPos="left" className="p-button-text nav-btn main-title" >
+            <span>N</span>
+            <span>A</span>
+            <span>V</span>
+            <span>I</span>
+            <span>G</span>
+            <span>A</span>
+            <span>T</span>
+            <span>E</span>
+          </Button>
         </Link>
         <span className="p-text" style={{marginLeft: "20px"}}>Site</span>
       </div>

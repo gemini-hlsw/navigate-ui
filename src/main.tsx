@@ -11,10 +11,9 @@ import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 
 // Components
-import App from './App'
 import AuthProvider from './components/Auth/AuthProvider';
 import Layout from './components/Layout/Layout';
-import Home from './components/Home';
+import Home from './components/Home/Home';
 import Team from './components/Team';
 import Teams from './components/Teams';
 import LeagueStandings from './components/LeagueStandings';

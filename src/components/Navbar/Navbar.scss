@@ -3,7 +3,7 @@
   display: flex;
   justify-content: space-between;
   background-color: var(--surface-0);
-  padding: 1px 5px;
+  padding: 3px 5px;
   font-family: var(--font-family);
   border-color: white;
 
@@ -31,11 +31,29 @@
   .main-title {
     text-transform: uppercase;
     letter-spacing: 0.3em;
+
+    span {
+      position: relative;
+      opacity: 0;
+      animation: move-text 0.75s forwards;
+    }
+
+    @for $i from 1 through 9 {
+      span:nth-child(#{$i}n) {
+        animation-delay: #{$i * 0.2}s;
+      }
+    }
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 700px) {
   .top-bar {
     display: none;
   }
+}
+
+@keyframes move-text {
+  0% { bottom: -0.2em; opacity: 1; }
+  50% { bottom: 0.2em; }
+  100% { bottom: 0; opacity: 1; }
 }
