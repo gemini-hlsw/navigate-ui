@@ -1,0 +1,41 @@
+.top-bar {
+  flex: 0 1 auto;
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--surface-0);
+  padding: 1px 5px;
+  font-family: var(--font-family);
+  border-color: white;
+
+  .nav-btn {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  div {
+    width: 33%;
+  }
+  
+  .left {
+    text-align: left;
+  }
+  
+  .right {
+    text-align: right;
+  }
+
+  .center {
+    text-align: center;
+  }
+
+  .main-title {
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+  }
+}
+
+@media (max-width: 480px) {
+  .top-bar {
+    display: none;
+  }
+}

@@ -1,9 +1,9 @@
-import { createContext, useState, ReactNode } from "react";
+import { createContext, useState, ReactNode, useEffect } from "react";
 import { Theme } from "../../types";
 
 interface ThemeContextType {
   theme: Theme;
-  setTheme: React.Dispatch<React.SetStateAction<Theme>>;
+  toggleTheme(): void;
 }
 
 export const ThemeContext = createContext<ThemeContextType>(null!);
@@ -11,7 +11,15 @@ export const ThemeContext = createContext<ThemeContextType>(null!);
 export default function AuthProvider ({ children }: { children: ReactNode }) {
   let [theme, setTheme] = useState<Theme>('dark');
 
-  let value = { theme, setTheme };
+  function toggleTheme() {
+    setTheme((theme === "dark") ? "light" : "dark")
+  }
+
+  let value = { theme, toggleTheme };
+
+  useEffect(() => {
+    document.body.classList.value = theme;
+  }, [theme])
 
   return (
     <ThemeContext.Provider value={value}>

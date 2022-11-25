@@ -1,0 +1,30 @@
+// Base styles
+body {
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+}
+
+a {
+  text-decoration: inherit;
+}
+
+#root {
+  padding: 0;
+  margin: 0;
+  max-width: 100%;
+  height: 100%;
+}
+
+/* stylelint-disable no-invalid-position-at-import-rule */
+.light {
+  @import 'lucuma-ui-css/light-theme';
+}
+
+.dark {
+  @import 'lucuma-ui-css/dark-theme';
+}
+
+@import 'lucuma-ui-css/lucuma-ui';
+@import 'helpers';
+/* stylelint-enable no-invalid-position-at-import-rule */

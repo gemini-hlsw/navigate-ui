@@ -1,0 +1,8 @@
+.layout {
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+  .body {
+    flex: 1 1 auto;
+  }
+}

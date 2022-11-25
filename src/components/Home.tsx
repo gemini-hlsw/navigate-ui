@@ -1,9 +1,8 @@
-import React from "react";
 import { Splitter, SplitterPanel } from "primereact/splitter";
 
 export default function Home() {
   return (
-    <Splitter className="w-100">
+    <Splitter className="h-100">
       <SplitterPanel>
           Telescope
       </SplitterPanel>
