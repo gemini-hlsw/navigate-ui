@@ -1,3 +1,4 @@
+import Telescope from "../Telescope/Telescope"
 import "./Home.scss"
 
 export default function Home() {
@@ -6,7 +7,7 @@ export default function Home() {
       <div className="panel">
         <span className="title">Telescope Setup</span>
         <div className="body">
-
+          <Telescope />
         </div>
       </div>
       <div className="panel">

@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vitejs/plugin-basic-ssl": "^0.1.2",
+    "framer-motion": "^7.6.15",
     "lucuma-ui-css": "^0.56.2-2-af44dc4-SNAPSHOT",
     "primeicons": "^6.0.1",
     "primereact": "^8.7.1",

@@ -20,7 +20,7 @@ export default function Teams() {
 
   return (
     <>
-      <ul>
+      <ul style={{color: "white"}}>
         {renderTeams}
       </ul>
       <Outlet />

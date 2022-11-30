@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import basicSsl from '@vitejs/plugin-basic-ssl'
 
 function fixCssRoot() {
   return {
@@ -19,10 +20,20 @@ fixCssRoot.postcss = true;
 export default defineConfig({
   server: {
     host: "0.0.0.0",
-    // https: true,
-    // proxy: {
-    //   '/api': 'http://localhost:5173'
-    // }
+    proxy: {
+      // '/api/seqexec/events': {
+      //   target: "http://localhost:7070",
+      //   changeOrigin: true,
+      //   ws: true
+      // },
+      '/ping': {
+        target: "http://localhost:7070"
+      },
+      '^/api/.*': {
+        target: "http://localhost:7070",
+        changeOrigin: true
+      }
+    }
   },
   css: {
     preprocessorOptions: {
@@ -31,8 +42,13 @@ export default defineConfig({
       },
     },
     postcss: {
-      plugins: [fixCssRoot]
+      plugins: [
+        fixCssRoot()
+      ]
     },
   },
-  plugins: [react()]
+  plugins: [
+    react(),
+    basicSsl()
+  ]
 })

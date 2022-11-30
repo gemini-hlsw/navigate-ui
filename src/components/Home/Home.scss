@@ -6,19 +6,18 @@
     color: var(--text-color);
     border: 1px solid var(--surface-border);
     width: 33.33333%;
-    display: inline-block;
+    display: block;
     height: 100%;
     font-family: var(--font-family);
+    float: left;
   
     .title {
       display: block;
       text-align: center;
       padding: 2px 0;
       background-color: var(--surface-c);
-    }
-  
-    .body {
-      height: 100%;
+      letter-spacing: 2px;
+      font-size: 0.9rem;
     }
   }
 }
@@ -29,7 +28,6 @@
 
     .panel {
       width: 100%;
-      display: inline-block;
       font-family: var(--font-family);
     
       .title {

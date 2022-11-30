@@ -1,31 +1,17 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { ThemeContext } from '../Theme/ThemeProvider';
 import { AuthContext } from '../Auth/AuthProvider';
+import { SplitButton } from 'primereact/splitbutton';
 import { Button } from 'primereact/button';
-import Theme from './Theme';
 import './Navbar.scss';
 
-// const PAGE_REFS = [
-//   { title: 'Home', href: '/', icon: 'house' },
-//   { title: 'App', href: '/app', icon: 'house' },
-//   { title: 'Teams', href: '/teams', icon: 'house' },
-//   { title: 'Team123', href: '/teams/123', icon: 'house' }
-// ];
-
-// let normalLinks: JSX.Element[] = []
-// PAGE_REFS.forEach((link, index) => {
-//   normalLinks.push(
-//     <li className="nav-item" key={`nav-link-${index}`}>
-//       <Link to={link.href} className="nav-link">
-//         <i className={`align-middle fs-4 bi-${link.icon}`}></i><span className="ms-1">{link.title}</span>
-//       </Link>
-//     </li>
-//   )
-// })
-
 export default function Navbar() {
+  let theme = useContext(ThemeContext);
   let auth = useContext(AuthContext);
   let navigate = useNavigate();
+
+  let themeIcon: string = (theme.theme === "dark") ? "pi pi-moon" : "pi pi-sun"
 
   function userSession() {
     if (auth.isUserLoggedIn) {
@@ -34,6 +20,19 @@ export default function Navbar() {
       navigate("/login")
     }
   }
+
+  const items = [
+    {
+      label: 'Switch theme',
+      icon: themeIcon,
+      command: theme.toggleTheme
+    },
+    {
+      label: auth.isUserLoggedIn ? "Logout" : "Login",
+      icon: auth.isUserLoggedIn ? "pi pi-sign-out" : "pi pi-sign-in",
+      command: userSession
+    }
+  ]
 
   return (
     <nav className="top-bar">
@@ -56,14 +55,13 @@ export default function Navbar() {
         <span className="p-text">Observation</span>
       </div>
       <div className="right">
-        <Theme />
-        <Button
-          label={(auth.isUserLoggedIn) ? "Logout" : "Login"}
+        <SplitButton
+          label={(auth.isUserLoggedIn) ? auth.user.displayName : "Guest"}
           icon="pi pi-user"
-          iconPos="right"
           className="p-button-text nav-btn"
-          onClick={userSession}
-        />
+          model={items}
+        >
+        </SplitButton>
       </div>
     </nav>
   );

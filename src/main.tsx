@@ -16,7 +16,6 @@ import Layout from './components/Layout/Layout';
 import Home from './components/Home/Home';
 import Team from './components/Team';
 import Teams from './components/Teams';
-import LeagueStandings from './components/LeagueStandings';
 import Login from './components/Login/Login';
 import ThemeProvider from './components/Theme/ThemeProvider';
 
@@ -33,7 +32,7 @@ root.render(
             <Route index element={<Home />} />
             <Route path="teams" element={<Teams />}>
               <Route path=":teamId" element={<Team />} />
-              <Route index element={<LeagueStandings />} />
+              {/* <Route index element={<LeagueStandings />} /> */}
             </Route>
           </Route>
           <Route path="/login" element={<Login />} />

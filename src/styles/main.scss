@@ -1,22 +1,3 @@
-// Base styles
-body {
-  padding: 0;
-  margin: 0;
-  height: 100vh;
-  background-color: var(--surface-0);
-}
-
-a {
-  text-decoration: inherit;
-}
-
-#root {
-  padding: 0;
-  margin: 0;
-  max-width: 100%;
-  height: 100%;
-}
-
 /* stylelint-disable no-invalid-position-at-import-rule */
 .light {
   @import 'lucuma-ui-css/light-theme';
@@ -29,3 +10,27 @@ a {
 @import 'lucuma-ui-css/lucuma-ui';
 @import 'helpers';
 /* stylelint-enable no-invalid-position-at-import-rule */
+
+:root {
+  --navigate-accent-color: rgba(144, 238, 144, 80%);
+}
+
+// Base styles
+body {
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+  background-color: var(--surface-0);
+  font-family: var(--font-family);
+}
+
+a {
+  text-decoration: inherit;
+}
+
+#root {
+  padding: 0;
+  margin: 0;
+  max-width: 100%;
+  height: 100%;
+}

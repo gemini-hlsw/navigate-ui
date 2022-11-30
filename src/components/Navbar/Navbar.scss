@@ -10,22 +10,28 @@
   .nav-btn {
     padding-top: 0;
     padding-bottom: 0;
+    .p-button {
+      padding: 0;
+    }
   }
 
-  div {
-    width: 33%;
+  .p-button-icon {
+    padding: 0 10px;
   }
   
   .left {
     text-align: left;
+    width: 33%;
   }
   
   .right {
     text-align: right;
+    width: 33%;
   }
 
   .center {
     text-align: center;
+    width: 33%;
   }
 
   .main-title {
