@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { AuthContext } from '../../Auth/AuthProvider';
 import { Button } from 'primereact/button';
-import { ParkStatus } from "../../types";
+import { ParkStatus } from "../../../types";
 
-export default function Telescope() {
+export default function Instrument() {
+  let auth = useContext(AuthContext);
   const [loading, setLoading] = useState<boolean>(false)
   const [mcsParkState, setMcsParkState] = useState<ParkStatus>('PENDING')
 
@@ -30,13 +32,18 @@ export default function Telescope() {
   }
 
   return (
-    <Button
-      label="mcsPark"
-      icon="pi pi-cog"
-      iconPos="right"
-      className={btnClass[mcsParkState]}
-      onClick={sendCommand}
-      loading={loading}
-    />
+    <div>
+      <div>
+        <Button
+          label="mcsPark"
+          icon="pi pi-cog"
+          iconPos="right"
+          disabled={!auth.isUserLoggedIn}
+          className={`${btnClass[mcsParkState]}`}
+          onClick={sendCommand}
+          loading={loading}
+        />
+      </div>
+    </div>
   )
 }

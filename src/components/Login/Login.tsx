@@ -20,7 +20,7 @@ export default function Login() {
   const [username, setUsername] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const [loading, setLoading] = useState<boolean>(false)
-  const toast = useRef<any>(null)
+  const toast = useRef<Toast>(null)
 
   const from = (location.state as LocationInterface)?.from?.pathname ?? "/";
 
