@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ThemeContext } from '../Theme/ThemeProvider';
 import { AuthContext } from '../Auth/AuthProvider';
@@ -49,10 +49,10 @@ export default function Navbar() {
             <span>E</span>
           </Button>
         </Link>
-        <span className="p-text" style={{marginLeft: "20px"}}>Site</span>
+        <span className="site">Site</span>
       </div>
       <div className="center">
-        <span className="p-text">Observation</span>
+        <span className="observation">Observation</span>
       </div>
       <div className="right">
         <SplitButton

@@ -1,6 +1,6 @@
 import { Button } from 'primereact/button'
 import { useContext } from 'react';
-import { AuthContext } from '../../Auth/AuthProvider';
+import { AuthContext } from '../Auth/AuthProvider';
 
 export default function Footer() {
   let auth = useContext(AuthContext);
@@ -23,6 +23,7 @@ export default function Footer() {
         className="btn-small" label="Apply Parameters"
         aria-label="Apply Parameters"
       />
+      <div></div>
       <Button
         disabled={!auth.isUserLoggedIn}
         className="btn-small p-button-danger right" label="Shutdown"

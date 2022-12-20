@@ -6,10 +6,14 @@
   padding: 3px 5px;
   font-family: var(--font-family);
   border-color: white;
+  position: fixed;
+  height: 26px;
+  width: 100vw;
 
   .nav-btn {
     padding-top: 0;
     padding-bottom: 0;
+
     .p-button {
       padding: 0;
     }
@@ -18,12 +22,17 @@
   .p-button-icon {
     padding: 0 10px;
   }
-  
+
   .left {
     text-align: left;
     width: 33%;
+
+    >.site {
+      margin-left: 20px;
+      color: var(--primary-color-text);
+    }
   }
-  
+
   .right {
     text-align: right;
     width: 33%;
@@ -32,6 +41,10 @@
   .center {
     text-align: center;
     width: 33%;
+
+    >.observation {
+      color: var(--primary-color-text);
+    }
   }
 
   .main-title {
@@ -54,12 +67,24 @@
 
 @media (max-width: 700px) {
   .top-bar {
-    display: none;
+    .main-title {
+      display: none;
+    }
   }
 }
 
 @keyframes move-text {
-  0% { bottom: -0.2em; opacity: 1; }
-  50% { bottom: 0.2em; }
-  100% { bottom: 0; opacity: 1; }
+  0% {
+    bottom: -0.2em;
+    opacity: 1;
+  }
+
+  50% {
+    bottom: 0.2em;
+  }
+
+  100% {
+    bottom: 0;
+    opacity: 1;
+  }
 }

@@ -27,20 +27,20 @@ export default function Login() {
   function handleSubmit() {
     setLoading(true)
     auth.signin(username, password)
-    .then(isLogged => {
-      if (isLogged) {
-        // Send them back to the page they tried to visit when they were
-        // redirected to the login page. Use { replace: true } so we don't create
-        // another entry in the history stack for the login page.  This means that
-        // when they get to the protected page and click the back button, they
-        // won't end up back on the login page, which is also really nice for the
-        // user experience.)
-        navigate(from, { replace: true })
-      } else {
-        toast.current?.show({severity: 'error', summary: 'Login Error', detail: 'Wrong credentials'});
-      }
-      setLoading(false)
-    })
+      .then(isLogged => {
+        if (isLogged) {
+          // Send them back to the page they tried to visit when they were
+          // redirected to the login page. Use { replace: true } so we don't create
+          // another entry in the history stack for the login page.  This means that
+          // when they get to the protected page and click the back button, they
+          // won't end up back on the login page, which is also really nice for the
+          // user experience.)
+          navigate(from, { replace: true })
+        } else {
+          toast.current?.show({ severity: 'error', summary: 'Login Error', detail: 'Wrong credentials' });
+        }
+        setLoading(false)
+      })
   }
 
   function goHome() {
@@ -58,18 +58,18 @@ export default function Login() {
         </div>
         <div className="p-inputgroup mb-10">
           <span className="p-inputgroup-addon">
-              <i className="pi pi-user"></i>
+            <i className="pi pi-user"></i>
           </span>
           <InputText placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
         </div>
         <div className="p-inputgroup mb-10">
           <span className="p-inputgroup-addon">
-              <i className="pi pi-key"></i>
+            <i className="pi pi-key"></i>
           </span>
           <Password placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </div>
-        <Button label="Cancel" icon="pi pi-times" iconPos="right" className="p-button-danger" onClick={goHome} />
-        <Button label="Submit" icon="pi pi-check" iconPos="right" onClick={handleSubmit} loading={loading} />
+        <Button label="Submit" icon="pi pi-check" iconPos="right" className="big-button" onClick={handleSubmit} loading={loading} />
+        <Button label="Cancel" icon="pi pi-times" iconPos="right" className="big-button p-button-danger" onClick={goHome} />
       </div>
     </div>
   );

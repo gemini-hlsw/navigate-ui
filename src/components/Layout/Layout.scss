@@ -2,7 +2,9 @@
   height: 100%;
   display: flex;
   flex-flow: column;
-  > .body {
+
+  >.body {
+    margin-top: 26px;
     flex: 1 1 auto;
   }
 }
