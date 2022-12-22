@@ -43,10 +43,37 @@
       animation-delay: .2s;
       animation-fill-mode: forwards;
     }
+    .login-buttons {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 4px;
+      .p-component.p-button {
+        width: 100%;
+        padding: 10px;
+        font-size: 1rem;
+        max-width: 200px;
+      }
+      .p-component.p-button:nth-child(0) {
+        float: right;
+      }
+    }
   }
 }
 
-
+@media only screen and (max-width: 1250px) {
+  .login {
+    .box {
+      min-width: initial;
+      .title {
+        width: 100%;
+      }
+      .text {
+        font-size: 1.5rem;
+        letter-spacing: 5px;
+      }
+    }
+  }
+}
 
 
 @keyframes show-underline {

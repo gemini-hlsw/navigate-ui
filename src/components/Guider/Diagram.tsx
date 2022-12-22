@@ -237,7 +237,12 @@ function Flow({  }) {
           position="bottom-right"
         />
       </ReactFlow>
-      <Button label="Change diagram" aria-label="Settings" onClick={() => {
+      <Button label="Diagram1" aria-label="Settings" onClick={() => {
+          setNodes(initialNodes);
+          setEdges(initialEdges);
+          setTimeout(() => fitView(), 100);
+        }} />
+      <Button label="Diagram2" aria-label="Settings" onClick={() => {
           setNodes(newNodes);
           setEdges(newEdges);
           setTimeout(() => fitView(), 100);

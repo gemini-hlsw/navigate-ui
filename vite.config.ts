@@ -50,5 +50,6 @@ export default defineConfig({
   plugins: [
     react(),
     basicSsl()
-  ]
+  ],
+  base: '/navigate/'
 })

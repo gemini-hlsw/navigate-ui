@@ -26,7 +26,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <ThemeProvider>
     <AuthProvider>
-      <BrowserRouter>
+      <BrowserRouter basename={import.meta.env.BASE_URL}>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />

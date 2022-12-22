@@ -68,8 +68,14 @@ export default function Login() {
           </span>
           <Password placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </div>
-        <Button label="Submit" icon="pi pi-check" iconPos="right" className="big-button" onClick={handleSubmit} loading={loading} />
-        <Button label="Cancel" icon="pi pi-times" iconPos="right" className="big-button p-button-danger" onClick={goHome} />
+        <div className="login-buttons">
+          <div className="text-right w-100">
+            <Button label="Submit" icon="pi pi-check" iconPos="right" onClick={handleSubmit} loading={loading} />
+          </div>
+          <div className="text-left w-100">
+            <Button label="Cancel" icon="pi pi-times" iconPos="right" className=" p-button-danger" onClick={goHome} />
+          </div>
+        </div>
       </div>
     </div>
   );
