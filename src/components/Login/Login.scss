@@ -38,7 +38,6 @@
       font-size: 3rem;
       text-transform: uppercase;
       letter-spacing: 20px;
-      text-indent: 20px;
       animation: show-top-text .8s;
       animation-delay: .2s;
       animation-fill-mode: forwards;
@@ -64,6 +63,7 @@
   .login {
     .box {
       min-width: initial;
+      width: 90%;
       .title {
         width: 100%;
       }
