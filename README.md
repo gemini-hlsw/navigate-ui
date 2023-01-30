@@ -42,3 +42,21 @@ Some project modules can be tested using vitest
   ```bash
   npm run test
   ```
+
+## Navigate backend
+To connect to the Navigate (previously named Engage) backend [this repository](https://github.com/gemini-hlsw/engage) should be cloned and run. The project was developed using Scala, then a proper Scala and sbt installation should be provided.
+
+In the repository directory run
+```bash
+sbt
+```
+
+In sbt compile everything using
+```bash
+compile
+```
+
+Once compiled, to run the server
+```
+engage_web_server/reStart
+```
