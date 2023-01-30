@@ -1,5 +1,9 @@
-.wavefront-sensors {
+.WavefrontSensors>.wavefront-sensors {
   font-size: 0.8rem;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
 
   .p-button {
     margin: 0;
@@ -27,7 +31,7 @@
     width: 100%;
   }
 
-  >.wfs {
+  >div>.wfs {
     width: 33.3333%;
     float: left;
     border: 1px solid var(--surface-border);

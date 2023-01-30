@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import basicSsl from '@vitejs/plugin-basic-ssl'
@@ -29,6 +30,10 @@ export default defineConfig({
       '/ping': {
         target: "http://localhost:7070"
       },
+      '^/graphqlapi/.*': {
+        target: "http://localhost:7070",
+        changeOrigin: true
+      },
       '^/api/.*': {
         target: "http://localhost:7070",
         changeOrigin: true
@@ -51,5 +56,8 @@ export default defineConfig({
     react(),
     basicSsl()
   ],
+  test: {
+    environment: "jsdom"
+  },
   base: '/navigate/'
 })

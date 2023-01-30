@@ -1,4 +1,14 @@
-export default function Title({ title, prevPanel, nextPanel, children }: { title: string, prevPanel?: any, nextPanel?: any, children?: any }) {
+export default function Title({
+  title,
+  prevPanel,
+  nextPanel,
+  children
+}: {
+  title: string,
+  prevPanel?: any,
+  nextPanel?: any,
+  children?: any
+}) {
   let prevPanelDisplay = null
   if (Boolean(prevPanel)) {
     prevPanelDisplay = (

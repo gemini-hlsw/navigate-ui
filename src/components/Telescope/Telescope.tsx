@@ -11,6 +11,64 @@ import GuidersDetails from './GuidersDetails';
 import { TargetObj } from '../../types';
 import "./Telescope.scss"
 
+import { gql, useMutation } from '@apollo/client';
+import { useEffect } from 'react';
+
+const MOUNT_MUTATION = gql`
+  mutation changeMountState($enable: Boolean!) {
+    mountFollow(enable: $enable) 
+  }
+`
+
+const PARK_MUTATION = gql`
+  mutation {
+    mountPark
+  }
+`
+
+function Mount() {
+  const [mutationFunction, {data, loading, error}] = useMutation(MOUNT_MUTATION, {
+    variables: {
+      enable: true
+    }
+  })
+
+  useEffect(() => {
+    if (Boolean(data)) {
+      console.log(data)
+    }
+  }, [data])
+
+  return <Button onClick={() => mutationFunction({variables: {enable: false}})} label="Mount Follow" />
+}
+
+function Park() {
+  const [mutationFunction, {data, loading, error}] = useMutation(PARK_MUTATION)
+
+  useEffect(() => {
+    if (Boolean(data)) {
+      console.log(data)
+    }
+  }, [data])
+
+  return <Button onClick={() => mutationFunction()} label="Mount Park" />
+}
+
+function TelescopeStatus() {
+  // const [mountFollowFunction, {data: mountFollowData, loading: mountFollowLoading, error: mountFollowError}] = useMutation(MOUNT_MUTATION, {
+  //   variables: {
+  //     enable: true
+  //   }
+  // })
+  // const [mountParkFunction, {data: mountParkData, loading: mountPark, error}] = useMutation(PARK_MUTATION)
+  return (
+    <div>
+      <Mount />
+      <Park />
+    </div>
+  )
+}
+
 export default function Telescope({ prevPanel, nextPanel }: { prevPanel: () => void, nextPanel: () => void }) {
   const TARGETS: TargetObj[] = [
     { name: "ScienceTarget", type: "radec", ra: "00:00:00", dec: "00:00:00" },
@@ -47,6 +105,7 @@ export default function Telescope({ prevPanel, nextPanel }: { prevPanel: () => v
         <GuidersDetails />
       </div>
       <Footer />
+      <TelescopeStatus />
     </div>
   )
 }

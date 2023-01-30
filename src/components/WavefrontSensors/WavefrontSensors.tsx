@@ -8,9 +8,11 @@ export default function WavefrontSensors({ prevPanel, nextPanel }: { prevPanel: 
   return (
     <div className="wavefront-sensors">
       <Title title="Wavefront Sensors" prevPanel={prevPanel} nextPanel={nextPanel}></Title>
-      <WavefrontSensor wfs={{ name: "PWFS1" }} />
-      <WavefrontSensor wfs={{ name: "PWFS2" }} />
-      <WavefrontSensor wfs={{ name: "OIWFS" }} />
+      <div>
+        <WavefrontSensor wfs={{ name: "PWFS1" }} />
+        <WavefrontSensor wfs={{ name: "PWFS2" }} />
+        <WavefrontSensor wfs={{ name: "OIWFS" }} />
+      </div>
       <AcquisitionCamera ac={{ name: "AC" }} />
       <Logs />
     </div>
