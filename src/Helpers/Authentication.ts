@@ -9,6 +9,16 @@ export const Authentication = {
     }
   },
 
+  canEdit() {
+    let user = this.getUser()
+    if (!Boolean(user)) {
+      return false
+    } else {
+      // Check if user can edit
+      return true
+    }
+  },
+
   async signin(username: string, password: string) {
     try {
       const res = await fetch(`/api/engage/login`, {

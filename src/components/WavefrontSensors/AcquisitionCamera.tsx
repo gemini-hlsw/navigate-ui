@@ -5,7 +5,7 @@ import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { AcObj } from '../../types';
 
-export default function AcquisitionCamera({ ac }: { ac: AcObj }) {
+export default function AcquisitionCamera({ canEdit, ac }: { canEdit: boolean, ac: AcObj }) {
   return (
     <div className="acquisition-camera">
       <div className="left">
@@ -13,14 +13,14 @@ export default function AcquisitionCamera({ ac }: { ac: AcObj }) {
         <img src={imgUrl} alt="wfs" />
         <div className="controls">
           <span style={{ textAlign: "center", alignSelf: "center", gridArea: "g1" }}>Exp</span>
-          <Dropdown style={{ gridArea: "g2" }} value={2} options={[{ label: 'a', value: 'a' }]} />
+          <Dropdown disabled={!canEdit} style={{ gridArea: "g2" }} value={2} options={[{ label: 'a', value: 'a' }]} />
           <span style={{ textAlign: "center", alignSelf: "center", gridArea: "g3" }}>Save</span>
-          <InputSwitch style={{ gridArea: "g4" }} checked={true} />
-          <Button style={{ gridArea: "g5" }} icon="pi pi-stop" aria-label="Stop" tooltip="Stop" />
-          <Button style={{ gridArea: "g6" }} icon="pi pi-camera" aria-label="Take Sky" tooltip="Take Sky" />
+          <InputSwitch disabled={!canEdit} style={{ gridArea: "g4" }} checked={true} />
+          <Button disabled={!canEdit} style={{ gridArea: "g5" }} icon="pi pi-stop" aria-label="Stop" tooltip="Stop" />
+          <Button disabled={!canEdit} style={{ gridArea: "g6" }} icon="pi pi-camera" aria-label="Take Sky" tooltip="Take Sky" />
         </div>
       </div>
-      <MainControls />
+      <MainControls canEdit={canEdit} />
     </div>
   )
 }

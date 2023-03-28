@@ -19,14 +19,28 @@ fixCssRoot.postcss = true;
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  define: {
+    'process.env': process.env
+  },
   server: {
     host: "0.0.0.0",
     proxy: {
-      // '/api/seqexec/events': {
-      //   target: "http://localhost:7070",
-      //   changeOrigin: true,
-      //   ws: true
-      // },
+      '/ping': {
+        target: "http://localhost:7070"
+      },
+      '^/graphqlapi/.*': {
+        target: "http://localhost:7070",
+        changeOrigin: true
+      },
+      '^/api/.*': {
+        target: "http://localhost:7070",
+        changeOrigin: true
+      }
+    }
+  },
+  preview: {
+    host: "0.0.0.0",
+    proxy: {
       '/ping': {
         target: "http://localhost:7070"
       },
@@ -59,5 +73,5 @@ export default defineConfig({
   test: {
     environment: "jsdom"
   },
-  base: '/navigate/'
+  base: '/'
 })

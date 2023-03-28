@@ -1,0 +1,31 @@
+.target-table {
+  .p-column-filter-row .p-column-filter-clear-button {
+    display: none;
+  }
+
+  .p-checkbox.p-component {
+    margin-right: 0.2rem;
+  }
+
+  .p-datatable .p-datatable-header {
+    padding: 3px 0;
+  }
+
+  .p-column-filter-menu-button {
+    height: 1rem;
+    margin-left: 0 !important;
+  }
+
+  .header-table {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    & > span:first-child {
+      padding: 5px 0;
+    }
+    
+    & > span > input {
+      width: 100%;
+    }
+  }
+}

@@ -4,7 +4,7 @@ import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 
-export default function MainControls() {
+export default function MainControls({ canEdit }: { canEdit: boolean }) {
   const [slider, setSlider] = useState<any>(10)
   const upKey = useRef<any>(null)
   const downKey = useRef<any>(null)
@@ -56,18 +56,18 @@ export default function MainControls() {
     <div className="main-controls">
       <div className="top">
         <span style={{ alignSelf: "center", gridArea: "g11" }}>Handset</span>
-        <Dropdown style={{ gridArea: "g12" }} value={2} options={[{ label: 'a', value: 'a' }]} />
+        <Dropdown disabled={!canEdit} style={{ gridArea: "g12" }} value={2} options={[{ label: 'a', value: 'a' }]} />
         <span style={{ alignSelf: "center", gridArea: "g21" }}>Probe</span>
-        <Dropdown style={{ gridArea: "g22" }} value={2} options={[{ label: 'a', value: 'a' }]} />
+        <Dropdown disabled={!canEdit} style={{ gridArea: "g22" }} value={2} options={[{ label: 'a', value: 'a' }]} />
         <span style={{ alignSelf: "center", gridArea: "g31" }}>Coords</span>
-        <Dropdown style={{ gridArea: "g32" }} value={2} options={[{ label: 'a', value: 'a' }]} />
+        <Dropdown disabled={!canEdit} style={{ gridArea: "g32" }} value={2} options={[{ label: 'a', value: 'a' }]} />
       </div>
       <div className="arrow">
-        <Button onClick={handleClick} ref={upKey} style={{ gridArea: "gu" }} icon="pi pi-caret-up" aria-label="Bookmark" />
-        <Button onClick={handleClick} ref={leftKey} style={{ gridArea: "gl" }} icon="pi pi-caret-left" aria-label="Bookmark" />
-        <InputNumber style={{ gridArea: "g23" }} value={slider} onValueChange={(e) => setSlider((e.value) ? e.value : 0)} mode="decimal" />
-        <Button onClick={handleClick} ref={rightKey} style={{ gridArea: "gr" }} icon="pi pi-caret-right" aria-label="Bookmark" />
-        <Button onClick={handleClick} ref={downKey} style={{ gridArea: "gd" }} icon="pi pi-caret-down" aria-label="Bookmark" />
+        <Button disabled={!canEdit} onClick={handleClick} ref={upKey} style={{ gridArea: "gu" }} icon="pi pi-caret-up" aria-label="Bookmark" />
+        <Button disabled={!canEdit} onClick={handleClick} ref={leftKey} style={{ gridArea: "gl" }} icon="pi pi-caret-left" aria-label="Bookmark" />
+        <InputNumber disabled={!canEdit} style={{ gridArea: "g23" }} value={slider} onValueChange={(e) => setSlider((e.value) ? e.value : 0)} mode="decimal" />
+        <Button disabled={!canEdit} onClick={handleClick} ref={rightKey} style={{ gridArea: "gr" }} icon="pi pi-caret-right" aria-label="Bookmark" />
+        <Button disabled={!canEdit} onClick={handleClick} ref={downKey} style={{ gridArea: "gd" }} icon="pi pi-caret-down" aria-label="Bookmark" />
       </div>
       <div className="bottom">
         <span style={{ alignSelf: "center", gridArea: "g11" }}>Offset</span>
@@ -77,12 +77,12 @@ export default function MainControls() {
         <span style={{ textAlign: "center", alignSelf: "center", gridArea: "g22" }}>1.3</span>
         <span style={{ textAlign: "center", alignSelf: "center", gridArea: "g23" }}>3.4</span>
         <span style={{ alignSelf: "center", gridArea: "g31" }}>New</span>
-        <InputNumber style={{ gridArea: "g32" }} value={slider} onValueChange={(e) => setSlider((e.value) ? e.value : 0)} mode="decimal" minFractionDigits={2} />
-        <InputNumber style={{ gridArea: "g33" }} value={slider} onValueChange={(e) => setSlider((e.value) ? e.value : 0)} mode="decimal" minFractionDigits={2} />
-        <Button style={{ gridArea: "g41" }} label="Apply" />
-        <Button style={{ gridArea: "g42" }} label="Reset" />
-        <Button style={{ gridArea: "g43" }} label="Absorb" />
-        <Button style={{ gridArea: "g5" }} label="Autoadjust" />
+        <InputNumber disabled={!canEdit} style={{ gridArea: "g32" }} value={slider} onValueChange={(e) => setSlider((e.value) ? e.value : 0)} mode="decimal" minFractionDigits={2} />
+        <InputNumber disabled={!canEdit} style={{ gridArea: "g33" }} value={slider} onValueChange={(e) => setSlider((e.value) ? e.value : 0)} mode="decimal" minFractionDigits={2} />
+        <Button disabled={!canEdit} style={{ gridArea: "g41" }} label="Apply" />
+        <Button disabled={!canEdit} style={{ gridArea: "g42" }} label="Reset" />
+        <Button disabled={!canEdit} style={{ gridArea: "g43" }} label="Absorb" />
+        <Button disabled={!canEdit} style={{ gridArea: "g5" }} label="Autoadjust" />
       </div>
     </div>
   )

@@ -115,6 +115,10 @@ button.p-component.p-button {
   }
 }
 
+.dark .p-dialog .p-dialog-header, .light .p-dialog .p-dialog-header {
+  padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+}
+
 .p-overlaypanel {
   .p-overlaypanel-content {
     padding: 4px !important;
@@ -127,5 +131,11 @@ button.p-component.p-button {
     .p-divider {
       margin: 4px 0;
     }
+  }
+}
+
+.modal-footer {
+  button.p-component.p-button {
+    padding: 5px 10px;
   }
 }

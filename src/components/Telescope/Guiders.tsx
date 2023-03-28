@@ -1,12 +1,12 @@
 import { Button } from "primereact/button"
 import Guider from "./Guider"
 
-export default function Guiders({ children }: { children: any }) {
+export default function Guiders({ canEdit, children }: { canEdit: boolean, children: any }) {
   let guiders: JSX.Element[] = []
 
   children.map((child: any, index: number) => {
     guiders.push(
-      <Guider key={`guider-${index}`}>{child}</Guider>
+      <Guider canEdit={canEdit} key={`guider-${index}`}>{child}</Guider>
     )
   })
 
@@ -14,7 +14,7 @@ export default function Guiders({ children }: { children: any }) {
     <>
       {guiders}
       <div className="pl-5 pr-5">
-        <Button className="w-100" label="Point to guide target" />
+        <Button disabled={!canEdit} className="w-100" label="Point to guide target" />
       </div>
     </>
   )

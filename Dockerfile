@@ -1,12 +1,12 @@
-FROM node:lts-alpine
+FROM node:18
 
-RUN mkdir /opt/web || echo "Web directory already created"
-WORKDIR /opt/web
+# Create app directory
+WORKDIR /usr/src/app
 
-COPY package*.json .
-RUN yarn
+# Install app dependencies
+COPY package.json yarn.lock ./
+RUN yarn install
 
 COPY . .
 RUN yarn build
-
 CMD ["yarn", "preview"]

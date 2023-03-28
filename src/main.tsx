@@ -1,9 +1,9 @@
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom/client'
 import {
   BrowserRouter,
   Routes,
   Route,
-} from 'react-router-dom';
+} from 'react-router-dom'
 
 // Apollo
 import {
@@ -12,21 +12,19 @@ import {
   ApolloProvider,
   ApolloLink,
   HttpLink
-} from '@apollo/client';
+} from '@apollo/client'
 
 // Styles
-import './styles/main.scss';
-import 'primereact/resources/primereact.min.css';
-import 'primeicons/primeicons.css';
+import './styles/main.scss'
+import 'primereact/resources/primereact.min.css'
+import 'primeicons/primeicons.css'
 
 // Components
-import AuthProvider from './components/Auth/AuthProvider';
-import Layout from './components/Layout/Layout';
-import Home from './components/Home/Home';
-import Team from './components/Team';
-import Teams from './components/Teams';
-import Login from './components/Login/Login';
-import ThemeProvider from './components/Theme/ThemeProvider';
+import AuthProvider from './components/Auth/AuthProvider'
+import Layout from './components/Layout/Layout'
+import Home from './components/Home/Home'
+import Login from './components/Login/Login'
+import ThemeProvider from './components/Theme/ThemeProvider'
 
 const engageLink = new HttpLink({
   uri: '/graphqlapi/engage'
@@ -36,18 +34,29 @@ const rickAndMortyLink = new HttpLink({
   uri: 'https://rickandmortyapi.com/graphql'
 })
 
+const odbLink = new HttpLink({
+  uri: 'https://lucuma-postgres-odb-staging.herokuapp.com/odb',
+  headers: {
+    authorization: `Bearer ${process.env.ODB_TOKEN}`
+  }
+})
+
 const client = new ApolloClient({
   link: ApolloLink.split(
-    operation => operation.getContext().clientName === "rickAndMorty",
-    rickAndMortyLink,
-    engageLink
+    operation => operation.getContext().clientName === "odb",
+    odbLink,
+    ApolloLink.split(
+      operation => operation.getContext().clientName === "rickAndMorty",
+      rickAndMortyLink,
+      engageLink
+    )
   ),
   cache: new InMemoryCache(),
-});
+})
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
-);
+)
 
 root.render(
   <ThemeProvider>
@@ -57,10 +66,6 @@ root.render(
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
-              <Route path="teams" element={<Teams />}>
-                <Route path=":teamId" element={<Team />} />
-                {/* <Route index element={<LeagueStandings />} /> */}
-              </Route>
             </Route>
             <Route path="/login" element={<Login />} />
           </Routes>
@@ -68,4 +73,4 @@ root.render(
       </ApolloProvider>
     </AuthProvider>
   </ThemeProvider>
-);
+)
