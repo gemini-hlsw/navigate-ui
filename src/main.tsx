@@ -27,7 +27,7 @@ import Login from './components/Login/Login'
 import ThemeProvider from './components/Theme/ThemeProvider'
 
 const engageLink = new HttpLink({
-  uri: '/graphqlapi/engage'
+  uri: '/graphqlapi/navigate'
 })
 
 const rickAndMortyLink = new HttpLink({

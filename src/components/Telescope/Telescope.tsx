@@ -7,13 +7,13 @@ import { OdbImport } from './OdbImport';
 import Target from "./Target"
 import Guiders from "./Guiders"
 import Instrument from "./Instrument"
-import Footer from "./Footer"
 import Title from '../Title';
 import TitleDropdown from '../TitleDropdown';
 import TargetDetails from './TargetDetails';
 import GuidersDetails from './GuidersDetails';
 import { TargetObj } from '../../types';
 import "./Telescope.scss"
+import Footer from './Footer';
 
 export default function Telescope({ prevPanel, nextPanel }: { prevPanel: () => void, nextPanel: () => void }) {
   const { canEdit } = useContext(AuthContext)
@@ -57,7 +57,7 @@ export default function Telescope({ prevPanel, nextPanel }: { prevPanel: () => v
         <Title title="Guiders" />
         <GuidersDetails />
       </div>
-      <Footer canEdit={canEdit} />
+      <Footer baseTarget={baseTarget} canEdit={canEdit} />
       <OdbImport
         isOdbModalVisible={isOdbModalVisible}
         setIsOdbModalVisible={setIsOdbModalVisible}

@@ -1,6 +1,10 @@
 import { Button } from 'primereact/button'
+import { Slew } from './GqlButtons'
+import { TargetObj } from '../../types'
 
-export default function Footer({ canEdit }: { canEdit: boolean }) {
+
+export default function Footer({ baseTarget, canEdit }: { baseTarget: TargetObj | undefined, canEdit: boolean }) {
+  console.log(baseTarget)
   return (
     <div className="footer">
       <Button
@@ -9,10 +13,33 @@ export default function Footer({ canEdit }: { canEdit: boolean }) {
         className="p-button-rounded p-button-text btn-small"
         aria-label="Settings"
       />
-      <Button
-        disabled={!canEdit}
-        className="btn-small" label="Slew Telescope"
-        aria-label="Slew Telescope"
+      <Slew slewVars={{
+          "zeroChopThrow": true,
+          "zeroSourceOffset": true,
+          "zeroSourceDiffTrack": true,
+          "zeroMountOffset": true,
+          "zeroMountDiffTrack": true,
+          "shortcircuitTargetFilter": true,
+          "shortcircuitMountFilter": true,
+          "resetPointing": true,
+          "stopGuide": true,
+          "zeroGuideOffset": true,
+          "zeroInstrumentOffset": true,
+          "autoparkPwfs1": false,
+          "autoparkPwfs2": false,
+          "autoparkOiwfs": false,
+          "autoparkGems": false,
+          "autoparkAowfs": false,
+          "id": baseTarget?.id,
+          "name": baseTarget?.name,
+          "ra": baseTarget?.sidereal?.ra?.hms,
+          "dec": baseTarget?.sidereal?.dec?.dms,
+          "epoch": baseTarget?.epoch,
+          "wavelength": "400"
+        }}
+        disabled={!canEdit || !Boolean(baseTarget?.id)}
+        className="btn-small"
+        label="Slew Telescope"
       />
       <Button
         disabled={!canEdit}

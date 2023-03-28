@@ -10,6 +10,9 @@ export const Authentication = {
   },
 
   canEdit() {
+    // A proper authentication should be made!!
+    // Remove next line after telescope tests
+    // return true
     let user = this.getUser()
     if (!Boolean(user)) {
       return false
@@ -21,7 +24,7 @@ export const Authentication = {
 
   async signin(username: string, password: string) {
     try {
-      const res = await fetch(`/api/engage/login`, {
+      const res = await fetch(`/api/navigate/login`, {
         method: 'POST',
         body: JSON.stringify({username: username, password: password}),
         headers: {
@@ -48,7 +51,7 @@ export const Authentication = {
 
   async signout() {
     try {
-      const res = await fetch(`/api/engage/logout`, {
+      const res = await fetch(`/api/navigate/logout`, {
         method: 'POST',
         headers: {
           'Accept': '*/*',
