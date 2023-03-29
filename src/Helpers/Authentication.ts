@@ -12,7 +12,7 @@ export const Authentication = {
   canEdit() {
     // A proper authentication should be made!!
     // Remove next line after telescope tests
-    // return true
+    return true
     let user = this.getUser()
     if (!Boolean(user)) {
       return false

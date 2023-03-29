@@ -44,8 +44,8 @@ const GET_OBSERVATIONS = gql`
             id
             existence
             name
-            epoch
             sidereal {
+              epoch
               ra {
                 hms
                 degrees

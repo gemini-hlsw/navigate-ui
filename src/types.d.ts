@@ -15,8 +15,8 @@ export type TargetObj = {
       dms: string
       degrees: number
     }
+    epoch?: string
   },
-  epoch?: string
   navigateTarget?: NavigateTargetType
   az?: string
   az_wp1?: number

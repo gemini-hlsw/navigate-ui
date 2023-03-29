@@ -4,7 +4,6 @@ import { TargetObj } from '../../types'
 
 
 export default function Footer({ baseTarget, canEdit }: { baseTarget: TargetObj | undefined, canEdit: boolean }) {
-  console.log(baseTarget)
   return (
     <div className="footer">
       <Button
@@ -34,7 +33,7 @@ export default function Footer({ baseTarget, canEdit }: { baseTarget: TargetObj 
           "name": baseTarget?.name,
           "ra": baseTarget?.sidereal?.ra?.hms,
           "dec": baseTarget?.sidereal?.dec?.dms,
-          "epoch": baseTarget?.epoch,
+          "epoch": baseTarget?.sidereal?.epoch,
           "wavelength": "400"
         }}
         disabled={!canEdit || !Boolean(baseTarget?.id)}
