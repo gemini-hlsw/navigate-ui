@@ -12,7 +12,9 @@ const btnClass = {
 
 const MOUNT_MUTATION = gql`
   mutation changeMountState($enable: Boolean!) {
-    mountFollow(enable: $enable) 
+    mountFollow(enable: $enable) {
+      result
+    }
   }
 `
 
@@ -102,7 +104,7 @@ export function MCS({...props}) {
   return (
     <Button
       className={`${btnClass[state]}`}
-      onClick={() => mutationFunction({variables: {enable: false}})}
+      onClick={() => mutationFunction({variables: { enable: true }})}
       loading={loading}
       {...props}
     />
