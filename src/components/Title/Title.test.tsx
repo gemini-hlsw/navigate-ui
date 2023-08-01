@@ -1,6 +1,6 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest"
 import { render, fireEvent, cleanup, screen } from "@testing-library/react"
-import Title from "./Title"
+import { Title } from "./Title"
 
 describe('Title test with args', () => {
   let title = "My title"

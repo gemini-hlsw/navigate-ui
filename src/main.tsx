@@ -26,8 +26,12 @@ import Home from './components/Home/Home'
 import Login from './components/Login/Login'
 import ThemeProvider from './components/Theme/ThemeProvider'
 
-const engageLink = new HttpLink({
+const navigateCommandServer = new HttpLink({
   uri: '/graphqlapi/navigate'
+})
+
+const navigateConfigs = new HttpLink({
+  uri: 'http://localhost:4000/'
 })
 
 const rickAndMortyLink = new HttpLink({
@@ -48,7 +52,11 @@ const client = new ApolloClient({
     ApolloLink.split(
       operation => operation.getContext().clientName === "rickAndMorty",
       rickAndMortyLink,
-      engageLink
+      ApolloLink.split(
+        operation => operation.getContext().clientName === "navigateConfigs",
+        navigateConfigs,
+        navigateCommandServer
+      )
     )
   ),
   cache: new InMemoryCache(),

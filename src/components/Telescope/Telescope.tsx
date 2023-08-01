@@ -1,69 +1,41 @@
-import { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../Auth/AuthProvider';
-import { Button } from 'primereact/button';
-import { Divider } from 'primereact/divider';
-import { Dialog } from 'primereact/dialog';
-import { OdbImport } from './OdbImport';
-import Target from "./Target"
-import Guiders from "./Guiders"
-import Instrument from "./Instrument"
-import Title from '../Title';
-import TitleDropdown from '../TitleDropdown';
-import TargetDetails from './TargetDetails';
-import GuidersDetails from './GuidersDetails';
-import { TargetObj } from '../../types';
+import { OdbImport } from './Modals/OdbImport'
+import { ScienceTarget } from "./Targets/ScienceTarget"
+import { GuideTarget } from "./Targets/GuideTarget"
+// import { Guiders } from "./Targets/Guiders"
+import { Guiders } from "./Targets/Guiders/Guiders"
+import { Systems } from "./Systems/Systems"
+import { TargetDetails } from './Details/TargetDetails'
+import { GuidersDetails } from './Details/GuidersDetails'
+import { FixedTargetImport } from './Modals/FixedTargetImport'
+import { Footer } from './Footer/Footer'
+import { TelescopeProvider } from './TelescopeProvider'
+import { TelescopeTitle } from '../Title/TelescopeTitle'
+import { Title } from '../Title/Title'
 import "./Telescope.scss"
-import Footer from './Footer';
+import { SlewFlags } from './Modals/SlewFlags'
 
-export default function Telescope({ prevPanel, nextPanel }: { prevPanel: () => void, nextPanel: () => void }) {
-  const { canEdit } = useContext(AuthContext)
-  const [isOdbModalVisible, setIsOdbModalVisible] = useState<boolean>(false)
-  const [targetList, setTargetList] = useState<TargetObj[] | []>([])
-  const [baseTarget, setBaseTarget] = useState<TargetObj | undefined>(undefined)
 
-  useEffect(() => {
-    setTargetList([{id:"test", name:"Zenith", az: "147:00:00.00", el: "89:00:00.00", navigateTarget: "fixed"}])
-  }, [])
-
-  function setImportedTarget(target: TargetObj) {
-    setTargetList([...targetList.filter(t => t.navigateTarget === "fixed"), {...target, navigateTarget: "imported"}])
-  }
-
+export function Telescope({ prevPanel, nextPanel }: { prevPanel: () => void, nextPanel: () => void }) {
   return (
-    <div className="telescope">
-      <Title title="Telescope Setup" prevPanel={prevPanel} nextPanel={nextPanel}>
-        <TitleDropdown>
-          <Button disabled={!canEdit} className="p-button-text" label="Import from ODB" onClick={() => setIsOdbModalVisible(true)} />
-          <Button disabled={!canEdit} className="p-button-text" label="Load" />
-          <Button disabled={!canEdit} className="p-button-text" label="Save" />
-          <Button disabled={!canEdit} className="p-button-text" label="Save as" />
-          <Divider />
-          <Button disabled={!canEdit} className="p-button-text" label="Edit targets" />
-        </TitleDropdown>
-      </Title>
-      <Target type="base" targets={targetList} setBaseTarget={setBaseTarget} />
-      <div className="guiders">
-        <Title title="Guiders" />
-        <Guiders canEdit={canEdit}>
-          <Target type="PWFS1" targets={[]} />
-          <Target type="PWFS2" targets={[]} />
-          {/* <Target type="OIWFS" targets={TARGETS} /> */}
-        </Guiders>
-      </div>
-      <Instrument canEdit={canEdit} />
-      <div>
-        <Title title={`Base target ${baseTarget?.name}`} />
-        <TargetDetails target={baseTarget} />
+    <TelescopeProvider>
+      <div className="telescope">
+        <TelescopeTitle prevPanel={prevPanel} nextPanel={nextPanel} />
+        <ScienceTarget type="base" />
+        <Guiders />
+        {/* <Guiders>
+          <GuideTarget type="PWFS1" />
+          <GuideTarget type="PWFS2" />
+          <GuideTarget type={'OIWFS'} />
+        </Guiders> */}
+        <Systems />
+        <TargetDetails />
         <Title title="Guiders" />
         <GuidersDetails />
+        <Footer />
+        <OdbImport />
+        <FixedTargetImport />
+        <SlewFlags />
       </div>
-      <Footer baseTarget={baseTarget} canEdit={canEdit} />
-      <OdbImport
-        isOdbModalVisible={isOdbModalVisible}
-        setIsOdbModalVisible={setIsOdbModalVisible}
-        canEdit={canEdit}
-        setImportedTarget={setImportedTarget}
-      />
-    </div>
+    </TelescopeProvider>
   )
 }

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react"
-import Telescope from "../Telescope/Telescope"
-import WavefrontSensors from "../WavefrontSensors/WavefrontSensors"
-import Guider from "../Guider/Guider"
+import React, { useState } from "react"
+import { Telescope } from "../Telescope/Telescope"
+import { WavefrontSensors } from "../WavefrontSensors/WavefrontSensors"
+import { Guider } from "../Guider/Guider"
 import { Panels } from "../../types"
 import "./Home.scss"
 

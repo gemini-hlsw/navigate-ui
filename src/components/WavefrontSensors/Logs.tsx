@@ -1,6 +1,6 @@
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import Title from '../Title';
+import { Title } from '../Title/Title';
 
 export default function Logs() {
   const LOG_MESSAGES = [

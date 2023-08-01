@@ -8,7 +8,7 @@ interface ThemeContextType {
 
 export const ThemeContext = createContext<ThemeContextType>(null!);
 
-export default function AuthProvider ({ children }: { children: ReactNode }) {
+export default function ThemeProvider({ children }: { children: ReactNode }) {
   let [theme, setTheme] = useState<Theme>('dark');
 
   function toggleTheme() {
@@ -23,7 +23,7 @@ export default function AuthProvider ({ children }: { children: ReactNode }) {
 
   return (
     <ThemeContext.Provider value={value}>
-      { children }
+      {children}
     </ThemeContext.Provider>
   );
 }

@@ -1,15 +1,14 @@
 
-import { useState} from 'react'
+import { useState } from 'react'
 import { FilterMatchMode } from 'primereact/api'
 import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
 import { InputText } from 'primereact/inputtext'
 import "./TargetTable.scss"
-import { TargetObj } from '../../types'
 
-interface ObservationTable {
+interface ParamsInterface {
   loading: boolean
-  observations_list: { observations: { matches: []}}
+  observations_list: { matches: [] }
   selectedObservation: {
     title: string
     targetEnvironment: {
@@ -31,7 +30,7 @@ interface ObservationTable {
 }
 
 
-export default function ObservationTable({ loading, observations_list, selectedObservation, setSelectedObservation }: ObservationTable) {
+export function ObservationTable({ loading, observations_list, selectedObservation, setSelectedObservation }: ParamsInterface) {
   const [filters, setFilters] = useState({
     'id': { value: '', matchMode: FilterMatchMode.STARTS_WITH },
     'title': { value: '', matchMode: FilterMatchMode.STARTS_WITH },
@@ -42,7 +41,7 @@ export default function ObservationTable({ loading, observations_list, selectedO
   })
   const [globalFilterValue, setGlobalFilterValue] = useState('')
 
-  function onGlobalFilterChange (e: React.ChangeEvent<HTMLInputElement>) {
+  function onGlobalFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value
     let _filters = { ...filters }
     _filters['global'].value = value
@@ -67,14 +66,14 @@ export default function ObservationTable({ loading, observations_list, selectedO
 
   const header = renderHeader()
 
-  if (!Boolean(observations_list) || !("observations" in observations_list)) {
+  if (!Boolean(observations_list)) {
     return null
   }
 
   return (
     <div className="target-table">
       <DataTable
-        value={observations_list.observations.matches}
+        value={observations_list.matches}
         paginator
         selectionMode="single"
         onSelectionChange={e => setSelectedObservation(e.value)}

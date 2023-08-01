@@ -1,32 +1,45 @@
 
-import { useState} from 'react'
+import { useState } from 'react'
 import { FilterMatchMode } from 'primereact/api'
 import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
 import { InputText } from 'primereact/inputtext'
 import "./TargetTable.scss"
-import { TargetObj } from '../../types'
-import { Target } from 'framer-motion'
 
-interface TargetTable {
+interface ParamsInterface {
   loading: boolean
-  target_list: { targets: { matches: []}}
-  selectedTargets: Array<TargetObj> | []
-  setSelectedTargets: (_: []) => void
+  targets_list: []
+  selectedTarget: {
+    id: string
+    name: string
+    raAz: string
+    decEl: string
+    epoch: string
+    type: string
+  }
+  setSelectedTarget: (_: {
+    id: string
+    name: string
+    raAz: string
+    decEl: string
+    epoch: string
+    type: string
+  }) => void
 }
 
 
-export default function TargetTable({ loading, target_list, selectedTargets, setSelectedTargets }: TargetTable) {
+export function FixedTargetTable({ loading, targets_list, selectedTarget, setSelectedTarget }: ParamsInterface) {
   const [filters, setFilters] = useState({
     'id': { value: '', matchMode: FilterMatchMode.STARTS_WITH },
     'name': { value: '', matchMode: FilterMatchMode.STARTS_WITH },
-    'sidereal.ra.hms': { value: '', matchMode: FilterMatchMode.STARTS_WITH },
-    'sidereal.dec.dms': { value: '', matchMode: FilterMatchMode.STARTS_WITH },
+    'raAz': { value: '', matchMode: FilterMatchMode.STARTS_WITH },
+    'decEl': { value: '', matchMode: FilterMatchMode.STARTS_WITH },
+    'type': { value: '', matchMode: FilterMatchMode.STARTS_WITH },
     'global': { value: '', matchMode: FilterMatchMode.CONTAINS }
   })
   const [globalFilterValue, setGlobalFilterValue] = useState('')
 
-  function onGlobalFilterChange (e: React.ChangeEvent<HTMLInputElement>) {
+  function onGlobalFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value
     let _filters = { ...filters }
     _filters['global'].value = value
@@ -39,7 +52,7 @@ export default function TargetTable({ loading, target_list, selectedTargets, set
     return (
       <div className="header-table">
         <span>
-          {`Selected targets: ${selectedTargets.length}`}
+          {`Selected Target: ${selectedTarget.name}`}
         </span>
         <span className="p-input-icon-left">
           <i className="pi pi-search" />
@@ -51,17 +64,17 @@ export default function TargetTable({ loading, target_list, selectedTargets, set
 
   const header = renderHeader()
 
-  if (!Boolean(target_list) || !("targets" in target_list)) {
+  if (!Boolean(targets_list)) {
     return null
   }
 
   return (
     <div className="target-table">
       <DataTable
-        value={target_list.targets.matches}
+        value={targets_list}
         paginator
-        selection={selectedTargets}
-        onSelectionChange={e => setSelectedTargets(e.value)}
+        selectionMode="single"
+        onSelectionChange={e => setSelectedTarget(e.value)}
         className="p-datatable-customers"
         rows={10}
         dataKey="id"
@@ -69,15 +82,15 @@ export default function TargetTable({ loading, target_list, selectedTargets, set
         filterDisplay="row"
         loading={loading}
         responsiveLayout="scroll"
-        globalFilterFields={['id', 'name', 'ra.hms', 'sidereal.dec.dms']}
+        globalFilterFields={['id', 'name', 'raAz', 'decEl', 'type']}
         header={header}
         emptyMessage="No targets found."
       >
-        <Column selectionMode="multiple" headerStyle={{width: '3em'}}></Column>
         <Column field="id" header="ID" filter filterPlaceholder="Search ID" style={{ minWidth: '12rem' }} />
-        <Column field="name" header="Name" filter filterPlaceholder="Search name" style={{ minWidth: '12rem' }} />
-        <Column field="sidereal.ra.hms" header="RA" style={{ minWidth: '12rem' }} filter filterPlaceholder="Filter RA" />
-        <Column field="sidereal.dec.dms" header="Dec" style={{ minWidth: '12rem' }} filter filterPlaceholder="Filter Dec" />
+        <Column field="name" header="Name" filter filterPlaceholder="Search Name" style={{ minWidth: '12rem' }} />
+        <Column field="raAz" header="RA or Az" style={{ minWidth: '12rem' }} filter filterPlaceholder="Filter RA or Az" />
+        <Column field="decEl" header="Dec or El" style={{ minWidth: '12rem' }} filter filterPlaceholder="Filter Dec or El" />
+        <Column field="type" header="Target Type" style={{ minWidth: '12rem' }} filter filterPlaceholder="Filter Target Type" />
       </DataTable>
     </div>
   )

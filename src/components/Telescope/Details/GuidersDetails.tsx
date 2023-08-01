@@ -1,4 +1,4 @@
-export default function GuidersDetails() {
+export function GuidersDetails() {
   const GUIDERS_VALUES = [
     { name: "PWFS1", x: 0, y: 0, r: 0, x_max: 50, x_min: 0, y_max: 50, y_min: 0, r_max: 50, r_min: 0 },
     { name: "PWFS2", x: 103, y: 0, r: 0, x_max: 50, x_min: 0, y_max: 50, y_min: 0, r_max: 50, r_min: 0 }

@@ -1,12 +1,32 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 import { Slider } from 'primereact/slider';
-import { MCS, McsPark } from './GqlButtons';
+import { MCS, McsPark } from '../gql/Buttons';
+import { Instrument } from './Instrument';
+import { Rotator } from './Rotator';
+import { Altair, Gems } from './AdaptiveOptics';
+import { AuthContext } from '../../Auth/AuthProvider'
 
+const DOME_MODE = [
+  { label: 'MinVibration', value: 'MinVibration' },
+  { label: 'Rome', value: 'RM' },
+  { label: 'London', value: 'LDN' },
+  { label: 'Istanbul', value: 'IST' },
+  { label: 'Paris', value: 'PRS' }
+]
 
-export default function Instrument({ canEdit }: { canEdit: boolean }) {
+const SHUTTERS_MODE = [
+  { label: 'Tracking', value: 'Tracking' },
+  { label: 'Rome', value: 'RM' },
+  { label: 'London', value: 'LDN' },
+  { label: 'Istanbul', value: 'IST' },
+  { label: 'Paris', value: 'PRS' }
+]
+
+export function Systems() {
+  const { canEdit } = useContext(AuthContext)
   const [collapsed, setCollapsed] = useState<boolean>(false)
   const [domeMode, setDomeMode] = useState<string>('MinVibration')
   const [shuttersMode, setShuttersMode] = useState<string>('Tracking')
@@ -14,28 +34,12 @@ export default function Instrument({ canEdit }: { canEdit: boolean }) {
   const [WVGate, setWVGate] = useState<any>(50)
   const [EVGate, setEVGate] = useState<any>(50)
 
-  const DOME_MODE = [
-    { label: 'MinVibration', value: 'MinVibration' },
-    { label: 'Rome', value: 'RM' },
-    { label: 'London', value: 'LDN' },
-    { label: 'Istanbul', value: 'IST' },
-    { label: 'Paris', value: 'PRS' }
-  ];
-
-  const SHUTTERS_MODE = [
-    { label: 'Tracking', value: 'Tracking' },
-    { label: 'Rome', value: 'RM' },
-    { label: 'London', value: 'LDN' },
-    { label: 'Istanbul', value: 'IST' },
-    { label: 'Paris', value: 'PRS' }
-  ];
-
   function toggle() {
     setCollapsed(!collapsed)
   }
 
   return (
-    <div className="instrument">
+    <div className="systems">
       <div className="left">
         <MCS label="MCS" disabled={!canEdit} />
         <Button disabled={!canEdit} label="SCS" />
@@ -51,7 +55,7 @@ export default function Instrument({ canEdit }: { canEdit: boolean }) {
       </div>
       <div className={`grid-wrapper ${(collapsed) ? "collapsed" : ""}`}>
         <div className="top-left">
-          <McsPark disabled={!canEdit} style={{ gridArea: "g11" }} label="Park"/>
+          <McsPark disabled={!canEdit} style={{ gridArea: "g11" }} label="Park" />
           <Button disabled={!canEdit} style={{ gridArea: "g12" }} label="Unwrap" />
           <Button disabled={!canEdit} style={{ gridArea: "g31" }} label="Park" />
           <Button disabled={!canEdit} style={{ gridArea: "g32" }} label="Unwrap" />
@@ -71,6 +75,7 @@ export default function Instrument({ canEdit }: { canEdit: boolean }) {
             <Button disabled={!canEdit} label="Park" />
             <span>AC Pickoff</span>
             <Button disabled={!canEdit} label="Park" />
+            <span></span>
             <Button disabled={!canEdit} label="Park All" />
           </div>
         </div>
@@ -101,7 +106,10 @@ export default function Instrument({ canEdit }: { canEdit: boolean }) {
         </div>
       </div>
       <div className="right">
-
+        <Instrument canEdit={canEdit} />
+        <Rotator canEdit={canEdit} />
+        {/* <Gems canEdit={canEdit} /> */}
+        <Altair canEdit={canEdit} />
       </div>
     </div>
   )

@@ -1,6 +1,7 @@
-import { Dropdown } from 'primereact/dropdown';
+import { Dropdown } from 'primereact/dropdown'
+import { ReactNode } from 'react'
 
-export default function Guider({ canEdit, children }: { canEdit: boolean, children: any }) {
+export function Guider({ canEdit, children }: { canEdit: boolean, children: ReactNode }) {
   return (
     <div className="guider mb-5">
       {children}

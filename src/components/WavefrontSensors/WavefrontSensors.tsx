@@ -4,9 +4,9 @@ import "./WavefrontSensors.scss"
 import WavefrontSensor from "./WavefrontSensor"
 import AcquisitionCamera from "./AcquisitionCamera"
 import Logs from "./Logs"
-import Title from "../Title"
+import { Title } from "../Title/Title"
 
-export default function WavefrontSensors({ prevPanel, nextPanel }: { prevPanel: () => void, nextPanel: () => void }) {
+export function WavefrontSensors({ prevPanel, nextPanel }: { prevPanel: () => void, nextPanel: () => void }) {
   const { canEdit } = useContext(AuthContext)
 
   return (

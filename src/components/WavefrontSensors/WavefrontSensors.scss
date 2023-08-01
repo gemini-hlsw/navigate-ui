@@ -12,15 +12,8 @@
   }
 
   .p-inputswitch {
-    margin-top: 4px;
-    height: 1rem;
-
-    >.p-inputswitch-slider:before {
-      height: 0.75rem;
-      width: 0.75rem;
-      left: 0.45rem;
-      margin-top: -0.375rem;
-    }
+    height: 20px;
+    align-self: center;
   }
 
   button.p-component.p-button {
@@ -102,10 +95,6 @@
         grid-template-rows: 26px;
         gap: 4px;
         padding: 2px;
-
-        .p-inputswitch {
-          margin-top: 4px;
-        }
       }
 
       >span {
