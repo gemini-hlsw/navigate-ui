@@ -2,12 +2,13 @@ import React, { useState } from "react"
 import { Telescope } from "../Telescope/Telescope"
 import { WavefrontSensors } from "../WavefrontSensors/WavefrontSensors"
 import { Guider } from "../Guider/Guider"
-import { Panels } from "../../types"
+import { PanelType } from "../../types"
 import "./Home.scss"
+import { ConfigurationSave } from "./ConfigurationSave"
 
 export default function Home() {
-  const TOUCH_THRESHOLD = 50;
-  const [panelDisplay, setPanelDisplay] = useState<Panels>('Telescope')
+  const TOUCH_THRESHOLD = 50
+  const [panelDisplay, setPanelDisplay] = useState<PanelType>("Telescope")
   const [touchPos, setTouchPos] = useState<number>(0)
 
   function handleTouchStart(e: React.TouchEvent) {
@@ -18,15 +19,15 @@ export default function Home() {
     switch (panelDisplay) {
       case "Telescope":
         setPanelDisplay("WavefrontSensors")
-        break;
+        break
       case "WavefrontSensors":
         setPanelDisplay("Guider")
-        break;
+        break
       case "Guider":
         setPanelDisplay("Telescope")
         break
       default:
-        break;
+        break
     }
   }
 
@@ -34,15 +35,15 @@ export default function Home() {
     switch (panelDisplay) {
       case "Telescope":
         setPanelDisplay("Guider")
-        break;
+        break
       case "WavefrontSensors":
         setPanelDisplay("Telescope")
-        break;
+        break
       case "Guider":
         setPanelDisplay("WavefrontSensors")
         break
       default:
-        break;
+        break
     }
   }
 
@@ -56,8 +57,13 @@ export default function Home() {
   }
 
   return (
-    <div className={`main-body ${panelDisplay}`} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+    <div
+      className={`main-body ${panelDisplay}`}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
       <div className="panel Telescope">
+        {/* <p>Telescope</p> */}
         <Telescope prevPanel={prevPanel} nextPanel={nextPanel} />
       </div>
       <div className="panel WavefrontSensors">
@@ -66,6 +72,7 @@ export default function Home() {
       <div className="panel Guider">
         <Guider prevPanel={prevPanel} nextPanel={nextPanel} />
       </div>
+      <ConfigurationSave />
     </div>
   )
 }

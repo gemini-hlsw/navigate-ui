@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react'
 import { Dialog } from "primereact/dialog"
 import { Button } from "primereact/button"
 import { FixedTargetTable } from './FixedTargetTable'
-import { useGetFixedTargets } from '../gql/FixedTarget'
+import { useGetFixedTargets } from '../../../gql/FixedTarget'
 import { AuthContext } from '../../Auth/AuthProvider'
 import { TelescopeContext } from '../TelescopeProvider'
 

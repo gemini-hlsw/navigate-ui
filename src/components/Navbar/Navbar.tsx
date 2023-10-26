@@ -1,17 +1,23 @@
-import { useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { ThemeContext } from '../Theme/ThemeProvider';
-import { AuthContext } from '../Auth/AuthProvider';
-import { SplitButton } from 'primereact/splitbutton';
-import { Button } from 'primereact/button';
-import './Navbar.scss';
+import { useContext } from "react"
+import { Link, useNavigate } from "react-router-dom"
+import { VariablesContext } from "../Variables/VariablesProvider"
+import { AuthContext } from "../Auth/AuthProvider"
+import { SplitButton } from "primereact/splitbutton"
+import { Button } from "primereact/button"
+import "./Navbar.scss"
 
 export default function Navbar() {
-  let theme = useContext(ThemeContext);
-  let auth = useContext(AuthContext);
-  let navigate = useNavigate();
+  let {
+    theme,
+    toggleTheme,
+    observation,
+    isConfigModified,
+    setIsConfigModalVisible,
+  } = useContext(VariablesContext)
+  let auth = useContext(AuthContext)
+  let navigate = useNavigate()
 
-  let themeIcon: string = (theme.theme === "dark") ? "pi pi-moon" : "pi pi-sun"
+  let themeIcon: string = theme === "dark" ? "pi pi-moon" : "pi pi-sun"
 
   function userSession() {
     if (auth.isUserLoggedIn) {
@@ -23,22 +29,26 @@ export default function Navbar() {
 
   const items = [
     {
-      label: 'Switch theme',
+      label: "Switch theme",
       icon: themeIcon,
-      command: theme.toggleTheme
+      command: toggleTheme,
     },
     {
       label: auth.isUserLoggedIn ? "Logout" : "Login",
       icon: auth.isUserLoggedIn ? "pi pi-sign-out" : "pi pi-sign-in",
-      command: userSession
-    }
+      command: userSession,
+    },
   ]
 
   return (
     <nav className="top-bar">
       <div className="left">
         <Link to="/">
-          <Button icon="pi pi-map" iconPos="left" className="p-button-text nav-btn main-title" >
+          <Button
+            icon="pi pi-map"
+            iconPos="left"
+            className="p-button-text nav-btn main-title"
+          >
             <span>N</span>
             <span>A</span>
             <span>V</span>
@@ -52,17 +62,28 @@ export default function Navbar() {
         <span className="site">Site</span>
       </div>
       <div className="center">
-        <span className="observation">Observation</span>
+        <span className="observation">{observation.name}</span>
       </div>
       <div className="right">
+        {isConfigModified && (
+          <Button
+            icon="pi pi-save"
+            iconPos="left"
+            className="p-button-text nav-btn blink-btn"
+            tooltip="Save configuration"
+            tooltipOptions={{ position: "bottom" }}
+            onClick={() => setIsConfigModalVisible(true)}
+          >
+            {"\u00A0"}
+          </Button>
+        )}
         <SplitButton
-          label={(auth.isUserLoggedIn) ? auth.user.displayName : "Guest"}
+          label={auth.isUserLoggedIn ? auth.user.displayName : "Guest"}
           icon="pi pi-user"
           className="p-button-text nav-btn"
           model={items}
-        >
-        </SplitButton>
+        ></SplitButton>
       </div>
     </nav>
-  );
+  )
 }

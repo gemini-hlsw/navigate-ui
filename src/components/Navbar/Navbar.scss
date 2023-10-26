@@ -10,6 +10,11 @@
   height: 26px;
   width: 100vw;
 
+  .blink-btn {
+    color: rgba(255, 0, 0, 1) !important;
+    animation: blink 3s infinite;
+  }
+
   .nav-btn {
     padding-top: 0;
     padding-bottom: 0;
@@ -70,6 +75,21 @@
     .main-title {
       display: none;
     }
+  }
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 }
 

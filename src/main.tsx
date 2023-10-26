@@ -24,7 +24,7 @@ import AuthProvider from './components/Auth/AuthProvider'
 import Layout from './components/Layout/Layout'
 import Home from './components/Home/Home'
 import Login from './components/Login/Login'
-import ThemeProvider from './components/Theme/ThemeProvider'
+import VariablesProvider from './components/Variables/VariablesProvider'
 
 const navigateCommandServer = new HttpLink({
   uri: '/graphqlapi/navigate'
@@ -67,9 +67,9 @@ const root = ReactDOM.createRoot(
 )
 
 root.render(
-  <ThemeProvider>
-    <AuthProvider>
-      <ApolloProvider client={client}>
+  <AuthProvider>
+    <ApolloProvider client={client}>
+      <VariablesProvider>
         <BrowserRouter basename={import.meta.env.BASE_URL}>
           <Routes>
             <Route path="/" element={<Layout />}>
@@ -78,7 +78,7 @@ root.render(
             <Route path="/login" element={<Login />} />
           </Routes>
         </BrowserRouter>
-      </ApolloProvider>
-    </AuthProvider>
-  </ThemeProvider>
+      </VariablesProvider>
+    </ApolloProvider>
+  </AuthProvider>
 )

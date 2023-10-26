@@ -1,40 +1,40 @@
-import { OdbImport } from './Modals/OdbImport'
-import { ScienceTarget } from "./Targets/ScienceTarget"
-import { GuideTarget } from "./Targets/GuideTarget"
-// import { Guiders } from "./Targets/Guiders"
-import { Guiders } from "./Targets/Guiders/Guiders"
+import { OdbImport } from "./Modals/OdbImport"
 import { Systems } from "./Systems/Systems"
-import { TargetDetails } from './Details/TargetDetails'
-import { GuidersDetails } from './Details/GuidersDetails'
-import { FixedTargetImport } from './Modals/FixedTargetImport'
-import { Footer } from './Footer/Footer'
-import { TelescopeProvider } from './TelescopeProvider'
-import { TelescopeTitle } from '../Title/TelescopeTitle'
-import { Title } from '../Title/Title'
+import { TargetDetails } from "./Details/TargetDetails"
+import { GuidersDetails } from "./Details/GuidersDetails"
+import { FixedTargetImport } from "./Modals/FixedTargetImport"
+import { Footer } from "./Footer/Footer"
+import { TelescopeProvider } from "./TelescopeProvider"
+import { TelescopeTitle } from "../Title/TelescopeTitle"
+import { SlewFlags } from "./Modals/SlewFlags"
+import { ObservationTargets } from "./Targets/ObservationTargets"
+import { useContext } from "react"
+import { VariablesContext } from "../Variables/VariablesProvider"
+import { GuiderTargets } from "./Targets/GuiderTargets"
 import "./Telescope.scss"
-import { SlewFlags } from './Modals/SlewFlags'
 
+export function Telescope({
+  prevPanel,
+  nextPanel,
+}: {
+  prevPanel: () => void
+  nextPanel: () => void
+}) {
+  const { observation, selectedTarget } = useContext(VariablesContext)
 
-export function Telescope({ prevPanel, nextPanel }: { prevPanel: () => void, nextPanel: () => void }) {
   return (
     <TelescopeProvider>
       <div className="telescope">
         <TelescopeTitle prevPanel={prevPanel} nextPanel={nextPanel} />
-        <ScienceTarget type="base" />
-        <Guiders />
-        {/* <Guiders>
-          <GuideTarget type="PWFS1" />
-          <GuideTarget type="PWFS2" />
-          <GuideTarget type={'OIWFS'} />
-        </Guiders> */}
+        <ObservationTargets targets={observation.targets} />
+        <GuiderTargets guideProbes={observation.guideProbes} />
         <Systems />
-        <TargetDetails />
-        <Title title="Guiders" />
+        <TargetDetails target={selectedTarget} />
         <GuidersDetails />
         <Footer />
         <OdbImport />
-        <FixedTargetImport />
         <SlewFlags />
+        {/* Add a way to import fixed targets <FixedTargetImport /> */}
       </div>
     </TelescopeProvider>
   )

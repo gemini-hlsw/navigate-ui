@@ -1,47 +1,92 @@
-export type Theme = 'light' | 'dark'
-export type Panels = 'Telescope' | 'WavefrontSensors' | 'Guider'
-export type buttonState = 'PENDING' | 'ACTIVE' | 'DONE'
-export type CoordSystem = 'Celestial' | 'Horizontal'
-export type NavigateTargetType = 'fixed' | 'imported'
-export type TargetType = 'OIWFS' | 'PWFS1' | 'PWFS2' | 'Base' | 'BlindOffset'
-export type BaseTarget = {
-  id: string
+export type ThemeType = "light" | "dark"
+
+export type UserType = {
+  pk: number
   name: string
-  raAz: string
-  decEl: string
-  epoch: string
-  coordSystem: CoordSystem
-  type: TargetType
+  configurations?: ConfigurationType[]
 }
 
-export interface ScienceTarget extends BaseTarget {
-  blindTargets?: BaseTarget[]
-  guideTargets?: BaseTarget[]
+export type ConfigurationType = {
+  pk: number
+  name: string
+  instrument?: InstrumentType
+  observation?: ObservationType
 }
 
-export type InstrumentConfig = {
+export type InstrumentType = {
+  pk: number
   name: string
   iaa: number
   issPort: number
   focusOffset: number
-  wfs: string
+  wfs: WfsType
   originX: number
   originY: number
   ao: boolean
   extraParams: object
 }
 
-export type WfsObj = {
+export type ObservationType = {
+  pk: number
+  id: string
   name: string
+  selectedTarget: number
+  selectedProbe: string
+  targets?: TargetType[]
+  guideProbes?: GuideProbeType[]
 }
 
-export type AcObj = {
-  name: string
+export type GuideProbeType = {
+  pk: number
+  probe: string
+  selectedTarget: number
+  targets?: TargetType[]
 }
 
-export type NodeStatus = 'inactive' | 'active' | 'idle'
+export type TargetType = {
+  pk: number
+  id: string
+  name: string
+  ra?: RaType
+  dec?: DecType
+  az?: AzType
+  el?: ElType
+  epoch?: string
+  type: TypeOfTarget
+  createdAt: Date
+}
 
-export interface SlewFlags {
+export type RaType = {
+  degrees?: number
+  hms?: string
+}
+
+export type DecType = {
+  degrees?: number
+  dms?: string
+}
+
+export type AzType = {
+  degrees?: number
+  dms?: string
+}
+
+export type ElType = {
+  degrees?: number
+  dms?: string
+}
+
+export type WfsType = "NONE" | "PWFS1" | "PWFS2" | "OIWFS"
+
+export type TypeOfTarget = "FIXED" | "SCIENCE" | "BLINDOFFSET" | "GUIDE"
+
+export type PanelType = "Telescope" | "WavefrontSensors" | "Guider"
+
+export type ButtonStateType = "PENDING" | "ACTIVE" | "DONE"
+
+export type NodeStatusType = "inactive" | "active" | "idle"
+
+export interface SlewFlagsType {
   zeroChopThrow: boolean
   zeroSourceOffset: boolean
   zeroSourceDiffTrack: boolean
@@ -60,22 +105,74 @@ export interface SlewFlags {
   autoparkAowfs: boolean
 }
 
-interface TelescopeContextType {
+export interface TelescopeContextType {
   odbVisible: boolean
   setOdbVisible: (_: boolean) => void
   targetVisible: boolean
   setTargetVisible: (_: boolean) => void
   slewVisible: boolean
   setSlewVisible: (_: boolean) => void
-  baseTarget: BaseTarget
-  setBaseTarget: (_: BaseTarget) => void
-  scienceTarget: ScienceTarget
-  setOdbTarget: (_: any) => void
-  setFixedTarget: (_: any) => void
   slewFlags: SlewFlags
   setSlewFlags: (_: SlewFlags) => void
-  instrument: InstrumentConfig
-  setInstrument: (_: InstrumentConfig) => void
-  guideTarget: BaseTarget
-  setGuideTarget: (_: BaseTarget) => void
+}
+
+export interface TargetInput {
+  id: string
+  name: string
+  ra?: number
+  dec?: number
+  az?: number
+  el?: number
+  epoch?: string
+  type: TypeOfTarget
+}
+
+export interface ObservationInput {
+  id: string
+  name: string
+  targets: TargetInput[]
+}
+
+export interface VariablesContextType {
+  theme: ThemeType
+  toggleTheme(): void
+  observation: ObservationType
+  setObservation(_: ObservationType): void
+  updateOdbObservation(_: ObservationInput): void
+  instrument: InstrumentType
+  updateInstrument(_: InstrumentType): void
+  isConfigModified: boolean
+  saveConfiguration(type: "save" | "create"): void
+  selectedTarget: TargetType
+  isConfigModalVisible: boolean
+  setIsConfigModalVisible(_: boolean): void
+  configuration: ConfigurationType
+  setConfiguration(_: ConfigurationType): void
+}
+
+export interface OdbObservationType {
+  id: string
+  title: string
+  targetEnvironment: {
+    firstScienceTarget: {
+      id: string
+      name: string
+      sidereal: {
+        ra: {
+          degrees: number
+        }
+        dec: {
+          degrees: number
+        }
+        epoch: string
+      }
+    }
+  }
+}
+
+export interface ParamsInterface {
+  loading: boolean
+  observations_list: { matches: [] }
+  selectedObservation: OdbObservationType
+  setSelectedObservation: (_: OdbObservationType) => void
 }

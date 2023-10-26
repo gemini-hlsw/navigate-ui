@@ -3,7 +3,7 @@ import { Button } from "primereact/button"
 import { Divider } from "primereact/divider"
 import { InputNumber } from 'primereact/inputnumber'
 import { InputText } from "primereact/inputtext"
-import { useGetCurrentInstrument, useCreateInstrument, useUpdateCurrentInstrument } from "../gql/Instrument"
+import { useGetCurrentInstrument, useCreateInstrument, useUpdateCurrentInstrument } from "../../../gql/Instrument"
 import { useContext, useEffect, useState } from "react"
 import { TelescopeContext } from "../TelescopeProvider"
 

@@ -1,5 +1,5 @@
 import { Button } from 'primereact/button'
-import { Slew } from '../gql/Buttons'
+import { Slew } from '../../../gql/server/Buttons'
 import { AuthContext } from '../../Auth/AuthProvider'
 import { useContext } from 'react'
 import { TelescopeContext } from '../TelescopeProvider'

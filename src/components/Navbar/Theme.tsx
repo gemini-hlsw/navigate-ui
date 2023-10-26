@@ -1,9 +1,9 @@
-import { ThemeContext } from '../Theme/ThemeProvider';
-import { useContext } from 'react';
+import { VariablesContext } from '../Variables/VariablesProvider'
+import { useContext } from 'react'
 import { Button } from 'primereact/button'
 
 export default function Theme() {
-  let theme = useContext(ThemeContext);
+  let theme = useContext(VariablesContext)
 
   let themeIcon: string = (theme.theme === "dark") ? "pi pi-moon" : "pi pi-sun"
 

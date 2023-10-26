@@ -1,13 +1,12 @@
 import { useContext } from "react"
 import { TelescopeContext } from "../TelescopeProvider"
 import { Title } from "../../Title/Title"
+import { TargetType } from "../../../types"
 
-export function TargetDetails() {
-  const { baseTarget } = useContext(TelescopeContext)
-  if (!Boolean(baseTarget)) return null
+export function TargetDetails({ target }: { target: TargetType }) {
   return (
-    <>
-      <Title title={`Base target ${baseTarget?.name}`} />
+    <div>
+      <Title title={`Selected target ${target.name ?? ""}`} />
       <div className="target-details">
         <span>HA:</span>
         <span>{0}</span>
@@ -32,6 +31,6 @@ export function TargetDetails() {
         <span>Moon dist:</span>
         <span>{0}</span>
       </div>
-    </>
+    </div>
   )
 }

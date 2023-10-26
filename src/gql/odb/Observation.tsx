@@ -1,5 +1,4 @@
 import { useQuery, gql } from '@apollo/client'
-import { useEffect, useState } from 'react'
 
 interface OdbImportI {
   isOdbModalVisible: boolean

@@ -1,15 +1,16 @@
-import { gql, useMutation } from '@apollo/client';
-import { useContext, useEffect } from 'react';
-import { Button } from 'primereact/button';
-import { BaseTarget, buttonState } from '../../../types';
-import { TelescopeContext } from '../TelescopeProvider';
-import { AuthContext } from '../../Auth/AuthProvider';
+import { gql, useMutation } from "@apollo/client"
+import { useContext, useEffect } from "react"
+import { Button } from "primereact/button"
+import { ButtonStateType, TargetType } from "../../types"
+import { TelescopeContext } from "../../components/Telescope/TelescopeProvider"
+import { AuthContext } from "../../components/Auth/AuthProvider"
+import { VariablesContext } from "../../components/Variables/VariablesProvider"
 
 // Buttons possible states
 const btnClass = {
   PENDING: "",
   ACTIVE: "p-button-warning",
-  DONE: "p-button-success"
+  DONE: "p-button-success",
 }
 
 const MOUNT_MUTATION = gql`
@@ -79,21 +80,14 @@ const SLEW_MUTATION = gql`
         baseTarget: {
           id: $id
           name: $name
-          sidereal: {
-            ra: { hms: $ra }
-            dec: { dms: $dec }
-            epoch: $epoch
-          }
+          sidereal: { ra: { hms: $ra }, dec: { dms: $dec }, epoch: $epoch }
           wavelength: { nanometers: $wavelength }
         }
         instParams: {
           iaa: { degrees: $iaa }
           focusOffset: { micrometers: $focusOffset }
           agName: $agName
-          origin: {
-            x: { micrometers: $x }
-            y: { micrometers: $y }
-          }
+          origin: { x: { micrometers: $x }, y: { micrometers: $y } }
         }
       }
     ) {
@@ -113,20 +107,10 @@ const OIWFS_MUTATION = gql`
   ) {
     oiwfsTarget(
       target: {
-        id: $id,
-        name: $name,
-        sidereal: {
-          ra: {
-            hms: $ra
-          }
-          dec: {
-            dms: $dec
-          }
-          epoch: $epoch
-        }
-        wavelength: {
-          nanometers: $wavelength
-        }
+        id: $id
+        name: $name
+        sidereal: { ra: { hms: $ra }, dec: { dms: $dec }, epoch: $epoch }
+        wavelength: { nanometers: $wavelength }
       }
     ) {
       result
@@ -135,11 +119,14 @@ const OIWFS_MUTATION = gql`
 `
 
 export function MCS({ ...props }) {
-  const [mutationFunction, { data, loading, error }] = useMutation(MOUNT_MUTATION, {
-    variables: {
-      enable: true
+  const [mutationFunction, { data, loading, error }] = useMutation(
+    MOUNT_MUTATION,
+    {
+      variables: {
+        enable: true,
+      },
     }
-  })
+  )
 
   useEffect(() => {
     if (Boolean(data)) {
@@ -147,7 +134,7 @@ export function MCS({ ...props }) {
     }
   }, [data])
 
-  let state: buttonState = (loading) ? "ACTIVE" : "PENDING"
+  let state: ButtonStateType = loading ? "ACTIVE" : "PENDING"
 
   return (
     <Button
@@ -160,7 +147,8 @@ export function MCS({ ...props }) {
 }
 
 export function McsPark({ ...props }) {
-  const [mutationFunction, { data, loading, error }] = useMutation(PARK_MUTATION)
+  const [mutationFunction, { data, loading, error }] =
+    useMutation(PARK_MUTATION)
 
   useEffect(() => {
     if (Boolean(data)) {
@@ -168,7 +156,7 @@ export function McsPark({ ...props }) {
     }
   }, [data])
 
-  let state: buttonState = (loading) ? "ACTIVE" : "PENDING"
+  let state: ButtonStateType = loading ? "ACTIVE" : "PENDING"
 
   return (
     <Button
@@ -180,25 +168,36 @@ export function McsPark({ ...props }) {
   )
 }
 
-export function Slew({ className, label }: { className: string, label: string }) {
+export function Slew({
+  className,
+  label,
+}: {
+  className: string
+  label: string
+}) {
   const { canEdit } = useContext(AuthContext)
-  const { slewFlags, baseTarget, instrument } = useContext(TelescopeContext)
-  const [mutationFunction, { data, loading, error }] = useMutation(SLEW_MUTATION, {
-    variables: {
-      ...slewFlags,
-      id: baseTarget?.id,
-      name: baseTarget?.name,
-      ra: baseTarget?.raAz,
-      dec: baseTarget?.decEl,
-      epoch: baseTarget?.epoch,
-      wavelength: "400",
-      iaa: instrument.iaa,
-      focusOffset: instrument.focusOffset,
-      agName: instrument.name,
-      x: instrument.originX,
-      y: instrument.originY
+  const { slewFlags } = useContext(TelescopeContext)
+  const { instrument, selectedTarget } = useContext(VariablesContext)
+
+  const [mutationFunction, { data, loading, error }] = useMutation(
+    SLEW_MUTATION,
+    {
+      variables: {
+        ...slewFlags,
+        id: selectedTarget?.id,
+        name: selectedTarget?.name,
+        ra: selectedTarget?.ra?.hms,
+        dec: selectedTarget?.dec?.dms,
+        epoch: selectedTarget?.epoch,
+        wavelength: "400",
+        iaa: instrument.iaa,
+        focusOffset: instrument.focusOffset,
+        agName: instrument.name,
+        x: instrument.originX,
+        y: instrument.originY,
+      },
     }
-  })
+  )
 
   useEffect(() => {
     if (Boolean(data)) {
@@ -206,60 +205,65 @@ export function Slew({ className, label }: { className: string, label: string })
     }
   }, [data])
 
-  let state: buttonState = (loading) ? "ACTIVE" : "PENDING"
+  let state: ButtonStateType = loading ? "ACTIVE" : "PENDING"
 
   return (
     <Button
       className={`${btnClass[state]} ${className}`}
-      onClick={() => mutationFunction({
-        variables: {
-          ...slewFlags,
-          id: baseTarget?.id,
-          name: baseTarget?.name,
-          ra: baseTarget?.raAz,
-          dec: baseTarget?.decEl,
-          epoch: baseTarget?.epoch,
-          wavelength: "400",
-          iaa: instrument.iaa,
-          focusOffset: instrument.focusOffset,
-          agName: instrument.name,
-          x: instrument.originX,
-          y: instrument.originY
-        }
-      })}
+      onClick={() =>
+        mutationFunction({
+          variables: {
+            ...slewFlags,
+            id: selectedTarget?.id,
+            name: selectedTarget?.name,
+            ra: selectedTarget?.ra?.hms,
+            dec: selectedTarget?.dec?.dms,
+            epoch: selectedTarget?.epoch,
+            wavelength: "400",
+            iaa: instrument.iaa,
+            focusOffset: instrument.focusOffset,
+            agName: instrument.name,
+            x: instrument.originX,
+            y: instrument.originY,
+          },
+        })
+      }
       loading={loading}
-      disabled={!canEdit || !Boolean(baseTarget?.id)}
+      disabled={!canEdit || !Boolean(selectedTarget?.id)}
       label={label}
     />
   )
 }
 
 export function useOiwfs() {
-  const { baseTarget } = useContext(TelescopeContext)
-  const [mutationFunction, { data, loading, error }] = useMutation(OIWFS_MUTATION, {
-    variables: {
-      id: baseTarget?.id,
-      name: baseTarget?.name,
-      ra: baseTarget?.raAz,
-      dec: baseTarget?.decEl,
-      epoch: baseTarget?.epoch,
-      wavelength: "400"
+  const { selectedTarget } = useContext(VariablesContext)
+  const [mutationFunction, { data, loading, error }] = useMutation(
+    OIWFS_MUTATION,
+    {
+      variables: {
+        id: selectedTarget?.id,
+        name: selectedTarget?.name,
+        ra: selectedTarget?.ra?.hms,
+        dec: selectedTarget?.dec?.dms,
+        epoch: selectedTarget?.epoch,
+        wavelength: "400",
+      },
     }
-  })
+  )
 
-  function setOiwfsTarget(target: BaseTarget) {
+  function setOiwfsTarget(target: TargetType) {
     let variables = {
       id: target?.id,
       name: target?.name,
-      ra: target?.raAz,
-      dec: target?.decEl,
+      ra: target?.ra?.hms,
+      dec: target?.dec?.dms,
       epoch: target?.epoch,
-      wavelength: "400"
+      wavelength: "400",
     }
     console.log(`Excecuting oiwfsTarget mutation with variables`)
     console.log(variables)
     mutationFunction({
-      variables: variables
+      variables: variables,
     })
   }
 
