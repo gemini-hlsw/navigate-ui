@@ -1,10 +1,13 @@
 import { Dropdown } from "primereact/dropdown"
+import { ProgressBar } from "primereact/progressbar"
 import { GuideProbeType, TargetType } from "../../../types"
 import { Title } from "../../Title/Title"
 import { ObservationTargets } from "./ObservationTargets"
 import { Button } from "primereact/button"
 import { useContext } from "react"
 import { AuthContext } from "../../Auth/AuthProvider"
+import { VariablesContext } from "../../Variables/VariablesProvider"
+import { UpdateGuideTargets } from "./UpdateGuideTargets"
 
 function GuiderFooter({ target }: { target: TargetType }) {
   const { canEdit } = useContext(AuthContext)
@@ -30,6 +33,9 @@ export function GuiderTargets({
 }: {
   guideProbes: GuideProbeType[] | undefined
 }) {
+  const { canEdit } = useContext(AuthContext)
+  const { loadingGuideTarget } = useContext(VariablesContext)
+
   let displayProbes: JSX.Element[] = []
   guideProbes?.map((gp: GuideProbeType, index: number) => {
     displayProbes.push(
@@ -52,8 +58,17 @@ export function GuiderTargets({
   }
   return (
     <div className="guiders">
-      <Title title="Guiders" />
-      {displayProbes}
+      <Title title="Guiders">
+        <UpdateGuideTargets canEdit={canEdit} />
+      </Title>
+      {loadingGuideTarget ? (
+        <ProgressBar
+          mode="indeterminate"
+          style={{ height: "6px" }}
+        ></ProgressBar>
+      ) : (
+        displayProbes
+      )}
     </div>
   )
 }

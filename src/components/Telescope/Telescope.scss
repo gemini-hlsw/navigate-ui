@@ -55,6 +55,11 @@
   }
 
   .target {
+    .target-name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
     >.selected-target {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr 30px 1fr 30px;
@@ -364,6 +369,7 @@
       text-align: center;
       vertical-align: middle;
       line-height: 26px;
+      cursor: pointer;
     }
 
     >button {

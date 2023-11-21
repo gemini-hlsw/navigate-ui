@@ -117,7 +117,7 @@ export interface TelescopeContextType {
 }
 
 export interface TargetInput {
-  id: string
+  id?: string
   name: string
   ra?: number
   dec?: number
@@ -148,6 +148,8 @@ export interface VariablesContextType {
   setIsConfigModalVisible(_: boolean): void
   configuration: ConfigurationType
   setConfiguration(_: ConfigurationType): void
+  loadingGuideTarget: boolean
+  setLoadingGuideTarget(_: boolean): void
 }
 
 export interface OdbObservationType {

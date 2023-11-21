@@ -39,7 +39,7 @@ export function ObservationTargets({
         selectedTarget={
           probePk === undefined
             ? observation.selectedTarget
-            : observation.guideProbes?.[probePk].selectedTarget
+            : observation.guideProbes?.[probePk]?.selectedTarget
         }
       />
     )

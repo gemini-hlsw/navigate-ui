@@ -44,6 +44,35 @@ const MUTATE_OBSERVATION = gql`
         type
         createdAt
       }
+      guideProbes {
+        pk
+        probe
+        selectedTarget
+        targets {
+          pk
+          id
+          name
+          ra {
+            degrees
+            hms
+          }
+          dec {
+            degrees
+            dms
+          }
+          az {
+            degrees
+            dms
+          }
+          el {
+            degrees
+            dms
+          }
+          epoch
+          type
+          createdAt
+        }
+      }
     }
   }
 `
@@ -108,6 +137,35 @@ const UPDATE_OBSERVATION_SELECTED_TARGET = gql`
         epoch
         type
         createdAt
+      }
+      guideProbes {
+        pk
+        probe
+        selectedTarget
+        targets {
+          pk
+          id
+          name
+          ra {
+            degrees
+            hms
+          }
+          dec {
+            degrees
+            dms
+          }
+          az {
+            degrees
+            dms
+          }
+          el {
+            degrees
+            dms
+          }
+          epoch
+          type
+          createdAt
+        }
       }
     }
   }

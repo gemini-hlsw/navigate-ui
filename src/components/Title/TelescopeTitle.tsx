@@ -14,6 +14,7 @@ interface ParamsInterface {
 export function TelescopeTitle({ prevPanel, nextPanel }: ParamsInterface) {
   const { canEdit } = useContext(AuthContext)
   const { setOdbVisible, setTargetVisible } = useContext(TelescopeContext)
+
   return (
     <Title title="TELESCOPE SETUP" prevPanel={prevPanel} nextPanel={nextPanel}>
       <TitleDropdown icon="list">
@@ -29,9 +30,9 @@ export function TelescopeTitle({ prevPanel, nextPanel }: ParamsInterface) {
           label="Import from Fixed Targets"
           onClick={() => setTargetVisible(true)}
         />
-        <Button disabled={!canEdit} className="p-button-text" label="Load" />
+        {/* <Button disabled={!canEdit} className="p-button-text" label="Load" />
         <Button disabled={!canEdit} className="p-button-text" label="Save" />
-        <Button disabled={!canEdit} className="p-button-text" label="Save as" />
+        <Button disabled={!canEdit} className="p-button-text" label="Save as" /> */}
         <Divider />
         <Button
           disabled={!canEdit}

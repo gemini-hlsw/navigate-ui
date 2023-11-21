@@ -45,6 +45,9 @@ export default function VariablesProvider({
     document.body.classList.value = theme
   }, [theme])
 
+  // ----------- Guide Targets -----------------
+  const [loadingGuideTarget, setLoadingGuideTarget] = useState(false)
+
   // --------- Local db Config ------------------
   const [isConfigModified, setIsConfigModified] = useState(false)
   const [isConfigModalVisible, setIsConfigModalVisible] = useState(false)
@@ -156,6 +159,8 @@ export default function VariablesProvider({
     setIsConfigModalVisible,
     configuration,
     setConfiguration,
+    loadingGuideTarget,
+    setLoadingGuideTarget,
   }
 
   return (

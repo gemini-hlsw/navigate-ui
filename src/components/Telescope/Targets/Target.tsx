@@ -21,7 +21,9 @@ export function Target({
         onClick={() => updateSelectedTarget(target.pk)}
       >
         <div className="target-item">
-          <span>{target.name}</span>
+          <span className="target-name" title={target.name}>
+            {target.name}
+          </span>
           <span className="text-right">{target.az?.dms}</span>
           <span>Az</span>
           <span className="text-right">{target.el?.dms}</span>
@@ -38,7 +40,9 @@ export function Target({
         onClick={() => updateSelectedTarget(target.pk)}
       >
         <div className="target-item">
-          <span>{target.name}</span>
+          <span className="target-name" title={target.name}>
+            {target.name}
+          </span>
           <span className="text-right">{target.ra?.hms}</span>
           <span>RA</span>
           <span className="text-right">{target.dec?.dms}</span>
