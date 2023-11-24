@@ -26,6 +26,12 @@ export type InstrumentType = {
   extraParams: object
 }
 
+export type RotatorType = {
+  pk: number
+  angle: number
+  tracking: TrackingType
+}
+
 export type ObservationType = {
   pk: number
   id: string
@@ -77,6 +83,8 @@ export type ElType = {
 }
 
 export type WfsType = "NONE" | "PWFS1" | "PWFS2" | "OIWFS"
+
+export type TrackingType = "TRACKING" | "FIXED"
 
 export type TypeOfTarget = "FIXED" | "SCIENCE" | "BLINDOFFSET" | "GUIDE"
 
@@ -140,7 +148,10 @@ export interface VariablesContextType {
   setObservation(_: ObservationType): void
   updateOdbObservation(_: ObservationInput): void
   instrument: InstrumentType
+  setInstrument(_: InstrumentType): void
   updateInstrument(_: InstrumentType): void
+  rotator: RotatorType
+  setRotator(_: RotatorType): void
   isConfigModified: boolean
   saveConfiguration(type: "save" | "create"): void
   selectedTarget: TargetType
@@ -174,7 +185,7 @@ export interface OdbObservationType {
 
 export interface ParamsInterface {
   loading: boolean
-  observations_list: { matches: [] }
+  observations_list: any
   selectedObservation: OdbObservationType
   setSelectedObservation: (_: OdbObservationType) => void
 }

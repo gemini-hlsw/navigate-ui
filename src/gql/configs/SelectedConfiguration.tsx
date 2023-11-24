@@ -1,5 +1,5 @@
 import { useQuery, gql, useMutation } from "@apollo/client"
-import { InstrumentType, ObservationType } from "../../types"
+import { InstrumentType, ObservationType, RotatorType } from "../../types"
 
 const GET_SELECTED_CONFIGURATION = gql`
   query getSelectedConfiguration {
@@ -19,6 +19,11 @@ const GET_SELECTED_CONFIGURATION = gql`
           originY
           ao
           extraParams
+        }
+        rotator {
+          pk
+          angle
+          tracking
         }
         observation {
           pk
@@ -95,6 +100,7 @@ export function useGetSelectedConfiguration() {
       configuration: {
         instrument: {} as InstrumentType,
         observation: {} as ObservationType,
+        rotator: {} as RotatorType,
       },
     }
 

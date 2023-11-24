@@ -56,39 +56,42 @@ const SLEW_MUTATION = gql`
     $agName: String
     $x: Long
     $y: Long
+    $rotAngle: BigDecimal
+    $tracking: RotatorTrackingMode!
   ) {
     slew(
-      slewParams: {
-        slewOptions: {
-          zeroChopThrow: $zeroChopThrow
-          zeroSourceOffset: $zeroSourceOffset
-          zeroSourceDiffTrack: $zeroSourceDiffTrack
-          zeroMountOffset: $zeroMountOffset
-          zeroMountDiffTrack: $zeroMountDiffTrack
-          shortcircuitTargetFilter: $shortcircuitTargetFilter
-          shortcircuitMountFilter: $shortcircuitMountFilter
-          resetPointing: $resetPointing
-          stopGuide: $stopGuide
-          zeroGuideOffset: $zeroGuideOffset
-          zeroInstrumentOffset: $zeroInstrumentOffset
-          autoparkPwfs1: $autoparkPwfs1
-          autoparkPwfs2: $autoparkPwfs2
-          autoparkOiwfs: $autoparkOiwfs
-          autoparkGems: $autoparkGems
-          autoparkAowfs: $autoparkAowfs
-        }
-        baseTarget: {
-          id: $id
-          name: $name
-          sidereal: { ra: { hms: $ra }, dec: { dms: $dec }, epoch: $epoch }
-          wavelength: { nanometers: $wavelength }
-        }
+      slewOptions: {
+        zeroChopThrow: $zeroChopThrow
+        zeroSourceOffset: $zeroSourceOffset
+        zeroSourceDiffTrack: $zeroSourceDiffTrack
+        zeroMountOffset: $zeroMountOffset
+        zeroMountDiffTrack: $zeroMountDiffTrack
+        shortcircuitTargetFilter: $shortcircuitTargetFilter
+        shortcircuitMountFilter: $shortcircuitMountFilter
+        resetPointing: $resetPointing
+        stopGuide: $stopGuide
+        zeroGuideOffset: $zeroGuideOffset
+        zeroInstrumentOffset: $zeroInstrumentOffset
+        autoparkPwfs1: $autoparkPwfs1
+        autoparkPwfs2: $autoparkPwfs2
+        autoparkOiwfs: $autoparkOiwfs
+        autoparkGems: $autoparkGems
+        autoparkAowfs: $autoparkAowfs
+      }
+      config: {
         instParams: {
           iaa: { degrees: $iaa }
           focusOffset: { micrometers: $focusOffset }
           agName: $agName
           origin: { x: { micrometers: $x }, y: { micrometers: $y } }
         }
+        sourceATarget: {
+          id: $id
+          name: $name
+          sidereal: { ra: { hms: $ra }, dec: { dms: $dec }, epoch: $epoch }
+          wavelength: { nanometers: $wavelength }
+        }
+        rotator: { ipa: { degrees: $rotAngle }, mode: $tracking }
       }
     ) {
       result
@@ -177,7 +180,7 @@ export function Slew({
 }) {
   const { canEdit } = useContext(AuthContext)
   const { slewFlags } = useContext(TelescopeContext)
-  const { instrument, selectedTarget } = useContext(VariablesContext)
+  const { instrument, selectedTarget, rotator } = useContext(VariablesContext)
 
   const [mutationFunction, { data, loading, error }] = useMutation(
     SLEW_MUTATION,
@@ -195,6 +198,8 @@ export function Slew({
         agName: instrument.name,
         x: instrument.originX,
         y: instrument.originY,
+        rotAngle: rotator.angle,
+        tracking: rotator.tracking,
       },
     }
   )
@@ -225,6 +230,8 @@ export function Slew({
             agName: instrument.name,
             x: instrument.originX,
             y: instrument.originY,
+            rotAngle: rotator.angle,
+            tracking: rotator.tracking,
           },
         })
       }

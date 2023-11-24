@@ -127,7 +127,7 @@
       padding: 3px;
       display: grid;
       grid-template-columns: 93px;
-      grid-template-rows: repeat(11, 26px);
+      grid-template-rows: repeat(12, 26px);
       gap: 4px;
       border-right: 1px solid var(--surface-border);
       z-index: 3;
@@ -229,13 +229,14 @@
       transition: left 0.5s ease-in-out;
       display: grid;
       grid-template-columns: 1fr 1fr 18px;
-      grid-template-rows: repeat(11, 1fr);
+      grid-template-rows: repeat(12, 1fr);
       grid-template-areas:
         "top-left top-right expand-btn"
         "top-left top-right expand-btn"
         "top-left top-right expand-btn"
         "top-left top-right expand-btn"
         "top-left top-right expand-btn"
+        "bottom bottom expand-btn"
         "bottom bottom expand-btn"
         "bottom bottom expand-btn"
         "bottom bottom expand-btn"
@@ -304,14 +305,15 @@
         grid-area: bottom;
         display: grid;
         grid-template-columns: repeat(6, 1fr);
-        grid-template-rows: repeat(6, 26px);
+        grid-template-rows: repeat(7, 26px);
         grid-template-areas:
           "g11 g12 g13 g14 g15 g16"
           "g21 g22 g23 g24 g25 g26"
           "g31 g32 g33 g33 g33 g36"
-          "g41 g42 g43 g44 g45 g46"
-          "g51 g52 g53 g53 g53 g56"
-          "g61 g62 g63 g63 g63 g66";
+          "g41 g42 g43 g43 g43 g46"
+          "g51 g52 g53 g54 g55 g56"
+          "g61 g62 g63 g63 g63 g66"
+          "g71 g72 g73 g73 g73 g76";
         row-gap: 4px;
         column-gap: 4px;
 

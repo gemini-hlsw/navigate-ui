@@ -2,14 +2,16 @@ import { VariablesContext } from "../../Variables/VariablesProvider"
 import { useGetGuideTargets } from "../../../gql/odb/Observation"
 import { useCreateGuideProbe } from "../../../gql/configs/GuideProbe"
 import { TargetInput } from "../../../types"
-import { useContext } from "react"
+import { useContext, useRef } from "react"
 import { Button } from "primereact/button"
+import { Toast } from "primereact/toast"
 
 export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
   const { observation, setObservation, setLoadingGuideTarget } =
     useContext(VariablesContext)
   const getGuideTargets = useGetGuideTargets()
   const createGuideProbe = useCreateGuideProbe()
+  const toast = useRef<Toast>(null)
 
   function calculateGuideTargets() {
     setLoadingGuideTarget(true)
@@ -60,6 +62,13 @@ export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
         })
       },
       onError(err) {
+        setLoadingGuideTarget(false)
+        toast.current?.show({
+          severity: "error",
+          summary: "Error",
+          detail: err.toString(),
+          life: 5000,
+        })
         console.log(err)
       },
     })
@@ -67,15 +76,18 @@ export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
   }
 
   return (
-    <Button
-      disabled={!canEdit}
-      className="absolute-right-btn"
-      tooltip="Get current guide targets"
-      tooltipOptions={{ position: "bottom" }}
-      icon="pi pi-refresh"
-      iconPos="right"
-      label=""
-      onClick={calculateGuideTargets}
-    />
+    <>
+      <Toast ref={toast} />
+      <Button
+        disabled={!canEdit}
+        className="absolute-right-btn"
+        tooltip="Get current guide targets"
+        tooltipOptions={{ position: "bottom" }}
+        icon="pi pi-refresh"
+        iconPos="right"
+        label=""
+        onClick={calculateGuideTargets}
+      />
+    </>
   )
 }

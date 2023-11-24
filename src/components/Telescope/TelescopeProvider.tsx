@@ -7,7 +7,24 @@ export function TelescopeProvider({ children }: { children: ReactNode }) {
   const [odbVisible, setOdbVisible] = useState<boolean>(false)
   const [targetVisible, setTargetVisible] = useState<boolean>(false)
   const [slewVisible, setSlewVisible] = useState<boolean>(false)
-  const [slewFlags, setSlewFlags] = useState<SlewFlagsType>({} as SlewFlagsType)
+  const [slewFlags, setSlewFlags] = useState<SlewFlagsType>({
+    zeroChopThrow: false,
+    zeroSourceOffset: false,
+    zeroSourceDiffTrack: false,
+    zeroMountOffset: false,
+    zeroMountDiffTrack: false,
+    shortcircuitTargetFilter: false,
+    shortcircuitMountFilter: false,
+    resetPointing: false,
+    stopGuide: false,
+    zeroGuideOffset: false,
+    zeroInstrumentOffset: false,
+    autoparkPwfs1: false,
+    autoparkPwfs2: false,
+    autoparkOiwfs: false,
+    autoparkGems: false,
+    autoparkAowfs: false,
+  } as SlewFlagsType)
 
   let value = {
     odbVisible, // Modal ODB visibility flag

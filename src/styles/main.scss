@@ -126,3 +126,9 @@ button.p-component.p-button {
     padding: 5px 10px;
   }
 }
+
+.p-toast-message-content {
+  .p-toast-message-icon {
+    display: none;
+  }
+}

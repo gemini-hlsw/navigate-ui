@@ -7,6 +7,7 @@ import {
   VariablesContextType,
   ObservationInput,
   ConfigurationType,
+  RotatorType,
 } from "../../types"
 import {
   useGetSelectedConfiguration,
@@ -60,6 +61,7 @@ export default function VariablesProvider({
   const [instrument, setInstrument] = useState<InstrumentType>(
     {} as InstrumentType
   )
+  const [rotator, setRotator] = useState<RotatorType>({} as RotatorType)
 
   function updateOdbObservation({ id, name, targets }: ObservationInput) {
     if (id !== observation.id) {
@@ -126,16 +128,22 @@ export default function VariablesProvider({
   }
 
   useEffect(() => {
-    if (selectedConfiguration.configuration)
+    if (selectedConfiguration.configuration) {
       setConfiguration(selectedConfiguration.configuration)
-    if (selectedConfiguration.configuration?.observation)
+    }
+    if (selectedConfiguration.configuration?.observation) {
       setObservation(
         selectedConfiguration.configuration.observation as ObservationType
       )
-    if (selectedConfiguration.configuration?.instrument)
+    }
+    if (selectedConfiguration.configuration?.instrument) {
       setInstrument(
         selectedConfiguration.configuration.instrument as InstrumentType
       )
+    }
+    if (selectedConfiguration.configuration?.rotator) {
+      setRotator(selectedConfiguration.configuration.rotator as RotatorType)
+    }
   }, [selectedConfiguration])
 
   // SELECTED TARGET
@@ -151,7 +159,10 @@ export default function VariablesProvider({
     setObservation,
     updateOdbObservation,
     instrument,
+    setInstrument,
     updateInstrument,
+    rotator,
+    setRotator,
     isConfigModified,
     saveConfiguration,
     selectedTarget,

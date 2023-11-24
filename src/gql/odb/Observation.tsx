@@ -58,12 +58,14 @@ const GET_OBSERVATIONS = gql`
 `
 
 export function useGetObservations() {
-  const { loading, error, data, refetch } = useQuery(GET_OBSERVATIONS, {
-    context: { clientName: "odb" },
-  })
+  const [getObservations, { loading, error, data }] = useLazyQuery(
+    GET_OBSERVATIONS,
+    {
+      context: { clientName: "odb" },
+    }
+  )
 
-  if (loading) return [refetch, null]
-  return [refetch, data.observations]
+  return { getObservations, loading, data, error }
 }
 
 const GET_GUIDE_TARGETS = gql`

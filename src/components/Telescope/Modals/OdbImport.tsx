@@ -14,7 +14,7 @@ export function OdbImport() {
   const { updateOdbObservation } = useContext(VariablesContext)
   const [selectedObservation, setSelectedObservation] =
     useState<OdbObservationType>({} as OdbObservationType)
-  const [refetch, data] = useGetObservations()
+  const { getObservations, loading, data, error } = useGetObservations()
 
   function updateObs() {
     setOdbVisible(false)
@@ -40,14 +40,6 @@ export function OdbImport() {
 
   let footer = (
     <div className="modal-footer">
-      <div className="left">
-        <Button
-          disabled={!canEdit}
-          className=""
-          label="Refresh Observations"
-          onClick={() => refetch()}
-        />
-      </div>
       <div className="right">
         <Button
           disabled={
@@ -75,7 +67,7 @@ export function OdbImport() {
   )
 
   useEffect(() => {
-    if (odbVisible) refetch()
+    if (odbVisible) getObservations()
   }, [odbVisible])
 
   return (
@@ -87,12 +79,12 @@ export function OdbImport() {
       modal
       onHide={() => setOdbVisible(false)}
     >
-      {!Boolean(data) ? (
+      {loading ? (
         <p>Loading observations...</p>
       ) : (
         <ObservationTable
           loading={!Boolean(data)}
-          observations_list={data}
+          observations_list={data?.observations}
           selectedObservation={selectedObservation}
           setSelectedObservation={setSelectedObservation}
         />

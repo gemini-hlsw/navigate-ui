@@ -15,17 +15,27 @@ export function ObservationTargets({
   const updateObservationSelectedTarget = useUpdateObservationSelectedTarget()
 
   function updateSelectedTarget(targetPk: number) {
-    if (probePk !== undefined) {
-    } else {
-      updateObservationSelectedTarget({
-        variables: {
-          pk: observation.pk,
-          selectedTarget: targetPk,
-        },
-        onCompleted(data) {
-          setObservation(data.updateObservationSelectedTarget)
-        },
+    if (probePk !== undefined && observation.guideProbes) {
+      let idx = observation.guideProbes?.findIndex((g) => g.pk === probePk)
+      setObservation({
+        ...observation,
+        guideProbes: [
+          ...observation.guideProbes?.slice(0, idx),
+          { ...observation.guideProbes[idx], selectedTarget: targetPk },
+          ...observation.guideProbes?.slice(idx + 1),
+        ],
       })
+    } else {
+      setObservation({ ...observation, selectedTarget: targetPk })
+      // updateObservationSelectedTarget({
+      //   variables: {
+      //     pk: observation.pk,
+      //     selectedTarget: targetPk,
+      //   },
+      //   onCompleted(data) {
+      //     setObservation(data.updateObservationSelectedTarget)
+      //   },
+      // })
     }
   }
 
