@@ -23,6 +23,9 @@ dependencies:
   jsdom:
     specifier: ^20.0.3
     version: 20.0.3
+  just-diff:
+    specifier: ^6.0.2
+    version: 6.0.2
   lucuma-ui-css:
     specifier: ^0.56.2-2-af44dc4-SNAPSHOT
     version: 0.56.2-2-af44dc4-SNAPSHOT
@@ -2146,6 +2149,10 @@ packages:
   /jsonc-parser@3.2.0:
     resolution: {integrity: sha512-gfFQZrcTc8CnKXp6Y4/CBT3fTc0OVuDofpre4aEeEpSBPV5X5v4+Vmx+8snU7RLPrNHPKSgLxGo9YuQzz20o+w==}
     dev: true
+
+  /just-diff@6.0.2:
+    resolution: {integrity: sha512-S59eriX5u3/QhMNq3v/gm8Kd0w8OS6Tz2FS1NG4blv+z0MuQcBRJyFWjdovM0Rad4/P4aUPFtnkNjMjyMlMSYA==}
+    dev: false
 
   /local-pkg@0.4.3:
     resolution: {integrity: sha512-SFppqq5p42fe2qcZQqqEOiVRXl+WCP1MdT6k7BDEW1j++sp5fIY+/fdRQitvKgB5BrBcmrs5m/L0v2FrU5MY1g==}

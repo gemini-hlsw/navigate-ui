@@ -11,6 +11,7 @@ export type ConfigurationType = {
   name: string
   instrument?: InstrumentType
   observation?: ObservationType
+  rotator?: RotatorType
 }
 
 export type InstrumentType = {
@@ -37,7 +38,8 @@ export type ObservationType = {
   id: string
   name: string
   selectedTarget: number
-  selectedProbe: string
+  selectedGuideTarget: number
+  selectedProbe: number
   targets?: TargetType[]
   guideProbes?: GuideProbeType[]
 }
@@ -45,7 +47,6 @@ export type ObservationType = {
 export type GuideProbeType = {
   pk: number
   probe: string
-  selectedTarget: number
   targets?: TargetType[]
 }
 
@@ -53,10 +54,10 @@ export type TargetType = {
   pk: number
   id: string
   name: string
-  ra?: RaType
-  dec?: DecType
-  az?: AzType
-  el?: ElType
+  ra?: RaType | null
+  dec?: DecType | null
+  az?: AzType | null
+  el?: ElType | null
   epoch?: string
   type: TypeOfTarget
   createdAt: Date
@@ -141,26 +142,11 @@ export interface ObservationInput {
   targets: TargetInput[]
 }
 
-export interface VariablesContextType {
-  theme: ThemeType
-  toggleTheme(): void
-  observation: ObservationType
-  setObservation(_: ObservationType): void
-  updateOdbObservation(_: ObservationInput): void
-  instrument: InstrumentType
-  setInstrument(_: InstrumentType): void
-  updateInstrument(_: InstrumentType): void
-  rotator: RotatorType
-  setRotator(_: RotatorType): void
-  isConfigModified: boolean
-  saveConfiguration(type: "save" | "create"): void
-  selectedTarget: TargetType
-  isConfigModalVisible: boolean
-  setIsConfigModalVisible(_: boolean): void
-  configuration: ConfigurationType
-  setConfiguration(_: ConfigurationType): void
-  loadingGuideTarget: boolean
-  setLoadingGuideTarget(_: boolean): void
+export interface TargetEditType {
+  isVisible: boolean
+  target: TargetType
+  targetIndex: number | undefined
+  probeIndex: number | undefined
 }
 
 export interface OdbObservationType {
@@ -188,4 +174,35 @@ export interface ParamsInterface {
   observations_list: any
   selectedObservation: OdbObservationType
   setSelectedObservation: (_: OdbObservationType) => void
+}
+
+export interface ConfigurationChangesType {
+  op: "remove" | "add" | "replace"
+  path: object | string
+  value?: string | number
+}
+
+export interface VariablesContextType {
+  theme: ThemeType
+  toggleTheme(): void
+  odbVisible: boolean
+  setOdbVisible(_: boolean): void
+  setOdbObservation(_: ObservationType): void
+  slewVisible: boolean
+  setSlewVisible(_: boolean): void
+  slewFlags: SlewFlagsType
+  setSlewFlags(_: SlewFlagsType): void
+  targetEdit: TargetEditType
+  setTargetEdit(_: TargetEditType): void
+  importInstrument: boolean
+  setImportInstrument(_: boolean): void
+  saveConfiguration(type: "save" | "create"): void
+  selectedTarget: TargetType
+  isConfigModalVisible: boolean
+  setIsConfigModalVisible(_: boolean): void
+  configuration: ConfigurationType
+  setConfiguration(_: ConfigurationType): void
+  configurationChanges: ConfigurationChangesType[] | undefined
+  loadingGuideTarget: boolean
+  setLoadingGuideTarget(_: boolean): void
 }

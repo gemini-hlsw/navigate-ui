@@ -13,6 +13,7 @@
 
 :root {
   --navigate-accent-color: rgba(144, 238, 144, 80%);
+  --input-font-size: 0.8rem;
 }
 
 // Base styles
@@ -44,7 +45,7 @@ a {
 
     >span {
       margin: 0 2px;
-      font-size: 0.8rem;
+      font-size: var(--input-font-size);
     }
   }
 
@@ -54,7 +55,7 @@ a {
 
     &.p-inputtext {
       width: 40px;
-      font-size: 0.8rem;
+      font-size: var(--input-font-size);
       padding: 3px;
       line-height: normal;
     }
@@ -63,18 +64,22 @@ a {
 
 .p-inputnumber {
   .p-inputtext {
-    font-size: 0.8rem;
+    font-size: var(--input-font-size);
     padding: 0;
     text-align: center;
   }
+}
+
+.p-inputtext.p-component {
+  font-size: var(--input-font-size);
 }
 
 .p-component {
   &.p-button,
   .p-button {
     margin: 0;
-    padding: 2px;
-    font-size: 0.8rem;
+    padding: 4px;
+    font-size: var(--input-font-size);
   }
 }
 
@@ -131,4 +136,17 @@ button.p-component.p-button {
   .p-toast-message-icon {
     display: none;
   }
+}
+
+.dark .p-checkbox .p-checkbox-box {
+  border-width: 1px;
+}
+
+.p-dropdown-item {
+  font-size: 0.9rem;
+}
+
+.p-dialog {
+  max-width: 90vw;
+  min-width: 50vw;
 }

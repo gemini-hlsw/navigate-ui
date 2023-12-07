@@ -1,18 +1,67 @@
-import { gql, useMutation } from "@apollo/client"
-import { useContext, useEffect } from "react"
+import { DocumentNode, gql, useMutation } from "@apollo/client"
+import { useContext, useRef } from "react"
 import { Button } from "primereact/button"
-import { ButtonStateType, TargetType } from "../../types"
-import { TelescopeContext } from "../../components/Telescope/TelescopeProvider"
-import { AuthContext } from "../../components/Auth/AuthProvider"
-import { VariablesContext } from "../../components/Variables/VariablesProvider"
+import { ButtonStateType } from "@/types"
+import { VariablesContext } from "@Contexts/Variables/VariablesProvider"
+import { Toast } from "primereact/toast"
 
-// Buttons possible states
-const btnClass = {
+// Generic mutation button
+const BTN_CLASSES = {
   PENDING: "",
   ACTIVE: "p-button-warning",
   DONE: "p-button-success",
 }
+const TOAST_LIFE = 5000
 
+function MutationButton({
+  mutation,
+  variables,
+  className,
+  label,
+  disabled = false,
+}: {
+  mutation: DocumentNode
+  variables: object
+  className: string
+  label: string
+  disabled: boolean
+}) {
+  const toast = useRef<Toast>(null)
+  const [mutationFunction, { data, loading, error }] = useMutation(mutation, {
+    variables: variables,
+  })
+
+  if (error) {
+    toast.current?.show({
+      severity: "error",
+      summary: "Error",
+      detail: error.message,
+      life: TOAST_LIFE,
+    })
+  }
+
+  let state: ButtonStateType = loading ? "ACTIVE" : "PENDING"
+
+  return (
+    <>
+      <Toast ref={toast} />
+      <Button
+        className={`${BTN_CLASSES[state]} ${className}`}
+        onClick={() =>
+          mutationFunction({
+            variables: variables,
+          })
+        }
+        loading={loading}
+        disabled={disabled}
+        label={label}
+      />
+    </>
+  )
+}
+
+// BUTTONS
+// MCS
 const MOUNT_MUTATION = gql`
   mutation changeMountState($enable: Boolean!) {
     mountFollow(enable: $enable) {
@@ -21,12 +70,45 @@ const MOUNT_MUTATION = gql`
   }
 `
 
+export function MCS({ label, disabled }: { label: string; disabled: boolean }) {
+  return (
+    <MutationButton
+      mutation={MOUNT_MUTATION}
+      variables={{ enable: true }}
+      className=""
+      label={label}
+      disabled={disabled}
+    />
+  )
+}
+
+// PARK
 const PARK_MUTATION = gql`
   mutation {
     mountPark
   }
 `
 
+export function McsPark({
+  label,
+  disabled,
+}: {
+  label: string
+  disabled: boolean
+  style: object
+}) {
+  return (
+    <MutationButton
+      mutation={PARK_MUTATION}
+      variables={{ enable: true }}
+      className=""
+      label={label}
+      disabled={disabled}
+    />
+  )
+}
+
+// SLEW
 const SLEW_MUTATION = gql`
   mutation runSlew(
     $zeroChopThrow: Boolean!
@@ -99,6 +181,45 @@ const SLEW_MUTATION = gql`
   }
 `
 
+export function Slew({
+  label,
+  disabled,
+  className,
+}: {
+  label: string
+  disabled: boolean
+  className: string
+}) {
+  const { configuration, selectedTarget, slewFlags } =
+    useContext(VariablesContext)
+
+  return (
+    <MutationButton
+      mutation={SLEW_MUTATION}
+      variables={{
+        ...slewFlags,
+        id: selectedTarget?.id,
+        name: selectedTarget?.name,
+        ra: selectedTarget?.ra?.hms,
+        dec: selectedTarget?.dec?.dms,
+        epoch: selectedTarget?.epoch,
+        wavelength: "400",
+        iaa: configuration.instrument?.iaa,
+        focusOffset: configuration.instrument?.focusOffset,
+        agName: configuration.instrument?.name,
+        x: configuration.instrument?.originX,
+        y: configuration.instrument?.originY,
+        rotAngle: configuration.rotator?.angle,
+        tracking: configuration.rotator?.tracking,
+      }}
+      className={className}
+      label={label}
+      disabled={disabled || !Boolean(selectedTarget?.id)}
+    />
+  )
+}
+
+// OIWFS
 const OIWFS_MUTATION = gql`
   mutation setOiwfsTarget(
     $id: TargetId!
@@ -121,158 +242,30 @@ const OIWFS_MUTATION = gql`
   }
 `
 
-export function MCS({ ...props }) {
-  const [mutationFunction, { data, loading, error }] = useMutation(
-    MOUNT_MUTATION,
-    {
-      variables: {
-        enable: true,
-      },
-    }
-  )
-
-  useEffect(() => {
-    if (Boolean(data)) {
-      console.log(data)
-    }
-  }, [data])
-
-  let state: ButtonStateType = loading ? "ACTIVE" : "PENDING"
-
-  return (
-    <Button
-      className={`${btnClass[state]}`}
-      onClick={() => mutationFunction({ variables: { enable: true } })}
-      loading={loading}
-      {...props}
-    />
-  )
-}
-
-export function McsPark({ ...props }) {
-  const [mutationFunction, { data, loading, error }] =
-    useMutation(PARK_MUTATION)
-
-  useEffect(() => {
-    if (Boolean(data)) {
-      console.log(data)
-    }
-  }, [data])
-
-  let state: ButtonStateType = loading ? "ACTIVE" : "PENDING"
-
-  return (
-    <Button
-      className={`${btnClass[state]}`}
-      onClick={() => mutationFunction({ variables: { enable: false } })}
-      loading={loading}
-      {...props}
-    />
-  )
-}
-
-export function Slew({
-  className,
+export function Oiwfs({
   label,
+  disabled,
+  className,
 }: {
-  className: string
   label: string
+  disabled: boolean
+  className: string
 }) {
-  const { canEdit } = useContext(AuthContext)
-  const { slewFlags } = useContext(TelescopeContext)
-  const { instrument, selectedTarget, rotator } = useContext(VariablesContext)
-
-  const [mutationFunction, { data, loading, error }] = useMutation(
-    SLEW_MUTATION,
-    {
-      variables: {
-        ...slewFlags,
+  const { selectedTarget } = useContext(VariablesContext)
+  return (
+    <MutationButton
+      mutation={OIWFS_MUTATION}
+      variables={{
         id: selectedTarget?.id,
         name: selectedTarget?.name,
         ra: selectedTarget?.ra?.hms,
         dec: selectedTarget?.dec?.dms,
         epoch: selectedTarget?.epoch,
         wavelength: "400",
-        iaa: instrument.iaa,
-        focusOffset: instrument.focusOffset,
-        agName: instrument.name,
-        x: instrument.originX,
-        y: instrument.originY,
-        rotAngle: rotator.angle,
-        tracking: rotator.tracking,
-      },
-    }
-  )
-
-  useEffect(() => {
-    if (Boolean(data)) {
-      console.log(data)
-    }
-  }, [data])
-
-  let state: ButtonStateType = loading ? "ACTIVE" : "PENDING"
-
-  return (
-    <Button
-      className={`${btnClass[state]} ${className}`}
-      onClick={() =>
-        mutationFunction({
-          variables: {
-            ...slewFlags,
-            id: selectedTarget?.id,
-            name: selectedTarget?.name,
-            ra: selectedTarget?.ra?.hms,
-            dec: selectedTarget?.dec?.dms,
-            epoch: selectedTarget?.epoch,
-            wavelength: "400",
-            iaa: instrument.iaa,
-            focusOffset: instrument.focusOffset,
-            agName: instrument.name,
-            x: instrument.originX,
-            y: instrument.originY,
-            rotAngle: rotator.angle,
-            tracking: rotator.tracking,
-          },
-        })
-      }
-      loading={loading}
-      disabled={!canEdit || !Boolean(selectedTarget?.id)}
+      }}
+      className={className}
       label={label}
+      disabled={disabled || !Boolean(selectedTarget?.id)}
     />
   )
-}
-
-export function useOiwfs() {
-  const { selectedTarget } = useContext(VariablesContext)
-  const [mutationFunction, { data, loading, error }] = useMutation(
-    OIWFS_MUTATION,
-    {
-      variables: {
-        id: selectedTarget?.id,
-        name: selectedTarget?.name,
-        ra: selectedTarget?.ra?.hms,
-        dec: selectedTarget?.dec?.dms,
-        epoch: selectedTarget?.epoch,
-        wavelength: "400",
-      },
-    }
-  )
-
-  function setOiwfsTarget(target: TargetType) {
-    let variables = {
-      id: target?.id,
-      name: target?.name,
-      ra: target?.ra?.hms,
-      dec: target?.dec?.dms,
-      epoch: target?.epoch,
-      wavelength: "400",
-    }
-    console.log(`Excecuting oiwfsTarget mutation with variables`)
-    console.log(variables)
-    mutationFunction({
-      variables: variables,
-    })
-  }
-
-  return setOiwfsTarget
 }

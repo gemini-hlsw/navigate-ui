@@ -2,6 +2,7 @@
 import { defineConfig } from "vite"
 import react from "@vitejs/plugin-react"
 import basicSsl from "@vitejs/plugin-basic-ssl"
+import path from "path"
 
 function fixCssRoot() {
   return {
@@ -21,6 +22,24 @@ fixCssRoot.postcss = true
 export default defineConfig({
   define: {
     "process.env": process.env,
+  },
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+      "@Contexts": path.resolve(__dirname, "./src/components/Contexts"),
+      "@Telescope": path.resolve(
+        __dirname,
+        "./src/components/Panels/Telescope"
+      ),
+      "@WavefrontSensors": path.resolve(
+        __dirname,
+        "./src/components/Panels/WavefrontSensors"
+      ),
+      "@Guider": path.resolve(__dirname, "./src/components/Panels/Guider"),
+      "@Shared": path.resolve(__dirname, "./src/components/Shared"),
+      "@assets": path.resolve(__dirname, "./src/assets"),
+      "@gql": path.resolve(__dirname, "./src/gql"),
+    },
   },
   server: {
     host: "0.0.0.0",
