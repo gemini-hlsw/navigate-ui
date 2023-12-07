@@ -1,0 +1,139 @@
+.target-edit {
+  font-size: 0.9rem;
+  display: grid;
+  grid-template-areas:
+  "s1 s2 s2 s2 s2"
+  "l1 d1 d1 d1 d1"
+  "t1 c11 f11 c12 f12"
+  "t2 c21 f21 c22 f22"
+  "s3 s4 s4 s4 s4";
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(4, 26px);
+  gap: 4px;
+  padding-bottom: 20px;
+
+  .label {
+    align-self: center;
+  }
+}
+
+.import-instrument {
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+
+  >.selectors {
+    display: flex;
+    flex-direction: row;
+    column-gap: 8px;
+    align-items: center;
+  }
+
+  >.table {
+    margin-top: 10px;
+    text-align: center;
+    border-spacing: 0;
+    td {
+      border-top: 1px solid var(--surface-border);
+      padding: 2px 6px;
+    }
+    th {
+      padding: 2px 6px;
+    }
+    tr.active > td {
+      background-color: var(--blue-900);
+    }
+  }
+}
+
+.slew-flags {
+  margin-top: 5px;
+  font-size: 0.9rem;
+  display: grid;
+  grid-template-columns: 40% 10% 40% 10%;
+  grid-template-rows: repeat(5, 22px);
+  gap: 4px;
+  margin-bottom: 20px;
+
+  >.p-inputswitch {
+    height: 24px;
+    align-self: center;
+  }
+}
+
+.target-table {
+  .p-datatable.p-component {
+    .p-datatable-header {
+      padding: 5px 0;
+      .header-table {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 4px;
+        align-items: center;
+        > span {
+          flex-grow: 1;
+          .p-inputtext.p-component {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}
+
+.config-save {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
+  >.name {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+  }
+}
+
+.p-dialog-footer > .modal-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+}
+
+@media only screen and (max-width: 1250px) {
+  .slew-flags {
+    grid-template-columns: 80% 20%;
+  }
+
+  .import-instrument {
+    >.selectors {
+      flex-direction: column;
+      align-items: baseline;
+      gap: 4px;
+    }
+  }
+
+  .target-edit {
+    grid-template-areas:
+    "s1 s1"
+    "s2 s2"
+    "l1 l1"
+    "d1 d1"
+    "t1 t1"
+    "c11 f11"
+    "c12 f12"
+    "t2 t2"
+    "c21 f21"
+    "c22 f22"
+    "s3 s3"
+    "s4 s4";
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(12, 26px);
+    gap: 4px;
+    padding-bottom: 20px;
+  
+    .label {
+      align-self: center;
+    }
+  }
+}

@@ -14,8 +14,18 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "paths": {
+      "@Telescope/*": ["./src/components/Panels/Telescope/*"],
+      "@WavefrontSensors/*": ["./src/components/Panels/WavefrontSensors/*"],
+      "@Guider/*": ["./src/components/Panels/Guider/*"],
+      "@Contexts/*": ["./src/components/Contexts/*"],
+      "@Shared/*": ["./src/components/Shared/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@gql/*": ["./src/gql/*"],
+      "@/*": ["./src/*"],
+    }
   },
   "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "references": [{ "path": "./tsconfig.node.json" }],
 }
