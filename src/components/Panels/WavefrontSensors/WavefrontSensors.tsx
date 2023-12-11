@@ -23,12 +23,12 @@ export function WavefrontSensors({
         nextPanel={nextPanel}
       ></Title>
       <div className="body">
-        {/* <div className="sensors">
+        <div className="sensors">
           <WavefrontSensor canEdit={canEdit} wfs={{ name: "PWFS1" }} />
           <WavefrontSensor canEdit={canEdit} wfs={{ name: "PWFS2" }} />
           <WavefrontSensor canEdit={canEdit} wfs={{ name: "OIWFS" }} />
         </div>
-        <AcquisitionCamera canEdit={canEdit} ac={{ name: "AC" }} /> */}
+        <AcquisitionCamera canEdit={canEdit} ac={{ name: "AC" }} />
         <Logs />
       </div>
     </div>

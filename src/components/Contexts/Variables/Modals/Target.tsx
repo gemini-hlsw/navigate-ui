@@ -223,7 +223,13 @@ export function Target() {
                 },
               })
             }
-            setc1String(stringC1)
+          }}
+          onBlur={(e) => {
+            if (coordsType === "celestial") {
+              setc1String(auxTarget.ra?.hms)
+            } else {
+              setc1String(auxTarget.az?.dms)
+            }
           }}
         />
         <span style={{ gridArea: "f11" }} className="label">
@@ -281,7 +287,13 @@ export function Target() {
                 },
               })
             }
-            setc2String(stringC2)
+          }}
+          onBlur={() => {
+            if (coordsType === "celestial") {
+              setc2String(auxTarget.dec?.dms)
+            } else {
+              setc2String(auxTarget.el?.dms)
+            }
           }}
         />
         <span style={{ gridArea: "f21" }} className="label">

@@ -18,7 +18,7 @@ export function Configuration() {
         <Checkbox
           style={{ gridArea: "s1" }}
           disabled={!canEdit}
-          checked={true}
+          // checked={false}
           onChange={(e) => e.target.value}
         />
         <Dropdown

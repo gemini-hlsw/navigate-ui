@@ -40,6 +40,22 @@ export default function Navbar() {
     },
   ]
 
+  let configSave: JSX.Element | null = null
+  if (configurationChanges?.length && configurationChanges?.length > 0) {
+    configSave = (
+      <Button
+        icon="pi pi-save"
+        iconPos="left"
+        className="p-button-text nav-btn blink-btn"
+        tooltip="Save configuration"
+        tooltipOptions={{ position: "bottom" }}
+        onClick={() => setIsConfigModalVisible(true)}
+      >
+        {"\u00A0"}
+      </Button>
+    )
+  }
+
   return (
     <nav className="top-bar">
       <div className="left">
@@ -65,18 +81,7 @@ export default function Navbar() {
         <span className="observation">{configuration.observation?.name}</span>
       </div>
       <div className="right">
-        {configurationChanges?.length && (
-          <Button
-            icon="pi pi-save"
-            iconPos="left"
-            className="p-button-text nav-btn blink-btn"
-            tooltip="Save configuration"
-            tooltipOptions={{ position: "bottom" }}
-            onClick={() => setIsConfigModalVisible(true)}
-          >
-            {"\u00A0"}
-          </Button>
-        )}
+        {configSave}
         <SplitButton
           label={auth.isUserLoggedIn ? auth.user.displayName : "Guest"}
           icon="pi pi-user"

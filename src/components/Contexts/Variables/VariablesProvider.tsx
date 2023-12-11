@@ -58,24 +58,6 @@ export default function VariablesProvider({
   })
   const [slewVisible, setSlewVisible] = useState(false)
   const [importInstrument, setImportInstrument] = useState(false)
-  const [slewFlags, setSlewFlags] = useState<SlewFlagsType>({
-    zeroChopThrow: false,
-    zeroSourceOffset: false,
-    zeroSourceDiffTrack: false,
-    zeroMountOffset: false,
-    zeroMountDiffTrack: false,
-    shortcircuitTargetFilter: false,
-    shortcircuitMountFilter: false,
-    resetPointing: false,
-    stopGuide: false,
-    zeroGuideOffset: false,
-    zeroInstrumentOffset: false,
-    autoparkPwfs1: false,
-    autoparkPwfs2: false,
-    autoparkOiwfs: false,
-    autoparkGems: false,
-    autoparkAowfs: false,
-  } as SlewFlagsType)
 
   // ----------- Guide Targets -----------------
   const [loadingGuideTarget, setLoadingGuideTarget] = useState(false)
@@ -176,8 +158,6 @@ export default function VariablesProvider({
     setOdbObservation,
     slewVisible,
     setSlewVisible,
-    slewFlags,
-    setSlewFlags,
     targetEdit,
     setTargetEdit,
     importInstrument,

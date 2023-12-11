@@ -12,6 +12,7 @@ export type ConfigurationType = {
   instrument?: InstrumentType
   observation?: ObservationType
   rotator?: RotatorType
+  slewFlags?: SlewFlagsType
 }
 
 export type InstrumentType = {
@@ -96,6 +97,7 @@ export type ButtonStateType = "PENDING" | "ACTIVE" | "DONE"
 export type NodeStatusType = "inactive" | "active" | "idle"
 
 export interface SlewFlagsType {
+  pk: number
   zeroChopThrow: boolean
   zeroSourceOffset: boolean
   zeroSourceDiffTrack: boolean
@@ -190,8 +192,6 @@ export interface VariablesContextType {
   setOdbObservation(_: ObservationType): void
   slewVisible: boolean
   setSlewVisible(_: boolean): void
-  slewFlags: SlewFlagsType
-  setSlewFlags(_: SlewFlagsType): void
   targetEdit: TargetEditType
   setTargetEdit(_: TargetEditType): void
   importInstrument: boolean
