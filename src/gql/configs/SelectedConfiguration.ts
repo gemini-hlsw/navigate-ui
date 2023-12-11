@@ -25,6 +25,25 @@ const GET_SELECTED_CONFIGURATION = gql`
           angle
           tracking
         }
+        slewFlags {
+          pk
+          zeroChopThrow
+          zeroSourceOffset
+          zeroSourceDiffTrack
+          zeroMountOffset
+          zeroMountDiffTrack
+          shortcircuitTargetFilter
+          shortcircuitMountFilter
+          resetPointing
+          stopGuide
+          zeroGuideOffset
+          zeroInstrumentOffset
+          autoparkPwfs1
+          autoparkPwfs2
+          autoparkOiwfs
+          autoparkGems
+          autoparkAowfs
+        }
         observation {
           pk
           id

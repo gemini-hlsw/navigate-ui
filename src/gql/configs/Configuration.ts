@@ -6,12 +6,14 @@ const UPDATE_CONFIGURATION = gql`
     $name: String!
     $instrumentPk: Int
     $observationPk: Int
+    $slewFlagsPk: Int
   ) {
     updateConfiguration(
       pk: $pk
       name: $name
       instrumentPk: $instrumentPk
       observationPk: $observationPk
+      slewFlagsPk: $slewFlagsPk
     ) {
       pk
       name
@@ -33,11 +35,13 @@ const CREATE_CONFIGURATION = gql`
     $name: String!
     $instrumentPk: Int
     $observationPk: Int
+    $slewFlagsPk: Int
   ) {
     createConfiguration(
       name: $name
       instrumentPk: $instrumentPk
       observationPk: $observationPk
+      slewFlagsPk: $slewFlagsPk
     ) {
       pk
       name

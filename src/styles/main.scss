@@ -138,8 +138,15 @@ button.p-component.p-button {
   }
 }
 
-.dark .p-checkbox .p-checkbox-box {
+.dark .p-checkbox .p-checkbox-box, .light .p-checkbox .p-checkbox-box {
   border-width: 1px;
+}
+
+.dark .p-checkbox .p-checkbox-box.p-highlight {
+  border-color: var(--blue-400);
+  > span {
+    color: var(--blue-400)
+  }
 }
 
 .p-dropdown-item {
