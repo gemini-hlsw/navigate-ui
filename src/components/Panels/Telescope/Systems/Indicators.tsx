@@ -1,5 +1,5 @@
 import { Button } from "primereact/button"
-import { MCS } from "@gql/server/Buttons"
+import { MCS, Oiwfs } from "@gql/server/Buttons"
 
 export function Indicators({ canEdit }: { canEdit: boolean }) {
   return (
@@ -9,7 +9,7 @@ export function Indicators({ canEdit }: { canEdit: boolean }) {
       <Button disabled={!canEdit} label="CRCS" />
       <Button disabled={!canEdit} label="PWFS1" />
       <Button disabled={!canEdit} label="PWFS2" />
-      <Button disabled={!canEdit} label="OIWFS" />
+      <Oiwfs label="OIWFS" disabled={!canEdit} />
       <Button disabled={!canEdit} label="ODGW" />
       <Button disabled={!canEdit} label="AOWFS" />
       <Button disabled={!canEdit} label="Dome" />

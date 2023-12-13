@@ -1,4 +1,37 @@
-import { gql, useMutation } from "@apollo/client"
+import { gql, useLazyQuery, useMutation } from "@apollo/client"
+
+const GET_SLEW_FLAGS = gql`
+  query getSlewFlags {
+    slewFlags {
+      pk
+      zeroChopThrow
+      zeroSourceOffset
+      zeroSourceDiffTrack
+      zeroMountOffset
+      zeroMountDiffTrack
+      shortcircuitTargetFilter
+      shortcircuitMountFilter
+      resetPointing
+      stopGuide
+      zeroGuideOffset
+      zeroInstrumentOffset
+      autoparkPwfs1
+      autoparkPwfs2
+      autoparkOiwfs
+      autoparkGems
+      autoparkAowfs
+    }
+  }
+`
+
+export function useGetSlewFlags() {
+  const [queryFunction, { data, loading, error }] = useLazyQuery(
+    GET_SLEW_FLAGS,
+    { context: { clientName: "navigateConfigs" } }
+  )
+
+  return queryFunction
+}
 
 const UPDATE_SLEW_FLAGS = gql`
   mutation updateSlewFlags(

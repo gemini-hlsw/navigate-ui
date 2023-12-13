@@ -1,4 +1,3 @@
-import { ConfigurationSave } from "./ConfigurationSave"
 import { Instrument } from "./Instrument"
 import { OdbImport } from "./OdbImport/OdbImport"
 import { SlewFlags } from "./SlewFlags"
@@ -12,7 +11,6 @@ export function Modals() {
       <SlewFlags />
       <Target />
       <Instrument />
-      <ConfigurationSave />
     </>
   )
 }

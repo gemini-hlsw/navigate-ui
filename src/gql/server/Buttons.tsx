@@ -1,18 +1,11 @@
 import { DocumentNode, gql, useMutation } from "@apollo/client"
-import { useContext, useRef } from "react"
+import { useContext, useEffect, useRef } from "react"
 import { Button } from "primereact/button"
-import { ButtonStateType } from "@/types"
+import { ButtonStateType, TargetType } from "@/types"
 import { VariablesContext } from "@Contexts/Variables/VariablesProvider"
 import { Toast } from "primereact/toast"
 
 // Generic mutation button
-const BTN_CLASSES = {
-  PENDING: "",
-  ACTIVE: "p-button-warning",
-  DONE: "p-button-success",
-}
-const TOAST_LIFE = 5000
-
 function MutationButton({
   mutation,
   variables,
@@ -26,19 +19,27 @@ function MutationButton({
   label: string
   disabled: boolean
 }) {
+  const BTN_CLASSES = {
+    PENDING: "",
+    ACTIVE: "p-button-warning",
+    DONE: "p-button-success",
+  }
+  const TOAST_LIFE = 5000
   const toast = useRef<Toast>(null)
   const [mutationFunction, { data, loading, error }] = useMutation(mutation, {
     variables: variables,
   })
 
-  if (error) {
-    toast.current?.show({
-      severity: "error",
-      summary: "Error",
-      detail: error.message,
-      life: TOAST_LIFE,
-    })
-  }
+  useEffect(() => {
+    if (error) {
+      toast.current?.show({
+        severity: "error",
+        summary: "Error",
+        detail: error.message,
+        life: TOAST_LIFE,
+      })
+    }
+  }, [error])
 
   let state: ButtonStateType = loading ? "ACTIVE" : "PENDING"
 
@@ -190,8 +191,12 @@ export function Slew({
   disabled: boolean
   className: string
 }) {
-  const { configuration, selectedTarget, slewFlags } =
+  const { baseTargets, instrument, slewFlags, rotator, configuration } =
     useContext(VariablesContext)
+
+  let selectedTarget = baseTargets.filter(
+    (t) => t.pk === configuration.selectedTarget
+  )[0]
 
   return (
     <MutationButton
@@ -204,13 +209,13 @@ export function Slew({
         dec: selectedTarget?.dec?.dms,
         epoch: selectedTarget?.epoch,
         wavelength: "400",
-        iaa: configuration.instrument?.iaa,
-        focusOffset: configuration.instrument?.focusOffset,
-        agName: configuration.instrument?.name,
-        x: configuration.instrument?.originX,
-        y: configuration.instrument?.originY,
-        rotAngle: configuration.rotator?.angle,
-        tracking: configuration.rotator?.tracking,
+        iaa: instrument.iaa,
+        focusOffset: instrument.focusOffset,
+        agName: instrument.name,
+        x: instrument.originX,
+        y: instrument.originY,
+        rotAngle: rotator.angle,
+        tracking: rotator.tracking,
       }}
       className={className}
       label={label}
@@ -245,13 +250,17 @@ const OIWFS_MUTATION = gql`
 export function Oiwfs({
   label,
   disabled,
-  className,
+  className = "",
 }: {
   label: string
   disabled: boolean
-  className: string
+  className?: string
 }) {
-  const { selectedTarget } = useContext(VariablesContext)
+  const { oiTargets, configuration } = useContext(VariablesContext)
+  let selectedTarget = oiTargets.filter(
+    (t) => t.pk === configuration.selectedOiTarget
+  )[0]
+
   return (
     <MutationButton
       mutation={OIWFS_MUTATION}
@@ -265,7 +274,7 @@ export function Oiwfs({
       }}
       className={className}
       label={label}
-      disabled={disabled || !Boolean(selectedTarget?.id)}
+      disabled={disabled || !Boolean(selectedTarget?.name)}
     />
   )
 }

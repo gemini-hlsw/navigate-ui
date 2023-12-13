@@ -1,22 +1,80 @@
-import { gql, useMutation } from "@apollo/client"
+import { gql, useLazyQuery, useMutation } from "@apollo/client"
+
+const GET_CONFIGURATION = gql`
+  query getConfiguration {
+    configuration {
+      pk
+      site
+      selectedTarget
+      selectedOiTarget
+      selectedP1Target
+      selectedP2Target
+      oiGuidingType
+      p1GuidingType
+      p2GuidingType
+      obsTitle
+      obsId
+      obsInstrument
+      obsSubtitle
+    }
+  }
+`
+
+export function useGetConfiguration() {
+  const [queryFunction, { data, loading, error }] = useLazyQuery(
+    GET_CONFIGURATION,
+    {
+      context: { clientName: "navigateConfigs" },
+    }
+  )
+
+  return queryFunction
+}
 
 const UPDATE_CONFIGURATION = gql`
   mutation updateConfiguration(
     $pk: Int!
-    $name: String!
-    $instrumentPk: Int
-    $observationPk: Int
-    $slewFlagsPk: Int
+    $site: SiteType
+    $selectedTarget: Int
+    $selectedOiTarget: Int
+    $selectedP1Target: Int
+    $selectedP2Target: Int
+    $oiGuidingType: GuidingType
+    $p1GuidingType: GuidingType
+    $p2GuidingType: GuidingType
+    $obsTitle: String
+    $obsId: String
+    $obsInstrument: String
+    $obsSubtitle: String
   ) {
     updateConfiguration(
       pk: $pk
-      name: $name
-      instrumentPk: $instrumentPk
-      observationPk: $observationPk
-      slewFlagsPk: $slewFlagsPk
+      site: $site
+      selectedTarget: $selectedTarget
+      selectedOiTarget: $selectedOiTarget
+      selectedP1Target: $selectedP1Target
+      selectedP2Target: $selectedP2Target
+      oiGuidingType: $oiGuidingType
+      p1GuidingType: $p1GuidingType
+      p2GuidingType: $p2GuidingType
+      obsTitle: $obsTitle
+      obsId: $obsId
+      obsInstrument: $obsInstrument
+      obsSubtitle: $obsSubtitle
     ) {
       pk
-      name
+      site
+      selectedTarget
+      selectedOiTarget
+      selectedP1Target
+      selectedP2Target
+      oiGuidingType
+      p1GuidingType
+      p2GuidingType
+      obsTitle
+      obsId
+      obsInstrument
+      obsSubtitle
     }
   }
 `
@@ -24,34 +82,6 @@ const UPDATE_CONFIGURATION = gql`
 export function useUpdateConfiguration() {
   const [mutationFunction, { data, loading, error }] = useMutation(
     UPDATE_CONFIGURATION,
-    { context: { clientName: "navigateConfigs" } }
-  )
-
-  return mutationFunction
-}
-
-const CREATE_CONFIGURATION = gql`
-  mutation createConfiguration(
-    $name: String!
-    $instrumentPk: Int
-    $observationPk: Int
-    $slewFlagsPk: Int
-  ) {
-    createConfiguration(
-      name: $name
-      instrumentPk: $instrumentPk
-      observationPk: $observationPk
-      slewFlagsPk: $slewFlagsPk
-    ) {
-      pk
-      name
-    }
-  }
-`
-
-export function useCreateConfiguration() {
-  const [mutationFunction, { data, loading, error }] = useMutation(
-    CREATE_CONFIGURATION,
     { context: { clientName: "navigateConfigs" } }
   )
 

@@ -8,13 +8,11 @@ export function Target({
   target,
   updateSelectedTarget,
   selectedTarget = undefined,
-  probeIndex = undefined,
   targetIndex = undefined,
 }: {
   target: TargetType
   updateSelectedTarget(target: number): void
   selectedTarget?: number | undefined
-  probeIndex?: number | undefined
   targetIndex?: number | undefined
 }) {
   const { canEdit } = useContext(AuthContext)
@@ -26,7 +24,6 @@ export function Target({
     setTargetEdit({
       isVisible: true,
       target: target,
-      probeIndex: probeIndex,
       targetIndex: targetIndex,
     })
   }
@@ -52,7 +49,6 @@ export function Target({
           setTargetEdit({
             isVisible: true,
             target: target,
-            probeIndex: probeIndex,
             targetIndex: targetIndex,
           })
           break
