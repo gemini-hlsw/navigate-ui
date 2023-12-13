@@ -65,3 +65,31 @@ export function useGetInstruments() {
 
   return queryFunction
 }
+
+const GET_INSTRUMENT = gql`
+  query getInstrument($name: String!, $issPort: Int!, $wfs: WfsType) {
+    instrument(name: $name, issPort: $issPort, wfs: $wfs) {
+      pk
+      name
+      iaa
+      issPort
+      focusOffset
+      wfs
+      originX
+      originY
+      ao
+      extraParams
+    }
+  }
+`
+
+export function useGetInstrument() {
+  const [queryFunction, { data, loading, error }] = useLazyQuery(
+    GET_INSTRUMENT,
+    {
+      context: { clientName: "navigateConfigs" },
+    }
+  )
+
+  return queryFunction
+}

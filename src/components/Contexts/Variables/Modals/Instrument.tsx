@@ -11,12 +11,8 @@ import { Dropdown } from "primereact/dropdown"
 import { InstrumentType } from "@/types"
 
 export function Instrument() {
-  const {
-    configuration,
-    setConfiguration,
-    importInstrument,
-    setImportInstrument,
-  } = useContext(VariablesContext)
+  const { instrument, setInstrument, importInstrument, setImportInstrument } =
+    useContext(VariablesContext)
   const getNames = useGetDistinctInstruments()
   const getPorts = useGetDistinctPorts()
   const getInstuments = useGetInstruments()
@@ -27,7 +23,7 @@ export function Instrument() {
   const [instrumentOptions, setInstrumentOptions] = useState<InstrumentType[]>(
     []
   )
-  const [instrument, setInstrument] = useState<InstrumentType>(
+  const [currentInstrument, setCurrentInstrument] = useState<InstrumentType>(
     {} as InstrumentType
   )
 
@@ -67,15 +63,15 @@ export function Instrument() {
     }
   }, [port])
 
-  function updateInstrument() {
-    setConfiguration({ ...configuration, instrument: instrument })
+  function modifyInstrument() {
+    setInstrument(currentInstrument)
     setImportInstrument(false)
   }
 
   let footer = (
     <div className="modal-footer">
       <div className="right">
-        <Button className="" label="Import" onClick={updateInstrument} />
+        <Button className="" label="Import" onClick={modifyInstrument} />
         <Button
           className="p-button-danger"
           label="Cancel"
@@ -90,8 +86,8 @@ export function Instrument() {
     tableData.push(
       <InstrumentDetails
         instrument={i}
-        selectedPk={instrument.pk}
-        setInstrument={setInstrument}
+        selectedPk={currentInstrument.pk}
+        setInstrument={setCurrentInstrument}
         key={idx}
       />
     )

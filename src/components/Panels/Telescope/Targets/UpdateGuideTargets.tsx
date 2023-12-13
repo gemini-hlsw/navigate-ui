@@ -1,16 +1,21 @@
 import { VariablesContext } from "@Contexts/Variables/VariablesProvider"
 import { useGetGuideTargets } from "@gql/odb/Observation"
-import { useCreateGuideProbe } from "@gql/configs/GuideProbe"
-import { ObservationType, TargetInput } from "@/types"
+import { TargetInput } from "@/types"
 import { useContext, useRef } from "react"
 import { Button } from "primereact/button"
 import { Toast } from "primereact/toast"
+import { useRemoveAndCreateWfsTargets } from "@gql/configs/Target"
 
 export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
-  const { configuration, setConfiguration, setLoadingGuideTarget } =
-    useContext(VariablesContext)
+  const {
+    setOiTargets,
+    setP1Targets,
+    setP2Targets,
+    setLoadingGuideTarget,
+    configuration,
+  } = useContext(VariablesContext)
   const getGuideTargets = useGetGuideTargets()
-  const createGuideProbe = useCreateGuideProbe()
+  const removeAndCreateWfsTargets = useRemoveAndCreateWfsTargets()
   const toast = useRef<Toast>(null)
 
   function calculateGuideTargets() {
@@ -18,7 +23,7 @@ export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
     let crtTime = new Date().toISOString()
     getGuideTargets({
       variables: {
-        observationId: configuration.observation?.id,
+        observationId: configuration.obsId,
         observationTime: crtTime,
       },
       onCompleted(data) {
@@ -30,81 +35,48 @@ export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
             let auxTarget: TargetInput = {
               name: t.name,
               id: undefined,
-              type: "GUIDE",
+              type: "OIWFS",
               epoch: t.sidereal.epoch,
-              ra: t.sidereal.ra.degrees,
-              dec: t.sidereal.dec.degrees,
+              coord1: t.sidereal.ra.degrees,
+              coord2: t.sidereal.dec.degrees,
             }
             if (t.probe.includes("OIWFS")) {
-              OiwfsTargets.push(auxTarget)
+              OiwfsTargets.push({ ...auxTarget, type: "OIWFS" })
             } else if (t.probe.includes("PWFS1")) {
-              Pwfs1Targets.push(auxTarget)
+              Pwfs1Targets.push({ ...auxTarget, type: "PWFS1" })
             } else if (t.probe.includes("PWFS2")) {
-              Pwfs2Targets.push(auxTarget)
+              Pwfs2Targets.push({ ...auxTarget, type: "PWFS2" })
             }
           })
         })
 
-        if (OiwfsTargets.length > 0) {
-          createGuideProbe({
-            variables: {
-              probe: "OIWFS",
-              selectedTarget: undefined,
-              observationPk: configuration.observation?.pk,
-              targets: OiwfsTargets,
-            },
-            onCompleted(res) {
-              console.log(res)
-              setConfiguration({
-                ...configuration,
-                observation: {
-                  ...(configuration.observation ?? ({} as ObservationType)),
-                  guideProbes: [res.createGuideProbe],
-                },
-              })
-            },
-          })
-        }
-
-        if (Pwfs1Targets.length > 0) {
-          createGuideProbe({
-            variables: {
-              probe: "PWFS1",
-              selectedTarget: undefined,
-              observationPk: configuration.observation?.pk,
-              targets: Pwfs1Targets,
-            },
-            onCompleted(res) {
-              setConfiguration({
-                ...configuration,
-                observation: {
-                  ...(configuration.observation ?? ({} as ObservationType)),
-                  guideProbes: [res.createGuideProbe],
-                },
-              })
-            },
-          })
-        }
-
-        if (Pwfs2Targets.length > 0) {
-          createGuideProbe({
-            variables: {
-              probe: "PWFS2",
-              selectedTarget: undefined,
-              observationPk: configuration.observation?.pk,
-              targets: Pwfs2Targets,
-            },
-            onCompleted(res) {
-              setConfiguration({
-                ...configuration,
-                observation: {
-                  ...(configuration.observation ?? ({} as ObservationType)),
-                  guideProbes: [res.createGuideProbe],
-                },
-              })
-            },
-          })
-        }
+        removeAndCreateWfsTargets({
+          variables: {
+            wfs: "OIWFS",
+            targets: OiwfsTargets,
+          },
+          onCompleted(data) {
+            setOiTargets(data.removeAndCreateWfsTargets)
+          },
+        })
+        removeAndCreateWfsTargets({
+          variables: {
+            wfs: "PWFS1",
+            targets: Pwfs1Targets,
+          },
+          onCompleted(data) {
+            setP1Targets(data.removeAndCreateWfsTargets)
+          },
+        })
+        removeAndCreateWfsTargets({
+          variables: {
+            wfs: "PWFS2",
+            targets: Pwfs2Targets,
+          },
+          onCompleted(data) {
+            setP2Targets(data.removeAndCreateWfsTargets)
+          },
+        })
 
         setLoadingGuideTarget(false)
       },
@@ -117,6 +89,33 @@ export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
           life: 5000,
         })
         console.log(err)
+        removeAndCreateWfsTargets({
+          variables: {
+            wfs: "OIWFS",
+            targets: [],
+          },
+          onCompleted(data) {
+            setOiTargets([])
+          },
+        })
+        removeAndCreateWfsTargets({
+          variables: {
+            wfs: "PWFS1",
+            targets: [],
+          },
+          onCompleted(data) {
+            setP1Targets([])
+          },
+        })
+        removeAndCreateWfsTargets({
+          variables: {
+            wfs: "PWFS2",
+            targets: [],
+          },
+          onCompleted(data) {
+            setP2Targets([])
+          },
+        })
       },
     })
   }

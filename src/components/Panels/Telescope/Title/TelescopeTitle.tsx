@@ -27,12 +27,9 @@ export function TelescopeTitle({ prevPanel, nextPanel }: ParamsInterface) {
         <Button
           disabled={!canEdit}
           className="p-button-text"
-          label="Import from Fixed Targets"
-          onClick={() => console.log("Open modal??")}
+          label="Import from catalog"
+          onClick={() => console.log("Open catalog modal")}
         />
-        {/* <Button disabled={!canEdit} className="p-button-text" label="Load" />
-        <Button disabled={!canEdit} className="p-button-text" label="Save" />
-        <Button disabled={!canEdit} className="p-button-text" label="Save as" /> */}
         <Divider />
         <Button
           disabled={!canEdit}

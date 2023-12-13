@@ -3,25 +3,45 @@ import { Button } from "primereact/button"
 import { Divider } from "primereact/divider"
 import { InputNumber } from "primereact/inputnumber"
 import { InputText } from "primereact/inputtext"
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import { VariablesContext } from "@Contexts/Variables/VariablesProvider"
 import { InstrumentType } from "@/types"
+import { useGetInstrument } from "@gql/configs/Instrument"
 
 export function Instrument({ canEdit }: { canEdit: boolean }) {
-  const { configuration, setConfiguration, setImportInstrument } =
+  const { instrument, setInstrument, setImportInstrument, configuration } =
     useContext(VariablesContext)
+  const getInstrument = useGetInstrument()
+
+  useEffect(() => {
+    if (configuration.obsInstrument) {
+      // Get Instrument port from TCS
+      // Then get instrument configuration from local configs
+      getInstrument({
+        variables: {
+          name: configuration.obsInstrument,
+          issPort: 3,
+          wfs: "NONE",
+        },
+        onCompleted(data) {
+          setInstrument(data.instrument)
+        },
+      })
+    }
+  }, [configuration])
 
   function updateInstrument({ key, val }: { key: string; val: any }) {
-    setConfiguration({
-      ...configuration,
-      instrument: {
-        ...(configuration.instrument ?? ({} as InstrumentType)),
-        [key]: val,
-      },
-    })
+    console.log("Update instrument")
+    // setConfiguration({
+    //   ...configuration,
+    //   instrument: {
+    //     ...(configuration.instrument ?? ({} as InstrumentType)),
+    //     [key]: val,
+    //   },
+    // })
   }
 
-  if (configuration.instrument && !("name" in configuration.instrument)) {
+  if (!("name" in instrument)) {
     return null
   }
 
@@ -52,7 +72,7 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
         <span className="label">SF Name</span>
         <InputText
           disabled={!canEdit}
-          value={configuration.instrument?.name}
+          value={instrument.name}
           onChange={(e) =>
             updateInstrument({ key: "name", val: e.target.value })
           }
@@ -60,14 +80,14 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
         <span className="label">Port</span>
         <InputNumber
           disabled={!canEdit}
-          value={configuration.instrument?.issPort}
+          value={instrument.issPort}
           onChange={(e) => updateInstrument({ key: "issPort", val: e.value })}
           mode="decimal"
         />
         <span className="label">Origin X</span>
         <InputNumber
           disabled={!canEdit}
-          value={configuration.instrument?.originX}
+          value={instrument.originX}
           minFractionDigits={2}
           maxFractionDigits={5}
           onChange={(e) => updateInstrument({ key: "originX", val: e.value })}
@@ -76,7 +96,7 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
         <span className="label">Origin Y</span>
         <InputNumber
           disabled={!canEdit}
-          value={configuration.instrument?.originY}
+          value={instrument.originY}
           minFractionDigits={2}
           maxFractionDigits={5}
           onChange={(e) => updateInstrument({ key: "originY", val: e.value })}
@@ -85,7 +105,7 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
         <span className="label">Focus Offset</span>
         <InputNumber
           disabled={!canEdit}
-          value={configuration.instrument?.focusOffset}
+          value={instrument.focusOffset}
           minFractionDigits={2}
           maxFractionDigits={5}
           onChange={(e) =>
@@ -96,7 +116,7 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
         <span className="label">IAA</span>
         <InputNumber
           disabled={!canEdit}
-          value={configuration.instrument?.iaa}
+          value={instrument.iaa}
           minFractionDigits={2}
           maxFractionDigits={5}
           onChange={(e) => updateInstrument({ key: "iaa", val: e.value })}

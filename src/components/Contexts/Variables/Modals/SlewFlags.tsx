@@ -8,18 +8,18 @@ import { useUpdateSlewFlags } from "@gql/configs/SlewFlags"
 
 export function SlewFlags() {
   const { canEdit } = useContext(AuthContext)
-  const { slewVisible, setSlewVisible, configuration, setConfiguration } =
+  const { slewVisible, setSlewVisible, slewFlags, setSlewFlags } =
     useContext(VariablesContext)
   const updateSlewFlags = useUpdateSlewFlags()
 
   function updateFlags(flagName: string, value: boolean) {
     updateSlewFlags({
       variables: {
-        pk: configuration.slewFlags?.pk,
+        pk: slewFlags.pk,
         [flagName]: value,
       },
       onCompleted: (data) => {
-        setConfiguration({ ...configuration, slewFlags: data.updateSlewFlags })
+        setSlewFlags(data.updateSlewFlags)
       },
     })
   }
@@ -37,12 +37,9 @@ export function SlewFlags() {
         </span>
         <InputSwitch
           disabled={!canEdit}
-          checked={configuration.slewFlags?.zeroChopThrow}
+          checked={slewFlags.zeroChopThrow}
           onChange={() =>
-            updateFlags(
-              "zeroChopThrow",
-              !configuration.slewFlags?.zeroChopThrow
-            )
+            updateFlags("zeroChopThrow", !slewFlags.zeroChopThrow)
           }
         />
         <span style={{ textAlign: "center", alignSelf: "center" }}>
@@ -50,12 +47,9 @@ export function SlewFlags() {
         </span>
         <InputSwitch
           disabled={!canEdit}
-          checked={configuration.slewFlags?.zeroSourceOffset}
+          checked={slewFlags.zeroSourceOffset}
           onChange={() =>
-            updateFlags(
-              "zeroSourceOffset",
-              !configuration.slewFlags?.zeroSourceOffset
-            )
+            updateFlags("zeroSourceOffset", !slewFlags.zeroSourceOffset)
           }
         />
         <span style={{ textAlign: "center", alignSelf: "center" }}>
@@ -63,12 +57,9 @@ export function SlewFlags() {
         </span>
         <InputSwitch
           disabled={!canEdit}
-          checked={configuration.slewFlags?.zeroSourceDiffTrack}
+          checked={slewFlags.zeroSourceDiffTrack}
           onChange={() =>
-            updateFlags(
-              "zeroSourceDiffTrack",
-              !configuration.slewFlags?.zeroSourceDiffTrack
-            )
+            updateFlags("zeroSourceDiffTrack", !slewFlags.zeroSourceDiffTrack)
           }
         />
         <span style={{ textAlign: "center", alignSelf: "center" }}>
@@ -76,12 +67,9 @@ export function SlewFlags() {
         </span>
         <InputSwitch
           disabled={!canEdit}
-          checked={configuration.slewFlags?.zeroMountOffset}
+          checked={slewFlags.zeroMountOffset}
           onChange={() =>
-            updateFlags(
-              "zeroMountOffset",
-              !configuration.slewFlags?.zeroMountOffset
-            )
+            updateFlags("zeroMountOffset", !slewFlags.zeroMountOffset)
           }
         />
         <span style={{ textAlign: "center", alignSelf: "center" }}>
@@ -89,12 +77,9 @@ export function SlewFlags() {
         </span>
         <InputSwitch
           disabled={!canEdit}
-          checked={configuration.slewFlags?.zeroMountDiffTrack}
+          checked={slewFlags.zeroMountDiffTrack}
           onChange={() =>
-            updateFlags(
-              "zeroMountDiffTrack",
-              !configuration.slewFlags?.zeroMountDiffTrack
-            )
+            updateFlags("zeroMountDiffTrack", !slewFlags.zeroMountDiffTrack)
           }
         />
         <span style={{ textAlign: "center", alignSelf: "center" }}>
@@ -102,11 +87,11 @@ export function SlewFlags() {
         </span>
         <InputSwitch
           disabled={!canEdit}
-          checked={configuration.slewFlags?.shortcircuitTargetFilter}
+          checked={slewFlags.shortcircuitTargetFilter}
           onChange={() =>
             updateFlags(
               "shortcircuitTargetFilter",
-              !configuration.slewFlags?.shortcircuitTargetFilter
+              !slewFlags.shortcircuitTargetFilter
             )
           }
         />
@@ -115,11 +100,11 @@ export function SlewFlags() {
         </span>
         <InputSwitch
           disabled={!canEdit}
-          checked={configuration.slewFlags?.shortcircuitMountFilter}
+          checked={slewFlags.shortcircuitMountFilter}
           onChange={() =>
             updateFlags(
               "shortcircuitMountFilter",
-              !configuration.slewFlags?.shortcircuitMountFilter
+              !slewFlags.shortcircuitMountFilter
             )
           }
         />
@@ -128,12 +113,9 @@ export function SlewFlags() {
         </span>
         <InputSwitch
           disabled={!canEdit}
-          checked={configuration.slewFlags?.resetPointing}
+          checked={slewFlags.resetPointing}
           onChange={() =>
-            updateFlags(
-              "resetPointing",
-              !configuration.slewFlags?.resetPointing
-            )
+            updateFlags("resetPointing", !slewFlags.resetPointing)
           }
         />
         <span style={{ textAlign: "center", alignSelf: "center" }}>
@@ -141,22 +123,17 @@ export function SlewFlags() {
         </span>
         <InputSwitch
           disabled={!canEdit}
-          checked={configuration.slewFlags?.stopGuide}
-          onChange={() =>
-            updateFlags("stopGuide", !configuration.slewFlags?.stopGuide)
-          }
+          checked={slewFlags.stopGuide}
+          onChange={() => updateFlags("stopGuide", !slewFlags.stopGuide)}
         />
         <span style={{ textAlign: "center", alignSelf: "center" }}>
           Zero Guide Offset
         </span>
         <InputSwitch
           disabled={!canEdit}
-          checked={configuration.slewFlags?.zeroGuideOffset}
+          checked={slewFlags.zeroGuideOffset}
           onChange={() =>
-            updateFlags(
-              "zeroGuideOffset",
-              !configuration.slewFlags?.zeroGuideOffset
-            )
+            updateFlags("zeroGuideOffset", !slewFlags.zeroGuideOffset)
           }
         />
         <span style={{ textAlign: "center", alignSelf: "center" }}>
@@ -164,12 +141,9 @@ export function SlewFlags() {
         </span>
         <InputSwitch
           disabled={!canEdit}
-          checked={configuration.slewFlags?.zeroInstrumentOffset}
+          checked={slewFlags.zeroInstrumentOffset}
           onChange={() =>
-            updateFlags(
-              "zeroInstrumentOffset",
-              !configuration.slewFlags?.zeroInstrumentOffset
-            )
+            updateFlags("zeroInstrumentOffset", !slewFlags.zeroInstrumentOffset)
           }
         />
         <span style={{ textAlign: "center", alignSelf: "center" }}>
@@ -177,12 +151,9 @@ export function SlewFlags() {
         </span>
         <InputSwitch
           disabled={!canEdit}
-          checked={configuration.slewFlags?.autoparkPwfs1}
+          checked={slewFlags.autoparkPwfs1}
           onChange={() =>
-            updateFlags(
-              "autoparkPwfs1",
-              !configuration.slewFlags?.autoparkPwfs1
-            )
+            updateFlags("autoparkPwfs1", !slewFlags.autoparkPwfs1)
           }
         />
         <span style={{ textAlign: "center", alignSelf: "center" }}>
@@ -190,12 +161,9 @@ export function SlewFlags() {
         </span>
         <InputSwitch
           disabled={!canEdit}
-          checked={configuration.slewFlags?.autoparkPwfs2}
+          checked={slewFlags.autoparkPwfs2}
           onChange={() =>
-            updateFlags(
-              "autoparkPwfs2",
-              !configuration.slewFlags?.autoparkPwfs2
-            )
+            updateFlags("autoparkPwfs2", !slewFlags.autoparkPwfs2)
           }
         />
         <span style={{ textAlign: "center", alignSelf: "center" }}>
@@ -203,12 +171,9 @@ export function SlewFlags() {
         </span>
         <InputSwitch
           disabled={!canEdit}
-          checked={configuration.slewFlags?.autoparkOiwfs}
+          checked={slewFlags.autoparkOiwfs}
           onChange={() =>
-            updateFlags(
-              "autoparkOiwfs",
-              !configuration.slewFlags?.autoparkOiwfs
-            )
+            updateFlags("autoparkOiwfs", !slewFlags.autoparkOiwfs)
           }
         />
         <span style={{ textAlign: "center", alignSelf: "center" }}>
@@ -216,22 +181,17 @@ export function SlewFlags() {
         </span>
         <InputSwitch
           disabled={!canEdit}
-          checked={configuration.slewFlags?.autoparkGems}
-          onChange={() =>
-            updateFlags("autoparkGems", !configuration.slewFlags?.autoparkGems)
-          }
+          checked={slewFlags.autoparkGems}
+          onChange={() => updateFlags("autoparkGems", !slewFlags.autoparkGems)}
         />
         <span style={{ textAlign: "center", alignSelf: "center" }}>
           Autopark AO WFS
         </span>
         <InputSwitch
           disabled={!canEdit}
-          checked={configuration.slewFlags?.autoparkAowfs}
+          checked={slewFlags.autoparkAowfs}
           onChange={() =>
-            updateFlags(
-              "autoparkAowfs",
-              !configuration.slewFlags?.autoparkAowfs
-            )
+            updateFlags("autoparkAowfs", !slewFlags.autoparkAowfs)
           }
         />
       </div>

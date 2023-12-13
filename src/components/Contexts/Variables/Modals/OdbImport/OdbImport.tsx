@@ -6,43 +6,68 @@ import { useGetObservations } from "@gql/odb/Observation"
 import { AuthContext } from "@Contexts/Auth/AuthProvider"
 import { VariablesContext } from "@Contexts/Variables/VariablesProvider"
 import { OdbObservationType } from "@/types"
-import { useUpsertObservation } from "@gql/configs/Observation"
+import {
+  useCreateTarget,
+  useRemoveAndCreateBaseTargets,
+} from "@gql/configs/Target"
+import { useUpdateConfiguration } from "@gql/configs/Configuration"
 
 export function OdbImport() {
   const { canEdit } = useContext(AuthContext)
-  const { odbVisible, setOdbVisible, setOdbObservation } =
-    useContext(VariablesContext)
+  const { configuration, setConfiguration } = useContext(VariablesContext)
+  const {
+    odbVisible,
+    setOdbVisible,
+    setBaseTargets,
+    setOiTargets,
+    setP1Targets,
+    setP2Targets,
+  } = useContext(VariablesContext)
   const [selectedObservation, setSelectedObservation] =
     useState<OdbObservationType>({} as OdbObservationType)
   const { getObservations, loading, data, error } = useGetObservations()
-  const upsertObservation = useUpsertObservation()
+  const removeAndCreateBaseTargets = useRemoveAndCreateBaseTargets()
+  const updateConfiguration = useUpdateConfiguration()
 
   function updateObs() {
-    setOdbVisible(false)
-    upsertObservation({
+    updateConfiguration({
       variables: {
-        id: selectedObservation.id,
-        name: selectedObservation.title,
-        targets: [
-          {
-            id: selectedObservation.targetEnvironment.firstScienceTarget.id,
-            name: selectedObservation.targetEnvironment.firstScienceTarget.name,
-            ra: selectedObservation.targetEnvironment.firstScienceTarget
-              .sidereal.ra.degrees,
-            dec: selectedObservation.targetEnvironment.firstScienceTarget
-              .sidereal.dec.degrees,
-            epoch:
-              selectedObservation.targetEnvironment.firstScienceTarget.sidereal
-                .epoch,
-            type: "SCIENCE",
-          },
-        ],
+        ...configuration,
+        obsId: selectedObservation.id,
+        obsTitle: selectedObservation.title,
+        obsSubtitle: selectedObservation.subtitle,
+        obsInstrument: selectedObservation.instrument,
       },
       onCompleted(data) {
-        setOdbObservation(data.updateObservation)
-      },
-      onError(error) {
-        console.log(error)
+        setConfiguration(data.updateConfiguration)
+        setOdbVisible(false)
+        removeAndCreateBaseTargets({
+          variables: {
+            targets: [
+              {
+                id: selectedObservation.targetEnvironment.firstScienceTarget.id,
+                name: selectedObservation.targetEnvironment.firstScienceTarget
+                  .name,
+                coord1:
+                  selectedObservation.targetEnvironment.firstScienceTarget
+                    .sidereal.ra.degrees,
+                coord2:
+                  selectedObservation.targetEnvironment.firstScienceTarget
+                    .sidereal.dec.degrees,
+                epoch:
+                  selectedObservation.targetEnvironment.firstScienceTarget
+                    .sidereal.epoch,
+                type: "SCIENCE",
+              },
+            ],
+          },
+          onCompleted(data) {
+            setBaseTargets(data.removeAndCreateBaseTargets)
+            setOiTargets([])
+            setP1Targets([])
+            setP2Targets([])
+          },
+        })
       },
     })
   }
