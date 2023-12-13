@@ -6,50 +6,26 @@ This tool will be used to configure the telescope and its subsystems to point an
 
 ## Launch on local development
 
-Make sure you have installed [NodeJS](https://nodejs.org/en/) in your machine.
-
-### Using yarn
+Make sure you have installed [NodeJS](https://nodejs.org/en/) and [ni](https://github.com/antfu/ni) in your machine.
 
 - Install dependencies
 
   ```bash
-  yarn
+  ni
   ```
 
 - Run the web app
   ```bash
-  yarn dev
-  ```
-
-### Using NPM
-
-- Install dependencies
-
-  ```bash
-  npm install
-  ```
-
-- Run the web app
-  ```bash
-  npm run dev
+  nr dev
   ```
 
 ## Test modules
 
 Some project modules can be tested using vitest
 
-### Using yarn
-
 - Run vitest
   ```bash
-  yarn test
-  ```
-
-### Using NPM
-
-- Run vitest
-  ```bash
-  npm run test
+  nlx vitest
   ```
 
 ## Navigate backend
@@ -79,5 +55,5 @@ navigate_web_server/reStart
 In order to publish the project as static assets, run:
 
 ```bash
-yarn build
+nr build
 ```
