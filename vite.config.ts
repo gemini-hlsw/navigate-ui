@@ -20,9 +20,9 @@ fixCssRoot.postcss = true
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  define: {
-    "process.env": process.env,
-  },
+  // define: {
+  //   "process.env": process.env,
+  // },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
@@ -59,7 +59,7 @@ export default defineConfig({
     host: "0.0.0.0",
     proxy: {
       "^/navigate/graphql": {
-        target: "http://localhost:7070",
+        target: "http://host.docker.internal:7070",
         changeOrigin: true,
       },
       // "ws://localhost/navigate/ws": {

@@ -22,7 +22,7 @@ const navigateConfigs = new HttpLink({
 const odbLink = new HttpLink({
   uri: "https://lucuma-postgres-odb-staging.herokuapp.com/odb",
   headers: {
-    authorization: `Bearer ${process.env.ODB_TOKEN}`,
+    authorization: `Bearer ${import.meta.env.VITE_ODB_TOKEN}`,
   },
 })
 

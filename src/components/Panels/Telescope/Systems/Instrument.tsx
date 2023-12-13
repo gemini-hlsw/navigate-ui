@@ -24,7 +24,7 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
           wfs: "NONE",
         },
         onCompleted(data) {
-          setInstrument(data.instrument)
+          setInstrument(data.instrument ?? ({} as InstrumentType))
         },
       })
     }
