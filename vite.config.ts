@@ -59,7 +59,7 @@ export default defineConfig({
     host: "0.0.0.0",
     proxy: {
       "^/navigate/graphql": {
-        target: "http://host.docker.internal:7070",
+        target: "http://server:7070",
         changeOrigin: true,
       },
       // "ws://localhost/navigate/ws": {
