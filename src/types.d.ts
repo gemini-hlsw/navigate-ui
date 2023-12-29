@@ -96,6 +96,7 @@ export type ButtonStateType = "PENDING" | "ACTIVE" | "DONE"
 export type NodeStatusType = "inactive" | "active" | "idle"
 
 export interface SlewFlagsType {
+  __typename: string
   pk: number
   zeroChopThrow: boolean
   zeroSourceOffset: boolean

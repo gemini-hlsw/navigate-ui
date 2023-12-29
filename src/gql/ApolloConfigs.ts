@@ -12,11 +12,11 @@ import { SubscriptionClient } from "subscriptions-transport-ws"
 import { getMainDefinition } from "@apollo/client/utilities"
 
 const navigateCommandServer = new HttpLink({
-  uri: "/navigate/graphql",
+  uri: "http://navigate.lucuma.xyz/navigate/graphql",
 })
 
 const navigateConfigs = new HttpLink({
-  uri: "http://localhost:4000/",
+  uri: "http://navigate.lucuma.xyz/db/",
 })
 
 const odbLink = new HttpLink({
@@ -27,7 +27,7 @@ const odbLink = new HttpLink({
 })
 
 const wsLink = new WebSocketLink(
-  new SubscriptionClient("ws://localhost:7070/navigate/ws")
+  new SubscriptionClient("ws://navigate.lucuma.xyz/navigate/ws")
 )
 
 export const client = new ApolloClient({

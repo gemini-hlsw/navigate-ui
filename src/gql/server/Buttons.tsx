@@ -111,72 +111,8 @@ export function McsPark({
 
 // SLEW
 const SLEW_MUTATION = gql`
-  mutation runSlew(
-    $zeroChopThrow: Boolean!
-    $zeroSourceOffset: Boolean!
-    $zeroSourceDiffTrack: Boolean!
-    $zeroMountOffset: Boolean!
-    $zeroMountDiffTrack: Boolean!
-    $shortcircuitTargetFilter: Boolean!
-    $shortcircuitMountFilter: Boolean!
-    $resetPointing: Boolean!
-    $stopGuide: Boolean!
-    $zeroGuideOffset: Boolean!
-    $zeroInstrumentOffset: Boolean!
-    $autoparkPwfs1: Boolean!
-    $autoparkPwfs2: Boolean!
-    $autoparkOiwfs: Boolean!
-    $autoparkGems: Boolean!
-    $autoparkAowfs: Boolean!
-    $id: TargetId!
-    $name: NonEmptyString!
-    $ra: HmsString
-    $dec: DmsString
-    $epoch: EpochString
-    $wavelength: PosBigDecimal
-    $iaa: BigDecimal
-    $focusOffset: Long
-    $agName: String
-    $x: Long
-    $y: Long
-    $rotAngle: BigDecimal
-    $tracking: RotatorTrackingMode!
-  ) {
-    slew(
-      slewOptions: {
-        zeroChopThrow: $zeroChopThrow
-        zeroSourceOffset: $zeroSourceOffset
-        zeroSourceDiffTrack: $zeroSourceDiffTrack
-        zeroMountOffset: $zeroMountOffset
-        zeroMountDiffTrack: $zeroMountDiffTrack
-        shortcircuitTargetFilter: $shortcircuitTargetFilter
-        shortcircuitMountFilter: $shortcircuitMountFilter
-        resetPointing: $resetPointing
-        stopGuide: $stopGuide
-        zeroGuideOffset: $zeroGuideOffset
-        zeroInstrumentOffset: $zeroInstrumentOffset
-        autoparkPwfs1: $autoparkPwfs1
-        autoparkPwfs2: $autoparkPwfs2
-        autoparkOiwfs: $autoparkOiwfs
-        autoparkGems: $autoparkGems
-        autoparkAowfs: $autoparkAowfs
-      }
-      config: {
-        instParams: {
-          iaa: { degrees: $iaa }
-          focusOffset: { micrometers: $focusOffset }
-          agName: $agName
-          origin: { x: { micrometers: $x }, y: { micrometers: $y } }
-        }
-        sourceATarget: {
-          id: $id
-          name: $name
-          sidereal: { ra: { hms: $ra }, dec: { dms: $dec }, epoch: $epoch }
-          wavelength: { nanometers: $wavelength }
-        }
-        rotator: { ipa: { degrees: $rotAngle }, mode: $tracking }
-      }
-    ) {
+  mutation runSlew($slewOptions: SlewOptionsInput!, $config: TcsConfigInput!) {
+    slew(slewOptions: $slewOptions, config: $config) {
       result
     }
   }
@@ -191,32 +127,74 @@ export function Slew({
   disabled: boolean
   className: string
 }) {
-  const { baseTargets, instrument, slewFlags, rotator, configuration } =
-    useContext(VariablesContext)
+  const {
+    baseTargets,
+    oiTargets,
+    instrument,
+    slewFlags,
+    rotator,
+    configuration,
+  } = useContext(VariablesContext)
 
   let selectedTarget = baseTargets.filter(
     (t) => t.pk === configuration.selectedTarget
   )[0]
 
+  let selectedOiTarget = oiTargets.filter(
+    (t) => t.pk === configuration.selectedOiTarget
+  )[0]
+
+  console.log(selectedOiTarget)
+  console.log(Boolean(selectedOiTarget))
+
+  let variables = {
+    slewOptions: (({ __typename, pk, ...o }) => o)(slewFlags),
+    config: {
+      instParams: {
+        iaa: { degrees: instrument.iaa },
+        focusOffset: { micrometers: instrument.focusOffset },
+        agName: instrument.name,
+        origin: {
+          x: { micrometers: instrument.originX },
+          y: { micrometers: instrument.originY },
+        },
+      },
+      sourceATarget: {
+        id: selectedTarget?.id,
+        name: selectedTarget?.name,
+        sidereal: {
+          ra: { hms: selectedTarget?.ra?.hms },
+          dec: { dms: selectedTarget?.dec?.dms },
+          epoch: selectedTarget?.epoch,
+        },
+        wavelength: { nanometers: "400" },
+      },
+      rotator: { ipa: { degrees: rotator.angle }, mode: rotator.tracking },
+      ...(Boolean(selectedOiTarget) && {
+        oiwfs: {
+          target: {
+            name: selectedOiTarget?.name,
+            sidereal: {
+              ra: { hms: selectedOiTarget?.ra?.hms },
+              dec: { dms: selectedOiTarget?.dec?.dms },
+              epoch: selectedOiTarget?.epoch,
+            },
+          },
+          tracking: {
+            nodAchopA: true,
+            nodAchopB: false,
+            nodBchopA: false,
+            nodBchopB: false,
+          },
+        },
+      }),
+    },
+  }
+
   return (
     <MutationButton
       mutation={SLEW_MUTATION}
-      variables={{
-        ...slewFlags,
-        id: selectedTarget?.id,
-        name: selectedTarget?.name,
-        ra: selectedTarget?.ra?.hms,
-        dec: selectedTarget?.dec?.dms,
-        epoch: selectedTarget?.epoch,
-        wavelength: "400",
-        iaa: instrument.iaa,
-        focusOffset: instrument.focusOffset,
-        agName: instrument.name,
-        x: instrument.originX,
-        y: instrument.originY,
-        rotAngle: rotator.angle,
-        tracking: rotator.tracking,
-      }}
+      variables={variables}
       className={className}
       label={label}
       disabled={disabled || !Boolean(selectedTarget?.id)}
