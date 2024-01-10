@@ -3,12 +3,45 @@ import { InputNumber } from "primereact/inputnumber"
 import { Dropdown } from "primereact/dropdown"
 import { useEffect, useState } from "react"
 import { Checkbox } from "primereact/checkbox"
+import { AltairInstrumentType, GemsInstrumentType } from "@/types"
+import {
+  useGetGemsInstrument,
+  useUpdateGemsInstrument,
+} from "@gql/configs/GemsInstrument"
+import {
+  useGetAltairInstrument,
+  useUpdateAltairInstrument,
+} from "@gql/configs/AltairInstrument"
 
-export function Gems({ canEdit }: { canEdit: boolean }) {
-  const [adc, setAdc] = useState(true)
+export function GeMS({ canEdit }: { canEdit: boolean }) {
+  const [state, setState] = useState<GemsInstrumentType>(
+    {} as GemsInstrumentType
+  )
+  const getGemsInstrument = useGetGemsInstrument()
+  const updateGemsInstrument = useUpdateGemsInstrument()
+
   useEffect(() => {
-    console.log(adc)
-  }, [adc])
+    getGemsInstrument({
+      onCompleted(data) {
+        setState(data.gemsInstrument)
+      },
+    })
+  }, [])
+
+  function modifyGemsInstrument(
+    name: string,
+    value: boolean | string | number
+  ) {
+    updateGemsInstrument({
+      variables: {
+        pk: state.pk,
+        [name]: value,
+      },
+      onCompleted(data) {
+        setState(data.updateGemsInstrument)
+      },
+    })
+  }
 
   return (
     <div className="ao-gems">
@@ -17,24 +50,26 @@ export function Gems({ canEdit }: { canEdit: boolean }) {
         <span className="label">ADC</span>
         <Checkbox
           disabled={!canEdit}
-          checked={adc}
-          onChange={() => setAdc(!adc)}
+          checked={state.adc}
+          onChange={() => modifyGemsInstrument("adc", !state.adc)}
         />
         <span className="label">Beamsplitter</span>
         <Dropdown
           disabled={!canEdit}
-          value={""}
+          value={state.beamsplitter}
           options={["400 nm", "550 nm", "700nm", "850 nm", "1000 nm"]}
-          onChange={(e) => console.log(e.value)}
-          placeholder="Select a tracking"
+          onChange={(e) => modifyGemsInstrument("beamsplitter", e.target.value)}
+          placeholder="Select a beamsplitter"
         />
         <span className="label">Astrometric mode</span>
         <Dropdown
           disabled={!canEdit}
-          value={""}
+          value={state.astrometricMode}
           options={["Best", "Average"]}
-          onChange={(e) => console.log(e.value)}
-          placeholder="Select a tracking"
+          onChange={(e) =>
+            modifyGemsInstrument("astrometricMode", e.target.value)
+          }
+          placeholder="Select a mode"
         />
       </div>
     </div>
@@ -42,6 +77,35 @@ export function Gems({ canEdit }: { canEdit: boolean }) {
 }
 
 export function Altair({ canEdit }: { canEdit: boolean }) {
+  const [state, setState] = useState<AltairInstrumentType>(
+    {} as AltairInstrumentType
+  )
+  const getAltairInstrument = useGetAltairInstrument()
+  const updateAltairInstrument = useUpdateAltairInstrument()
+
+  useEffect(() => {
+    getAltairInstrument({
+      onCompleted(data) {
+        setState(data.altairInstrument)
+      },
+    })
+  }, [])
+
+  function modifyAltairInstrument(
+    name: string,
+    value: boolean | string | number
+  ) {
+    updateAltairInstrument({
+      variables: {
+        pk: state.pk,
+        [name]: value,
+      },
+      onCompleted(data) {
+        setState(data.updateAltairInstrument)
+      },
+    })
+  }
+
   return (
     <div className="ao-altair">
       <Title title={"Altair"} />
@@ -49,64 +113,72 @@ export function Altair({ canEdit }: { canEdit: boolean }) {
         <span className="label">Beamsplitter</span>
         <Dropdown
           disabled={!canEdit}
-          value={""}
+          value={state.beamsplitter}
           options={["400 nm", "550 nm", "700nm", "850 nm", "1000 nm"]}
-          onChange={(e) => console.log(e.value)}
+          onChange={(e) =>
+            modifyAltairInstrument("beamsplitter", e.target.value)
+          }
           placeholder="Select a tracking"
         />
         <span className="label">ND filter</span>
         <Checkbox
           disabled={!canEdit}
-          checked={true}
-          onChange={(e) => e.target.value}
+          checked={state.ndFilter}
+          onChange={(e) => modifyAltairInstrument("ndFilter", e.target.value)}
         />
         <span className="label">Star Mag</span>
         <InputNumber
           disabled={!canEdit}
-          value={0.0}
-          onValueChange={(e) => console.log(e.value ? e.value : 0)}
+          value={state.startMagnitude}
+          onValueChange={(e) =>
+            modifyAltairInstrument("startMagnitude", e.target.value ?? 0.0)
+          }
         />
         <span className="label">Field Lens</span>
         <Checkbox
           disabled={!canEdit}
-          checked={true}
-          onChange={(e) => e.target.value}
+          checked={state.fieldLens}
+          onChange={() => modifyAltairInstrument("fieldLens", !state.fieldLens)}
         />
         <span className="label">Seeing r0</span>
         <InputNumber
           disabled={!canEdit}
-          value={0.0}
-          onValueChange={(e) => console.log(e.value ? e.value : 0)}
+          value={state.seeing}
+          onValueChange={(e) =>
+            modifyAltairInstrument("seeing", e.target.value ?? 0.0)
+          }
         />
         <span className="label">Deploy ADC</span>
         <Checkbox
           disabled={!canEdit}
-          checked={true}
-          onChange={(e) => e.target.value}
+          checked={state.deployAdc}
+          onChange={() => modifyAltairInstrument("deployAdc", !state.deployAdc)}
         />
         <span className="label">Wind speed</span>
         <InputNumber
           disabled={!canEdit}
-          value={0.0}
-          onValueChange={(e) => console.log(e.value ? e.value : 0)}
+          value={state.windSpeed}
+          onValueChange={(e) =>
+            modifyAltairInstrument("windSpeed", e.target.value ?? 0.0)
+          }
         />
         <span className="label">Adjust ADC</span>
         <Checkbox
           disabled={!canEdit}
-          checked={true}
-          onChange={(e) => e.target.value}
+          checked={state.adjustAdc}
+          onChange={() => modifyAltairInstrument("adjustAdc", !state.adjustAdc)}
         />
         <span className="label">Force Mode</span>
         <Checkbox
           disabled={!canEdit}
-          checked={true}
-          onChange={(e) => e.target.value}
+          checked={state.forceMode}
+          onChange={() => modifyAltairInstrument("forceMode", !state.forceMode)}
         />
         <span className="label">Use LGS</span>
         <Checkbox
           disabled={!canEdit}
-          checked={true}
-          onChange={(e) => e.target.value}
+          checked={state.lgs}
+          onChange={() => modifyAltairInstrument("lgs", !state.lgs)}
         />
       </div>
     </div>

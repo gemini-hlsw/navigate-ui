@@ -4,6 +4,7 @@ import { Button } from "primereact/button"
 import { ButtonStateType, TargetType } from "@/types"
 import { VariablesContext } from "@Contexts/Variables/VariablesProvider"
 import { Toast } from "primereact/toast"
+import { BTN_CLASSES } from "@/Helpers/constants"
 
 // Generic mutation button
 function MutationButton({
@@ -19,11 +20,6 @@ function MutationButton({
   label: string
   disabled: boolean
 }) {
-  const BTN_CLASSES = {
-    PENDING: "",
-    ACTIVE: "p-button-warning",
-    DONE: "p-button-success",
-  }
   const TOAST_LIFE = 5000
   const toast = useRef<Toast>(null)
   const [mutationFunction, { data, loading, error }] = useMutation(mutation, {
@@ -67,6 +63,7 @@ const MOUNT_MUTATION = gql`
   mutation changeMountState($enable: Boolean!) {
     mountFollow(enable: $enable) {
       result
+      msg
     }
   }
 `
@@ -86,7 +83,10 @@ export function MCS({ label, disabled }: { label: string; disabled: boolean }) {
 // PARK
 const PARK_MUTATION = gql`
   mutation {
-    mountPark
+    mountPark {
+      result
+      msg
+    }
   }
 `
 
@@ -143,9 +143,6 @@ export function Slew({
   let selectedOiTarget = oiTargets.filter(
     (t) => t.pk === configuration.selectedOiTarget
   )[0]
-
-  console.log(selectedOiTarget)
-  console.log(Boolean(selectedOiTarget))
 
   let variables = {
     slewOptions: (({ __typename, pk, ...o }) => o)(slewFlags),

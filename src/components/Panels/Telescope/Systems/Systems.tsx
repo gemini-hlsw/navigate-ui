@@ -1,18 +1,27 @@
 import { useContext, useState } from "react"
 import { Rotator } from "./Rotator"
-import { Altair, Gems } from "./AdaptiveOptics"
+import { Altair, GeMS } from "./AdaptiveOptics"
 import { AuthContext } from "@Contexts/Auth/AuthProvider"
 import { Indicators } from "./Indicators"
 import { AgMechanism } from "./AgMechanism"
 import { BotSubsystems, TopSubsystems } from "./Subsystems"
 import { Instrument } from "./Instrument"
+import { VariablesContext } from "@Contexts/Variables/VariablesProvider"
 
 export function Systems() {
   const { canEdit } = useContext(AuthContext)
+  const { configuration } = useContext(VariablesContext)
   const [collapsed, setCollapsed] = useState<boolean>(false)
 
   function toggle() {
     setCollapsed(!collapsed)
+  }
+
+  let aoSystem = null
+  if (configuration.site === "GN") {
+    aoSystem = <Altair canEdit={canEdit} />
+  } else if (configuration.site === "GS") {
+    aoSystem = <GeMS canEdit={canEdit} />
   }
 
   return (
@@ -29,8 +38,7 @@ export function Systems() {
       <div className="right">
         <Instrument canEdit={canEdit} />
         <Rotator canEdit={canEdit} />
-        {/* <Gems canEdit={canEdit} /> */}
-        <Altair canEdit={canEdit} />
+        {aoSystem}
       </div>
     </div>
   )

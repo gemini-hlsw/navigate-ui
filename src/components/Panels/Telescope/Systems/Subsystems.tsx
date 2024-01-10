@@ -3,7 +3,10 @@ import { Dropdown } from "primereact/dropdown"
 import { InputNumber } from "primereact/inputnumber"
 import { Slider } from "primereact/slider"
 import { McsPark } from "@gql/server/Buttons"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { MechanismType } from "@/types"
+import { useGetMechanism, useUpdateMechanism } from "@gql/configs/Mechanism"
+import { BTN_CLASSES } from "@/Helpers/constants"
 
 export function TopSubsystems({ canEdit }: { canEdit: boolean }) {
   return (
@@ -28,7 +31,7 @@ const DOME_MODE = [
   { label: "Paris", value: "PRS" },
 ]
 
-const SHUTTERS_MODE = [
+const SHUTTER_MODE = [
   { label: "Tracking", value: "Tracking" },
   { label: "Rome", value: "RM" },
   { label: "London", value: "LDN" },
@@ -37,18 +40,66 @@ const SHUTTERS_MODE = [
 ]
 
 export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
+  const [state, setState] = useState<MechanismType>({} as MechanismType)
   const [domeMode, setDomeMode] = useState("MinVibration")
-  const [shuttersMode, setShuttersMode] = useState("Tracking")
+  const [shutterMode, setShutterMode] = useState("Tracking")
   const [aperture, setAperture] = useState(90)
   const [WVGate, setWVGate] = useState<any>(50)
   const [EVGate, setEVGate] = useState<any>(50)
+  const getMechanism = useGetMechanism()
+  const updateMechanism = useUpdateMechanism()
+
+  useEffect(() => {
+    getMechanism({
+      onCompleted(data) {
+        setState(data.mechanism)
+        setEVGate(data.mechanism.eVGateValue)
+        setWVGate(data.mechanism.wVGateValue)
+        setAperture(data.mechanism.shutterAperture)
+        setDomeMode(data.mechanism.domeMode)
+        setShutterMode(data.mechanism.shutterMode)
+      },
+    })
+  }, [])
+
+  function modifyMechanism(vars: object) {
+    updateMechanism({
+      variables: {
+        pk: state.pk,
+        ...vars,
+      },
+      onCompleted(data) {
+        setState(data.updateMechanism)
+      },
+    })
+  }
 
   return (
     <div className="bottom">
-      <Button disabled={!canEdit} style={{ gridArea: "g11" }} label="Park" />
-      <Button disabled={!canEdit} style={{ gridArea: "g21" }} label="Park" />
-      <Button disabled={!canEdit} style={{ gridArea: "g31" }} label="Park" />
-      <Button disabled={!canEdit} style={{ gridArea: "g41" }} label="Park" />
+      <Button
+        disabled={!canEdit}
+        style={{ gridArea: "g11" }}
+        label="Park"
+        className={BTN_CLASSES[state.oiwfsPark]}
+      />
+      <Button
+        disabled={!canEdit}
+        style={{ gridArea: "g21" }}
+        label="Park"
+        className={BTN_CLASSES[state.odgwPark]}
+      />
+      <Button
+        disabled={!canEdit}
+        style={{ gridArea: "g31" }}
+        label="Park"
+        className={BTN_CLASSES[state.aowfsPark]}
+      />
+      <Button
+        disabled={!canEdit}
+        style={{ gridArea: "g41" }}
+        label="Park"
+        className={BTN_CLASSES[state.domePark]}
+      />
       <span
         style={{
           textAlign: "center",
@@ -66,8 +117,18 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         onChange={(e) => setDomeMode(e.value)}
         placeholder="Select a Dome Mode"
       />
-      <Button disabled={!canEdit} style={{ gridArea: "g46" }} label="Set" />
-      <Button disabled={!canEdit} style={{ gridArea: "g51" }} label="Park" />
+      <Button
+        disabled={!canEdit}
+        style={{ gridArea: "g46" }}
+        label="Set"
+        onClick={() => modifyMechanism({ domeMode: domeMode })}
+      />
+      <Button
+        disabled={!canEdit}
+        style={{ gridArea: "g51" }}
+        label="Park"
+        className={BTN_CLASSES[state.shuttersPark]}
+      />
       <span
         style={{
           textAlign: "center",
@@ -80,10 +141,10 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
       <Dropdown
         disabled={!canEdit}
         style={{ gridArea: "g53" }}
-        value={shuttersMode}
-        options={SHUTTERS_MODE}
-        onChange={(e) => setShuttersMode(e.value)}
-        placeholder="Select a Shutters Mode"
+        value={shutterMode}
+        options={SHUTTER_MODE}
+        onChange={(e) => setShutterMode(e.value)}
+        placeholder="Select a Shutter Mode"
       />
       <span
         style={{
@@ -101,8 +162,23 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         onValueChange={(e) => setAperture(e.value ? e.value : 0)}
         mode="decimal"
       />
-      <Button disabled={!canEdit} style={{ gridArea: "g56" }} label="Set" />
-      <Button disabled={!canEdit} style={{ gridArea: "g61" }} label="Close" />
+      <Button
+        disabled={!canEdit}
+        style={{ gridArea: "g56" }}
+        label="Set"
+        onClick={() =>
+          modifyMechanism({
+            shutterMode: shutterMode,
+            shutterAperture: aperture,
+          })
+        }
+      />
+      <Button
+        disabled={!canEdit}
+        style={{ gridArea: "g61" }}
+        label="Close"
+        className={BTN_CLASSES[state.wVGateClose]}
+      />
       <InputNumber
         disabled={!canEdit}
         style={{ gridArea: "g62" }}
@@ -116,8 +192,18 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         value={WVGate}
         onChange={(e) => setWVGate(e.value)}
       />
-      <Button disabled={!canEdit} style={{ gridArea: "g66" }} label="Move" />
-      <Button disabled={!canEdit} style={{ gridArea: "g71" }} label="Close" />
+      <Button
+        disabled={!canEdit}
+        style={{ gridArea: "g66" }}
+        label="Move"
+        onClick={() => modifyMechanism({ wVGateValue: WVGate })}
+      />
+      <Button
+        disabled={!canEdit}
+        style={{ gridArea: "g71" }}
+        label="Close"
+        className={BTN_CLASSES[state.eVGateClose]}
+      />
       <InputNumber
         disabled={!canEdit}
         style={{ gridArea: "g72" }}
@@ -131,7 +217,12 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         value={EVGate}
         onChange={(e) => setEVGate(e.value)}
       />
-      <Button disabled={!canEdit} style={{ gridArea: "g76" }} label="Move" />
+      <Button
+        disabled={!canEdit}
+        style={{ gridArea: "g76" }}
+        label="Move"
+        onClick={() => modifyMechanism({ eVGateValue: EVGate })}
+      />
     </div>
   )
 }

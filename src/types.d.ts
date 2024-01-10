@@ -190,3 +190,104 @@ export interface VariablesContextType {
   rotator: RotatorType
   setRotator(_: RotatorType): void
 }
+
+export interface AltairGuideLoopType {
+  pk: number
+  aoEnabled: boolean
+  oiBlend: boolean
+  focus: boolean
+  p1Ttf: boolean
+  strap: boolean
+  oiTtf: boolean
+  ttgs: boolean
+  sfo: boolean
+}
+
+export interface GemsGuideLoopType {
+  pk: number
+  aoEnabled: boolean
+  focus: boolean
+  rotation: boolean
+  tipTilt: boolean
+  anisopl: boolean
+  flexure: boolean
+}
+
+export interface GuideLoopType {
+  pk: number
+  m2TipTiltEnable: boolean
+  m2TipTiltSource: string
+  m2FocusEnable: boolean
+  m2FocusSource: string
+  m2TipTiltFocusLink: boolean
+  m2ComaEnable: boolean
+  m1CorrectionsEnable: boolean
+  m2ComaM1CorrectionsSource: string
+  mountOffload: boolean
+  daytimeMode: boolean
+  probeTracking: string
+  lightPath: string
+}
+
+export interface GemsInstrumentType {
+  pk: number
+  beamsplitter: string
+  adc: boolean
+  astrometricMode: string
+}
+
+export interface AltairInstrumentType {
+  pk: number
+  beamsplitter: string
+  startMagnitude: number
+  seeing: number
+  windSpeed: number
+  forceMode: boolean
+  ndFilter: boolean
+  fieldLens: boolean
+  deployAdc: boolean
+  adjustAdc: boolean
+  lgs: boolean
+}
+
+export type StatusType = "PENDING" | "ACTIVE" | "DONE" | "ERROR"
+
+export interface MechanismType {
+  pk: number
+  mcs: StatusType
+  mcsPark: StatusType
+  mcsUnwrap: StatusType
+  scs: StatusType
+  crcs: StatusType
+  crcsPark: StatusType
+  crcsUnwrap: StatusType
+  pwfs1: StatusType
+  pwfs1Park: StatusType
+  pwfs1Unwrap: StatusType
+  pwfs2: StatusType
+  pwfs2Park: StatusType
+  pwfs2Unwrap: StatusType
+  oiwfs: StatusType
+  oiwfsPark: StatusType
+  odgw: StatusType
+  odgwPark: StatusType
+  aowfs: StatusType
+  aowfsPark: StatusType
+  dome: StatusType
+  domePark: StatusType
+  domeMode: string
+  shutters: StatusType
+  shuttersPark: StatusType
+  shutterMode: string
+  shutterAperture: number
+  wVGate: StatusType
+  wVGateClose: StatusType
+  wVGateValue: number
+  eVGate: StatusType
+  eVGateClose: StatusType
+  eVGateValue: number
+  agScienceFoldPark: StatusType
+  agAoFoldPark: StatusType
+  agAcPickoffPark: StatusType
+  agParkAll: StatusType
+}

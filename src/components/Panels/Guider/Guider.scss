@@ -120,6 +120,29 @@
                 width: 100%;
               }
             }
+            .p-multiselect {
+              width: 100% !important;
+            
+              .p-multiselect-trigger {
+                width: initial !important;
+            
+                >span {
+                  margin: 0 2px;
+                  font-size: var(--input-font-size);
+                }
+              }
+            
+              .p-multiselect-label-container {
+                display: flex;
+                align-items: center;
+            
+                .p-multiselect-label {
+                  font-size: var(--input-font-size);
+                  padding: 3px;
+                  line-height: normal;
+                }
+              }
+            }
           }
 
           > .buttons {
