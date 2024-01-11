@@ -101,7 +101,10 @@ export function OdbImport() {
   )
 
   useEffect(() => {
-    if (odbVisible) getObservations()
+    if (odbVisible)
+      getObservations({
+        fetchPolicy: "no-cache",
+      })
   }, [odbVisible])
 
   return (

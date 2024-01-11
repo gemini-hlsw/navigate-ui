@@ -8,7 +8,7 @@ const GET_ALTAIR_INSTRUMENT = gql`
       startMagnitude
       seeing
       windSpeed
-      foceMode
+      forceMode
       ndFilter
       fieldLens
       deployAdc
@@ -34,7 +34,7 @@ const UPDATE_ALTAIR_INSTRUMENT = gql`
     $startMagnitude: Float
     $seeing: Float
     $windSpeed: Float
-    $foceMode: Boolean
+    $forceMode: Boolean
     $ndFilter: Boolean
     $fieldLens: Boolean
     $deployAdc: Boolean
@@ -47,7 +47,7 @@ const UPDATE_ALTAIR_INSTRUMENT = gql`
       startMagnitude: $startMagnitude
       seeing: $seeing
       windSpeed: $windSpeed
-      foceMode: $foceMode
+      forceMode: $forceMode
       ndFilter: $ndFilter
       fieldLens: $fieldLens
       deployAdc: $deployAdc
@@ -59,7 +59,7 @@ const UPDATE_ALTAIR_INSTRUMENT = gql`
       startMagnitude
       seeing
       windSpeed
-      foceMode
+      forceMode
       ndFilter
       fieldLens
       deployAdc
