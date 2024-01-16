@@ -39,6 +39,10 @@
       .react-flow__edge.active>path {
         stroke: var(--primary-color);
       }
+
+      .react-flow__edge.idle>path {
+        stroke: rgba(150, 150, 0, 0.5);
+      }
   
       .react-flow__edge.inactive>path {
         stroke: var(--surface-border);

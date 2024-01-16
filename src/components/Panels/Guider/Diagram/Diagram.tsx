@@ -217,19 +217,77 @@ function Flow({}) {
       })
     }
 
-    // Update static boxes colors
-    initialNodes.filter((n) => n.id === "tiptilt")[0].className =
-      state.m2TipTiltEnable ? "active" : "inactive"
-    initialNodes.filter((n) => n.id === "mount")[0].className =
-      state.m2TipTiltEnable ? "active" : "inactive"
+    // Check statick boxes state
+    // active: Enabled and receiving input
+    // idle: Enabled and waiting for input
+    // inacive: Disabled
+
+    // Tip/Tilt
+    let tiptiltState
+    if (state.m2TipTiltEnable) {
+      if (sourceEdges.filter((n) => n.target === "tiptilt").length > 0) {
+        tiptiltState = "active"
+      } else {
+        tiptiltState = "idle"
+      }
+    } else {
+      tiptiltState = "inactive"
+    }
+    initialNodes.filter((n) => n.id === "tiptilt")[0].className = tiptiltState
+
+    // Mount
+    let mountState = "active"
+    if (state.mountOffload) {
+      if (tiptiltState === "active") {
+        mountState = "active"
+      } else {
+        mountState = "idle"
+      }
+    } else {
+      mountState = "inactive"
+    }
+    initialNodes.filter((n) => n.id === "mount")[0].className = mountState
     initialEdges.filter((n) => n.id === "tiptilt-mount")[0].className =
-      state.m2TipTiltEnable ? "active" : "inactive"
-    initialNodes.filter((n) => n.id === "focus")[0].className =
-      state.m2FocusEnable ? "active" : "inactive"
-    initialNodes.filter((n) => n.id === "coma")[0].className =
-      state.m2ComaEnable ? "active" : "inactive"
-    initialNodes.filter((n) => n.id === "higho")[0].className =
-      state.m1CorrectionsEnable ? "active" : "inactive"
+      mountState
+
+    // Focus
+    let focusState
+    if (state.m2FocusEnable) {
+      if (sourceEdges.filter((n) => n.target === "focus").length > 0) {
+        focusState = "active"
+      } else {
+        focusState = "idle"
+      }
+    } else {
+      focusState = "inactive"
+    }
+    initialNodes.filter((n) => n.id === "focus")[0].className = focusState
+
+    // Coma
+    let comaState
+    if (state.m2ComaEnable) {
+      if (sourceEdges.filter((n) => n.target === "coma").length > 0) {
+        comaState = "active"
+      } else {
+        comaState = "idle"
+      }
+    } else {
+      comaState = "inactive"
+    }
+    initialNodes.filter((n) => n.id === "coma")[0].className = comaState
+
+    // High-O
+    let highoState
+    if (state.m1CorrectionsEnable) {
+      if (sourceEdges.filter((n) => n.target === "higho").length > 0) {
+        highoState = "active"
+      } else {
+        highoState = "idle"
+      }
+    } else {
+      highoState = "inactive"
+    }
+    initialNodes.filter((n) => n.id === "higho")[0].className = highoState
 
     // Check probe tracking
 
