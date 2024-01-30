@@ -58,7 +58,6 @@ const initialEdges: Edge[] = [
     source: "tiptilt",
     target: "mount",
     animated: true,
-    type: "bezier",
     className: "active",
   },
 ]
@@ -71,12 +70,9 @@ function Flow({}) {
   const getGuideLoop = useGetGuideLoop()
 
   function retrieveInfo() {
-    console.log("Retrieving guide loop info")
     getGuideLoop({
       fetchPolicy: "no-cache",
       onCompleted(data) {
-        console.log("Data")
-        console.log(data)
         setState(data.guideLoop)
       },
     })
@@ -96,7 +92,6 @@ function Flow({}) {
 
   useEffect(() => {
     // fitView()
-    console.log("State changed")
     // Get active sources first
     let sourceNodes: Node[] = []
     let sourceEdges: Edge[] = []
@@ -114,7 +109,6 @@ function Flow({}) {
           source: source,
           target: "tiptilt",
           animated: true,
-          type: "bezier",
           className: "active",
         })
       })
@@ -127,7 +121,6 @@ function Flow({}) {
           source: n.id,
           target: "focus",
           animated: true,
-          type: "bezier",
           className: "active",
         })
       })
@@ -148,7 +141,6 @@ function Flow({}) {
             source: s,
             target: "focus",
             animated: true,
-            type: "bezier",
             className: "active",
           })
         })
@@ -181,7 +173,6 @@ function Flow({}) {
         source: state.m2ComaM1CorrectionsSource,
         target: "coma",
         animated: true,
-        type: "bezier",
         className: "active",
       })
     }
@@ -212,7 +203,6 @@ function Flow({}) {
         source: state.m2ComaM1CorrectionsSource,
         target: "higho",
         animated: true,
-        type: "bezier",
         className: "active",
       })
     }

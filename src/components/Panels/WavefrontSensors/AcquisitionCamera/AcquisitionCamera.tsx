@@ -9,13 +9,13 @@ export default function AcquisitionCamera({
   ac,
 }: {
   canEdit: boolean
-  ac: { name: string }
+  ac: string
 }) {
   return (
     <div className="acquisition-camera">
       <div className="left">
         <div className="image">
-          <span className="ac-name">{ac.name}</span>
+          <span className="ac-name">{ac}</span>
           <img src={imgUrl} alt="wfs" />
         </div>
         <div className="controls">

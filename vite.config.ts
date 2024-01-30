@@ -1,7 +1,6 @@
 /// <reference types="vitest" />
 import { defineConfig } from "vite"
 import react from "@vitejs/plugin-react"
-import basicSsl from "@vitejs/plugin-basic-ssl"
 import path from "path"
 
 function fixCssRoot() {
@@ -45,7 +44,11 @@ export default defineConfig({
     host: "0.0.0.0",
     proxy: {
       "^/navigate/graphql": {
-        target: "http://localhost:7070",
+        target: "http://navigate.lucuma.xyz",
+        changeOrigin: true,
+      },
+      "^/db": {
+        target: "http://navigate.lucuma.xyz",
         changeOrigin: true,
       },
       // "ws://localhost/navigate/ws": {
@@ -57,17 +60,12 @@ export default defineConfig({
   },
   preview: {
     host: "0.0.0.0",
-    proxy: {
-      "^/navigate/graphql": {
-        target: "http://server:7070",
-        changeOrigin: true,
-      },
-      // "ws://localhost/navigate/ws": {
-      //   target: "ws://localhost:7070",
-      //   changeOrigin: true,
-      //   ws: true,
-      // },
-    },
+    // proxy: {
+    //   "^/navigate/graphql": {
+    //     target: "http://server:7070",
+    //     changeOrigin: true,
+    //   },
+    // },
   },
   css: {
     preprocessorOptions: {
@@ -79,7 +77,7 @@ export default defineConfig({
       plugins: [fixCssRoot()],
     },
   },
-  plugins: [react(), basicSsl()],
+  plugins: [react()],
   test: {
     environment: "jsdom",
   },
