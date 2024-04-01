@@ -9,13 +9,19 @@ import { GuideLoopType } from "@/types"
 import { useGetGuideLoop, useUpdateGuideLoop } from "@gql/configs/GuideLoop"
 import { Altair, GeMS } from "./AdaptiveOptics"
 import { VariablesContext } from "@Contexts/Variables/VariablesProvider"
+import { useGuideDisable, useGuideEnable } from "@gql/server/GuideState"
 
 export function Configuration() {
   const { canEdit } = useContext(AuthContext)
   const { configuration } = useContext(VariablesContext)
-  const [state, setState] = useState<GuideLoopType>({} as GuideLoopType)
+  const [state, setState] = useState<GuideLoopType>({
+    m1CorrectionsEnable: true,
+    m2ComaM1CorrectionsSource: "OIWFS",
+  } as GuideLoopType)
   const getGuideLoop = useGetGuideLoop()
   const updateGuideLoop = useUpdateGuideLoop()
+  const guideEnable = useGuideEnable()
+  const guideDisable = useGuideDisable()
 
   useEffect(() => {
     getGuideLoop({
@@ -35,6 +41,39 @@ export function Configuration() {
         setState(data.updateGuideLoop)
       },
     })
+  }
+
+  function translateStateGuideInput() {
+    let m2Inputs = []
+    if (state.m2TipTiltEnable) {
+      if (state.m2TipTiltSource.split(",").includes("OIWFS")) {
+        m2Inputs.push("OIWFS")
+      }
+    }
+    let m1Input = state.m2ComaM1CorrectionsSource
+    let [probeFrom, probeTo] = state.probeTracking.split("➡")
+
+    return {
+      m2Inputs: m2Inputs,
+      m2Coma: state.m2ComaEnable,
+      m1Input: m1Input,
+      mountOffload: state.mountOffload,
+      daytimeMode: state.daytimeMode,
+      probeGuide: {
+        from:
+          probeFrom === "OI"
+            ? "GMOS_OIWFS"
+            : probeFrom === "P1"
+            ? "PWFS_1"
+            : "PWFS_2",
+        to:
+          probeFrom === "OI"
+            ? "GMOS_OIWFS"
+            : probeFrom === "P1"
+            ? "PWFS_1"
+            : "PWFS_2",
+      },
+    }
   }
 
   let aoSystem = null
@@ -76,10 +115,10 @@ export function Configuration() {
               modifyGuideLoop("m2TipTiltSource", e.value.join(","))
             }
             options={[
-              { label: "PWFS1", value: "PWFS1" },
-              { label: "PWFS2", value: "PWFS2" },
+              // { label: "PWFS1", value: "PWFS1" },
+              // { label: "PWFS2", value: "PWFS2" },
               { label: "OIWFS", value: "OIWFS" },
-              { label: "GAOS", value: "GAOS" },
+              // { label: "GAOS", value: "GAOS" },
             ]}
             placeholder="Select sources"
             maxSelectedLabels={3}
@@ -121,10 +160,10 @@ export function Configuration() {
               modifyGuideLoop("m2FocusSource", e.value.join(","))
             }
             options={[
-              { label: "PWFS1", value: "PWFS1" },
-              { label: "PWFS2", value: "PWFS2" },
+              // { label: "PWFS1", value: "PWFS1" },
+              // { label: "PWFS2", value: "PWFS2" },
               { label: "OIWFS", value: "OIWFS" },
-              { label: "GAOS", value: "GAOS" },
+              // { label: "GAOS", value: "GAOS" },
             ]}
             placeholder="Select sources"
             maxSelectedLabels={3}
@@ -151,7 +190,8 @@ export function Configuration() {
               !canEdit || (!state.m2ComaEnable && !state.m1CorrectionsEnable)
             }
             value={state.m2ComaM1CorrectionsSource}
-            options={["PWFS1", "PWFS2", "PWFS1 & PWFS2", "OIWFS", "GAOS"]}
+            // options={["PWFS1", "PWFS2", "PWFS1 & PWFS2", "OIWFS", "GAOS"]}
+            options={["OIWFS"]}
             onChange={(e) =>
               modifyGuideLoop("m2ComaM1CorrectionsSource", e.target.value)
             }
@@ -165,7 +205,8 @@ export function Configuration() {
             disabled={!canEdit}
             checked={state.m1CorrectionsEnable}
             onChange={() =>
-              modifyGuideLoop("m1CorrectionsEnable", !state.m1CorrectionsEnable)
+              // modifyGuideLoop("m1CorrectionsEnable", !state.m1CorrectionsEnable)
+              modifyGuideLoop("m1CorrectionsEnable", true)
             }
           />
           <span className="label" style={{ gridArea: "l5" }}>
@@ -195,14 +236,50 @@ export function Configuration() {
             style={{ gridArea: "d7" }}
             disabled={!canEdit}
             value={state.probeTracking}
-            options={["OI➡OI", "P1➡P1", "P2➡P2", "NONE"]}
+            options={[
+              "OI➡OI",
+              "OI➡P1",
+              "OI➡P2",
+              "P1➡OI",
+              "P1➡P1",
+              "P1➡P2",
+              "P2➡OI",
+              "P2➡P1",
+              "P2➡P2",
+              // "NONE",
+            ]}
             onChange={(e) => modifyGuideLoop("probeTracking", e.target.value)}
             placeholder="Select a tracking"
           />
         </div>
         <div className="buttons">
-          <Button>Enable</Button>
-          <Button>Disable</Button>
+          <Button
+            disabled={!canEdit}
+            onClick={() =>
+              guideEnable({
+                variables: {
+                  config: translateStateGuideInput(),
+                },
+                onCompleted(data) {
+                  // console.log(data)
+                },
+              })
+            }
+          >
+            Enable
+          </Button>
+          <Button
+            disabled={!canEdit}
+            onClick={() =>
+              guideDisable({
+                onCompleted(data) {
+                  // console.log(data)
+                },
+              })
+            }
+          >
+            Disable
+          </Button>
         </div>
       </div>
       {aoSystem}

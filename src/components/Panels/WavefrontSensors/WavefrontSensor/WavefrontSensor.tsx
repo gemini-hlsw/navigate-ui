@@ -33,7 +33,6 @@ export default function WavefrontSensor({
           onClick={() =>
             stopObserve({
               onCompleted(data) {
-                console.log(data)
                 setObserveState(false)
               },
             })
@@ -52,7 +51,6 @@ export default function WavefrontSensor({
             startObserve({
               variables: { period: { milliseconds: (1 / freq) * 1000 } },
               onCompleted(data) {
-                console.log(data)
                 setObserveState(true)
               },
             })

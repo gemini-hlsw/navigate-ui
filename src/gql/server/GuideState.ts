@@ -1,4 +1,4 @@
-import { gql, useSubscription } from "@apollo/client"
+import { gql, useMutation, useSubscription } from "@apollo/client"
 
 const GUIDE_STATE_SUBSCRIPTION = gql`
   subscription guideState {
@@ -11,8 +11,39 @@ const GUIDE_STATE_SUBSCRIPTION = gql`
   }
 `
 
-export function useLogMessages() {
+export function useGuideState() {
   const { data, loading } = useSubscription(GUIDE_STATE_SUBSCRIPTION)
 
   return { data, loading }
+}
+
+const GUIDE_ENABLE = gql`
+  mutation guideEnable($config: GuideConfigurationInput!) {
+    guideEnable(config: $config) {
+      result
+      msg
+    }
+  }
+`
+
+export function useGuideEnable() {
+  const [mutationFunction, { data, loading, error }] = useMutation(GUIDE_ENABLE)
+
+  return mutationFunction
+}
+
+const GUIDE_DISABLE = gql`
+  mutation guideDisable {
+    guideDisable {
+      result
+      msg
+    }
+  }
+`
+
+export function useGuideDisable() {
+  const [mutationFunction, { data, loading, error }] =
+    useMutation(GUIDE_DISABLE)
+
+  return mutationFunction
 }

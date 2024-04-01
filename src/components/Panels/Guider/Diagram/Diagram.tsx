@@ -1,5 +1,3 @@
-import { GuideLoopType } from "@/types"
-import { useGetGuideLoop } from "@gql/configs/GuideLoop"
 import { useCallback, useEffect, useState } from "react"
 import ReactFlow, {
   Node, // Node Type
@@ -14,6 +12,7 @@ import ReactFlow, {
   applyNodeChanges,
 } from "reactflow"
 import "reactflow/dist/style.css"
+import { useGetGuideState } from "./useGetGuideState"
 
 const initialNodes: Node[] = [
   {
@@ -63,20 +62,11 @@ const initialEdges: Edge[] = [
 ]
 
 function Flow({}) {
-  const [state, setState] = useState<GuideLoopType>({} as GuideLoopType)
+  // const [state, setState] = useState<GuideLoopType>({} as GuideLoopType)
   const [nodes, setNodes] = useState<Node[]>(initialNodes)
   const [edges, setEdges] = useState<Edge[]>(initialEdges)
   const { fitView } = useReactFlow()
-  const getGuideLoop = useGetGuideLoop()
-
-  function retrieveInfo() {
-    getGuideLoop({
-      fetchPolicy: "no-cache",
-      onCompleted(data) {
-        setState(data.guideLoop)
-      },
-    })
-  }
+  const state = useGetGuideState()
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) =>
@@ -96,7 +86,7 @@ function Flow({}) {
     let sourceNodes: Node[] = []
     let sourceEdges: Edge[] = []
     if (state.m2TipTiltEnable && state.m2TipTiltSource) {
-      state.m2TipTiltSource.split(",").map((source) => {
+      state.m2TipTiltSource.split(",").map((source: string) => {
         sourceNodes.push({
           id: source,
           data: { label: source },
@@ -308,9 +298,6 @@ function Flow({}) {
           position="bottom-right"
         />
       </ReactFlow>
-      <button onClick={() => retrieveInfo()} style={{ position: "absolute" }}>
-        update
-      </button>
     </div>
   )
 }
