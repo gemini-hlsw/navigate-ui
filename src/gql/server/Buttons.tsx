@@ -166,6 +166,7 @@ export function Slew({
         },
         wavelength: { nanometers: "400" },
       },
+      instrument: instrument.name,
       rotator: { ipa: { degrees: rotator.angle }, mode: rotator.tracking },
       ...(Boolean(selectedOiTarget) && {
         oiwfs: {
