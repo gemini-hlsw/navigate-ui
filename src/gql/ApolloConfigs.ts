@@ -12,22 +12,22 @@ import { SubscriptionClient } from "subscriptions-transport-ws"
 import { getMainDefinition } from "@apollo/client/utilities"
 
 const navigateCommandServer = new HttpLink({
-  uri: "http://navigate.lucuma.xyz/navigate/graphql",
+  uri: import.meta.env.VITE_NG_SERVER_URI,
 })
 
 const navigateConfigs = new HttpLink({
-  uri: "http://navigate.lucuma.xyz/db/",
+  uri: import.meta.env.VITE_NG_CONFIGS_URI,
 })
 
 const odbLink = new HttpLink({
-  uri: "https://lucuma-postgres-odb-staging.herokuapp.com/odb",
+  uri: import.meta.env.VITE_ODB_URI,
   headers: {
     authorization: `Bearer ${import.meta.env.VITE_ODB_TOKEN}`,
   },
 })
 
 const wsLink = new WebSocketLink(
-  new SubscriptionClient("ws://navigate.lucuma.xyz/navigate/ws")
+  new SubscriptionClient(import.meta.env.VITE_NG_WS)
 )
 
 export const client = new ApolloClient({
