@@ -21,9 +21,9 @@ const navigateConfigs = new HttpLink({
 
 const odbLink = new HttpLink({
   uri: import.meta.env.VITE_ODB_URI,
-  headers: {
-    authorization: `Bearer ${import.meta.env.VITE_ODB_TOKEN}`,
-  },
+  // headers: {
+  //   authorization: `Bearer ${import.meta.env.VITE_ODB_TOKEN}`,
+  // },
 })
 
 const wsLink = new WebSocketLink(

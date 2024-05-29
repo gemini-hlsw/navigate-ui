@@ -11,6 +11,9 @@ export default function Navbar() {
   let auth = useContext(AuthContext)
   let navigate = useNavigate()
 
+  // Will be removed in the future
+  const { odbToken } = useContext(VariablesContext)
+
   let themeIcon: string = theme === "dark" ? "pi pi-moon" : "pi pi-sun"
 
   function userSession() {
@@ -31,6 +34,11 @@ export default function Navbar() {
       label: auth.isUserLoggedIn ? "Logout" : "Login",
       icon: auth.isUserLoggedIn ? "pi pi-sign-out" : "pi pi-sign-in",
       command: userSession,
+    },
+    {
+      label: "ODB Token",
+      icon: "pi pi-key",
+      command: () => navigate("/token"),
     },
   ]
 
@@ -59,6 +67,11 @@ export default function Navbar() {
         <span className="observation">{configuration.obsTitle ?? ""}</span>
       </div>
       <div className="right">
+        {!Boolean(odbToken) && (
+          <Link to="/token" style={{ animation: "blink 1s infinite" }}>
+            <i className="pi pi-key"></i>
+          </Link>
+        )}
         <SplitButton
           label={auth.isUserLoggedIn ? auth.user.displayName : "Guest"}
           icon="pi pi-user"

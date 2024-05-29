@@ -189,6 +189,8 @@ export interface VariablesContextType {
   setInstrument(_: InstrumentType): void
   rotator: RotatorType
   setRotator(_: RotatorType): void
+  odbToken: string
+  setOdbToken(_: string): void
 }
 
 export interface AltairGuideLoopType {

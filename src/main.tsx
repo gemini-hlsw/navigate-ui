@@ -16,6 +16,7 @@ import Layout from "./components/Layout/Layout"
 import Home from "./components/Layout/Home/Home"
 import Login from "./components/Login/Login"
 import VariablesProvider from "@Contexts/Variables/VariablesProvider"
+import Token from "./components/Token/Token"
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 
@@ -29,6 +30,7 @@ root.render(
               <Route index element={<Home />} />
             </Route>
             <Route path="/login" element={<Login />} />
+            <Route path="/token" element={<Token />} />
           </Routes>
         </BrowserRouter>
       </VariablesProvider>

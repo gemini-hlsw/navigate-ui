@@ -1,4 +1,6 @@
 import { gql, useLazyQuery } from "@apollo/client"
+import { VariablesContext } from "@Contexts/Variables/VariablesProvider"
+import { useContext } from "react"
 
 const GET_OBSERVATIONS = gql`
   query getObservations {
@@ -52,10 +54,16 @@ const GET_OBSERVATIONS = gql`
 `
 
 export function useGetObservations() {
+  const { odbToken } = useContext(VariablesContext)
   const [getObservations, { loading, error, data }] = useLazyQuery(
     GET_OBSERVATIONS,
     {
-      context: { clientName: "odb" },
+      context: {
+        clientName: "odb",
+        headers: {
+          Authorization: `Bearer ${odbToken}`,
+        },
+      },
     }
   )
 
@@ -89,10 +97,16 @@ const GET_GUIDE_TARGETS = gql`
 `
 
 export function useGetGuideTargets() {
+  const { odbToken } = useContext(VariablesContext)
   const [queryFunction, { called, loading, error, data }] = useLazyQuery(
     GET_GUIDE_TARGETS,
     {
-      context: { clientName: "odb" },
+      context: {
+        clientName: "odb",
+        headers: {
+          Authorization: `Bearer ${odbToken}`,
+        },
+      },
     }
   )
 
