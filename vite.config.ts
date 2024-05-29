@@ -44,11 +44,11 @@ export default defineConfig({
     host: "0.0.0.0",
     proxy: {
       "^/navigate/graphql": {
-        target: "http://navigate.lucuma.xyz",
+        target: "http://navigate.lucuma.xyz:9070",
         changeOrigin: true,
       },
       "^/db": {
-        target: "http://navigate.lucuma.xyz",
+        target: "http://navigate.lucuma.xyz:4000",
         changeOrigin: true,
       },
       // "ws://localhost/navigate/ws": {
