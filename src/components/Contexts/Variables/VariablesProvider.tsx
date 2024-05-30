@@ -48,7 +48,12 @@ export default function VariablesProvider({
   })
 
   // --------- ODB Token (will be removed) ------------------
-  const [odbToken, setOdbToken] = useState("")
+  const [odbToken, setOdbToken] = useState(
+    localStorage.getItem("odbToken") ?? ""
+  )
+  useEffect(() => {
+    localStorage.setItem("odbToken", odbToken)
+  }, [odbToken])
 
   // ----------- Guide Targets -----------------
   const [loadingGuideTarget, setLoadingGuideTarget] = useState(false)
