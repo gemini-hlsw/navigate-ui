@@ -22,7 +22,9 @@ const navigateConfigs = new HttpLink({
 })
 
 const odbLink = new HttpLink({
-  uri: import.meta.env.VITE_ODB_URI,
+  uri:
+    import.meta.env.VITE_ODB_URI ??
+    "https://lucuma-postgres-odb-staging.herokuapp.com/odb",
 })
 
 const wsLink = new WebSocketLink(
