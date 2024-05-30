@@ -47,6 +47,9 @@ export default function VariablesProvider({
     targetIndex: undefined,
   })
 
+  // --------- ODB Token (will be removed) ------------------
+  const [odbToken, setOdbToken] = useState("")
+
   // ----------- Guide Targets -----------------
   const [loadingGuideTarget, setLoadingGuideTarget] = useState(false)
 
@@ -125,6 +128,8 @@ export default function VariablesProvider({
     setInstrument,
     rotator,
     setRotator,
+    odbToken,
+    setOdbToken,
   }
 
   return (
