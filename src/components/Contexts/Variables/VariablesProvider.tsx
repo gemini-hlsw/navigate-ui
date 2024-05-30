@@ -1,4 +1,10 @@
-import { createContext, useState, ReactNode, useEffect } from "react"
+import {
+  createContext,
+  useState,
+  ReactNode,
+  useEffect,
+  useSyncExternalStore,
+} from "react"
 import {
   ThemeType,
   TargetType,
@@ -48,12 +54,18 @@ export default function VariablesProvider({
   })
 
   // --------- ODB Token (will be removed) ------------------
-  const [odbToken, setOdbToken] = useState(
-    localStorage.getItem("odbToken") ?? ""
-  )
-  useEffect(() => {
-    localStorage.setItem("odbToken", odbToken)
-  }, [odbToken])
+  const subscribe = (listener: () => void) => {
+    window.addEventListener("storage", listener)
+    return () => {
+      window.removeEventListener("storage", listener)
+    }
+  }
+  // Get ODB Token from localstorage
+  const getLsOdbToken = () => {
+    return localStorage.getItem("odbToken")
+  }
+
+  const odbToken = useSyncExternalStore(subscribe, getLsOdbToken) ?? ""
 
   // ----------- Guide Targets -----------------
   const [loadingGuideTarget, setLoadingGuideTarget] = useState(false)
@@ -134,7 +146,6 @@ export default function VariablesProvider({
     rotator,
     setRotator,
     odbToken,
-    setOdbToken,
   }
 
   return (
