@@ -9,7 +9,6 @@ export default function Token() {
   const navigate = useNavigate()
   const { odbToken } = useContext(VariablesContext)
   const [auxOdbToken, setAuxOdbToken] = useState(odbToken)
-  console.log(odbToken)
 
   return (
     <div className="login">
