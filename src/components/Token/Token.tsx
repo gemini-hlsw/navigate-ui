@@ -1,4 +1,4 @@
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { InputText } from "primereact/inputtext"
 import "./Login.scss"
 import { VariablesContext } from "@Contexts/Variables/VariablesProvider"
@@ -7,7 +7,8 @@ import { useNavigate } from "react-router-dom"
 
 export default function Token() {
   const navigate = useNavigate()
-  const { odbToken, setOdbToken } = useContext(VariablesContext)
+  const { odbToken } = useContext(VariablesContext)
+  const [auxOdbToken, setAuxOdbToken] = useState(odbToken)
 
   return (
     <div className="login">
@@ -21,8 +22,9 @@ export default function Token() {
           </span>
           <InputText
             placeholder="ODB Token"
-            value={odbToken}
-            onChange={(e) => setOdbToken(e.target.value)}
+            defaultValue={odbToken}
+            value={auxOdbToken}
+            onChange={(e) => setAuxOdbToken(e.target.value)}
           />
         </div>
         <Button
@@ -30,7 +32,10 @@ export default function Token() {
           icon="pi pi-check"
           iconPos="right"
           className=" p-button-success"
-          onClick={() => navigate("/")}
+          onClick={() => {
+            localStorage.setItem("odbToken", auxOdbToken)
+            navigate("/")
+          }}
         />
       </div>
     </div>
