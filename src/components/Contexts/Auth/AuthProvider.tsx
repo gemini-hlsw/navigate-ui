@@ -20,7 +20,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
   const [canEdit, setCanEdit] = useState<boolean>(Authentication.canEdit())
 
   let signin = async (username: string, password: string) => {
-    let [user, message] = await Authentication.signin(username, password)
+    let [user, _] = await Authentication.signin(username, password)
     if (!Boolean(user)) return Promise.resolve(false)
     setUser(user)
     setIsUserLoggedIn(true)

@@ -6,10 +6,7 @@ import { useGetObservations } from "@gql/odb/Observation"
 import { AuthContext } from "@Contexts/Auth/AuthProvider"
 import { VariablesContext } from "@Contexts/Variables/VariablesProvider"
 import { OdbObservationType } from "@/types"
-import {
-  useCreateTarget,
-  useRemoveAndCreateBaseTargets,
-} from "@gql/configs/Target"
+import { useRemoveAndCreateBaseTargets } from "@gql/configs/Target"
 import { useUpdateConfiguration } from "@gql/configs/Configuration"
 
 export function OdbImport() {
