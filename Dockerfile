@@ -17,10 +17,3 @@ RUN npm install
 
 # Copy all the remaining code
 COPY --chown=software:software . .
-
-# Create environment vars to build project
-ENV VITE_ODB_TOKEN=${VITE_ODB_TOKEN}
-ENV VITE_ODB_URI=${VITE_ODB_URI}
-ENV VITE_NG_SERVER_URI=${VITE_NG_SERVER_URI}
-ENV VITE_NG_CONFIGS_URI=${VITE_NG_CONFIGS_URI}
-ENV VITE_NG_WS=${VITE_NG_WS}
