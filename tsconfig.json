@@ -24,7 +24,10 @@
       "@assets/*": ["./src/assets/*"],
       "@gql/*": ["./src/gql/*"],
       "@/*": ["./src/*"],
-    }
+    },
+    "types": [
+      "vitest/globals"
+    ]
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }],

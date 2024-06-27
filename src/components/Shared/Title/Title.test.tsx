@@ -1,4 +1,4 @@
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest"
+import { beforeEach, describe, expect } from "vitest"
 import { render, fireEvent, cleanup, screen } from "@testing-library/react"
 import { Title } from "./Title"
 
@@ -15,8 +15,8 @@ describe('Title test with args', () => {
   const nextPanelFunction = vi.spyOn(nextPanelObject, 'nextPanel')
   const prevPanelFunction = vi.spyOn(prevPanelObject, 'prevPanel')
   
-  let container: any = null
-  beforeAll(() => {
+  let container: HTMLElement = null!
+  beforeEach(() => {
     ({ container } = render(
       <Title
         title={title}
@@ -26,10 +26,6 @@ describe('Title test with args', () => {
         <h3>Hola</h3>
       </Title>
     ))
-  })
-
-  afterAll(() => {
-    cleanup()
   })
 
   it('sholud show title', () => {
@@ -90,7 +86,6 @@ describe('Title test with args', () => {
     )
     expect(nextPanelMock).toHaveBeenCalledTimes(1)
     expect(prevPanelMock).toHaveBeenCalledTimes(1)
-    cleanup()
   })
 })
 
@@ -106,7 +101,6 @@ describe('Title test without args', () => {
     )
 
     expect(screen.getByText(title)).toBeDefined()
-    cleanup()
   })
 
   it('should not have prev and next panel button if no functions are defined', () => {
@@ -118,7 +112,6 @@ describe('Title test without args', () => {
     )
     expect(container.getElementsByClassName("p-panel").length).toBe(0)
     expect(container.getElementsByClassName("n-panel").length).toBe(0)
-    cleanup()
   })
 
   it('should not show children neither buttons if not defined', () => {
@@ -129,7 +122,6 @@ describe('Title test without args', () => {
       </Title>
     )
     expect(container.firstChild?.childNodes.length).toBe(1)
-    cleanup()
   })
 })
 
@@ -149,6 +141,5 @@ describe('Title with children', () => {
       </Title>
     )
     expect(instance.container.firstChild?.childNodes.length).toBe(CHILDREN + 1)
-    cleanup()
   })
 })
