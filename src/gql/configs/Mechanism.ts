@@ -1,4 +1,4 @@
-import { gql, useLazyQuery, useMutation } from "@apollo/client"
+import { gql, useLazyQuery, useMutation } from '@apollo/client';
 
 const GET_MECHANISM = gql`
   query getMechanism {
@@ -42,15 +42,14 @@ const GET_MECHANISM = gql`
       agParkAll
     }
   }
-`
+`;
 
 export function useGetMechanism() {
-  const [queryFunction, { data, loading, error }] = useLazyQuery(
-    GET_MECHANISM,
-    { context: { clientName: "navigateConfigs" } }
-  )
+  const [queryFunction, { data, loading, error }] = useLazyQuery(GET_MECHANISM, {
+    context: { clientName: 'navigateConfigs' },
+  });
 
-  return queryFunction
+  return queryFunction;
 }
 
 const UPDATE_MECHANISM = gql`
@@ -171,13 +170,12 @@ const UPDATE_MECHANISM = gql`
       agParkAll
     }
   }
-`
+`;
 
 export function useUpdateMechanism() {
-  const [mutationFunction, { data, loading, error }] = useMutation(
-    UPDATE_MECHANISM,
-    { context: { clientName: "navigateConfigs" } }
-  )
+  const [mutationFunction, { data, loading, error }] = useMutation(UPDATE_MECHANISM, {
+    context: { clientName: 'navigateConfigs' },
+  });
 
-  return mutationFunction
+  return mutationFunction;
 }

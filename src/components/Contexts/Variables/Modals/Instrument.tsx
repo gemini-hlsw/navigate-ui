@@ -1,87 +1,70 @@
-import { Button } from "primereact/button"
-import { Dialog } from "primereact/dialog"
-import { useContext, useEffect, useState } from "react"
-import { VariablesContext } from "../VariablesProvider"
-import {
-  useGetDistinctInstruments,
-  useGetDistinctPorts,
-  useGetInstruments,
-} from "@gql/configs/Instrument"
-import { Dropdown } from "primereact/dropdown"
-import { InstrumentType } from "@/types"
+import { Button } from 'primereact/button';
+import { Dialog } from 'primereact/dialog';
+import { useContext, useEffect, useState } from 'react';
+import { VariablesContext } from '../VariablesProvider';
+import { useGetDistinctInstruments, useGetDistinctPorts, useGetInstruments } from '@gql/configs/Instrument';
+import { Dropdown } from 'primereact/dropdown';
+import { InstrumentType } from '@/types';
 
 export function Instrument() {
-  const { instrument, setInstrument, importInstrument, setImportInstrument } =
-    useContext(VariablesContext)
-  const getNames = useGetDistinctInstruments()
-  const getPorts = useGetDistinctPorts()
-  const getInstuments = useGetInstruments()
-  const [nameOptions, setNameOptions] = useState<string[]>([])
-  const [name, setName] = useState("")
-  const [portOptions, setPortOptions] = useState<number[]>([])
-  const [port, setPort] = useState(0)
-  const [instrumentOptions, setInstrumentOptions] = useState<InstrumentType[]>(
-    []
-  )
-  const [currentInstrument, setCurrentInstrument] = useState<InstrumentType>(
-    {} as InstrumentType
-  )
+  const { instrument, setInstrument, importInstrument, setImportInstrument } = useContext(VariablesContext);
+  const getNames = useGetDistinctInstruments();
+  const getPorts = useGetDistinctPorts();
+  const getInstuments = useGetInstruments();
+  const [nameOptions, setNameOptions] = useState<string[]>([]);
+  const [name, setName] = useState('');
+  const [portOptions, setPortOptions] = useState<number[]>([]);
+  const [port, setPort] = useState(0);
+  const [instrumentOptions, setInstrumentOptions] = useState<InstrumentType[]>([]);
+  const [currentInstrument, setCurrentInstrument] = useState<InstrumentType>({} as InstrumentType);
 
   useEffect(() => {
     if (importInstrument)
       getNames({
         onCompleted: (data) => {
-          setNameOptions(
-            data.distinctInstruments.map((e: { name: string }) => e.name)
-          )
+          setNameOptions(data.distinctInstruments.map((e: { name: string }) => e.name));
         },
-      })
-  }, [importInstrument])
+      });
+  }, [importInstrument]);
 
   useEffect(() => {
-    if (name !== "") {
-      setPort(0)
+    if (name !== '') {
+      setPort(0);
       getPorts({
         variables: { name: name },
         onCompleted: (data) => {
-          setPortOptions(
-            data.distinctPorts.map((e: { issPort: number }) => e.issPort)
-          )
+          setPortOptions(data.distinctPorts.map((e: { issPort: number }) => e.issPort));
         },
-      })
+      });
     }
-  }, [name])
+  }, [name]);
 
   useEffect(() => {
-    if (port > 0 && name !== "") {
+    if (port > 0 && name !== '') {
       getInstuments({
         variables: { name: name, issPort: port },
         onCompleted: (data) => {
-          setInstrumentOptions(data.instruments)
+          setInstrumentOptions(data.instruments);
         },
-      })
+      });
     }
-  }, [port])
+  }, [port]);
 
   function modifyInstrument() {
-    setInstrument(currentInstrument)
-    setImportInstrument(false)
+    setInstrument(currentInstrument);
+    setImportInstrument(false);
   }
 
   let footer = (
     <div className="modal-footer">
       <div className="right">
         <Button className="" label="Import" onClick={modifyInstrument} />
-        <Button
-          className="p-button-danger"
-          label="Cancel"
-          onClick={() => setImportInstrument(false)}
-        />
+        <Button className="p-button-danger" label="Cancel" onClick={() => setImportInstrument(false)} />
       </div>
     </div>
-  )
+  );
 
-  let tableData: JSX.Element[] = []
+  let tableData: JSX.Element[] = [];
   instrumentOptions.map((i, idx) => {
     tableData.push(
       <InstrumentDetails
@@ -89,12 +72,12 @@ export function Instrument() {
         selectedPk={currentInstrument.pk}
         setInstrument={setCurrentInstrument}
         key={idx}
-      />
-    )
-  })
+      />,
+    );
+  });
 
-  let table: JSX.Element | null = null
-  if (port > 0 && name !== "") {
+  let table: JSX.Element | null = null;
+  if (port > 0 && name !== '') {
     table = (
       <table className="table">
         <thead>
@@ -110,7 +93,7 @@ export function Instrument() {
         </thead>
         <tbody>{tableData}</tbody>
       </table>
-    )
+    );
   }
 
   return (
@@ -143,7 +126,7 @@ export function Instrument() {
         {table}
       </div>
     </Dialog>
-  )
+  );
 }
 
 function InstrumentDetails({
@@ -151,15 +134,12 @@ function InstrumentDetails({
   setInstrument,
   selectedPk,
 }: {
-  instrument: InstrumentType
-  setInstrument(_: InstrumentType): void
-  selectedPk: number
+  instrument: InstrumentType;
+  setInstrument(_: InstrumentType): void;
+  selectedPk: number;
 }) {
   return (
-    <tr
-      onClick={() => setInstrument(instrument)}
-      className={instrument.pk === selectedPk ? "active" : ""}
-    >
+    <tr onClick={() => setInstrument(instrument)} className={instrument.pk === selectedPk ? 'active' : ''}>
       <td>{instrument.ao}</td>
       <td>{instrument.focusOffset}</td>
       <td>{instrument.iaa}</td>
@@ -168,5 +148,5 @@ function InstrumentDetails({
       <td>{instrument.wfs}</td>
       <td>{JSON.stringify(instrument.extraParams)}</td>
     </tr>
-  )
+  );
 }

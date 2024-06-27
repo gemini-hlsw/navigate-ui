@@ -1,4 +1,4 @@
-.Guider>.guider {
+.Guider > .guider {
   display: flex;
   height: 100%;
   flex-direction: column;
@@ -12,7 +12,7 @@
       flex: 1 0 30%;
       // height: calc(40vh - 28px);
       border-top: 1px solid var(--surface-border);
-  
+
       .react-flow__node-default,
       .react-flow__node-input,
       .react-flow__node-output,
@@ -20,59 +20,59 @@
         max-width: 90px;
         border-color: var(--surface-border);
       }
-  
+
       .react-flow__node.active {
         background-color: var(--primary-color);
         color: var(--primary-color-text);
       }
-  
+
       .react-flow__node.inactive {
         background-color: var(--surface-c);
         color: var(--text-color);
       }
-  
+
       .react-flow__node.idle {
         background-color: rgba(150, 150, 0, 0.5);
         color: var(--text-color);
       }
-  
-      .react-flow__edge.active>path {
+
+      .react-flow__edge.active > path {
         stroke: var(--primary-color);
       }
 
-      .react-flow__edge.idle>path {
+      .react-flow__edge.idle > path {
         stroke: rgba(150, 150, 0, 0.5);
       }
-  
-      .react-flow__edge.inactive>path {
+
+      .react-flow__edge.inactive > path {
         stroke: var(--surface-border);
       }
-  
+
       .react-flow__panel {
         margin: 5px;
       }
-  
+
       .react-flow__controls-button {
         background-color: var(--primary-color);
         border-radius: 3px;
         border: 0;
-  
-        >svg {
+
+        > svg {
           fill: var(--primary-color-text);
         }
       }
     }
-  
+
     > .loop {
       flex-shrink: 1;
       // min-height: 210px;
       width: 100%;
       border-top: 1px solid var(--surface-border);
-  
+
       > .loop-body {
         display: flex;
         flex-flow: row nowrap;
-  
+
         > .configuration {
           flex-grow: 1;
           display: flex;
@@ -82,30 +82,30 @@
             margin: 2px;
             display: grid;
             grid-template-areas:
-            "l1 s1 d1 lever"
-            "l2 s2 d2 lever"
-            "l3 s3 d3 e3"
-            "l4 s4 d3 e4"
-            "l5 s5 d5 e5"
-            "l6 s6 d6 e6"
-            "l7 d7 d7 e7";
+              'l1 s1 d1 lever'
+              'l2 s2 d2 lever'
+              'l3 s3 d3 e3'
+              'l4 s4 d3 e4'
+              'l5 s5 d5 e5'
+              'l6 s6 d6 e6'
+              'l7 d7 d7 e7';
             grid-template-columns: 1fr 20px 1fr 20px;
             grid-template-rows: repeat(7, 22px);
             font-size: 0.9rem;
             gap: 4px;
             justify-items: center;
-    
-            >.label {
+
+            > .label {
               justify-self: baseline;
               align-self: center;
             }
-    
+
             > .lever {
               grid-area: lever;
               display: flex;
               width: 100%;
               cursor: pointer;
-    
+
               > svg {
                 stroke: var(--primary-color-text);
                 transition: stroke 0.15s;
@@ -114,32 +114,32 @@
                 }
               }
             }
-    
-            >.p-checkbox {
+
+            > .p-checkbox {
               align-self: center;
               text-align: center;
             }
-            >.p-inputnumber {
-              >.p-inputtext {
+            > .p-inputnumber {
+              > .p-inputtext {
                 width: 100%;
               }
             }
             .p-multiselect {
               width: 100% !important;
-            
+
               .p-multiselect-trigger {
                 width: initial !important;
-            
-                >span {
+
+                > span {
                   margin: 0 2px;
                   font-size: var(--input-font-size);
                 }
               }
-            
+
               .p-multiselect-label-container {
                 display: flex;
                 align-items: center;
-            
+
                 .p-multiselect-label {
                   font-size: var(--input-font-size);
                   padding: 3px;
@@ -160,14 +160,13 @@
             }
           }
         }
-  
+
         > .adaptive-optics {
           flex-grow: 1;
           border: 1px solid var(--surface-border);
           margin: 2px;
           // display: none;
-  
-  
+
           > .ao-body {
             display: grid;
             grid-template-columns: 70% 30%;
@@ -176,20 +175,20 @@
             gap: 4px;
             justify-items: center;
             padding: 4px;
-  
-            >.label {
+
+            > .label {
               justify-self: baseline;
               align-self: center;
             }
-            >.p-inputnumber {
-              >.p-inputtext {
+            > .p-inputnumber {
+              > .p-inputtext {
                 width: 100%;
               }
             }
           }
         }
       }
-  
+
       > .buttons {
         display: flex;
         justify-content: center;
@@ -197,11 +196,11 @@
         padding: 4px 0;
       }
     }
-  
+
     > .light-path {
       flex-shrink: 1;
       border-top: 1px solid var(--surface-border);
-      >.body {
+      > .body {
         padding: 4px;
         display: flex;
         gap: 4px;
@@ -211,7 +210,7 @@
         }
       }
     }
-  
+
     > .wavefront-sensors {
       flex-shrink: 1;
       border-top: 1px solid var(--surface-border);
@@ -256,7 +255,7 @@
         }
       }
     }
-  
+
     > .alarms {
       flex-shrink: 1;
       min-height: 160px;
@@ -279,8 +278,8 @@
             gap: 4px;
             padding: 4px;
             justify-items: center;
-            >.p-inputnumber {
-              >.p-inputtext {
+            > .p-inputnumber {
+              > .p-inputtext {
                 width: 100%;
               }
             }

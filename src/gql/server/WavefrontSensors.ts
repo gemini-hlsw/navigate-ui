@@ -1,4 +1,4 @@
-import { gql, useMutation } from "@apollo/client"
+import { gql, useMutation } from '@apollo/client';
 
 const OIWFS_OBSERVE = gql`
   mutation oiwfsObserve($period: TimeSpanInput) {
@@ -7,13 +7,12 @@ const OIWFS_OBSERVE = gql`
       msg
     }
   }
-`
+`;
 
 export function useOiwfsObserve() {
-  const [mutationFunction, { data, loading, error }] =
-    useMutation(OIWFS_OBSERVE)
+  const [mutationFunction, { data, loading, error }] = useMutation(OIWFS_OBSERVE);
 
-  return mutationFunction
+  return mutationFunction;
 }
 
 const OIWFS_STOP_OBSERVE = gql`
@@ -23,11 +22,10 @@ const OIWFS_STOP_OBSERVE = gql`
       msg
     }
   }
-`
+`;
 
 export function useOiwfsStopObserve() {
-  const [mutationFunction, { data, loading, error }] =
-    useMutation(OIWFS_STOP_OBSERVE)
+  const [mutationFunction, { data, loading, error }] = useMutation(OIWFS_STOP_OBSERVE);
 
-  return mutationFunction
+  return mutationFunction;
 }

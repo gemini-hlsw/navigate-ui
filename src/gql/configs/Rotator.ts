@@ -1,4 +1,4 @@
-import { gql, useLazyQuery, useMutation } from "@apollo/client"
+import { gql, useLazyQuery, useMutation } from '@apollo/client';
 
 const GET_ROTATOR = gql`
   query getRotator {
@@ -8,14 +8,14 @@ const GET_ROTATOR = gql`
       tracking
     }
   }
-`
+`;
 
 export function useGetRotator() {
   const [queryFunction, { data, loading, error }] = useLazyQuery(GET_ROTATOR, {
-    context: { clientName: "navigateConfigs" },
-  })
+    context: { clientName: 'navigateConfigs' },
+  });
 
-  return queryFunction
+  return queryFunction;
 }
 
 const UPDATE_ROTATOR = gql`
@@ -26,13 +26,12 @@ const UPDATE_ROTATOR = gql`
       tracking
     }
   }
-`
+`;
 
 export function useUpdateRotator() {
-  const [mutationFunction, { data, loading, error }] = useMutation(
-    UPDATE_ROTATOR,
-    { context: { clientName: "navigateConfigs" } }
-  )
+  const [mutationFunction, { data, loading, error }] = useMutation(UPDATE_ROTATOR, {
+    context: { clientName: 'navigateConfigs' },
+  });
 
-  return mutationFunction
+  return mutationFunction;
 }

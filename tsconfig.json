@@ -23,12 +23,10 @@
       "@Shared/*": ["./src/components/Shared/*"],
       "@assets/*": ["./src/assets/*"],
       "@gql/*": ["./src/gql/*"],
-      "@/*": ["./src/*"],
+      "@/*": ["./src/*"]
     },
-    "types": [
-      "vitest/globals"
-    ]
+    "types": ["vitest/globals"]
   },
   "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

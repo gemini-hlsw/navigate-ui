@@ -21,7 +21,7 @@
       // border-bottom: var(--navigate-accent-color) solid 4px;
     }
     .title::after {
-      display:block;
+      display: block;
       content: '';
       border-bottom: var(--navigate-accent-color) solid 4px;
       transform: scaleX(0);
@@ -38,8 +38,8 @@
       font-size: 3rem;
       text-transform: uppercase;
       letter-spacing: 20px;
-      animation: show-top-text .8s;
-      animation-delay: .2s;
+      animation: show-top-text 0.8s;
+      animation-delay: 0.2s;
       animation-fill-mode: forwards;
     }
     .login-buttons {
@@ -75,7 +75,6 @@
   }
 }
 
-
 @keyframes show-underline {
   0% {
     transform: scaleX(0);
@@ -85,7 +84,6 @@
     transform: scaleX(1);
   }
 }
-
 
 @keyframes show-top-text {
   0% {

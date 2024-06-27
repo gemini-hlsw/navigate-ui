@@ -1,4 +1,4 @@
-import { gql, useLazyQuery } from "@apollo/client"
+import { gql, useLazyQuery } from '@apollo/client';
 
 const GET_All = gql`
   query getAllInfo {
@@ -66,12 +66,12 @@ const GET_All = gql`
       createdAt
     }
   }
-`
+`;
 
 export function useGetAllInformation() {
   const [queryFunction, { data, loading, error }] = useLazyQuery(GET_All, {
-    context: { clientName: "navigateConfigs" },
-  })
+    context: { clientName: 'navigateConfigs' },
+  });
 
-  return queryFunction
+  return queryFunction;
 }

@@ -1,5 +1,5 @@
-import { Button } from "primereact/button"
-import { Dropdown } from "primereact/dropdown"
+import { Button } from 'primereact/button';
+import { Dropdown } from 'primereact/dropdown';
 
 export function ACHR({ disabled }: { disabled: boolean }) {
   return (
@@ -8,8 +8,8 @@ export function ACHR({ disabled }: { disabled: boolean }) {
       <span>In</span>
       <Dropdown
         disabled={disabled}
-        value={"In"}
-        options={["In", "Out"]}
+        value={'In'}
+        options={['In', 'Out']}
         onChange={(e) => console.log(e.value)}
         placeholder="Select lens pos"
       />
@@ -18,8 +18,8 @@ export function ACHR({ disabled }: { disabled: boolean }) {
       <span>R-red2</span>
       <Dropdown
         disabled={disabled}
-        value={"R-red2"}
-        options={["R-red2", "???"]}
+        value={'R-red2'}
+        options={['R-red2', '???']}
         onChange={(e) => console.log(e.value)}
         placeholder="Select filter"
       />
@@ -28,8 +28,8 @@ export function ACHR({ disabled }: { disabled: boolean }) {
       <span>Open</span>
       <Dropdown
         disabled={disabled}
-        value={"Open"}
-        options={["Open", "???"]}
+        value={'Open'}
+        options={['Open', '???']}
         onChange={(e) => console.log(e.value)}
         placeholder="Select state"
       />
@@ -38,12 +38,12 @@ export function ACHR({ disabled }: { disabled: boolean }) {
       <span>200x200</span>
       <Dropdown
         disabled={disabled}
-        value={"200x200"}
-        options={["200x200", "???"]}
+        value={'200x200'}
+        options={['200x200', '???']}
         onChange={(e) => console.log(e.value)}
         placeholder="Select ROI"
       />
       <Button label="Set" />
     </div>
-  )
+  );
 }

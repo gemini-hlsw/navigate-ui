@@ -1,4 +1,4 @@
-import { gql, useLazyQuery, useMutation } from "@apollo/client"
+import { gql, useLazyQuery, useMutation } from '@apollo/client';
 
 const GET_ALTAIR_INSTRUMENT = gql`
   query getAltairInstrument {
@@ -16,15 +16,14 @@ const GET_ALTAIR_INSTRUMENT = gql`
       lgs
     }
   }
-`
+`;
 
 export function useGetAltairInstrument() {
-  const [queryFunction, { data, loading, error }] = useLazyQuery(
-    GET_ALTAIR_INSTRUMENT,
-    { context: { clientName: "navigateConfigs" } }
-  )
+  const [queryFunction, { data, loading, error }] = useLazyQuery(GET_ALTAIR_INSTRUMENT, {
+    context: { clientName: 'navigateConfigs' },
+  });
 
-  return queryFunction
+  return queryFunction;
 }
 
 const UPDATE_ALTAIR_INSTRUMENT = gql`
@@ -67,13 +66,12 @@ const UPDATE_ALTAIR_INSTRUMENT = gql`
       lgs
     }
   }
-`
+`;
 
 export function useUpdateAltairInstrument() {
-  const [mutationFunction, { data, loading, error }] = useMutation(
-    UPDATE_ALTAIR_INSTRUMENT,
-    { context: { clientName: "navigateConfigs" } }
-  )
+  const [mutationFunction, { data, loading, error }] = useMutation(UPDATE_ALTAIR_INSTRUMENT, {
+    context: { clientName: 'navigateConfigs' },
+  });
 
-  return mutationFunction
+  return mutationFunction;
 }

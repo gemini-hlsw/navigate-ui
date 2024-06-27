@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from 'react';
 import ReactFlow, {
   Node, // Node Type
   Edge, // Edge Type
@@ -10,99 +10,91 @@ import ReactFlow, {
   Background,
   applyEdgeChanges,
   applyNodeChanges,
-} from "reactflow"
-import "reactflow/dist/style.css"
-import { useGetGuideState } from "./useGetGuideState"
+} from 'reactflow';
+import 'reactflow/dist/style.css';
+import { useGetGuideState } from './useGetGuideState';
 
 const initialNodes: Node[] = [
   {
-    id: "tiptilt",
-    data: { label: "Tip/Tilt" },
+    id: 'tiptilt',
+    data: { label: 'Tip/Tilt' },
     position: { x: 0, y: 100 },
-    className: "active", // "active", "idle", "inactive"
+    className: 'active', // "active", "idle", "inactive"
   },
   {
-    id: "focus",
-    data: { label: "Focus" },
+    id: 'focus',
+    data: { label: 'Focus' },
     position: { x: 100, y: 100 },
-    className: "active",
-    type: "output",
+    className: 'active',
+    type: 'output',
   },
   {
-    id: "coma",
-    data: { label: "Coma" },
+    id: 'coma',
+    data: { label: 'Coma' },
     position: { x: 200, y: 100 },
-    className: "active",
-    type: "output",
+    className: 'active',
+    type: 'output',
   },
   {
-    id: "higho",
-    data: { label: "High O" },
+    id: 'higho',
+    data: { label: 'High O' },
     position: { x: 300, y: 100 },
-    className: "active",
-    type: "output",
+    className: 'active',
+    type: 'output',
   },
   {
-    id: "mount",
-    data: { label: "Mount" },
+    id: 'mount',
+    data: { label: 'Mount' },
     position: { x: 0, y: 200 },
-    className: "active",
-    type: "output",
+    className: 'active',
+    type: 'output',
   },
-]
+];
 
 const initialEdges: Edge[] = [
   {
-    id: "tiptilt-mount",
-    source: "tiptilt",
-    target: "mount",
+    id: 'tiptilt-mount',
+    source: 'tiptilt',
+    target: 'mount',
     animated: true,
-    className: "active",
+    className: 'active',
   },
-]
+];
 
 function Flow({}) {
   // const [state, setState] = useState<GuideLoopType>({} as GuideLoopType)
-  const [nodes, setNodes] = useState<Node[]>(initialNodes)
-  const [edges, setEdges] = useState<Edge[]>(initialEdges)
-  const { fitView } = useReactFlow()
-  const state = useGetGuideState()
+  const [nodes, setNodes] = useState<Node[]>(initialNodes);
+  const [edges, setEdges] = useState<Edge[]>(initialEdges);
+  const { fitView } = useReactFlow();
+  const state = useGetGuideState();
 
-  const onNodesChange = useCallback(
-    (changes: NodeChange[]) =>
-      setNodes((nds) => applyNodeChanges(changes, nds)),
-    []
-  )
+  const onNodesChange = useCallback((changes: NodeChange[]) => setNodes((nds) => applyNodeChanges(changes, nds)), []);
 
-  const onEdgesChange = useCallback(
-    (changes: EdgeChange[]) =>
-      setEdges((eds) => applyEdgeChanges(changes, eds)),
-    []
-  )
+  const onEdgesChange = useCallback((changes: EdgeChange[]) => setEdges((eds) => applyEdgeChanges(changes, eds)), []);
 
   useEffect(() => {
-    let auxState = { ...state }
+    let auxState = { ...state };
     // fitView()
     // Get active sources first
-    let sourceNodes: Node[] = []
-    let sourceEdges: Edge[] = []
+    let sourceNodes: Node[] = [];
+    let sourceEdges: Edge[] = [];
     if (auxState.m2TipTiltEnable && auxState.m2TipTiltSource) {
-      auxState.m2TipTiltSource.split(",").map((source: string) => {
+      auxState.m2TipTiltSource.split(',').map((source: string) => {
         sourceNodes.push({
           id: source,
           data: { label: source },
           position: { x: 0, y: 0 },
-          className: "active",
-          type: "input",
-        })
+          className: 'active',
+          type: 'input',
+        });
         sourceEdges.push({
           id: `${source}-tiptilt`,
           source: source,
-          target: "tiptilt",
+          target: 'tiptilt',
           animated: true,
-          className: "active",
-        })
-      })
+          className: 'active',
+        });
+      });
     }
 
     if (auxState.m2TipTiltFocusLink) {
@@ -110,92 +102,80 @@ function Flow({}) {
         sourceEdges.push({
           id: `${n.id}-focus`,
           source: n.id,
-          target: "focus",
+          target: 'focus',
           animated: true,
-          className: "active",
-        })
-      })
+          className: 'active',
+        });
+      });
     } else {
       if (auxState.m2FocusEnable && auxState.m2FocusSource) {
-        auxState.m2FocusSource.split(",").map((s) => {
+        auxState.m2FocusSource.split(',').map((s) => {
           if (sourceNodes.filter((n) => n.id === s).length === 0) {
             sourceNodes.push({
               id: s,
               data: { label: s },
               position: { x: 0, y: 0 },
-              className: "active",
-              type: "input",
-            })
+              className: 'active',
+              type: 'input',
+            });
           }
           sourceEdges.push({
             id: `${s}-focus`,
             source: s,
-            target: "focus",
+            target: 'focus',
             animated: true,
-            className: "active",
-          })
-        })
+            className: 'active',
+          });
+        });
       }
     }
 
     if (auxState.m2ComaEnable) {
-      let pos = sourceNodes
-        .map((n) => n.id)
-        .indexOf(auxState.m2ComaM1CorrectionsSource)
+      let pos = sourceNodes.map((n) => n.id).indexOf(auxState.m2ComaM1CorrectionsSource);
       if (pos === -1) {
         sourceNodes.push({
           id: auxState.m2ComaM1CorrectionsSource,
           data: { label: auxState.m2ComaM1CorrectionsSource },
           position: { x: 0, y: 0 },
-          className: "active",
-          type: "input",
-        })
+          className: 'active',
+          type: 'input',
+        });
       } else {
         if (pos !== sourceNodes.length - 1) {
-          sourceNodes.splice(
-            sourceNodes.length - 1,
-            0,
-            sourceNodes.splice(pos, 1)[0]
-          )
+          sourceNodes.splice(sourceNodes.length - 1, 0, sourceNodes.splice(pos, 1)[0]);
         }
       }
       sourceEdges.push({
         id: `${auxState.m2ComaM1CorrectionsSource}-coma`,
         source: auxState.m2ComaM1CorrectionsSource,
-        target: "coma",
+        target: 'coma',
         animated: true,
-        className: "active",
-      })
+        className: 'active',
+      });
     }
 
     if (auxState.m1CorrectionsEnable) {
-      let pos = sourceNodes
-        .map((n) => n.id)
-        .indexOf(auxState.m2ComaM1CorrectionsSource)
+      let pos = sourceNodes.map((n) => n.id).indexOf(auxState.m2ComaM1CorrectionsSource);
       if (pos === -1) {
         sourceNodes.push({
           id: auxState.m2ComaM1CorrectionsSource,
           data: { label: auxState.m2ComaM1CorrectionsSource },
           position: { x: 0, y: 0 },
-          className: "active",
-          type: "input",
-        })
+          className: 'active',
+          type: 'input',
+        });
       } else {
         if (pos !== sourceNodes.length - 1) {
-          sourceNodes.splice(
-            sourceNodes.length - 1,
-            0,
-            sourceNodes.splice(pos, 1)[0]
-          )
+          sourceNodes.splice(sourceNodes.length - 1, 0, sourceNodes.splice(pos, 1)[0]);
         }
       }
       sourceEdges.push({
         id: `${auxState.m2ComaM1CorrectionsSource}-higho`,
         source: auxState.m2ComaM1CorrectionsSource,
-        target: "higho",
+        target: 'higho',
         animated: true,
-        className: "active",
-      })
+        className: 'active',
+      });
     }
 
     // Check statick boxes state
@@ -204,83 +184,82 @@ function Flow({}) {
     // inacive: Disabled
 
     // Tip/Tilt
-    let tiptiltState
+    let tiptiltState;
     if (auxState.m2TipTiltEnable) {
-      if (sourceEdges.filter((n) => n.target === "tiptilt").length > 0) {
-        tiptiltState = "active"
+      if (sourceEdges.filter((n) => n.target === 'tiptilt').length > 0) {
+        tiptiltState = 'active';
       } else {
-        tiptiltState = "idle"
+        tiptiltState = 'idle';
       }
     } else {
-      tiptiltState = "inactive"
+      tiptiltState = 'inactive';
     }
-    initialNodes.filter((n) => n.id === "tiptilt")[0].className = tiptiltState
+    initialNodes.filter((n) => n.id === 'tiptilt')[0].className = tiptiltState;
 
     // Mount
-    let mountState = "active"
+    let mountState = 'active';
     if (auxState.mountOffload) {
-      if (tiptiltState === "active") {
-        mountState = "active"
+      if (tiptiltState === 'active') {
+        mountState = 'active';
       } else {
-        mountState = "idle"
+        mountState = 'idle';
       }
     } else {
-      mountState = "inactive"
+      mountState = 'inactive';
     }
-    initialNodes.filter((n) => n.id === "mount")[0].className = mountState
-    initialEdges.filter((n) => n.id === "tiptilt-mount")[0].className =
-      mountState
+    initialNodes.filter((n) => n.id === 'mount')[0].className = mountState;
+    initialEdges.filter((n) => n.id === 'tiptilt-mount')[0].className = mountState;
 
     // Focus
-    let focusState
+    let focusState;
     if (auxState.m2FocusEnable) {
-      if (sourceEdges.filter((n) => n.target === "focus").length > 0) {
-        focusState = "active"
+      if (sourceEdges.filter((n) => n.target === 'focus').length > 0) {
+        focusState = 'active';
       } else {
-        focusState = "idle"
+        focusState = 'idle';
       }
     } else {
-      focusState = "inactive"
+      focusState = 'inactive';
     }
-    initialNodes.filter((n) => n.id === "focus")[0].className = focusState
+    initialNodes.filter((n) => n.id === 'focus')[0].className = focusState;
 
     // Coma
-    let comaState
+    let comaState;
     if (auxState.m2ComaEnable) {
-      if (sourceEdges.filter((n) => n.target === "coma").length > 0) {
-        comaState = "active"
+      if (sourceEdges.filter((n) => n.target === 'coma').length > 0) {
+        comaState = 'active';
       } else {
-        comaState = "idle"
+        comaState = 'idle';
       }
     } else {
-      comaState = "inactive"
+      comaState = 'inactive';
     }
-    initialNodes.filter((n) => n.id === "coma")[0].className = comaState
+    initialNodes.filter((n) => n.id === 'coma')[0].className = comaState;
 
     // High-O
-    let highoState
+    let highoState;
     if (auxState.m1CorrectionsEnable) {
-      if (sourceEdges.filter((n) => n.target === "higho").length > 0) {
-        highoState = "active"
+      if (sourceEdges.filter((n) => n.target === 'higho').length > 0) {
+        highoState = 'active';
       } else {
-        highoState = "idle"
+        highoState = 'idle';
       }
     } else {
-      highoState = "inactive"
+      highoState = 'inactive';
     }
-    initialNodes.filter((n) => n.id === "higho")[0].className = highoState
+    initialNodes.filter((n) => n.id === 'higho')[0].className = highoState;
 
     // Check probe tracking
 
-    let sourceN = sourceNodes.length
+    let sourceN = sourceNodes.length;
     if (sourceN) {
-      sourceNodes.map((n, i) => (n.position.x = i * 100))
+      sourceNodes.map((n, i) => (n.position.x = i * 100));
     }
 
-    setNodes([...sourceNodes, ...initialNodes])
-    setEdges([...sourceEdges, ...initialEdges])
+    setNodes([...sourceNodes, ...initialNodes]);
+    setEdges([...sourceEdges, ...initialEdges]);
     // setTimeout(() => fitView(), 100)
-  }, [state])
+  }, [state]);
 
   return (
     <div className="diagram">
@@ -293,14 +272,10 @@ function Flow({}) {
         fitView
       >
         <Background />
-        <Controls
-          showZoom={false}
-          showInteractive={false}
-          position="bottom-right"
-        />
+        <Controls showZoom={false} showInteractive={false} position="bottom-right" />
       </ReactFlow>
     </div>
-  )
+  );
 }
 
 export default function Diagram() {
@@ -308,5 +283,5 @@ export default function Diagram() {
     <ReactFlowProvider>
       <Flow />
     </ReactFlowProvider>
-  )
+  );
 }

@@ -1,12 +1,12 @@
-import { Dropdown } from "primereact/dropdown"
-import { ProgressBar } from "primereact/progressbar"
-import { Title } from "@Shared/Title/Title"
-import { TargetList } from "./TargetList"
-import { Button } from "primereact/button"
-import { useContext } from "react"
-import { AuthContext } from "@Contexts/Auth/AuthProvider"
-import { VariablesContext } from "@Contexts/Variables/VariablesProvider"
-import { UpdateGuideTargets } from "./UpdateGuideTargets"
+import { Dropdown } from 'primereact/dropdown';
+import { ProgressBar } from 'primereact/progressbar';
+import { Title } from '@Shared/Title/Title';
+import { TargetList } from './TargetList';
+import { Button } from 'primereact/button';
+import { useContext } from 'react';
+import { AuthContext } from '@Contexts/Auth/AuthProvider';
+import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
+import { UpdateGuideTargets } from './UpdateGuideTargets';
 // import { UpdateGuideTargets } from "./UpdateGuideTargets"
 
 function GuiderFooter({ disabled }: { disabled: boolean }) {
@@ -14,68 +14,61 @@ function GuiderFooter({ disabled }: { disabled: boolean }) {
     <div className="guiders-footer">
       <Dropdown
         disabled={disabled} // check is a valid target
-        value={"NORMAL"}
-        options={[{ label: "Normal Guiding", value: "NORMAL" }]}
+        value={'NORMAL'}
+        options={[{ label: 'Normal Guiding', value: 'NORMAL' }]}
       />
     </div>
-  )
+  );
 }
 
 export function GuiderTargets() {
-  const { canEdit } = useContext(AuthContext)
-  const { loadingGuideTarget, configuration, p1Targets, p2Targets, oiTargets } =
-    useContext(VariablesContext)
+  const { canEdit } = useContext(AuthContext);
+  const { loadingGuideTarget, configuration, p1Targets, p2Targets, oiTargets } = useContext(VariablesContext);
 
-  let displayProbes: JSX.Element[] = []
+  let displayProbes: JSX.Element[] = [];
   if (oiTargets.length > 0) {
-    let oiSelected = oiTargets.filter(
-      (t) => t.pk === configuration.selectedOiTarget
-    )[0]
+    let oiSelected = oiTargets.filter((t) => t.pk === configuration.selectedOiTarget)[0];
     displayProbes.push(
-      <div key={"OIWFS"} className="guide-probe">
-        <Title title={oiSelected ? `OIWFS: ${oiSelected.name}` : "OIWFS"} />
+      <div key={'OIWFS'} className="guide-probe">
+        <Title title={oiSelected ? `OIWFS: ${oiSelected.name}` : 'OIWFS'} />
         <TargetList
           targets={oiTargets}
           selectedTarget={configuration ? configuration.selectedOiTarget : -1}
-          type={"OIWFS"}
+          type={'OIWFS'}
         />
         <GuiderFooter disabled={!canEdit} />
-      </div>
-    )
+      </div>,
+    );
   }
 
   if (p1Targets.length > 0) {
-    let p1Selected = p1Targets.filter(
-      (t) => t.pk === configuration.selectedP1Target
-    )[0]
+    let p1Selected = p1Targets.filter((t) => t.pk === configuration.selectedP1Target)[0];
     displayProbes.push(
-      <div key={"PWFS1"} className="guide-probe">
-        <Title title={p1Selected ? `PWFS1: ${p1Selected.name}` : "PWFS1"} />
+      <div key={'PWFS1'} className="guide-probe">
+        <Title title={p1Selected ? `PWFS1: ${p1Selected.name}` : 'PWFS1'} />
         <TargetList
           targets={p1Targets}
           selectedTarget={configuration ? configuration.selectedP1Target : -1}
-          type={"PWFS1"}
+          type={'PWFS1'}
         />
         <GuiderFooter disabled={!canEdit} />
-      </div>
-    )
+      </div>,
+    );
   }
 
   if (p2Targets.length > 0) {
-    let p2Selected = p2Targets.filter(
-      (t) => t.pk === configuration.selectedP2Target
-    )[0]
+    let p2Selected = p2Targets.filter((t) => t.pk === configuration.selectedP2Target)[0];
     displayProbes.push(
-      <div key={"PWFS2"} className="guide-probe">
-        <Title title={p2Selected ? `PWFS2: ${p2Selected.name}` : "PWFS2"} />
+      <div key={'PWFS2'} className="guide-probe">
+        <Title title={p2Selected ? `PWFS2: ${p2Selected.name}` : 'PWFS2'} />
         <TargetList
           targets={p2Targets}
           selectedTarget={configuration ? configuration.selectedP2Target : -1}
-          type={"PWFS2"}
+          type={'PWFS2'}
         />
         <GuiderFooter disabled={!canEdit} />
-      </div>
-    )
+      </div>,
+    );
   }
 
   if (displayProbes.length === 0) {
@@ -84,8 +77,8 @@ export function GuiderTargets() {
         <Title title={`OIWFS`} />
         <TargetList targets={[]} />
         <GuiderFooter disabled={true} />
-      </div>
-    )
+      </div>,
+    );
   }
   return (
     <div className="guiders">
@@ -94,10 +87,7 @@ export function GuiderTargets() {
       </Title>
       <div className="body">
         {loadingGuideTarget ? (
-          <ProgressBar
-            mode="indeterminate"
-            style={{ height: "6px" }}
-          ></ProgressBar>
+          <ProgressBar mode="indeterminate" style={{ height: '6px' }}></ProgressBar>
         ) : (
           displayProbes
         )}
@@ -106,8 +96,8 @@ export function GuiderTargets() {
         disabled={!canEdit} // check is a valid target || !Boolean(selectedGuideTarget?.id)
         className="footer w-100"
         label="Point to guide target"
-        onClick={() => console.log("Point to guide target")}
+        onClick={() => console.log('Point to guide target')}
       />
     </div>
-  )
+  );
 }

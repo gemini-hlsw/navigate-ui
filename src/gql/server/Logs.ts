@@ -1,4 +1,4 @@
-import { gql, useSubscription } from "@apollo/client"
+import { gql, useSubscription } from '@apollo/client';
 
 const LOGS_SUBSCRIPTION = gql`
   subscription logMessage {
@@ -9,10 +9,10 @@ const LOGS_SUBSCRIPTION = gql`
       message
     }
   }
-`
+`;
 
 export function useLogMessages() {
-  const { data, loading } = useSubscription(LOGS_SUBSCRIPTION)
+  const { data, loading } = useSubscription(LOGS_SUBSCRIPTION);
 
-  return { data, loading }
+  return { data, loading };
 }

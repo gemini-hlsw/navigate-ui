@@ -1,17 +1,16 @@
-import { Title, TitleDropdown } from "@Shared/Title/Title"
-import { Button } from "primereact/button"
-import { Divider } from "primereact/divider"
-import { InputNumber } from "primereact/inputnumber"
-import { InputText } from "primereact/inputtext"
-import { useContext, useEffect } from "react"
-import { VariablesContext } from "@Contexts/Variables/VariablesProvider"
-import { InstrumentType } from "@/types"
-import { useGetInstrument } from "@gql/configs/Instrument"
+import { Title, TitleDropdown } from '@Shared/Title/Title';
+import { Button } from 'primereact/button';
+import { Divider } from 'primereact/divider';
+import { InputNumber } from 'primereact/inputnumber';
+import { InputText } from 'primereact/inputtext';
+import { useContext, useEffect } from 'react';
+import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
+import { InstrumentType } from '@/types';
+import { useGetInstrument } from '@gql/configs/Instrument';
 
 export function Instrument({ canEdit }: { canEdit: boolean }) {
-  const { instrument, setInstrument, setImportInstrument, configuration } =
-    useContext(VariablesContext)
-  const getInstrument = useGetInstrument()
+  const { instrument, setInstrument, setImportInstrument, configuration } = useContext(VariablesContext);
+  const getInstrument = useGetInstrument();
 
   useEffect(() => {
     if (configuration.obsInstrument) {
@@ -21,17 +20,17 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
         variables: {
           name: configuration.obsInstrument,
           issPort: 3,
-          wfs: "NONE",
+          wfs: 'NONE',
         },
         onCompleted(data) {
-          setInstrument(data.instrument ?? ({} as InstrumentType))
+          setInstrument(data.instrument ?? ({} as InstrumentType));
         },
-      })
+      });
     }
-  }, [configuration])
+  }, [configuration]);
 
   function updateInstrument({ key, val }: { key: string; val: any }) {
-    console.log("Update instrument")
+    console.log('Update instrument');
     // setConfiguration({
     //   ...configuration,
     //   instrument: {
@@ -41,8 +40,8 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
     // })
   }
 
-  if (!("name" in instrument)) {
-    return null
+  if (!('name' in instrument)) {
+    return null;
   }
 
   return (
@@ -55,17 +54,9 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
             label="Import instrument"
             onClick={() => setImportInstrument(true)}
           />
-          <Button
-            disabled={!canEdit}
-            className="p-button-text"
-            label="Command 2"
-          />
+          <Button disabled={!canEdit} className="p-button-text" label="Command 2" />
           <Divider />
-          <Button
-            disabled={!canEdit}
-            className="p-button-text"
-            label="Command 3"
-          />
+          <Button disabled={!canEdit} className="p-button-text" label="Command 3" />
         </TitleDropdown>
       </Title>
       <div className="body">
@@ -73,15 +64,13 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
         <InputText
           disabled={!canEdit}
           value={instrument.name}
-          onChange={(e) =>
-            updateInstrument({ key: "name", val: e.target.value })
-          }
+          onChange={(e) => updateInstrument({ key: 'name', val: e.target.value })}
         />
         <span className="label">Port</span>
         <InputNumber
           disabled={!canEdit}
           value={instrument.issPort}
-          onChange={(e) => updateInstrument({ key: "issPort", val: e.value })}
+          onChange={(e) => updateInstrument({ key: 'issPort', val: e.value })}
           mode="decimal"
         />
         <span className="label">Origin X</span>
@@ -90,7 +79,7 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
           value={instrument.originX}
           minFractionDigits={2}
           maxFractionDigits={5}
-          onChange={(e) => updateInstrument({ key: "originX", val: e.value })}
+          onChange={(e) => updateInstrument({ key: 'originX', val: e.value })}
           mode="decimal"
         />
         <span className="label">Origin Y</span>
@@ -99,7 +88,7 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
           value={instrument.originY}
           minFractionDigits={2}
           maxFractionDigits={5}
-          onChange={(e) => updateInstrument({ key: "originY", val: e.value })}
+          onChange={(e) => updateInstrument({ key: 'originY', val: e.value })}
           mode="decimal"
         />
         <span className="label">Focus Offset</span>
@@ -108,9 +97,7 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
           value={instrument.focusOffset}
           minFractionDigits={2}
           maxFractionDigits={5}
-          onChange={(e) =>
-            updateInstrument({ key: "focusOffset", val: e.value })
-          }
+          onChange={(e) => updateInstrument({ key: 'focusOffset', val: e.value })}
           mode="decimal"
         />
         <span className="label">IAA</span>
@@ -119,10 +106,10 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
           value={instrument.iaa}
           minFractionDigits={2}
           maxFractionDigits={5}
-          onChange={(e) => updateInstrument({ key: "iaa", val: e.value })}
+          onChange={(e) => updateInstrument({ key: 'iaa', val: e.value })}
           mode="decimal"
         />
       </div>
     </div>
-  )
+  );
 }

@@ -1,9 +1,9 @@
-import { useState } from "react"
-import { FilterMatchMode } from "primereact/api"
-import { DataTable } from "primereact/datatable"
-import { Column } from "primereact/column"
-import { InputText } from "primereact/inputtext"
-import { ParamsInterface } from "@/types"
+import { useState } from 'react';
+import { FilterMatchMode } from 'primereact/api';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { InputText } from 'primereact/inputtext';
+import { ParamsInterface } from '@/types';
 
 export function ObservationTable({
   loading,
@@ -12,31 +12,31 @@ export function ObservationTable({
   setSelectedObservation,
 }: ParamsInterface) {
   const [filters, setFilters] = useState({
-    id: { value: "", matchMode: FilterMatchMode.STARTS_WITH },
-    title: { value: "", matchMode: FilterMatchMode.STARTS_WITH },
-    "program.pi.orcidGivenName": {
-      value: "",
+    id: { value: '', matchMode: FilterMatchMode.STARTS_WITH },
+    title: { value: '', matchMode: FilterMatchMode.STARTS_WITH },
+    'program.pi.orcidGivenName': {
+      value: '',
       matchMode: FilterMatchMode.STARTS_WITH,
     },
-    "program.pi.orcidFamilyName": {
-      value: "",
+    'program.pi.orcidFamilyName': {
+      value: '',
       matchMode: FilterMatchMode.STARTS_WITH,
     },
-    "targetEnvironment.firstScienceTarget.name": {
-      value: "",
+    'targetEnvironment.firstScienceTarget.name': {
+      value: '',
       matchMode: FilterMatchMode.STARTS_WITH,
     },
-    global: { value: "", matchMode: FilterMatchMode.CONTAINS },
-  })
-  const [globalFilterValue, setGlobalFilterValue] = useState("")
+    global: { value: '', matchMode: FilterMatchMode.CONTAINS },
+  });
+  const [globalFilterValue, setGlobalFilterValue] = useState('');
 
   function onGlobalFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const value = e.target.value
-    let _filters = { ...filters }
-    _filters["global"].value = value
+    const value = e.target.value;
+    let _filters = { ...filters };
+    _filters['global'].value = value;
 
-    setFilters(_filters)
-    setGlobalFilterValue(value)
+    setFilters(_filters);
+    setGlobalFilterValue(value);
   }
 
   const renderHeader = () => {
@@ -45,28 +45,22 @@ export function ObservationTable({
         <span>{`Selected Observation: ${selectedObservation.title}`}</span>
         <span className="p-input-icon-left">
           <i className="pi pi-search" />
-          <InputText
-            value={globalFilterValue}
-            onChange={onGlobalFilterChange}
-            placeholder="Keyword Search"
-          />
+          <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Keyword Search" />
         </span>
       </div>
-    )
-  }
+    );
+  };
 
-  const header = renderHeader()
+  const header = renderHeader();
 
   if (!Boolean(observations_list)) {
-    return null
+    return null;
   }
 
   return (
     <div className="target-table">
       <DataTable
-        value={observations_list.matches.filter(
-          (el: any) => el.activeStatus === "ACTIVE"
-        )}
+        value={observations_list.matches.filter((el: any) => el.activeStatus === 'ACTIVE')}
         paginator
         selectionMode="single"
         onSelectionChange={(e) => setSelectedObservation(e.value)}
@@ -78,51 +72,39 @@ export function ObservationTable({
         loading={loading}
         responsiveLayout="scroll"
         globalFilterFields={[
-          "id",
-          "title",
-          "program.pi.orcidGivenName",
-          "program.pi.orcidFamilyName",
-          "targetEnvironment.firstScienceTarget.name",
+          'id',
+          'title',
+          'program.pi.orcidGivenName',
+          'program.pi.orcidFamilyName',
+          'targetEnvironment.firstScienceTarget.name',
         ]}
         header={header}
         emptyMessage="No observations found."
       >
-        <Column
-          field="id"
-          header="ID"
-          filter
-          filterPlaceholder="Search ID"
-          style={{ minWidth: "12rem" }}
-        />
-        <Column
-          field="title"
-          header="Title"
-          filter
-          filterPlaceholder="Search Title"
-          style={{ minWidth: "12rem" }}
-        />
+        <Column field="id" header="ID" filter filterPlaceholder="Search ID" style={{ minWidth: '12rem' }} />
+        <Column field="title" header="Title" filter filterPlaceholder="Search Title" style={{ minWidth: '12rem' }} />
         <Column
           field="program.pi.orcidGivenName"
           header="PI Given Name"
-          style={{ minWidth: "12rem" }}
+          style={{ minWidth: '12rem' }}
           filter
           filterPlaceholder="Filter Given Name"
         />
         <Column
           field="program.pi.orcidFamilyName"
           header="PI Family Name"
-          style={{ minWidth: "12rem" }}
+          style={{ minWidth: '12rem' }}
           filter
           filterPlaceholder="Filter Family Name"
         />
         <Column
           field="targetEnvironment.firstScienceTarget.name"
           header="Target Name"
-          style={{ minWidth: "12rem" }}
+          style={{ minWidth: '12rem' }}
           filter
           filterPlaceholder="Filter Target Name"
         />
       </DataTable>
     </div>
-  )
+  );
 }

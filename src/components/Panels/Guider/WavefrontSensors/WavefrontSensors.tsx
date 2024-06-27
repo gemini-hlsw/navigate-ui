@@ -1,12 +1,12 @@
-import { TabView, TabPanel } from "primereact/tabview"
-import { Title } from "@Shared/Title/Title"
-import { PWFS1 } from "./PWFS1"
-import { useContext } from "react"
-import { AuthContext } from "@Contexts/Auth/AuthProvider"
-import { ACHR } from "./ACHR"
+import { TabView, TabPanel } from 'primereact/tabview';
+import { Title } from '@Shared/Title/Title';
+import { PWFS1 } from './PWFS1';
+import { useContext } from 'react';
+import { AuthContext } from '@Contexts/Auth/AuthProvider';
+import { ACHR } from './ACHR';
 
 export function WavefrontSensors() {
-  const { canEdit } = useContext(AuthContext)
+  const { canEdit } = useContext(AuthContext);
   return (
     <div className="wavefront-sensors">
       <Title title="Wavefront Sensors" />
@@ -25,5 +25,5 @@ export function WavefrontSensors() {
         </TabView>
       </div>
     </div>
-  )
+  );
 }
