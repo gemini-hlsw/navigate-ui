@@ -12,7 +12,7 @@ export function Target({
 }: {
   target: TargetType;
   updateSelectedTarget(target: number): void;
-  selectedTarget?: number | undefined;
+  selectedTarget?: number | null;
   targetIndex?: number | undefined;
 }) {
   const { canEdit } = useContext(AuthContext);
@@ -36,12 +36,12 @@ export function Target({
   function targetClicked(e: React.MouseEvent | React.TouchEvent) {
     if (!canEdit) return;
     if (e.nativeEvent instanceof TouchEvent) {
-      updateSelectedTarget(target.pk);
+      updateSelectedTarget(target.pk!);
     } else if (e.nativeEvent instanceof MouseEvent) {
       switch (e.detail) {
         case 1:
           clickRef.current = setTimeout(() => {
-            updateSelectedTarget(target.pk);
+            updateSelectedTarget(target.pk!);
           }, 300);
           break;
         case 2:
@@ -66,7 +66,7 @@ export function Target({
         {...longPressEvent}
       >
         <div className="target-item">
-          <span className="target-name" title={target.name}>
+          <span className="target-name" title={target.name ?? undefined}>
             {target.name}
           </span>
           <span className="text-right">{target.az?.dms}</span>
@@ -84,7 +84,7 @@ export function Target({
         {...longPressEvent}
       >
         <div className="target-item">
-          <span className="target-name" title={target.name}>
+          <span className="target-name" title={target.name ?? undefined}>
             {target.name}
           </span>
           <span className="text-right">{target.ra?.hms}</span>

@@ -5,9 +5,10 @@ import { ObservationTable } from './ObservationTable';
 import { useGetObservations } from '@gql/odb/Observation';
 import { AuthContext } from '@Contexts/Auth/AuthProvider';
 import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
-import { OdbObservationType } from '@/types';
+import { ConfigurationType, OdbObservationType } from '@/types';
 import { useRemoveAndCreateBaseTargets } from '@gql/configs/Target';
 import { useUpdateConfiguration } from '@gql/configs/Configuration';
+import { isNotNullish } from '@/Helpers/functions';
 
 export function OdbImport() {
   const { canEdit } = useContext(AuthContext);
@@ -22,30 +23,30 @@ export function OdbImport() {
   function updateObs() {
     updateConfiguration({
       variables: {
-        ...configuration,
+        ...(configuration as ConfigurationType & { pk: number }),
         obsId: selectedObservation.id,
         obsTitle: selectedObservation.title,
         obsSubtitle: selectedObservation.subtitle,
         obsInstrument: selectedObservation.instrument,
       },
       onCompleted(data) {
-        setConfiguration(data.updateConfiguration);
+        setConfiguration(data.updateConfiguration!);
         setOdbVisible(false);
         removeAndCreateBaseTargets({
           variables: {
             targets: [
               {
-                id: selectedObservation.targetEnvironment.firstScienceTarget.id,
-                name: selectedObservation.targetEnvironment.firstScienceTarget.name,
-                coord1: selectedObservation.targetEnvironment.firstScienceTarget.sidereal.ra.degrees,
-                coord2: selectedObservation.targetEnvironment.firstScienceTarget.sidereal.dec.degrees,
-                epoch: selectedObservation.targetEnvironment.firstScienceTarget.sidereal.epoch,
+                id: selectedObservation.targetEnvironment.firstScienceTarget?.id,
+                name: selectedObservation.targetEnvironment.firstScienceTarget?.name,
+                coord1: selectedObservation.targetEnvironment.firstScienceTarget?.sidereal?.ra.degrees,
+                coord2: selectedObservation.targetEnvironment.firstScienceTarget?.sidereal?.dec.degrees,
+                epoch: selectedObservation.targetEnvironment.firstScienceTarget?.sidereal?.epoch,
                 type: 'SCIENCE',
               },
             ],
           },
           onCompleted(data) {
-            setBaseTargets(data.removeAndCreateBaseTargets);
+            setBaseTargets(data.removeAndCreateBaseTargets?.filter(isNotNullish) ?? []);
             setOiTargets([]);
             setP1Targets([]);
             setP2Targets([]);

@@ -1,6 +1,7 @@
-import { gql, useLazyQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
+import { graphql } from './gen';
 
-const GET_All = gql`
+const GET_All = graphql(`
   query getAllInfo {
     configuration {
       pk
@@ -66,7 +67,7 @@ const GET_All = gql`
       createdAt
     }
   }
-`;
+`);
 
 export function useGetAllInformation() {
   const [queryFunction] = useLazyQuery(GET_All, {

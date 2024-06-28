@@ -1,12 +1,13 @@
-import { gql, useLazyQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
+import { graphql } from './gen';
 
-const GET_DISTINCT_INSTRUMENTS = gql`
+const GET_DISTINCT_INSTRUMENTS = graphql(`
   query getDistinctInstruments {
     distinctInstruments {
       name
     }
   }
-`;
+`);
 
 export function useGetDistinctInstruments() {
   const [queryFunction] = useLazyQuery(GET_DISTINCT_INSTRUMENTS, {
@@ -16,13 +17,13 @@ export function useGetDistinctInstruments() {
   return queryFunction;
 }
 
-const GET_DISTINCT_PORTS = gql`
+const GET_DISTINCT_PORTS = graphql(`
   query getDistinctPorts($name: String!) {
     distinctPorts(name: $name) {
       issPort
     }
   }
-`;
+`);
 
 export function useGetDistinctPorts() {
   const [queryFunction] = useLazyQuery(GET_DISTINCT_PORTS, {
@@ -32,7 +33,7 @@ export function useGetDistinctPorts() {
   return queryFunction;
 }
 
-const GET_INSTRUMENTS = gql`
+const GET_INSTRUMENTS = graphql(`
   query getInstruments($name: String!, $issPort: Int!) {
     instruments(name: $name, issPort: $issPort) {
       pk
@@ -47,7 +48,7 @@ const GET_INSTRUMENTS = gql`
       extraParams
     }
   }
-`;
+`);
 
 export function useGetInstruments() {
   const [queryFunction] = useLazyQuery(GET_INSTRUMENTS, {
@@ -57,7 +58,7 @@ export function useGetInstruments() {
   return queryFunction;
 }
 
-const GET_INSTRUMENT = gql`
+const GET_INSTRUMENT = graphql(`
   query getInstrument($name: String!, $issPort: Int!, $wfs: WfsType) {
     instrument(name: $name, issPort: $issPort, wfs: $wfs) {
       pk
@@ -72,7 +73,7 @@ const GET_INSTRUMENT = gql`
       extraParams
     }
   }
-`;
+`);
 
 export function useGetInstrument() {
   const [queryFunction] = useLazyQuery(GET_INSTRUMENT, {

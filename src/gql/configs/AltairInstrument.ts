@@ -1,6 +1,7 @@
-import { gql, useLazyQuery, useMutation } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
+import { graphql } from './gen';
 
-const GET_ALTAIR_INSTRUMENT = gql`
+const GET_ALTAIR_INSTRUMENT = graphql(`
   query getAltairInstrument {
     altairInstrument {
       pk
@@ -16,7 +17,7 @@ const GET_ALTAIR_INSTRUMENT = gql`
       lgs
     }
   }
-`;
+`);
 
 export function useGetAltairInstrument() {
   const [queryFunction] = useLazyQuery(GET_ALTAIR_INSTRUMENT, {
@@ -26,7 +27,7 @@ export function useGetAltairInstrument() {
   return queryFunction;
 }
 
-const UPDATE_ALTAIR_INSTRUMENT = gql`
+const UPDATE_ALTAIR_INSTRUMENT = graphql(`
   mutation updateAltairInstrument(
     $pk: Int!
     $beamsplitter: String
@@ -66,7 +67,7 @@ const UPDATE_ALTAIR_INSTRUMENT = gql`
       lgs
     }
   }
-`;
+`);
 
 export function useUpdateAltairInstrument() {
   const [mutationFunction] = useMutation(UPDATE_ALTAIR_INSTRUMENT, {

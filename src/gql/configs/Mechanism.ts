@@ -1,6 +1,7 @@
-import { gql, useLazyQuery, useMutation } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
+import { graphql } from './gen';
 
-const GET_MECHANISM = gql`
+const GET_MECHANISM = graphql(`
   query getMechanism {
     mechanism {
       pk
@@ -42,7 +43,7 @@ const GET_MECHANISM = gql`
       agParkAll
     }
   }
-`;
+`);
 
 export function useGetMechanism() {
   const [queryFunction] = useLazyQuery(GET_MECHANISM, {
@@ -52,7 +53,7 @@ export function useGetMechanism() {
   return queryFunction;
 }
 
-const UPDATE_MECHANISM = gql`
+const UPDATE_MECHANISM = graphql(`
   mutation updateMechanism(
     $pk: Int!
     $mcs: StatusType
@@ -170,7 +171,7 @@ const UPDATE_MECHANISM = gql`
       agParkAll
     }
   }
-`;
+`);
 
 export function useUpdateMechanism() {
   const [mutationFunction] = useMutation(UPDATE_MECHANISM, {

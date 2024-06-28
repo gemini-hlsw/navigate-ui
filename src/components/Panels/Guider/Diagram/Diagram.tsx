@@ -132,10 +132,10 @@ function Flow() {
     }
 
     if (auxState.m2ComaEnable) {
-      const pos = sourceNodes.map((n) => n.id).indexOf(auxState.m2ComaM1CorrectionsSource);
+      const pos = sourceNodes.map((n) => n.id).indexOf(auxState.m2ComaM1CorrectionsSource!);
       if (pos === -1) {
         sourceNodes.push({
-          id: auxState.m2ComaM1CorrectionsSource,
+          id: auxState.m2ComaM1CorrectionsSource ?? '',
           data: { label: auxState.m2ComaM1CorrectionsSource },
           position: { x: 0, y: 0 },
           className: 'active',
@@ -148,7 +148,7 @@ function Flow() {
       }
       sourceEdges.push({
         id: `${auxState.m2ComaM1CorrectionsSource}-coma`,
-        source: auxState.m2ComaM1CorrectionsSource,
+        source: auxState.m2ComaM1CorrectionsSource ?? '',
         target: 'coma',
         animated: true,
         className: 'active',
@@ -156,10 +156,10 @@ function Flow() {
     }
 
     if (auxState.m1CorrectionsEnable) {
-      const pos = sourceNodes.map((n) => n.id).indexOf(auxState.m2ComaM1CorrectionsSource);
+      const pos = sourceNodes.map((n) => n.id).indexOf(auxState.m2ComaM1CorrectionsSource!);
       if (pos === -1) {
         sourceNodes.push({
-          id: auxState.m2ComaM1CorrectionsSource,
+          id: auxState.m2ComaM1CorrectionsSource ?? '',
           data: { label: auxState.m2ComaM1CorrectionsSource },
           position: { x: 0, y: 0 },
           className: 'active',
@@ -172,7 +172,7 @@ function Flow() {
       }
       sourceEdges.push({
         id: `${auxState.m2ComaM1CorrectionsSource}-higho`,
-        source: auxState.m2ComaM1CorrectionsSource,
+        source: auxState.m2ComaM1CorrectionsSource ?? '',
         target: 'higho',
         animated: true,
         className: 'active',

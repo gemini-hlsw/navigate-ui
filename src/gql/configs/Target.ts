@@ -1,6 +1,7 @@
-import { gql, useLazyQuery, useMutation } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
+import { graphql } from './gen';
 
-const GET_TARGETS = gql`
+const GET_TARGETS = graphql(`
   query getTargets($type: TargetType) {
     targets(type: $type) {
       pk
@@ -27,7 +28,7 @@ const GET_TARGETS = gql`
       createdAt
     }
   }
-`;
+`);
 
 export function useGetTargets() {
   const [queryFunction] = useLazyQuery(GET_TARGETS, {
@@ -37,7 +38,7 @@ export function useGetTargets() {
   return queryFunction;
 }
 
-const UPDATE_TARGET = gql`
+const UPDATE_TARGET = graphql(`
   mutation updateTarget(
     $pk: Int!
     $id: String
@@ -72,7 +73,7 @@ const UPDATE_TARGET = gql`
       createdAt
     }
   }
-`;
+`);
 
 export function useUpdateTarget() {
   const [mutationFunction] = useMutation(UPDATE_TARGET, {
@@ -82,7 +83,7 @@ export function useUpdateTarget() {
   return mutationFunction;
 }
 
-const CREATE_TARGET = gql`
+const CREATE_TARGET = graphql(`
   mutation createTarget(
     $id: String
     $name: String!
@@ -118,7 +119,7 @@ const CREATE_TARGET = gql`
       createdAt
     }
   }
-`;
+`);
 
 export function useCreateTarget() {
   const [mutationFunction] = useMutation(CREATE_TARGET, {
@@ -128,7 +129,7 @@ export function useCreateTarget() {
   return mutationFunction;
 }
 
-const REMOVE_AND_CREATE_BASE_TARGETS = gql`
+const REMOVE_AND_CREATE_BASE_TARGETS = graphql(`
   mutation removeAndCreateBaseTargets($targets: [TargetInput]) {
     removeAndCreateBaseTargets(targets: $targets) {
       pk
@@ -155,7 +156,7 @@ const REMOVE_AND_CREATE_BASE_TARGETS = gql`
       createdAt
     }
   }
-`;
+`);
 
 export function useRemoveAndCreateBaseTargets() {
   const [mutationFunction] = useMutation(REMOVE_AND_CREATE_BASE_TARGETS, {
@@ -165,7 +166,7 @@ export function useRemoveAndCreateBaseTargets() {
   return mutationFunction;
 }
 
-const REMOVE_AND_CREATE_WFS_TARGETS = gql`
+const REMOVE_AND_CREATE_WFS_TARGETS = graphql(`
   mutation removeAndCreateWfsTargets($wfs: TargetType, $targets: [TargetInput]) {
     removeAndCreateWfsTargets(wfs: $wfs, targets: $targets) {
       pk
@@ -192,7 +193,7 @@ const REMOVE_AND_CREATE_WFS_TARGETS = gql`
       createdAt
     }
   }
-`;
+`);
 
 export function useRemoveAndCreateWfsTargets() {
   const [mutationFunction] = useMutation(REMOVE_AND_CREATE_WFS_TARGETS, {

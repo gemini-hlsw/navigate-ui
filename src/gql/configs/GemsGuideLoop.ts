@@ -1,6 +1,7 @@
-import { gql, useLazyQuery, useMutation } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
+import { graphql } from './gen';
 
-const GET_GEMS_GUIDE_LOOP = gql`
+const GET_GEMS_GUIDE_LOOP = graphql(`
   query getGemsGuideLoop {
     gemsGuideLoop {
       pk
@@ -12,7 +13,7 @@ const GET_GEMS_GUIDE_LOOP = gql`
       flexure
     }
   }
-`;
+`);
 
 export function useGetGemsGuideLoop() {
   const [queryFunction] = useLazyQuery(GET_GEMS_GUIDE_LOOP, {
@@ -22,7 +23,7 @@ export function useGetGemsGuideLoop() {
   return queryFunction;
 }
 
-const UPDATE_GEMS_GUIDE_LOOP = gql`
+const UPDATE_GEMS_GUIDE_LOOP = graphql(`
   mutation updateGemsGuideLoop(
     $pk: Int!
     $aoEnabled: Boolean
@@ -50,7 +51,7 @@ const UPDATE_GEMS_GUIDE_LOOP = gql`
       flexure
     }
   }
-`;
+`);
 
 export function useUpdateGemsGuideLoop() {
   const [mutationFunction] = useMutation(UPDATE_GEMS_GUIDE_LOOP, {

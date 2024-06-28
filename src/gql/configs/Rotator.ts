@@ -1,6 +1,7 @@
-import { gql, useLazyQuery, useMutation } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
+import { graphql } from './gen';
 
-const GET_ROTATOR = gql`
+const GET_ROTATOR = graphql(`
   query getRotator {
     rotator {
       pk
@@ -8,7 +9,7 @@ const GET_ROTATOR = gql`
       tracking
     }
   }
-`;
+`);
 
 export function useGetRotator() {
   const [queryFunction] = useLazyQuery(GET_ROTATOR, {
@@ -18,7 +19,7 @@ export function useGetRotator() {
   return queryFunction;
 }
 
-const UPDATE_ROTATOR = gql`
+const UPDATE_ROTATOR = graphql(`
   mutation updateRotator($pk: Int!, $angle: Float, $tracking: TrackingType) {
     updateRotator(pk: $pk, angle: $angle, tracking: $tracking) {
       pk
@@ -26,7 +27,7 @@ const UPDATE_ROTATOR = gql`
       tracking
     }
   }
-`;
+`);
 
 export function useUpdateRotator() {
   const [mutationFunction] = useMutation(UPDATE_ROTATOR, {

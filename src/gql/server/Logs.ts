@@ -1,6 +1,7 @@
-import { gql, useSubscription } from '@apollo/client';
+import { useSubscription } from '@apollo/client';
+import { graphql } from './gen';
 
-const LOGS_SUBSCRIPTION = gql`
+const LOGS_SUBSCRIPTION = graphql(`
   subscription logMessage {
     logMessage {
       timestamp
@@ -9,7 +10,7 @@ const LOGS_SUBSCRIPTION = gql`
       message
     }
   }
-`;
+`);
 
 export function useLogMessages() {
   const { data, loading } = useSubscription(LOGS_SUBSCRIPTION);

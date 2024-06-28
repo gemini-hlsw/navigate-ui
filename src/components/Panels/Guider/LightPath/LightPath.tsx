@@ -9,15 +9,15 @@ import { GuideLoopType } from '@/types';
 export function LightPath() {
   const { canEdit } = useContext(AuthContext);
   const [lightPath, setLightPath] = useState('');
-  const [state, setState] = useState<GuideLoopType>({} as GuideLoopType);
+  const [state, setState] = useState<GuideLoopType>({});
   const getGuideLoop = useGetGuideLoop();
   const updateGuideLoop = useUpdateGuideLoop();
 
   useEffect(() => {
     getGuideLoop({
       onCompleted(data) {
-        setState(data.guideLoop);
-        setLightPath(data.guideLoop.lightPath);
+        setState(data.guideLoop!);
+        setLightPath(data.guideLoop?.lightPath ?? '');
       },
     });
   }, []);
@@ -25,11 +25,11 @@ export function LightPath() {
   function modifyGuideLoop(name: string, value: boolean | string) {
     updateGuideLoop({
       variables: {
-        pk: state.pk,
+        pk: state.pk!,
         [name]: value,
       },
       onCompleted(data) {
-        setState(data.updateGuideLoop);
+        setState(data.updateGuideLoop!);
       },
     });
   }
