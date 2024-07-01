@@ -19,7 +19,7 @@ const GET_ALTAIR_INSTRUMENT = gql`
 `;
 
 export function useGetAltairInstrument() {
-  const [queryFunction, { data, loading, error }] = useLazyQuery(GET_ALTAIR_INSTRUMENT, {
+  const [queryFunction] = useLazyQuery(GET_ALTAIR_INSTRUMENT, {
     context: { clientName: 'navigateConfigs' },
   });
 
@@ -69,7 +69,7 @@ const UPDATE_ALTAIR_INSTRUMENT = gql`
 `;
 
 export function useUpdateAltairInstrument() {
-  const [mutationFunction, { data, loading, error }] = useMutation(UPDATE_ALTAIR_INSTRUMENT, {
+  const [mutationFunction] = useMutation(UPDATE_ALTAIR_INSTRUMENT, {
     context: { clientName: 'navigateConfigs' },
   });
 

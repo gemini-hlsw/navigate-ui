@@ -17,7 +17,7 @@ const GET_ALTAIR_GUIDE_LOOP = gql`
 `;
 
 export function useGetAltairGuideLoop() {
-  const [queryFunction, { data, loading, error }] = useLazyQuery(GET_ALTAIR_GUIDE_LOOP, {
+  const [queryFunction] = useLazyQuery(GET_ALTAIR_GUIDE_LOOP, {
     context: { clientName: 'navigateConfigs' },
   });
 
@@ -61,7 +61,7 @@ const UPDATE_ALTAIR_GUIDE_LOOP = gql`
 `;
 
 export function useUpdateAltairGuideLoop() {
-  const [mutationFunction, { data, loading, error }] = useMutation(UPDATE_ALTAIR_GUIDE_LOOP, {
+  const [mutationFunction] = useMutation(UPDATE_ALTAIR_GUIDE_LOOP, {
     context: { clientName: 'navigateConfigs' },
   });
 

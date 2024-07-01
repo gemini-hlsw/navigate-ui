@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
 import { useGetGuideTargets } from '@gql/odb/Observation';
 import { TargetInput } from '@/types';
@@ -15,19 +16,19 @@ export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
 
   function calculateGuideTargets() {
     setLoadingGuideTarget(true);
-    let crtTime = new Date().toISOString();
+    const crtTime = new Date().toISOString();
     getGuideTargets({
       variables: {
         observationId: configuration.obsId,
         observationTime: crtTime,
       },
       onCompleted(data) {
-        let OiwfsTargets: TargetInput[] = [];
-        let Pwfs1Targets: TargetInput[] = [];
-        let Pwfs2Targets: TargetInput[] = [];
+        const OiwfsTargets: TargetInput[] = [];
+        const Pwfs1Targets: TargetInput[] = [];
+        const Pwfs2Targets: TargetInput[] = [];
         data.observation.targetEnvironment.guideEnvironments.map((env: any) => {
           env.guideTargets.map((t: any) => {
-            let auxTarget: TargetInput = {
+            const auxTarget: TargetInput = {
               name: t.name,
               id: undefined,
               type: 'OIWFS',
@@ -80,6 +81,7 @@ export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
         toast.current?.show({
           severity: 'error',
           summary: 'Error',
+          // eslint-disable-next-line @typescript-eslint/no-base-to-string
           detail: err.toString(),
           life: 5000,
         });
@@ -89,7 +91,7 @@ export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
             wfs: 'OIWFS',
             targets: [],
           },
-          onCompleted(data) {
+          onCompleted() {
             setOiTargets([]);
           },
         });
@@ -98,7 +100,7 @@ export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
             wfs: 'PWFS1',
             targets: [],
           },
-          onCompleted(data) {
+          onCompleted() {
             setP1Targets([]);
           },
         });
@@ -107,7 +109,7 @@ export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
             wfs: 'PWFS2',
             targets: [],
           },
-          onCompleted(data) {
+          onCompleted() {
             setP2Targets([]);
           },
         });

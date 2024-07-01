@@ -1,7 +1,8 @@
 export const Authentication = {
   getUser() {
-    let user = localStorage.getItem('user');
+    const user = localStorage.getItem('user');
     if (user) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return JSON.parse(user);
     } else {
       return null;
@@ -12,8 +13,8 @@ export const Authentication = {
     // A proper authentication should be made!!
     // Remove next line after telescope tests
     return true;
-    let user = this.getUser();
-    if (!Boolean(user)) {
+    const user = this.getUser();
+    if (!user) {
       return false;
     } else {
       // Check if user can edit
@@ -33,8 +34,9 @@ export const Authentication = {
       });
 
       if (res.status === 200) {
-        let data = await res.json();
+        const data = await res.json();
         localStorage.setItem('user', JSON.stringify(data));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return [data, undefined];
       } else {
         return [null, res.statusText];
@@ -61,6 +63,8 @@ export const Authentication = {
       if (res.status === 200) {
         localStorage.removeItem('user');
       }
-    } catch (error) {}
+    } catch (error) {
+      /* empty */
+    }
   },
 };

@@ -21,7 +21,7 @@ const GET_CONFIGURATION = gql`
 `;
 
 export function useGetConfiguration() {
-  const [queryFunction, { data, loading, error }] = useLazyQuery(GET_CONFIGURATION, {
+  const [queryFunction] = useLazyQuery(GET_CONFIGURATION, {
     context: { clientName: 'navigateConfigs' },
   });
 
@@ -77,7 +77,7 @@ const UPDATE_CONFIGURATION = gql`
 `;
 
 export function useUpdateConfiguration() {
-  const [mutationFunction, { data, loading, error }] = useMutation(UPDATE_CONFIGURATION, {
+  const [mutationFunction] = useMutation(UPDATE_CONFIGURATION, {
     context: { clientName: 'navigateConfigs' },
   });
 

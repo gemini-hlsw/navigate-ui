@@ -25,7 +25,7 @@ const GET_SLEW_FLAGS = gql`
 `;
 
 export function useGetSlewFlags() {
-  const [queryFunction, { data, loading, error }] = useLazyQuery(GET_SLEW_FLAGS, {
+  const [queryFunction] = useLazyQuery(GET_SLEW_FLAGS, {
     context: { clientName: 'navigateConfigs' },
   });
 
@@ -93,7 +93,7 @@ const UPDATE_SLEW_FLAGS = gql`
 `;
 
 export function useUpdateSlewFlags() {
-  const [mutationFunction, { data, loading, error }] = useMutation(UPDATE_SLEW_FLAGS, {
+  const [mutationFunction] = useMutation(UPDATE_SLEW_FLAGS, {
     context: { clientName: 'navigateConfigs' },
   });
 

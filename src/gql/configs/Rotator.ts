@@ -11,7 +11,7 @@ const GET_ROTATOR = gql`
 `;
 
 export function useGetRotator() {
-  const [queryFunction, { data, loading, error }] = useLazyQuery(GET_ROTATOR, {
+  const [queryFunction] = useLazyQuery(GET_ROTATOR, {
     context: { clientName: 'navigateConfigs' },
   });
 
@@ -29,7 +29,7 @@ const UPDATE_ROTATOR = gql`
 `;
 
 export function useUpdateRotator() {
-  const [mutationFunction, { data, loading, error }] = useMutation(UPDATE_ROTATOR, {
+  const [mutationFunction] = useMutation(UPDATE_ROTATOR, {
     context: { clientName: 'navigateConfigs' },
   });
 

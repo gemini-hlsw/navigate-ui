@@ -28,7 +28,7 @@ export function Alarm({
         <span className="label">Subaperture</span>
         <span style={{ alignSelf: 'center' }}>{subaperture}</span>
         <span className="label">Enabled</span>
-        <Checkbox disabled={disabled} checked={enabled} onChange={(e) => e.target.value} />
+        <Checkbox disabled={disabled} checked={enabled} />
       </div>
     </div>
   );

@@ -3,7 +3,6 @@ import { Dialog } from 'primereact/dialog';
 import { AuthContext } from '@Contexts/Auth/AuthProvider';
 import { InputSwitch } from 'primereact/inputswitch';
 import { VariablesContext } from '../VariablesProvider';
-import { SlewFlagsType } from '@/types';
 import { useUpdateSlewFlags } from '@gql/configs/SlewFlags';
 
 export function SlewFlags() {

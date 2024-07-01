@@ -1,7 +1,7 @@
 import { useGuideState } from '@gql/server/GuideState';
 
 export function useGetGuideState() {
-  const { data, loading } = useGuideState();
+  const { data } = useGuideState();
 
   if (!data)
     return {
@@ -28,9 +28,9 @@ export function useGetGuideState() {
     m2ComaM1CorrectionsSource: data.guideState.m1Input,
     m2FocusEnable: false,
     m2FocusSource: 'OIWFS',
-    m2TipTiltEnable: Boolean(data.guideState.m2Inputs) ? Boolean(data.guideState.m2Inputs.length > 0) : false,
+    m2TipTiltEnable: data.guideState.m2Inputs ? Boolean(data.guideState.m2Inputs.length > 0) : false,
     m2TipTiltFocusLink: true,
-    m2TipTiltSource: Boolean(data.guideState.m2Inputs) ? data.guideState.m2Inputs.join(',') : 'NONE',
+    m2TipTiltSource: data.guideState.m2Inputs ? (data.guideState.m2Inputs as string[]).join(',') : 'NONE',
     probeTracking: 'OI➡OI',
   };
 }

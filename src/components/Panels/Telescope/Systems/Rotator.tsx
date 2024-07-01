@@ -1,8 +1,7 @@
 import { Title } from '@Shared/Title/Title';
 import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
-import { useContext, useState } from 'react';
-import { RotatorType } from '@/types';
+import { useContext } from 'react';
 import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
 import { useUpdateRotator } from '@gql/configs/Rotator';
 
@@ -20,7 +19,7 @@ export function Rotator({ canEdit }: { canEdit: boolean }) {
           value={rotator.tracking}
           options={['TRACKING', 'FIXED']}
           onChange={(e) =>
-            updateRotator({
+            void updateRotator({
               variables: { pk: rotator.pk, tracking: e.target.value },
               onCompleted(data) {
                 setRotator(data.updateRotator);
@@ -36,7 +35,7 @@ export function Rotator({ canEdit }: { canEdit: boolean }) {
           minFractionDigits={2}
           maxFractionDigits={7}
           onValueChange={(e) =>
-            updateRotator({
+            void updateRotator({
               variables: { pk: rotator.pk, angle: e.target.value },
               onCompleted(data) {
                 setRotator(data.updateRotator);

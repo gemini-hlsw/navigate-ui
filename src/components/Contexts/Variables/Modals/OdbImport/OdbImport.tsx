@@ -15,7 +15,7 @@ export function OdbImport() {
   const { odbVisible, setOdbVisible, setBaseTargets, setOiTargets, setP1Targets, setP2Targets } =
     useContext(VariablesContext);
   const [selectedObservation, setSelectedObservation] = useState<OdbObservationType>({} as OdbObservationType);
-  const { getObservations, loading, data, error } = useGetObservations();
+  const { getObservations, loading, data } = useGetObservations();
   const removeAndCreateBaseTargets = useRemoveAndCreateBaseTargets();
   const updateConfiguration = useUpdateConfiguration();
 
@@ -55,13 +55,13 @@ export function OdbImport() {
     });
   }
 
-  let footer = (
+  const footer = (
     <div className="modal-footer">
       <div className="right">
         <Button
           disabled={
             !(canEdit && selectedObservation.targetEnvironment?.firstScienceTarget?.name !== '') ||
-            !Boolean(selectedObservation.targetEnvironment?.firstScienceTarget?.name)
+            !selectedObservation.targetEnvironment?.firstScienceTarget?.name
           }
           className=""
           label="Import to Navigate"
@@ -85,7 +85,7 @@ export function OdbImport() {
         <p>Loading observations...</p>
       ) : (
         <ObservationTable
-          loading={!Boolean(data)}
+          loading={!data}
           observations_list={data?.observations}
           selectedObservation={selectedObservation}
           setSelectedObservation={setSelectedObservation}

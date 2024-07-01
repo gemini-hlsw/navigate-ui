@@ -10,7 +10,7 @@ const OIWFS_OBSERVE = gql`
 `;
 
 export function useOiwfsObserve() {
-  const [mutationFunction, { data, loading, error }] = useMutation(OIWFS_OBSERVE);
+  const [mutationFunction] = useMutation(OIWFS_OBSERVE);
 
   return mutationFunction;
 }
@@ -25,7 +25,7 @@ const OIWFS_STOP_OBSERVE = gql`
 `;
 
 export function useOiwfsStopObserve() {
-  const [mutationFunction, { data, loading, error }] = useMutation(OIWFS_STOP_OBSERVE);
+  const [mutationFunction] = useMutation(OIWFS_STOP_OBSERVE);
 
   return mutationFunction;
 }

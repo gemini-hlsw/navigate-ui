@@ -61,11 +61,12 @@ const initialEdges: Edge[] = [
   },
 ];
 
-function Flow({}) {
+function Flow() {
   // const [state, setState] = useState<GuideLoopType>({} as GuideLoopType)
   const [nodes, setNodes] = useState<Node[]>(initialNodes);
   const [edges, setEdges] = useState<Edge[]>(initialEdges);
-  const { fitView } = useReactFlow();
+  // eslint-disable-next-line no-empty-pattern
+  const {} = useReactFlow();
   const state = useGetGuideState();
 
   const onNodesChange = useCallback((changes: NodeChange[]) => setNodes((nds) => applyNodeChanges(changes, nds)), []);
@@ -73,11 +74,11 @@ function Flow({}) {
   const onEdgesChange = useCallback((changes: EdgeChange[]) => setEdges((eds) => applyEdgeChanges(changes, eds)), []);
 
   useEffect(() => {
-    let auxState = { ...state };
+    const auxState = { ...state };
     // fitView()
     // Get active sources first
-    let sourceNodes: Node[] = [];
-    let sourceEdges: Edge[] = [];
+    const sourceNodes: Node[] = [];
+    const sourceEdges: Edge[] = [];
     if (auxState.m2TipTiltEnable && auxState.m2TipTiltSource) {
       auxState.m2TipTiltSource.split(',').map((source: string) => {
         sourceNodes.push({
@@ -131,7 +132,7 @@ function Flow({}) {
     }
 
     if (auxState.m2ComaEnable) {
-      let pos = sourceNodes.map((n) => n.id).indexOf(auxState.m2ComaM1CorrectionsSource);
+      const pos = sourceNodes.map((n) => n.id).indexOf(auxState.m2ComaM1CorrectionsSource);
       if (pos === -1) {
         sourceNodes.push({
           id: auxState.m2ComaM1CorrectionsSource,
@@ -155,7 +156,7 @@ function Flow({}) {
     }
 
     if (auxState.m1CorrectionsEnable) {
-      let pos = sourceNodes.map((n) => n.id).indexOf(auxState.m2ComaM1CorrectionsSource);
+      const pos = sourceNodes.map((n) => n.id).indexOf(auxState.m2ComaM1CorrectionsSource);
       if (pos === -1) {
         sourceNodes.push({
           id: auxState.m2ComaM1CorrectionsSource,
@@ -251,7 +252,7 @@ function Flow({}) {
 
     // Check probe tracking
 
-    let sourceN = sourceNodes.length;
+    const sourceN = sourceNodes.length;
     if (sourceN) {
       sourceNodes.map((n, i) => (n.position.x = i * 100));
     }

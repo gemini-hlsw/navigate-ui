@@ -32,7 +32,7 @@ export function ObservationTable({
 
   function onGlobalFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
-    let _filters = { ...filters };
+    const _filters = { ...filters };
     _filters['global'].value = value;
 
     setFilters(_filters);
@@ -53,14 +53,14 @@ export function ObservationTable({
 
   const header = renderHeader();
 
-  if (!Boolean(observations_list)) {
+  if (!observations_list) {
     return null;
   }
 
   return (
     <div className="target-table">
       <DataTable
-        value={observations_list.matches.filter((el: any) => el.activeStatus === 'ACTIVE')}
+        value={(observations_list.matches as { activeStatus: string }[]).filter((el) => el.activeStatus === 'ACTIVE')}
         paginator
         selectionMode="single"
         onSelectionChange={(e) => setSelectedObservation(e.value)}

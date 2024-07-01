@@ -28,7 +28,7 @@ export function GuidersDetails() {
     },
   ];
 
-  let rows: JSX.Element[] = [];
+  const rows: JSX.Element[] = [];
   GUIDERS_VALUES.map((row, index) => {
     rows.push(
       <div className="row" key={`guiders-row-${index}`}>

@@ -44,7 +44,7 @@ export function Target() {
   }, [targetEdit]);
 
   function updateObservation() {
-    let tIdx = targetEdit.targetIndex ?? -1;
+    const tIdx = targetEdit.targetIndex ?? -1;
     switch (auxTarget.type) {
       case 'SCIENCE':
       case 'BLINDOFFSET':
@@ -72,6 +72,7 @@ export function Target() {
             setOiTargets([...oiTargets.slice(0, tIdx), data.target, ...oiTargets.slice(tIdx + 1)]);
           },
         });
+        break;
 
       case 'PWFS1':
         updateTarget({
@@ -84,6 +85,7 @@ export function Target() {
             setP1Targets([...p1Targets.slice(0, tIdx), data.target, ...p1Targets.slice(tIdx + 1)]);
           },
         });
+        break;
 
       case 'PWFS2':
         updateTarget({
@@ -96,6 +98,7 @@ export function Target() {
             setP2Targets([...p2Targets.slice(0, tIdx), data.target, ...p2Targets.slice(tIdx + 1)]);
           },
         });
+        break;
 
       default:
         break;
@@ -108,7 +111,7 @@ export function Target() {
     });
   }
 
-  let footer = (
+  const footer = (
     <div className="modal-footer">
       <div className="right">
         <Button className="" label="Update" onClick={updateObservation} />
@@ -232,7 +235,7 @@ export function Target() {
               });
             }
           }}
-          onBlur={(e) => {
+          onBlur={() => {
             if (coordsType === 'celestial') {
               setc1String(auxTarget.ra?.hms);
             } else {
@@ -273,7 +276,7 @@ export function Target() {
           style={{ gridArea: 'c21' }}
           value={coordsType === 'celestial' ? auxTarget.dec?.degrees : auxTarget.el?.degrees}
           onValueChange={(e) => {
-            let stringC2 = deg2dms(e.target.value ?? 0);
+            const stringC2 = deg2dms(e.target.value ?? 0);
             if (coordsType === 'celestial') {
               setAuxTarget({
                 ...auxTarget,
@@ -329,7 +332,7 @@ export function Target() {
           Epoch
         </span>
         <InputText
-          disabled={auxTarget.type === 'FIXED' ?? false}
+          disabled={auxTarget.type === 'FIXED'}
           style={{ gridArea: 's4' }}
           value={(auxTarget.type === 'FIXED' ? '' : auxTarget.epoch) ?? ''}
           onChange={(e) => setAuxTarget({ ...auxTarget, epoch: e.target.value })}

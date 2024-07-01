@@ -17,9 +17,9 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
 
   const [canEdit, setCanEdit] = useState<boolean>(Authentication.canEdit());
 
-  let signin = async (username: string, password: string) => {
-    let [user, _] = await Authentication.signin(username, password);
-    if (!Boolean(user)) return Promise.resolve(false);
+  const signin = async (username: string, password: string) => {
+    const [user] = await Authentication.signin(username, password);
+    if (!user) return Promise.resolve(false);
     setUser(user);
     setIsUserLoggedIn(true);
     // Check if user can edit
@@ -27,14 +27,14 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     return Promise.resolve(true);
   };
 
-  let signout = async () => {
+  const signout = async () => {
     await Authentication.signout();
     setUser(null);
     setCanEdit(false);
     setIsUserLoggedIn(false);
   };
 
-  let value = { user, signin, signout, isUserLoggedIn, canEdit };
+  const value = { user, signin, signout, isUserLoggedIn, canEdit };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

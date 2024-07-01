@@ -12,7 +12,7 @@ const GET_GEMS_INSTRUMENT = gql`
 `;
 
 export function useGetGemsInstrument() {
-  const [queryFunction, { data, loading, error }] = useLazyQuery(GET_GEMS_INSTRUMENT, {
+  const [queryFunction] = useLazyQuery(GET_GEMS_INSTRUMENT, {
     context: { clientName: 'navigateConfigs' },
   });
 
@@ -31,7 +31,7 @@ const UPDATE_GEMS_INSTRUMENT = gql`
 `;
 
 export function useUpdateGemsInstrument() {
-  const [mutationFunction, { data, loading, error }] = useMutation(UPDATE_GEMS_INSTRUMENT, {
+  const [mutationFunction] = useMutation(UPDATE_GEMS_INSTRUMENT, {
     context: { clientName: 'navigateConfigs' },
   });
 

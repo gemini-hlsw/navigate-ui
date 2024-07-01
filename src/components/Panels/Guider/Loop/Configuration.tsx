@@ -44,14 +44,14 @@ export function Configuration() {
   }
 
   function translateStateGuideInput() {
-    let m2Inputs = [];
+    const m2Inputs = [];
     if (state.m2TipTiltEnable) {
       if (state.m2TipTiltSource.split(',').includes('OIWFS')) {
         m2Inputs.push('OIWFS');
       }
     }
-    let m1Input = state.m2ComaM1CorrectionsSource;
-    let [probeFrom, probeTo] = state.probeTracking.split('➡');
+    const m1Input = state.m2ComaM1CorrectionsSource;
+    const [probeFrom] = state.probeTracking.split('➡');
 
     return {
       m2Inputs: m2Inputs,
@@ -94,7 +94,7 @@ export function Configuration() {
           />
           <MultiSelect
             value={state.m2TipTiltSource ? state.m2TipTiltSource.split(',') : undefined}
-            onChange={(e) => modifyGuideLoop('m2TipTiltSource', e.value.join(','))}
+            onChange={(e) => modifyGuideLoop('m2TipTiltSource', (e.value as string[]).join(','))}
             options={[
               // { label: "PWFS1", value: "PWFS1" },
               // { label: "PWFS2", value: "PWFS2" },
@@ -130,7 +130,7 @@ export function Configuration() {
                   ? state.m2FocusSource.split(',')
                   : undefined
             }
-            onChange={(e) => modifyGuideLoop('m2FocusSource', e.value.join(','))}
+            onChange={(e) => modifyGuideLoop('m2FocusSource', (e.value as string[]).join(','))}
             options={[
               // { label: "PWFS1", value: "PWFS1" },
               // { label: "PWFS2", value: "PWFS2" },
@@ -218,11 +218,11 @@ export function Configuration() {
           <Button
             disabled={!canEdit}
             onClick={() =>
-              guideEnable({
+              void guideEnable({
                 variables: {
                   config: translateStateGuideInput(),
                 },
-                onCompleted(data) {
+                onCompleted() {
                   // console.log(data)
                 },
               })
@@ -233,8 +233,8 @@ export function Configuration() {
           <Button
             disabled={!canEdit}
             onClick={() =>
-              guideDisable({
-                onCompleted(data) {
+              void guideDisable({
+                onCompleted() {
                   // console.log(data)
                 },
               })

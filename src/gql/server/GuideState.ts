@@ -27,7 +27,7 @@ const GUIDE_ENABLE = gql`
 `;
 
 export function useGuideEnable() {
-  const [mutationFunction, { data, loading, error }] = useMutation(GUIDE_ENABLE);
+  const [mutationFunction] = useMutation(GUIDE_ENABLE);
 
   return mutationFunction;
 }
@@ -42,7 +42,7 @@ const GUIDE_DISABLE = gql`
 `;
 
 export function useGuideDisable() {
-  const [mutationFunction, { data, loading, error }] = useMutation(GUIDE_DISABLE);
+  const [mutationFunction] = useMutation(GUIDE_DISABLE);
 
   return mutationFunction;
 }

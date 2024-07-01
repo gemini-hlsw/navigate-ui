@@ -11,7 +11,7 @@ interface ParamsInterface {
 
 export function Title({ title, prevPanel, nextPanel, children, className = '' }: ParamsInterface) {
   let prevPanelDisplay = null;
-  if (Boolean(prevPanel)) {
+  if (prevPanel) {
     prevPanelDisplay = (
       <div className="p-panel" onClick={prevPanel}>
         <i className="pi pi-angle-left"></i>
@@ -20,7 +20,7 @@ export function Title({ title, prevPanel, nextPanel, children, className = '' }:
   }
 
   let nextPanelDisplay = null;
-  if (Boolean(nextPanel)) {
+  if (nextPanel) {
     nextPanelDisplay = (
       <div className="n-panel" onClick={nextPanel}>
         <i className="pi pi-angle-right"></i>

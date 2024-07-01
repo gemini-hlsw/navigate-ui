@@ -7,7 +7,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { InstrumentType } from '@/types';
 
 export function Instrument() {
-  const { instrument, setInstrument, importInstrument, setImportInstrument } = useContext(VariablesContext);
+  const { setInstrument, importInstrument, setImportInstrument } = useContext(VariablesContext);
   const getNames = useGetDistinctInstruments();
   const getPorts = useGetDistinctPorts();
   const getInstuments = useGetInstruments();
@@ -21,8 +21,8 @@ export function Instrument() {
   useEffect(() => {
     if (importInstrument)
       getNames({
-        onCompleted: (data) => {
-          setNameOptions(data.distinctInstruments.map((e: { name: string }) => e.name));
+        onCompleted: (data: { distinctInstruments: { name: string }[] }) => {
+          setNameOptions(data.distinctInstruments.map((e) => e.name));
         },
       });
   }, [importInstrument]);
@@ -32,8 +32,8 @@ export function Instrument() {
       setPort(0);
       getPorts({
         variables: { name: name },
-        onCompleted: (data) => {
-          setPortOptions(data.distinctPorts.map((e: { issPort: number }) => e.issPort));
+        onCompleted: (data: { distinctPorts: { issPort: number }[] }) => {
+          setPortOptions(data.distinctPorts.map((e) => e.issPort));
         },
       });
     }
@@ -55,7 +55,7 @@ export function Instrument() {
     setImportInstrument(false);
   }
 
-  let footer = (
+  const footer = (
     <div className="modal-footer">
       <div className="right">
         <Button className="" label="Import" onClick={modifyInstrument} />
@@ -64,7 +64,7 @@ export function Instrument() {
     </div>
   );
 
-  let tableData: JSX.Element[] = [];
+  const tableData: JSX.Element[] = [];
   instrumentOptions.map((i, idx) => {
     tableData.push(
       <InstrumentDetails

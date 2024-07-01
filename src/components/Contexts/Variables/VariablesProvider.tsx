@@ -95,7 +95,7 @@ export default function VariablesProvider({ children }: { children: ReactNode })
     });
   }, []);
 
-  let value = {
+  const value = {
     theme,
     toggleTheme,
     odbVisible,

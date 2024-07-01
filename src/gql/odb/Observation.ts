@@ -95,7 +95,7 @@ const GET_GUIDE_TARGETS = gql`
 
 export function useGetGuideTargets() {
   const { odbToken } = useContext(VariablesContext);
-  const [queryFunction, { called, loading, error, data }] = useLazyQuery(GET_GUIDE_TARGETS, {
+  const [queryFunction] = useLazyQuery(GET_GUIDE_TARGETS, {
     context: {
       clientName: 'odb',
       headers: {

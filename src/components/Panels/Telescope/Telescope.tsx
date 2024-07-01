@@ -14,7 +14,7 @@ import { TargetType } from '@/types';
 export function Telescope({ prevPanel, nextPanel }: { prevPanel: () => void; nextPanel: () => void }) {
   const { configuration, baseTargets } = useContext(VariablesContext);
 
-  let selectedTarget = baseTargets.filter((t) => t.pk === configuration.selectedTarget)[0];
+  const selectedTarget = baseTargets.filter((t) => t.pk === configuration.selectedTarget)[0];
 
   return (
     <div className="telescope">

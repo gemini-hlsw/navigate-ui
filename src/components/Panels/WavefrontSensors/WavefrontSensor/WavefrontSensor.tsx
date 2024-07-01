@@ -10,8 +10,8 @@ export default function WavefrontSensor({ canEdit, wfs }: { canEdit: boolean; wf
   const [observeState, setObserveState] = useState(false);
   let observeButton;
   if (wfs === 'OIWFS') {
-    let startObserve = useOiwfsObserve();
-    let stopObserve = useOiwfsStopObserve();
+    const startObserve = useOiwfsObserve();
+    const stopObserve = useOiwfsStopObserve();
     if (observeState) {
       observeButton = (
         <Button
@@ -22,8 +22,8 @@ export default function WavefrontSensor({ canEdit, wfs }: { canEdit: boolean; wf
           aria-label="Stop"
           tooltip="Stop"
           onClick={() =>
-            stopObserve({
-              onCompleted(data) {
+            void stopObserve({
+              onCompleted() {
                 setObserveState(false);
               },
             })
@@ -39,9 +39,9 @@ export default function WavefrontSensor({ canEdit, wfs }: { canEdit: boolean; wf
           aria-label="Start"
           tooltip="Start"
           onClick={() =>
-            startObserve({
+            void startObserve({
               variables: { period: { milliseconds: (1 / freq) * 1000 } },
-              onCompleted(data) {
+              onCompleted() {
                 setObserveState(true);
               },
             })
@@ -50,7 +50,9 @@ export default function WavefrontSensor({ canEdit, wfs }: { canEdit: boolean; wf
       );
     }
   } else if (wfs === 'PWFS1') {
+    /* empty */
   } else if (wfs === 'PWFS2') {
+    /* empty */
   }
 
   return (

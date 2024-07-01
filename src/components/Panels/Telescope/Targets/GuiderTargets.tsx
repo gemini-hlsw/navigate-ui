@@ -25,9 +25,9 @@ export function GuiderTargets() {
   const { canEdit } = useContext(AuthContext);
   const { loadingGuideTarget, configuration, p1Targets, p2Targets, oiTargets } = useContext(VariablesContext);
 
-  let displayProbes: JSX.Element[] = [];
+  const displayProbes: JSX.Element[] = [];
   if (oiTargets.length > 0) {
-    let oiSelected = oiTargets.filter((t) => t.pk === configuration.selectedOiTarget)[0];
+    const oiSelected = oiTargets.filter((t) => t.pk === configuration.selectedOiTarget)[0];
     displayProbes.push(
       <div key={'OIWFS'} className="guide-probe">
         <Title title={oiSelected ? `OIWFS: ${oiSelected.name}` : 'OIWFS'} />
@@ -42,7 +42,7 @@ export function GuiderTargets() {
   }
 
   if (p1Targets.length > 0) {
-    let p1Selected = p1Targets.filter((t) => t.pk === configuration.selectedP1Target)[0];
+    const p1Selected = p1Targets.filter((t) => t.pk === configuration.selectedP1Target)[0];
     displayProbes.push(
       <div key={'PWFS1'} className="guide-probe">
         <Title title={p1Selected ? `PWFS1: ${p1Selected.name}` : 'PWFS1'} />
@@ -57,7 +57,7 @@ export function GuiderTargets() {
   }
 
   if (p2Targets.length > 0) {
-    let p2Selected = p2Targets.filter((t) => t.pk === configuration.selectedP2Target)[0];
+    const p2Selected = p2Targets.filter((t) => t.pk === configuration.selectedP2Target)[0];
     displayProbes.push(
       <div key={'PWFS2'} className="guide-probe">
         <Title title={p2Selected ? `PWFS2: ${p2Selected.name}` : 'PWFS2'} />

@@ -61,7 +61,7 @@ export function TargetList({
     }
   }
 
-  let displayTargets: JSX.Element[] = [];
+  const displayTargets: JSX.Element[] = [];
   targets?.map((target: TargetType, index: number) => {
     displayTargets.push(
       <Target
@@ -77,12 +77,7 @@ export function TargetList({
   if (displayTargets.length === 0) {
     // Return an empty target as placeholder
     displayTargets.push(
-      <Target
-        key={`obsTarget-0`}
-        target={{} as TargetType}
-        updateSelectedTarget={(_: number) => undefined}
-        selectedTarget={0}
-      />,
+      <Target key={`obsTarget-0`} target={{} as TargetType} updateSelectedTarget={() => {}} selectedTarget={0} />,
     );
   }
   return (

@@ -21,7 +21,7 @@ const GET_GUIDE_LOOP = gql`
 `;
 
 export function useGetGuideLoop() {
-  const [queryFunction, { data, loading, error }] = useLazyQuery(GET_GUIDE_LOOP, {
+  const [queryFunction] = useLazyQuery(GET_GUIDE_LOOP, {
     context: { clientName: 'navigateConfigs' },
   });
 
@@ -77,7 +77,7 @@ const UPDATE_GUIDE_LOOP = gql`
 `;
 
 export function useUpdateGuideLoop() {
-  const [mutationFunction, { data, loading, error }] = useMutation(UPDATE_GUIDE_LOOP, {
+  const [mutationFunction] = useMutation(UPDATE_GUIDE_LOOP, {
     context: { clientName: 'navigateConfigs' },
   });
 

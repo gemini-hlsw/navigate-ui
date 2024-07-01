@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect } from 'vitest';
-import { render, fireEvent, cleanup, screen } from '@testing-library/react';
+import { render, fireEvent, screen } from '@testing-library/react';
 import { Title } from './Title';
 
 describe('Title test with args', () => {
-  let title = 'My title';
+  const title = 'My title';
   const nextPanelObject = {
     nextPanel: () => {},
   };
@@ -47,7 +47,7 @@ describe('Title test with args', () => {
 });
 
 describe('Title test with args', () => {
-  let title = 'My title';
+  const title = 'My title';
 
   const nextPanel = () => {};
   const prevPanel = () => {};
@@ -56,7 +56,7 @@ describe('Title test with args', () => {
   const prevPanelMock = vi.fn().mockImplementation(prevPanel);
 
   it('functions should be called', () => {
-    let { container } = render(
+    const { container } = render(
       <Title title={title} prevPanel={prevPanelMock} nextPanel={nextPanelMock}>
         <h3>Hola</h3>
       </Title>,
@@ -70,37 +70,37 @@ describe('Title test with args', () => {
 });
 
 describe('Title test without args', () => {
-  let title = 'My title';
+  const title = 'My title';
 
   it('sholud show title', () => {
-    let { container } = render(<Title title={title}></Title>);
+    render(<Title title={title}></Title>);
 
     expect(screen.getByText(title)).toBeDefined();
   });
 
   it('should not have prev and next panel button if no functions are defined', () => {
-    let { container } = render(<Title title={title}></Title>);
+    const { container } = render(<Title title={title}></Title>);
     expect(container.getElementsByClassName('p-panel').length).toBe(0);
     expect(container.getElementsByClassName('n-panel').length).toBe(0);
   });
 
   it('should not show children neither buttons if not defined', () => {
-    let { container } = render(<Title title={title}></Title>);
+    const { container } = render(<Title title={title}></Title>);
     expect(container.firstChild?.childNodes.length).toBe(1);
   });
 });
 
 describe('Title with children', () => {
-  let title = 'My title';
+  const title = 'My title';
 
   const CHILDREN = Math.floor(Math.random() * 10);
-  let children: JSX.Element[] = [];
+  const children: JSX.Element[] = [];
   for (let i = 0; i < CHILDREN; i++) {
     children.push(<span key={i}>node {i}</span>);
   }
 
   it('should render title plus children created', () => {
-    let instance = render(<Title title={title}>{children}</Title>);
+    const instance = render(<Title title={title}>{children}</Title>);
     expect(instance.container.firstChild?.childNodes.length).toBe(CHILDREN + 1);
   });
 });

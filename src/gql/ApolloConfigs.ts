@@ -5,6 +5,7 @@ import { ApolloClient, InMemoryCache, ApolloLink, HttpLink } from '@apollo/clien
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { getMainDefinition } from '@apollo/client/utilities';
+import { Kind, OperationTypeNode } from 'graphql/language';
 
 const navigateCommandServer = new HttpLink({
   uri: import.meta.env.VITE_NG_SERVER_URI ?? 'http://navigate.lucuma.xyz:5173/navigate/graphql',
@@ -31,8 +32,10 @@ export const client = new ApolloClient({
       navigateConfigs,
       ApolloLink.split(
         ({ query }) => {
-          let definition = getMainDefinition(query);
-          return definition.kind === 'OperationDefinition' && definition.operation === 'subscription';
+          const definition = getMainDefinition(query);
+          return (
+            definition.kind === Kind.OPERATION_DEFINITION && definition.operation === OperationTypeNode.SUBSCRIPTION
+          );
         },
         wsLink,
         navigateCommandServer,

@@ -14,9 +14,9 @@ interface LocationInterface {
 }
 
 export default function Login() {
-  let navigate = useNavigate();
-  let location = useLocation();
-  let auth = useContext(AuthContext);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const auth = useContext(AuthContext);
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);

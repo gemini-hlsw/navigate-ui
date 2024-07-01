@@ -30,7 +30,7 @@ const GET_TARGETS = gql`
 `;
 
 export function useGetTargets() {
-  const [queryFunction, { data, loading, error }] = useLazyQuery(GET_TARGETS, {
+  const [queryFunction] = useLazyQuery(GET_TARGETS, {
     context: { clientName: 'navigateConfigs' },
   });
 
@@ -75,7 +75,7 @@ const UPDATE_TARGET = gql`
 `;
 
 export function useUpdateTarget() {
-  const [mutationFunction, { data, loading, error }] = useMutation(UPDATE_TARGET, {
+  const [mutationFunction] = useMutation(UPDATE_TARGET, {
     context: { clientName: 'navigateConfigs' },
   });
 
@@ -121,7 +121,7 @@ const CREATE_TARGET = gql`
 `;
 
 export function useCreateTarget() {
-  const [mutationFunction, { data, loading, error }] = useMutation(CREATE_TARGET, {
+  const [mutationFunction] = useMutation(CREATE_TARGET, {
     context: { clientName: 'navigateConfigs' },
   });
 
@@ -158,7 +158,7 @@ const REMOVE_AND_CREATE_BASE_TARGETS = gql`
 `;
 
 export function useRemoveAndCreateBaseTargets() {
-  const [mutationFunction, { data, loading, error }] = useMutation(REMOVE_AND_CREATE_BASE_TARGETS, {
+  const [mutationFunction] = useMutation(REMOVE_AND_CREATE_BASE_TARGETS, {
     context: { clientName: 'navigateConfigs' },
   });
 
@@ -195,7 +195,7 @@ const REMOVE_AND_CREATE_WFS_TARGETS = gql`
 `;
 
 export function useRemoveAndCreateWfsTargets() {
-  const [mutationFunction, { data, loading, error }] = useMutation(REMOVE_AND_CREATE_WFS_TARGETS, {
+  const [mutationFunction] = useMutation(REMOVE_AND_CREATE_WFS_TARGETS, {
     context: { clientName: 'navigateConfigs' },
   });
 

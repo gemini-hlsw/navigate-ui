@@ -1,8 +1,8 @@
 import { useCallback, useRef, useState } from 'react';
 
 export function useLongPress(
-  onLongPress: Function,
-  onClick: Function,
+  onLongPress: React.EventHandler<React.MouseEvent | React.TouchEvent>,
+  onClick: React.EventHandler<React.MouseEvent | React.TouchEvent>,
   { shouldPreventDefault = true, delay = 300 } = {},
 ) {
   const [longPressTriggered, setLongPressTriggered] = useState(false);

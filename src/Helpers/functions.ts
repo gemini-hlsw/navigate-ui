@@ -19,10 +19,10 @@ export function deg2hms(deg: number) {
 }
 
 export function deg2dms(deg: number) {
-  let degrees = Math.trunc(deg);
-  let rest = (deg - degrees) * 60;
-  let mins = Math.trunc(rest);
-  let secs = (rest - mins) * 60;
+  const degrees = Math.trunc(deg);
+  const rest = (deg - degrees) * 60;
+  const mins = Math.trunc(rest);
+  const secs = (rest - mins) * 60;
   if (deg < 0) {
     return '-' + Math.abs(degrees).toString() + ':' + Math.abs(mins).toString() + ':' + Math.abs(secs).toFixed(2);
   } else {
@@ -38,11 +38,11 @@ export function deg2dms(deg: number) {
 
 export function hms2deg(angle: string) {
   if (angle.includes(':')) {
-    let arr = angle.split(':');
-    let h = parseFloat(arr[0]);
-    let m = parseFloat(arr[1]);
-    let s = parseFloat(arr[2]);
-    let deg = ((h + m / 60.0 + s / 3600.0) / 24) * 360;
+    const arr = angle.split(':');
+    const h = parseFloat(arr[0]);
+    const m = parseFloat(arr[1]);
+    const s = parseFloat(arr[2]);
+    const deg = ((h + m / 60.0 + s / 3600.0) / 24) * 360;
     return deg;
   } else {
     return parseFloat(angle);
@@ -51,13 +51,13 @@ export function hms2deg(angle: string) {
 
 export function dms2deg(angle: string) {
   if (angle.includes(':')) {
-    let arr = angle.split(':');
+    const arr = angle.split(':');
     let d = parseFloat(arr[0]);
-    let sign = Math.sign(d);
+    const sign = Math.sign(d);
     d = Math.abs(d);
-    let m = parseFloat(arr[1]);
-    let s = parseFloat(arr[2]);
-    let deg = sign * (d + m / 60.0 + s / 3600.0);
+    const m = parseFloat(arr[1]);
+    const s = parseFloat(arr[2]);
+    const deg = sign * (d + m / 60.0 + s / 3600.0);
     return deg;
   } else {
     return parseFloat(angle);

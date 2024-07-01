@@ -1,7 +1,7 @@
 import { DocumentNode, gql, useMutation } from '@apollo/client';
 import { useContext, useEffect, useRef } from 'react';
 import { Button } from 'primereact/button';
-import { ButtonStateType, TargetType } from '@/types';
+import { ButtonStateType } from '@/types';
 import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
 import { Toast } from 'primereact/toast';
 import { BTN_CLASSES } from '@/Helpers/constants';
@@ -22,7 +22,7 @@ function MutationButton({
 }) {
   const TOAST_LIFE = 5000;
   const toast = useRef<Toast>(null);
-  const [mutationFunction, { data, loading, error }] = useMutation(mutation, {
+  const [mutationFunction, { loading, error }] = useMutation(mutation, {
     variables: variables,
   });
 
@@ -37,7 +37,7 @@ function MutationButton({
     }
   }, [error]);
 
-  let state: ButtonStateType = loading ? 'ACTIVE' : 'PENDING';
+  const state: ButtonStateType = loading ? 'ACTIVE' : 'PENDING';
 
   return (
     <>
@@ -45,7 +45,7 @@ function MutationButton({
       <Button
         className={`${BTN_CLASSES[state]} ${className}`}
         onClick={() =>
-          mutationFunction({
+          void mutationFunction({
             variables: variables,
           })
         }
@@ -114,11 +114,12 @@ const SLEW_MUTATION = gql`
 export function Slew({ label, disabled, className }: { label: string; disabled: boolean; className: string }) {
   const { baseTargets, oiTargets, instrument, slewFlags, rotator, configuration } = useContext(VariablesContext);
 
-  let selectedTarget = baseTargets.filter((t) => t.pk === configuration.selectedTarget)[0];
+  const selectedTarget = baseTargets.filter((t) => t.pk === configuration.selectedTarget)[0];
 
-  let selectedOiTarget = oiTargets.filter((t) => t.pk === configuration.selectedOiTarget)[0];
+  const selectedOiTarget = oiTargets.filter((t) => t.pk === configuration.selectedOiTarget)[0];
 
-  let variables = {
+  const variables = {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     slewOptions: (({ __typename, pk, ...o }) => o)(slewFlags),
     config: {
       instParams: {
@@ -169,7 +170,7 @@ export function Slew({ label, disabled, className }: { label: string; disabled: 
       variables={variables}
       className={className}
       label={label}
-      disabled={disabled || !Boolean(selectedTarget?.id)}
+      disabled={disabled || !selectedTarget?.id}
     />
   );
 }
@@ -199,7 +200,7 @@ const OIWFS_MUTATION = gql`
 
 export function Oiwfs({ label, disabled, className = '' }: { label: string; disabled: boolean; className?: string }) {
   const { oiTargets, configuration } = useContext(VariablesContext);
-  let selectedTarget = oiTargets.filter((t) => t.pk === configuration.selectedOiTarget)[0];
+  const selectedTarget = oiTargets.filter((t) => t.pk === configuration.selectedOiTarget)[0];
 
   return (
     <MutationButton
@@ -214,7 +215,7 @@ export function Oiwfs({ label, disabled, className = '' }: { label: string; disa
       }}
       className={className}
       label={label}
-      disabled={disabled || !Boolean(selectedTarget?.name)}
+      disabled={disabled || !selectedTarget?.name}
     />
   );
 }

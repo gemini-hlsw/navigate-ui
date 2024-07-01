@@ -69,7 +69,7 @@ const GET_All = gql`
 `;
 
 export function useGetAllInformation() {
-  const [queryFunction, { data, loading, error }] = useLazyQuery(GET_All, {
+  const [queryFunction] = useLazyQuery(GET_All, {
     context: { clientName: 'navigateConfigs' },
   });
 

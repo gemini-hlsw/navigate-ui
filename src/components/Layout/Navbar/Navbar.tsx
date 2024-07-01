@@ -7,14 +7,14 @@ import { Button } from 'primereact/button';
 import './Navbar.scss';
 
 export default function Navbar() {
-  let { theme, toggleTheme, configuration } = useContext(VariablesContext);
-  let auth = useContext(AuthContext);
-  let navigate = useNavigate();
+  const { theme, toggleTheme, configuration } = useContext(VariablesContext);
+  const auth = useContext(AuthContext);
+  const navigate = useNavigate();
 
   // Will be removed in the future
   const { odbToken } = useContext(VariablesContext);
 
-  let themeIcon: string = theme === 'dark' ? 'pi pi-moon' : 'pi pi-sun';
+  const themeIcon: string = theme === 'dark' ? 'pi pi-moon' : 'pi pi-sun';
 
   function userSession() {
     if (auth.isUserLoggedIn) {
@@ -63,7 +63,7 @@ export default function Navbar() {
         <span className="observation">{configuration.obsTitle ?? ''}</span>
       </div>
       <div className="right">
-        {!Boolean(odbToken) && (
+        {!odbToken && (
           <Link to="/token" style={{ animation: 'blink 1s infinite' }}>
             <i className="pi pi-key"></i>
           </Link>

@@ -45,7 +45,7 @@ const GET_MECHANISM = gql`
 `;
 
 export function useGetMechanism() {
-  const [queryFunction, { data, loading, error }] = useLazyQuery(GET_MECHANISM, {
+  const [queryFunction] = useLazyQuery(GET_MECHANISM, {
     context: { clientName: 'navigateConfigs' },
   });
 
@@ -173,7 +173,7 @@ const UPDATE_MECHANISM = gql`
 `;
 
 export function useUpdateMechanism() {
-  const [mutationFunction, { data, loading, error }] = useMutation(UPDATE_MECHANISM, {
+  const [mutationFunction] = useMutation(UPDATE_MECHANISM, {
     context: { clientName: 'navigateConfigs' },
   });
 

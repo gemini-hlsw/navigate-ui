@@ -6,12 +6,12 @@ import { useEffect, useState } from 'react';
 
 export default function Logs() {
   const MAX_LOG_DISPLAY = 20;
-  const { data, loading } = useLogMessages();
-  const [messages, setMessages] = useState<Object[]>([]);
+  const { data } = useLogMessages();
+  const [messages, setMessages] = useState<unknown[]>([]);
 
   useEffect(() => {
     if (data?.logMessage) {
-      let msg = {
+      const msg = {
         ...data?.logMessage,
         // timestamp: data?.logMessage.timestamp.split(" ")[1],
       };

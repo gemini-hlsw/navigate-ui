@@ -9,7 +9,7 @@ const GET_DISTINCT_INSTRUMENTS = gql`
 `;
 
 export function useGetDistinctInstruments() {
-  const [queryFunction, { data, loading, error }] = useLazyQuery(GET_DISTINCT_INSTRUMENTS, {
+  const [queryFunction] = useLazyQuery(GET_DISTINCT_INSTRUMENTS, {
     context: { clientName: 'navigateConfigs' },
   });
 
@@ -25,7 +25,7 @@ const GET_DISTINCT_PORTS = gql`
 `;
 
 export function useGetDistinctPorts() {
-  const [queryFunction, { data, loading, error }] = useLazyQuery(GET_DISTINCT_PORTS, {
+  const [queryFunction] = useLazyQuery(GET_DISTINCT_PORTS, {
     context: { clientName: 'navigateConfigs' },
   });
 
@@ -50,7 +50,7 @@ const GET_INSTRUMENTS = gql`
 `;
 
 export function useGetInstruments() {
-  const [queryFunction, { data, loading, error }] = useLazyQuery(GET_INSTRUMENTS, {
+  const [queryFunction] = useLazyQuery(GET_INSTRUMENTS, {
     context: { clientName: 'navigateConfigs' },
   });
 
@@ -75,7 +75,7 @@ const GET_INSTRUMENT = gql`
 `;
 
 export function useGetInstrument() {
-  const [queryFunction, { data, loading, error }] = useLazyQuery(GET_INSTRUMENT, {
+  const [queryFunction] = useLazyQuery(GET_INSTRUMENT, {
     context: { clientName: 'navigateConfigs' },
   });
 

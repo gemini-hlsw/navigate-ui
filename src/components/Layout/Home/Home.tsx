@@ -47,7 +47,7 @@ export default function Home() {
   }
 
   function handleTouchEnd(e: React.TouchEvent) {
-    let movement = e.changedTouches[0].pageX - touchPos;
+    const movement = e.changedTouches[0].pageX - touchPos;
     if (movement > TOUCH_THRESHOLD) {
       prevPanel();
     } else if (movement < -TOUCH_THRESHOLD) {

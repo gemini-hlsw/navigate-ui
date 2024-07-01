@@ -15,7 +15,7 @@ const GET_GEMS_GUIDE_LOOP = gql`
 `;
 
 export function useGetGemsGuideLoop() {
-  const [queryFunction, { data, loading, error }] = useLazyQuery(GET_GEMS_GUIDE_LOOP, {
+  const [queryFunction] = useLazyQuery(GET_GEMS_GUIDE_LOOP, {
     context: { clientName: 'navigateConfigs' },
   });
 
@@ -53,7 +53,7 @@ const UPDATE_GEMS_GUIDE_LOOP = gql`
 `;
 
 export function useUpdateGemsGuideLoop() {
-  const [mutationFunction, { data, loading, error }] = useMutation(UPDATE_GEMS_GUIDE_LOOP, {
+  const [mutationFunction] = useMutation(UPDATE_GEMS_GUIDE_LOOP, {
     context: { clientName: 'navigateConfigs' },
   });
 

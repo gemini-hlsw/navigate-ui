@@ -29,6 +29,7 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
     }
   }, [configuration]);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function updateInstrument({ key, val }: { key: string; val: any }) {
     console.log('Update instrument');
     // setConfiguration({
