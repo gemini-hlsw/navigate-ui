@@ -1,4 +1,4 @@
-import { gql, useLazyQuery, useMutation } from '@apollo/client';
+import { gql, useLazyQuery, useMutation } from "@apollo/client"
 
 const GET_TARGETS = gql`
   query getTargets($type: TargetType) {
@@ -27,14 +27,14 @@ const GET_TARGETS = gql`
       createdAt
     }
   }
-`;
+`
 
 export function useGetTargets() {
-  const [queryFunction] = useLazyQuery(GET_TARGETS, {
-    context: { clientName: 'navigateConfigs' },
-  });
+  const [queryFunction, { data, loading, error }] = useLazyQuery(GET_TARGETS, {
+    context: { clientName: "navigateConfigs" },
+  })
 
-  return queryFunction;
+  return queryFunction
 }
 
 const UPDATE_TARGET = gql`
@@ -47,7 +47,15 @@ const UPDATE_TARGET = gql`
     $epoch: String
     $type: TargetType
   ) {
-    updateTarget(pk: $pk, id: $id, name: $name, coord1: $coord1, coord2: $coord2, epoch: $epoch, type: $type) {
+    updateTarget(
+      pk: $pk
+      id: $id
+      name: $name
+      coord1: $coord1
+      coord2: $coord2
+      epoch: $epoch
+      type: $type
+    ) {
       pk
       id
       name
@@ -72,14 +80,15 @@ const UPDATE_TARGET = gql`
       createdAt
     }
   }
-`;
+`
 
 export function useUpdateTarget() {
-  const [mutationFunction] = useMutation(UPDATE_TARGET, {
-    context: { clientName: 'navigateConfigs' },
-  });
+  const [mutationFunction, { data, loading, error }] = useMutation(
+    UPDATE_TARGET,
+    { context: { clientName: "navigateConfigs" } }
+  )
 
-  return mutationFunction;
+  return mutationFunction
 }
 
 const CREATE_TARGET = gql`
@@ -93,7 +102,16 @@ const CREATE_TARGET = gql`
     $epoch: String
     $type: TargetType!
   ) {
-    createTarget(id: $id, name: $name, ra: $ra, az: $az, dec: $dec, el: $el, epoch: $epoch, type: $type) {
+    createTarget(
+      id: $id
+      name: $name
+      ra: $ra
+      az: $az
+      dec: $dec
+      el: $el
+      epoch: $epoch
+      type: $type
+    ) {
       pk
       id
       name
@@ -118,14 +136,15 @@ const CREATE_TARGET = gql`
       createdAt
     }
   }
-`;
+`
 
 export function useCreateTarget() {
-  const [mutationFunction] = useMutation(CREATE_TARGET, {
-    context: { clientName: 'navigateConfigs' },
-  });
+  const [mutationFunction, { data, loading, error }] = useMutation(
+    CREATE_TARGET,
+    { context: { clientName: "navigateConfigs" } }
+  )
 
-  return mutationFunction;
+  return mutationFunction
 }
 
 const REMOVE_AND_CREATE_BASE_TARGETS = gql`
@@ -155,18 +174,22 @@ const REMOVE_AND_CREATE_BASE_TARGETS = gql`
       createdAt
     }
   }
-`;
+`
 
 export function useRemoveAndCreateBaseTargets() {
-  const [mutationFunction] = useMutation(REMOVE_AND_CREATE_BASE_TARGETS, {
-    context: { clientName: 'navigateConfigs' },
-  });
+  const [mutationFunction, { data, loading, error }] = useMutation(
+    REMOVE_AND_CREATE_BASE_TARGETS,
+    { context: { clientName: "navigateConfigs" } }
+  )
 
-  return mutationFunction;
+  return mutationFunction
 }
 
 const REMOVE_AND_CREATE_WFS_TARGETS = gql`
-  mutation removeAndCreateWfsTargets($wfs: TargetType, $targets: [TargetInput]) {
+  mutation removeAndCreateWfsTargets(
+    $wfs: TargetType
+    $targets: [TargetInput]
+  ) {
     removeAndCreateWfsTargets(wfs: $wfs, targets: $targets) {
       pk
       id
@@ -192,12 +215,13 @@ const REMOVE_AND_CREATE_WFS_TARGETS = gql`
       createdAt
     }
   }
-`;
+`
 
 export function useRemoveAndCreateWfsTargets() {
-  const [mutationFunction] = useMutation(REMOVE_AND_CREATE_WFS_TARGETS, {
-    context: { clientName: 'navigateConfigs' },
-  });
+  const [mutationFunction, { data, loading, error }] = useMutation(
+    REMOVE_AND_CREATE_WFS_TARGETS,
+    { context: { clientName: "navigateConfigs" } }
+  )
 
-  return mutationFunction;
+  return mutationFunction
 }

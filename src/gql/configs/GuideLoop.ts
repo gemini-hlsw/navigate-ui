@@ -1,4 +1,4 @@
-import { gql, useLazyQuery, useMutation } from '@apollo/client';
+import { gql, useLazyQuery, useMutation } from "@apollo/client"
 
 const GET_GUIDE_LOOP = gql`
   query getGuideLoop {
@@ -18,14 +18,15 @@ const GET_GUIDE_LOOP = gql`
       lightPath
     }
   }
-`;
+`
 
 export function useGetGuideLoop() {
-  const [queryFunction] = useLazyQuery(GET_GUIDE_LOOP, {
-    context: { clientName: 'navigateConfigs' },
-  });
+  const [queryFunction, { data, loading, error }] = useLazyQuery(
+    GET_GUIDE_LOOP,
+    { context: { clientName: "navigateConfigs" } }
+  )
 
-  return queryFunction;
+  return queryFunction
 }
 
 const UPDATE_GUIDE_LOOP = gql`
@@ -74,12 +75,13 @@ const UPDATE_GUIDE_LOOP = gql`
       lightPath
     }
   }
-`;
+`
 
 export function useUpdateGuideLoop() {
-  const [mutationFunction] = useMutation(UPDATE_GUIDE_LOOP, {
-    context: { clientName: 'navigateConfigs' },
-  });
+  const [mutationFunction, { data, loading, error }] = useMutation(
+    UPDATE_GUIDE_LOOP,
+    { context: { clientName: "navigateConfigs" } }
+  )
 
-  return mutationFunction;
+  return mutationFunction
 }

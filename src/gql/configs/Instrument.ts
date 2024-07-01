@@ -1,4 +1,4 @@
-import { gql, useLazyQuery } from '@apollo/client';
+import { gql, useLazyQuery } from "@apollo/client"
 
 const GET_DISTINCT_INSTRUMENTS = gql`
   query getDistinctInstruments {
@@ -6,14 +6,17 @@ const GET_DISTINCT_INSTRUMENTS = gql`
       name
     }
   }
-`;
+`
 
 export function useGetDistinctInstruments() {
-  const [queryFunction] = useLazyQuery(GET_DISTINCT_INSTRUMENTS, {
-    context: { clientName: 'navigateConfigs' },
-  });
+  const [queryFunction, { data, loading, error }] = useLazyQuery(
+    GET_DISTINCT_INSTRUMENTS,
+    {
+      context: { clientName: "navigateConfigs" },
+    }
+  )
 
-  return queryFunction;
+  return queryFunction
 }
 
 const GET_DISTINCT_PORTS = gql`
@@ -22,14 +25,17 @@ const GET_DISTINCT_PORTS = gql`
       issPort
     }
   }
-`;
+`
 
 export function useGetDistinctPorts() {
-  const [queryFunction] = useLazyQuery(GET_DISTINCT_PORTS, {
-    context: { clientName: 'navigateConfigs' },
-  });
+  const [queryFunction, { data, loading, error }] = useLazyQuery(
+    GET_DISTINCT_PORTS,
+    {
+      context: { clientName: "navigateConfigs" },
+    }
+  )
 
-  return queryFunction;
+  return queryFunction
 }
 
 const GET_INSTRUMENTS = gql`
@@ -47,14 +53,17 @@ const GET_INSTRUMENTS = gql`
       extraParams
     }
   }
-`;
+`
 
 export function useGetInstruments() {
-  const [queryFunction] = useLazyQuery(GET_INSTRUMENTS, {
-    context: { clientName: 'navigateConfigs' },
-  });
+  const [queryFunction, { data, loading, error }] = useLazyQuery(
+    GET_INSTRUMENTS,
+    {
+      context: { clientName: "navigateConfigs" },
+    }
+  )
 
-  return queryFunction;
+  return queryFunction
 }
 
 const GET_INSTRUMENT = gql`
@@ -72,12 +81,15 @@ const GET_INSTRUMENT = gql`
       extraParams
     }
   }
-`;
+`
 
 export function useGetInstrument() {
-  const [queryFunction] = useLazyQuery(GET_INSTRUMENT, {
-    context: { clientName: 'navigateConfigs' },
-  });
+  const [queryFunction, { data, loading, error }] = useLazyQuery(
+    GET_INSTRUMENT,
+    {
+      context: { clientName: "navigateConfigs" },
+    }
+  )
 
-  return queryFunction;
+  return queryFunction
 }

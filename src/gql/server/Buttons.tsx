@@ -1,10 +1,10 @@
-import { DocumentNode, gql, useMutation } from '@apollo/client';
-import { useContext, useEffect, useRef } from 'react';
-import { Button } from 'primereact/button';
-import { ButtonStateType } from '@/types';
-import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
-import { Toast } from 'primereact/toast';
-import { BTN_CLASSES } from '@/Helpers/constants';
+import { DocumentNode, gql, useMutation } from "@apollo/client"
+import { useContext, useEffect, useRef } from "react"
+import { Button } from "primereact/button"
+import { ButtonStateType, TargetType } from "@/types"
+import { VariablesContext } from "@Contexts/Variables/VariablesProvider"
+import { Toast } from "primereact/toast"
+import { BTN_CLASSES } from "@/Helpers/constants"
 
 // Generic mutation button
 function MutationButton({
@@ -14,30 +14,30 @@ function MutationButton({
   label,
   disabled = false,
 }: {
-  mutation: DocumentNode;
-  variables: object;
-  className: string;
-  label: string;
-  disabled: boolean;
+  mutation: DocumentNode
+  variables: object
+  className: string
+  label: string
+  disabled: boolean
 }) {
-  const TOAST_LIFE = 5000;
-  const toast = useRef<Toast>(null);
-  const [mutationFunction, { loading, error }] = useMutation(mutation, {
+  const TOAST_LIFE = 5000
+  const toast = useRef<Toast>(null)
+  const [mutationFunction, { data, loading, error }] = useMutation(mutation, {
     variables: variables,
-  });
+  })
 
   useEffect(() => {
     if (error) {
       toast.current?.show({
-        severity: 'error',
-        summary: 'Error',
+        severity: "error",
+        summary: "Error",
         detail: error.message,
         life: TOAST_LIFE,
-      });
+      })
     }
-  }, [error]);
+  }, [error])
 
-  const state: ButtonStateType = loading ? 'ACTIVE' : 'PENDING';
+  let state: ButtonStateType = loading ? "ACTIVE" : "PENDING"
 
   return (
     <>
@@ -45,7 +45,7 @@ function MutationButton({
       <Button
         className={`${BTN_CLASSES[state]} ${className}`}
         onClick={() =>
-          void mutationFunction({
+          mutationFunction({
             variables: variables,
           })
         }
@@ -54,7 +54,7 @@ function MutationButton({
         label={label}
       />
     </>
-  );
+  )
 }
 
 // BUTTONS
@@ -66,7 +66,7 @@ const MOUNT_MUTATION = gql`
       msg
     }
   }
-`;
+`
 
 export function MCS({ label, disabled }: { label: string; disabled: boolean }) {
   return (
@@ -77,7 +77,7 @@ export function MCS({ label, disabled }: { label: string; disabled: boolean }) {
       label={label}
       disabled={disabled}
     />
-  );
+  )
 }
 
 // PARK
@@ -88,9 +88,16 @@ const PARK_MUTATION = gql`
       msg
     }
   }
-`;
+`
 
-export function McsPark({ label, disabled }: { label: string; disabled: boolean; style: object }) {
+export function McsPark({
+  label,
+  disabled,
+}: {
+  label: string
+  disabled: boolean
+  style: object
+}) {
   return (
     <MutationButton
       mutation={PARK_MUTATION}
@@ -99,7 +106,7 @@ export function McsPark({ label, disabled }: { label: string; disabled: boolean;
       label={label}
       disabled={disabled}
     />
-  );
+  )
 }
 
 // SLEW
@@ -109,17 +116,35 @@ const SLEW_MUTATION = gql`
       result
     }
   }
-`;
+`
 
-export function Slew({ label, disabled, className }: { label: string; disabled: boolean; className: string }) {
-  const { baseTargets, oiTargets, instrument, slewFlags, rotator, configuration } = useContext(VariablesContext);
+export function Slew({
+  label,
+  disabled,
+  className,
+}: {
+  label: string
+  disabled: boolean
+  className: string
+}) {
+  const {
+    baseTargets,
+    oiTargets,
+    instrument,
+    slewFlags,
+    rotator,
+    configuration,
+  } = useContext(VariablesContext)
 
-  const selectedTarget = baseTargets.filter((t) => t.pk === configuration.selectedTarget)[0];
+  let selectedTarget = baseTargets.filter(
+    (t) => t.pk === configuration.selectedTarget
+  )[0]
 
-  const selectedOiTarget = oiTargets.filter((t) => t.pk === configuration.selectedOiTarget)[0];
+  let selectedOiTarget = oiTargets.filter(
+    (t) => t.pk === configuration.selectedOiTarget
+  )[0]
 
-  const variables = {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  let variables = {
     slewOptions: (({ __typename, pk, ...o }) => o)(slewFlags),
     config: {
       instParams: {
@@ -139,7 +164,7 @@ export function Slew({ label, disabled, className }: { label: string; disabled: 
           dec: { dms: selectedTarget?.dec?.dms },
           epoch: selectedTarget?.epoch,
         },
-        wavelength: { nanometers: '400' },
+        wavelength: { nanometers: "400" },
       },
       instrument: instrument.name,
       rotator: { ipa: { degrees: rotator.angle }, mode: rotator.tracking },
@@ -162,7 +187,7 @@ export function Slew({ label, disabled, className }: { label: string; disabled: 
         },
       }),
     },
-  };
+  }
 
   return (
     <MutationButton
@@ -170,9 +195,9 @@ export function Slew({ label, disabled, className }: { label: string; disabled: 
       variables={variables}
       className={className}
       label={label}
-      disabled={disabled || !selectedTarget?.id}
+      disabled={disabled || !Boolean(selectedTarget?.id)}
     />
-  );
+  )
 }
 
 // OIWFS
@@ -196,11 +221,21 @@ const OIWFS_MUTATION = gql`
       result
     }
   }
-`;
+`
 
-export function Oiwfs({ label, disabled, className = '' }: { label: string; disabled: boolean; className?: string }) {
-  const { oiTargets, configuration } = useContext(VariablesContext);
-  const selectedTarget = oiTargets.filter((t) => t.pk === configuration.selectedOiTarget)[0];
+export function Oiwfs({
+  label,
+  disabled,
+  className = "",
+}: {
+  label: string
+  disabled: boolean
+  className?: string
+}) {
+  const { oiTargets, configuration } = useContext(VariablesContext)
+  let selectedTarget = oiTargets.filter(
+    (t) => t.pk === configuration.selectedOiTarget
+  )[0]
 
   return (
     <MutationButton
@@ -211,11 +246,11 @@ export function Oiwfs({ label, disabled, className = '' }: { label: string; disa
         ra: selectedTarget?.ra?.hms,
         dec: selectedTarget?.dec?.dms,
         epoch: selectedTarget?.epoch,
-        wavelength: '400',
+        wavelength: "400",
       }}
       className={className}
       label={label}
-      disabled={disabled || !selectedTarget?.name}
+      disabled={disabled || !Boolean(selectedTarget?.name)}
     />
-  );
+  )
 }
