@@ -1,10 +1,10 @@
-import { Title } from "@Shared/Title/Title"
-import { TargetType } from "@/types"
+import { Title } from '@Shared/Title/Title';
+import { TargetType } from '@/types';
 
 export function TargetDetails({ target }: { target: TargetType }) {
   return (
     <div>
-      <Title title={`Selected target ${target.name ?? ""}`} />
+      <Title title={`Selected target ${target.name ?? ''}`} />
       <div className="target-details">
         <span>HA:</span>
         <span>{0}</span>
@@ -30,5 +30,5 @@ export function TargetDetails({ target }: { target: TargetType }) {
         <span>{0}</span>
       </div>
     </div>
-  )
+  );
 }

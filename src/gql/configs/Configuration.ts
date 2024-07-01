@@ -1,4 +1,4 @@
-import { gql, useLazyQuery, useMutation } from "@apollo/client"
+import { gql, useLazyQuery, useMutation } from '@apollo/client';
 
 const GET_CONFIGURATION = gql`
   query getConfiguration {
@@ -18,17 +18,14 @@ const GET_CONFIGURATION = gql`
       obsSubtitle
     }
   }
-`
+`;
 
 export function useGetConfiguration() {
-  const [queryFunction, { data, loading, error }] = useLazyQuery(
-    GET_CONFIGURATION,
-    {
-      context: { clientName: "navigateConfigs" },
-    }
-  )
+  const [queryFunction] = useLazyQuery(GET_CONFIGURATION, {
+    context: { clientName: 'navigateConfigs' },
+  });
 
-  return queryFunction
+  return queryFunction;
 }
 
 const UPDATE_CONFIGURATION = gql`
@@ -77,13 +74,12 @@ const UPDATE_CONFIGURATION = gql`
       obsSubtitle
     }
   }
-`
+`;
 
 export function useUpdateConfiguration() {
-  const [mutationFunction, { data, loading, error }] = useMutation(
-    UPDATE_CONFIGURATION,
-    { context: { clientName: "navigateConfigs" } }
-  )
+  const [mutationFunction] = useMutation(UPDATE_CONFIGURATION, {
+    context: { clientName: 'navigateConfigs' },
+  });
 
-  return mutationFunction
+  return mutationFunction;
 }

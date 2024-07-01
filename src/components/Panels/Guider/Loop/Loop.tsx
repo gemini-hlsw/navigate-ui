@@ -1,4 +1,4 @@
-import { Configuration } from "./Configuration"
+import { Configuration } from './Configuration';
 
 export function Loop() {
   return (
@@ -7,5 +7,5 @@ export function Loop() {
         <Configuration />
       </div>
     </div>
-  )
+  );
 }

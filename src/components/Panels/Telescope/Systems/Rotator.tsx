@@ -1,29 +1,28 @@
-import { Title } from "@Shared/Title/Title"
-import { Dropdown } from "primereact/dropdown"
-import { InputNumber } from "primereact/inputnumber"
-import { useContext, useState } from "react"
-import { RotatorType } from "@/types"
-import { VariablesContext } from "@Contexts/Variables/VariablesProvider"
-import { useUpdateRotator } from "@gql/configs/Rotator"
+import { Title } from '@Shared/Title/Title';
+import { Dropdown } from 'primereact/dropdown';
+import { InputNumber } from 'primereact/inputnumber';
+import { useContext } from 'react';
+import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
+import { useUpdateRotator } from '@gql/configs/Rotator';
 
 export function Rotator({ canEdit }: { canEdit: boolean }) {
-  const { rotator, setRotator } = useContext(VariablesContext)
-  const updateRotator = useUpdateRotator()
+  const { rotator, setRotator } = useContext(VariablesContext);
+  const updateRotator = useUpdateRotator();
 
   return (
     <div className="rotator">
-      <Title title={"Rotator"} />
+      <Title title={'Rotator'} />
       <div className="body">
         <span className="label">Mode</span>
         <Dropdown
           disabled={!canEdit}
           value={rotator.tracking}
-          options={["TRACKING", "FIXED"]}
+          options={['TRACKING', 'FIXED']}
           onChange={(e) =>
-            updateRotator({
+            void updateRotator({
               variables: { pk: rotator.pk, tracking: e.target.value },
               onCompleted(data) {
-                setRotator(data.updateRotator)
+                setRotator(data.updateRotator);
               },
             })
           }
@@ -36,10 +35,10 @@ export function Rotator({ canEdit }: { canEdit: boolean }) {
           minFractionDigits={2}
           maxFractionDigits={7}
           onValueChange={(e) =>
-            updateRotator({
+            void updateRotator({
               variables: { pk: rotator.pk, angle: e.target.value },
               onCompleted(data) {
-                setRotator(data.updateRotator)
+                setRotator(data.updateRotator);
               },
             })
           }
@@ -47,5 +46,5 @@ export function Rotator({ canEdit }: { canEdit: boolean }) {
         />
       </div>
     </div>
-  )
+  );
 }

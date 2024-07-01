@@ -1,4 +1,4 @@
-import { Button } from "primereact/button"
+import { Button } from 'primereact/button';
 
 export function AgMechanism({ canEdit }: { canEdit: boolean }) {
   return (
@@ -17,5 +17,5 @@ export function AgMechanism({ canEdit }: { canEdit: boolean }) {
         <Button disabled={!canEdit} label="Park All" />
       </div>
     </div>
-  )
+  );
 }

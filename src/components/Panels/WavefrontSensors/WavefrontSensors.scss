@@ -1,11 +1,11 @@
-.WavefrontSensors>.wavefront-sensors {
+.WavefrontSensors > .wavefront-sensors {
   font-size: 0.8rem;
   display: flex;
   height: 100%;
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
-  
+
   .p-button {
     margin: 0;
     padding: 2px;
@@ -16,26 +16,26 @@
     height: 20px;
     align-self: center;
   }
-  
+
   button.p-component.p-button {
     margin-right: 0;
   }
-  
+
   .p-inputtext {
     width: 100%;
   }
 
-  >.title {
+  > .title {
     flex-shrink: 1;
   }
 
-  >.body {
+  > .body {
     flex: 1 0 auto;
     max-height: calc(100% - 20px);
     display: flex;
     flex-direction: column;
-    >.sensors {
-      >.wfs {
+    > .sensors {
+      > .wfs {
         width: 33.3333%;
         float: left;
         border-top: 1px solid var(--surface-border);
@@ -44,8 +44,8 @@
         &:not(:last-child) {
           border-right: 1px solid var(--surface-border);
         }
-    
-        >.wfs-name {
+
+        > .wfs-name {
           position: absolute;
           top: 2px;
           left: 2px;
@@ -53,52 +53,52 @@
           color: var(--primary-color-text);
           z-index: 10;
         }
-    
-        >img {
+
+        > img {
           width: 100%;
           scale: 1;
         }
-    
-        >.controls {
+
+        > .controls {
           display: grid;
           grid-template-columns: 35px 1fr 30px;
           grid-template-rows: repeat(3, 26px);
           grid-template-areas:
-            "g11 g12 g13"
-            "g21 g22 g23"
-            "g3 g3 g3";
+            'g11 g12 g13'
+            'g21 g22 g23'
+            'g3 g3 g3';
           // gap: 4px;
           justify-items: center;
           align-items: center;
           padding: 2px;
         }
-    
-        >span {
+
+        > span {
           text-align: center;
           align-self: center;
         }
       }
     }
-  
-    >.acquisition-camera {
+
+    > .acquisition-camera {
       border-top: 1px solid var(--surface-border);
       // flex: 1 0 auto;
-  
+
       display: grid;
       grid-template-columns: 66.666% 33.333%;
-  
-      >.left {
+
+      > .left {
         border-right: 1px solid var(--surface-border);
         position: relative;
         display: flex;
         flex-direction: column;
-  
+
         > .image {
           flex-grow: 1;
           display: flex;
           align-items: center;
           border-bottom: 1px solid var(--surface-border);
-          >.ac-name {
+          > .ac-name {
             position: absolute;
             top: 2px;
             left: 2px;
@@ -111,99 +111,98 @@
             scale: 1;
           }
         }
-  
-        >.controls {
+
+        > .controls {
           display: grid;
           grid-template-columns: 35px 1fr 35px 30px 30px 30px;
-          grid-template-areas:
-            "g1 g2 g3 g4 g5 g6";
+          grid-template-areas: 'g1 g2 g3 g4 g5 g6';
           grid-template-rows: 26px;
           align-items: center;
           justify-items: center;
           padding: 2px;
         }
-  
-        >span {
+
+        > span {
           text-align: center;
           align-self: center;
         }
       }
-  
-      >.main-controls {
+
+      > .main-controls {
         height: 100%;
         padding: 2px;
-  
+
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-  
-        >.top {
+
+        > .top {
           display: grid;
           grid-template-columns: 50px 1fr;
           grid-template-rows: repeat(3, 26px);
           grid-template-areas:
-            "g11 g12"
-            "g21 g22"
-            "g31 g32";
+            'g11 g12'
+            'g21 g22'
+            'g31 g32';
           gap: 4px;
           padding: 2px;
         }
-  
-        >.arrow {
+
+        > .arrow {
           margin-top: 10px;
           display: grid;
           grid-template-columns: 1fr 26px 26px 26px 1fr;
           grid-template-rows: repeat(3, 26px);
           grid-template-areas:
-            "g11 g12 gu g14 g15"
-            "g21 gl g23 gr g25"
-            "g31 g32 gd g34 g35";
+            'g11 g12 gu g14 g15'
+            'g21 gl g23 gr g25'
+            'g31 g32 gd g34 g35';
           gap: 4px;
           padding: 2px;
         }
-  
-        >.bottom {
+
+        > .bottom {
           margin-top: 10px;
           display: grid;
           grid-template-columns: repeat(3, 1fr);
           grid-template-rows: repeat(5, 26px);
           grid-template-areas:
-            "g11 g12 g13"
-            "g21 g22 g23"
-            "g31 g32 g33"
-            "g41 g42 g43"
-            "g5 g5 g5";
+            'g11 g12 g13'
+            'g21 g22 g23'
+            'g31 g32 g33'
+            'g41 g42 g43'
+            'g5 g5 g5';
           gap: 4px;
           padding: 2px;
         }
       }
     }
-  
+
     > .logs-table {
       max-height: 100%;
       overflow-y: auto;
-  
-      >.title {
+
+      > .title {
         border-top: 1px solid var(--surface-border);
       }
-  
+
       .p-datatable {
         thead tr th {
           background-color: var(--surface-1) !important;
         }
-  
+
         .debug {
           background-color: rgba(0, 100, 0, 0.2) !important;
         }
-  
+
         .warning {
           background-color: rgba(100, 100, 0, 0.2) !important;
         }
-  
+
         .info {
           background-color: rgba(50, 50, 50, 0.2) !important;
         }
-  
+
         .error {
           background-color: rgba(100, 0, 0, 0.2) !important;
         }

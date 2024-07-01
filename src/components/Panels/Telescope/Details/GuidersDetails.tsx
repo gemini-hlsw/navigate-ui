@@ -1,9 +1,9 @@
-import { Title } from "@Shared/Title/Title"
+import { Title } from '@Shared/Title/Title';
 
 export function GuidersDetails() {
   const GUIDERS_VALUES = [
     {
-      name: "PWFS1",
+      name: 'PWFS1',
       x: 0,
       y: 0,
       r: 0,
@@ -15,7 +15,7 @@ export function GuidersDetails() {
       r_min: 0,
     },
     {
-      name: "PWFS2",
+      name: 'PWFS2',
       x: 103,
       y: 0,
       r: 0,
@@ -26,37 +26,19 @@ export function GuidersDetails() {
       r_max: 50,
       r_min: 0,
     },
-  ]
+  ];
 
-  let rows: JSX.Element[] = []
+  const rows: JSX.Element[] = [];
   GUIDERS_VALUES.map((row, index) => {
     rows.push(
       <div className="row" key={`guiders-row-${index}`}>
         <span>{row.name}</span>
-        <span
-          className={
-            row.x > row.x_max || row.x < row.x_min ? "vals error" : "vals"
-          }
-        >
-          {row.x.toFixed(2)}
-        </span>
-        <span
-          className={
-            row.y > row.y_max || row.y < row.y_min ? "vals error" : "vals"
-          }
-        >
-          {row.y.toFixed(2)}
-        </span>
-        <span
-          className={
-            row.r > row.r_max || row.r < row.r_min ? "vals error" : "vals"
-          }
-        >
-          {row.r.toFixed(2)}
-        </span>
-      </div>
-    )
-  })
+        <span className={row.x > row.x_max || row.x < row.x_min ? 'vals error' : 'vals'}>{row.x.toFixed(2)}</span>
+        <span className={row.y > row.y_max || row.y < row.y_min ? 'vals error' : 'vals'}>{row.y.toFixed(2)}</span>
+        <span className={row.r > row.r_max || row.r < row.r_min ? 'vals error' : 'vals'}>{row.r.toFixed(2)}</span>
+      </div>,
+    );
+  });
 
   return (
     <div className="guiders-details">
@@ -71,5 +53,5 @@ export function GuidersDetails() {
         {rows}
       </div>
     </div>
-  )
+  );
 }

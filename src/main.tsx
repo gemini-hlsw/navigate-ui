@@ -1,24 +1,24 @@
-import ReactDOM from "react-dom/client"
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // Apollo
-import { ApolloProvider } from "@apollo/client"
-import { client } from "./gql/ApolloConfigs"
+import { ApolloProvider } from '@apollo/client';
+import { client } from './gql/ApolloConfigs';
 
 // Styles
-import "./styles/main.scss"
-import "primereact/resources/primereact.min.css"
-import "primeicons/primeicons.css"
+import './styles/main.scss';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
 
 // Components
-import AuthProvider from "@Contexts/Auth/AuthProvider"
-import Layout from "./components/Layout/Layout"
-import Home from "./components/Layout/Home/Home"
-import Login from "./components/Login/Login"
-import VariablesProvider from "@Contexts/Variables/VariablesProvider"
-import Token from "./components/Token/Token"
+import AuthProvider from '@Contexts/Auth/AuthProvider';
+import Layout from './components/Layout/Layout';
+import Home from './components/Layout/Home/Home';
+import Login from './components/Login/Login';
+import VariablesProvider from '@Contexts/Variables/VariablesProvider';
+import Token from './components/Token/Token';
 
-const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
   <AuthProvider>
@@ -35,5 +35,5 @@ root.render(
         </BrowserRouter>
       </VariablesProvider>
     </ApolloProvider>
-  </AuthProvider>
-)
+  </AuthProvider>,
+);

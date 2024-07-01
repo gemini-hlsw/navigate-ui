@@ -1,49 +1,51 @@
 export const Authentication = {
   getUser() {
-    let user = localStorage.getItem("user")
+    const user = localStorage.getItem('user');
     if (user) {
-      return JSON.parse(user)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return JSON.parse(user);
     } else {
-      return null
+      return null;
     }
   },
 
   canEdit() {
     // A proper authentication should be made!!
     // Remove next line after telescope tests
-    return true
-    let user = this.getUser()
-    if (!Boolean(user)) {
-      return false
+    return true;
+    const user = this.getUser();
+    if (!user) {
+      return false;
     } else {
       // Check if user can edit
-      return true
+      return true;
     }
   },
 
   async signin(username: string, password: string) {
     try {
       const res = await fetch(`/api/navigate/login`, {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify({ username: username, password: password }),
         headers: {
-          Accept: "*/*",
-          "Content-Type": "application/json",
+          Accept: '*/*',
+          'Content-Type': 'application/json',
         },
-      })
+      });
 
       if (res.status === 200) {
-        let data = await res.json()
-        localStorage.setItem("user", JSON.stringify(data))
-        return [data, undefined]
+        const data = await res.json();
+        localStorage.setItem('user', JSON.stringify(data));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return [data, undefined];
       } else {
-        return [null, res.statusText]
+        return [null, res.statusText];
       }
     } catch (error) {
       if (error instanceof Error) {
-        return [null, error.toString()]
+        return [null, error.toString()];
       } else {
-        return [null, "Unexpected error"]
+        return [null, 'Unexpected error'];
       }
     }
   },
@@ -51,16 +53,18 @@ export const Authentication = {
   async signout() {
     try {
       const res = await fetch(`/api/navigate/logout`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          Accept: "*/*",
-          "Content-Type": "application/json",
+          Accept: '*/*',
+          'Content-Type': 'application/json',
         },
-      })
+      });
 
       if (res.status === 200) {
-        localStorage.removeItem("user")
+        localStorage.removeItem('user');
       }
-    } catch (error) {}
+    } catch (error) {
+      /* empty */
+    }
   },
-}
+};

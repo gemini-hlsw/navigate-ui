@@ -1,13 +1,13 @@
-import { Button } from "primereact/button"
-import { Slew } from "@gql/server/Buttons"
-import { AuthContext } from "@Contexts/Auth/AuthProvider"
-import { useContext } from "react"
-import { TitleDropdown } from "@Shared/Title/Title"
-import { VariablesContext } from "@Contexts/Variables/VariablesProvider"
+import { Button } from 'primereact/button';
+import { Slew } from '@gql/server/Buttons';
+import { AuthContext } from '@Contexts/Auth/AuthProvider';
+import { useContext } from 'react';
+import { TitleDropdown } from '@Shared/Title/Title';
+import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
 
 export function Footer() {
-  const { canEdit } = useContext(AuthContext)
-  const { setSlewVisible } = useContext(VariablesContext)
+  const { canEdit } = useContext(AuthContext);
+  const { setSlewVisible } = useContext(VariablesContext);
   return (
     <div className="footer">
       <TitleDropdown icon="cog">
@@ -19,19 +19,9 @@ export function Footer() {
         />
       </TitleDropdown>
       <Slew className="btn-small" label="Slew Telescope" disabled={!canEdit} />
-      <Button
-        disabled={!canEdit}
-        className="btn-small"
-        label="Apply Parameters"
-        aria-label="Apply Parameters"
-      />
+      <Button disabled={!canEdit} className="btn-small" label="Apply Parameters" aria-label="Apply Parameters" />
       <div></div>
-      <Button
-        disabled={!canEdit}
-        className="btn-small p-button-danger right"
-        label="Shutdown"
-        aria-label="Shutdown"
-      />
+      <Button disabled={!canEdit} className="btn-small p-button-danger right" label="Shutdown" aria-label="Shutdown" />
     </div>
-  )
+  );
 }

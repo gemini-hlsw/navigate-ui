@@ -1,14 +1,14 @@
-import { useContext, useState } from "react"
-import { InputText } from "primereact/inputtext"
-import "./Login.scss"
-import { VariablesContext } from "@Contexts/Variables/VariablesProvider"
-import { Button } from "primereact/button"
-import { useNavigate } from "react-router-dom"
+import { useContext, useState } from 'react';
+import { InputText } from 'primereact/inputtext';
+import './Login.scss';
+import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
+import { Button } from 'primereact/button';
+import { useNavigate } from 'react-router-dom';
 
 export default function Token() {
-  const navigate = useNavigate()
-  const { odbToken } = useContext(VariablesContext)
-  const [auxOdbToken, setAuxOdbToken] = useState(odbToken)
+  const navigate = useNavigate();
+  const { odbToken } = useContext(VariablesContext);
+  const [auxOdbToken, setAuxOdbToken] = useState(odbToken);
 
   return (
     <div className="login">
@@ -33,11 +33,11 @@ export default function Token() {
           iconPos="right"
           className=" p-button-success"
           onClick={() => {
-            localStorage.setItem("odbToken", auxOdbToken)
-            navigate("/")
+            localStorage.setItem('odbToken', auxOdbToken);
+            navigate('/');
           }}
         />
       </div>
     </div>
-  )
+  );
 }

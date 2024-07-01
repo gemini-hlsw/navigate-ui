@@ -1,6 +1,6 @@
-import { gql, useLazyQuery } from "@apollo/client"
-import { VariablesContext } from "@Contexts/Variables/VariablesProvider"
-import { useContext } from "react"
+import { gql, useLazyQuery } from '@apollo/client';
+import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
+import { useContext } from 'react';
 
 const GET_OBSERVATIONS = gql`
   query getObservations {
@@ -51,23 +51,20 @@ const GET_OBSERVATIONS = gql`
       }
     }
   }
-`
+`;
 
 export function useGetObservations() {
-  const { odbToken } = useContext(VariablesContext)
-  const [getObservations, { loading, error, data }] = useLazyQuery(
-    GET_OBSERVATIONS,
-    {
-      context: {
-        clientName: "odb",
-        headers: {
-          Authorization: `Bearer ${odbToken}`,
-        },
+  const { odbToken } = useContext(VariablesContext);
+  const [getObservations, { loading, error, data }] = useLazyQuery(GET_OBSERVATIONS, {
+    context: {
+      clientName: 'odb',
+      headers: {
+        Authorization: `Bearer ${odbToken}`,
       },
-    }
-  )
+    },
+  });
 
-  return { getObservations, loading, data, error }
+  return { getObservations, loading, data, error };
 }
 
 const GET_GUIDE_TARGETS = gql`
@@ -94,21 +91,18 @@ const GET_GUIDE_TARGETS = gql`
       }
     }
   }
-`
+`;
 
 export function useGetGuideTargets() {
-  const { odbToken } = useContext(VariablesContext)
-  const [queryFunction, { called, loading, error, data }] = useLazyQuery(
-    GET_GUIDE_TARGETS,
-    {
-      context: {
-        clientName: "odb",
-        headers: {
-          Authorization: `Bearer ${odbToken}`,
-        },
+  const { odbToken } = useContext(VariablesContext);
+  const [queryFunction] = useLazyQuery(GET_GUIDE_TARGETS, {
+    context: {
+      clientName: 'odb',
+      headers: {
+        Authorization: `Bearer ${odbToken}`,
       },
-    }
-  )
+    },
+  });
 
-  return queryFunction
+  return queryFunction;
 }

@@ -1,4 +1,4 @@
-import { gql, useMutation, useSubscription } from "@apollo/client"
+import { gql, useMutation, useSubscription } from '@apollo/client';
 
 const GUIDE_STATE_SUBSCRIPTION = gql`
   subscription guideState {
@@ -9,12 +9,12 @@ const GUIDE_STATE_SUBSCRIPTION = gql`
       mountOffload
     }
   }
-`
+`;
 
 export function useGuideState() {
-  const { data, loading } = useSubscription(GUIDE_STATE_SUBSCRIPTION)
+  const { data, loading } = useSubscription(GUIDE_STATE_SUBSCRIPTION);
 
-  return { data, loading }
+  return { data, loading };
 }
 
 const GUIDE_ENABLE = gql`
@@ -24,12 +24,12 @@ const GUIDE_ENABLE = gql`
       msg
     }
   }
-`
+`;
 
 export function useGuideEnable() {
-  const [mutationFunction, { data, loading, error }] = useMutation(GUIDE_ENABLE)
+  const [mutationFunction] = useMutation(GUIDE_ENABLE);
 
-  return mutationFunction
+  return mutationFunction;
 }
 
 const GUIDE_DISABLE = gql`
@@ -39,11 +39,10 @@ const GUIDE_DISABLE = gql`
       msg
     }
   }
-`
+`;
 
 export function useGuideDisable() {
-  const [mutationFunction, { data, loading, error }] =
-    useMutation(GUIDE_DISABLE)
+  const [mutationFunction] = useMutation(GUIDE_DISABLE);
 
-  return mutationFunction
+  return mutationFunction;
 }

@@ -1,21 +1,21 @@
 /// <reference types="vitest" />
-import { defineConfig } from "vite"
-import react from "@vitejs/plugin-react"
-import path from "path"
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
 
 function fixCssRoot() {
   return {
-    postcssPlugin: "postcss-fix-nested-root",
+    postcssPlugin: 'postcss-fix-nested-root',
     Once(root: any) {
       root.walkRules((rule: any) => {
-        if (rule.selector.includes(" :root")) {
-          rule.selector = rule.selector.replace(" :root", "")
+        if (rule.selector.includes(' :root')) {
+          rule.selector = rule.selector.replace(' :root', '');
         }
-      })
+      });
     },
-  }
+  };
 }
-fixCssRoot.postcss = true
+fixCssRoot.postcss = true;
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -24,31 +24,25 @@ export default defineConfig({
   // },
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
-      "@Contexts": path.resolve(__dirname, "./src/components/Contexts"),
-      "@Telescope": path.resolve(
-        __dirname,
-        "./src/components/Panels/Telescope"
-      ),
-      "@WavefrontSensors": path.resolve(
-        __dirname,
-        "./src/components/Panels/WavefrontSensors"
-      ),
-      "@Guider": path.resolve(__dirname, "./src/components/Panels/Guider"),
-      "@Shared": path.resolve(__dirname, "./src/components/Shared"),
-      "@assets": path.resolve(__dirname, "./src/assets"),
-      "@gql": path.resolve(__dirname, "./src/gql"),
+      '@': path.resolve(__dirname, './src'),
+      '@Contexts': path.resolve(__dirname, './src/components/Contexts'),
+      '@Telescope': path.resolve(__dirname, './src/components/Panels/Telescope'),
+      '@WavefrontSensors': path.resolve(__dirname, './src/components/Panels/WavefrontSensors'),
+      '@Guider': path.resolve(__dirname, './src/components/Panels/Guider'),
+      '@Shared': path.resolve(__dirname, './src/components/Shared'),
+      '@assets': path.resolve(__dirname, './src/assets'),
+      '@gql': path.resolve(__dirname, './src/gql'),
     },
   },
   server: {
-    host: "0.0.0.0",
+    host: '0.0.0.0',
     proxy: {
-      "^/navigate/graphql": {
-        target: "http://navigate.lucuma.xyz:9070",
+      '^/navigate/graphql': {
+        target: 'http://navigate.lucuma.xyz:9070',
         changeOrigin: true,
       },
-      "^/db": {
-        target: "http://navigate.lucuma.xyz:4000",
+      '^/db': {
+        target: 'http://navigate.lucuma.xyz:4000',
         changeOrigin: true,
       },
       // "ws://localhost/navigate/ws": {
@@ -59,7 +53,7 @@ export default defineConfig({
     },
   },
   preview: {
-    host: "0.0.0.0",
+    host: '0.0.0.0',
     // proxy: {
     //   "^/navigate/graphql": {
     //     target: "http://server:7070",
@@ -80,7 +74,7 @@ export default defineConfig({
   plugins: [react()],
   test: {
     globals: true,
-    environment: "happy-dom",
+    environment: 'happy-dom',
   },
-  base: "/",
-})
+  base: '/',
+});

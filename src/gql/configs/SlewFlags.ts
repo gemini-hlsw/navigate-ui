@@ -1,4 +1,4 @@
-import { gql, useLazyQuery, useMutation } from "@apollo/client"
+import { gql, useLazyQuery, useMutation } from '@apollo/client';
 
 const GET_SLEW_FLAGS = gql`
   query getSlewFlags {
@@ -22,15 +22,14 @@ const GET_SLEW_FLAGS = gql`
       autoparkAowfs
     }
   }
-`
+`;
 
 export function useGetSlewFlags() {
-  const [queryFunction, { data, loading, error }] = useLazyQuery(
-    GET_SLEW_FLAGS,
-    { context: { clientName: "navigateConfigs" } }
-  )
+  const [queryFunction] = useLazyQuery(GET_SLEW_FLAGS, {
+    context: { clientName: 'navigateConfigs' },
+  });
 
-  return queryFunction
+  return queryFunction;
 }
 
 const UPDATE_SLEW_FLAGS = gql`
@@ -91,13 +90,12 @@ const UPDATE_SLEW_FLAGS = gql`
       autoparkAowfs
     }
   }
-`
+`;
 
 export function useUpdateSlewFlags() {
-  const [mutationFunction, { data, loading, error }] = useMutation(
-    UPDATE_SLEW_FLAGS,
-    { context: { clientName: "navigateConfigs" } }
-  )
+  const [mutationFunction] = useMutation(UPDATE_SLEW_FLAGS, {
+    context: { clientName: 'navigateConfigs' },
+  });
 
-  return mutationFunction
+  return mutationFunction;
 }

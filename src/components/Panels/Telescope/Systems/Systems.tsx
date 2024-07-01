@@ -1,33 +1,33 @@
-import { useContext, useState } from "react"
-import { Rotator } from "./Rotator"
-import { Altair, GeMS } from "./AdaptiveOptics"
-import { AuthContext } from "@Contexts/Auth/AuthProvider"
-import { Indicators } from "./Indicators"
-import { AgMechanism } from "./AgMechanism"
-import { BotSubsystems, TopSubsystems } from "./Subsystems"
-import { Instrument } from "./Instrument"
-import { VariablesContext } from "@Contexts/Variables/VariablesProvider"
+import { useContext, useState } from 'react';
+import { Rotator } from './Rotator';
+import { Altair, GeMS } from './AdaptiveOptics';
+import { AuthContext } from '@Contexts/Auth/AuthProvider';
+import { Indicators } from './Indicators';
+import { AgMechanism } from './AgMechanism';
+import { BotSubsystems, TopSubsystems } from './Subsystems';
+import { Instrument } from './Instrument';
+import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
 
 export function Systems() {
-  const { canEdit } = useContext(AuthContext)
-  const { configuration } = useContext(VariablesContext)
-  const [collapsed, setCollapsed] = useState<boolean>(false)
+  const { canEdit } = useContext(AuthContext);
+  const { configuration } = useContext(VariablesContext);
+  const [collapsed, setCollapsed] = useState<boolean>(false);
 
   function toggle() {
-    setCollapsed(!collapsed)
+    setCollapsed(!collapsed);
   }
 
-  let aoSystem = null
-  if (configuration.site === "GN") {
-    aoSystem = <Altair canEdit={canEdit} />
-  } else if (configuration.site === "GS") {
-    aoSystem = <GeMS canEdit={canEdit} />
+  let aoSystem = null;
+  if (configuration.site === 'GN') {
+    aoSystem = <Altair canEdit={canEdit} />;
+  } else if (configuration.site === 'GS') {
+    aoSystem = <GeMS canEdit={canEdit} />;
   }
 
   return (
     <div className="systems">
       <Indicators canEdit={canEdit} />
-      <div className={`grid-wrapper ${collapsed ? "collapsed" : ""}`}>
+      <div className={`grid-wrapper ${collapsed ? 'collapsed' : ''}`}>
         <TopSubsystems canEdit={canEdit} />
         <AgMechanism canEdit={canEdit} />
         <BotSubsystems canEdit={canEdit} />
@@ -41,5 +41,5 @@ export function Systems() {
         {aoSystem}
       </div>
     </div>
-  )
+  );
 }

@@ -43,7 +43,7 @@ a {
   .p-dropdown-trigger {
     width: initial !important;
 
-    >span {
+    > span {
       margin: 0 2px;
       font-size: var(--input-font-size);
     }
@@ -89,8 +89,8 @@ button.p-component.p-button {
 
 .p-datatable {
   .p-datatable-thead {
-    >tr {
-      >th {
+    > tr {
+      > th {
         padding: 2px !important;
         font-size: 0.9rem;
       }
@@ -98,8 +98,8 @@ button.p-component.p-button {
   }
 
   .p-datatable-tbody {
-    >tr {
-      >td {
+    > tr {
+      > td {
         padding: 2px !important;
         font-size: 0.9rem;
       }
@@ -107,7 +107,8 @@ button.p-component.p-button {
   }
 }
 
-.dark .p-dialog .p-dialog-header, .light .p-dialog .p-dialog-header {
+.dark .p-dialog .p-dialog-header,
+.light .p-dialog .p-dialog-header {
   padding: 1.5rem 1.5rem 0.5rem 1.5rem;
 }
 
@@ -138,14 +139,15 @@ button.p-component.p-button {
   }
 }
 
-.dark .p-checkbox .p-checkbox-box, .light .p-checkbox .p-checkbox-box {
+.dark .p-checkbox .p-checkbox-box,
+.light .p-checkbox .p-checkbox-box {
   border-width: 1px;
 }
 
 .dark .p-checkbox .p-checkbox-box.p-highlight {
   border-color: var(--blue-400);
   > span {
-    color: var(--blue-400)
+    color: var(--blue-400);
   }
 }
 
