@@ -10,6 +10,7 @@ import { useGetGuideLoop, useUpdateGuideLoop } from '@gql/configs/GuideLoop';
 import { Altair, GeMS } from './AdaptiveOptics';
 import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
 import { useGuideDisable, useGuideEnable } from '@gql/server/GuideState';
+import { GuideConfigurationInput } from '@gql/server/gen/graphql';
 
 export function Configuration() {
   const { canEdit } = useContext(AuthContext);
@@ -26,7 +27,7 @@ export function Configuration() {
   useEffect(() => {
     getGuideLoop({
       onCompleted(data) {
-        setState(data.guideLoop);
+        setState(data.guideLoop!);
       },
     });
   }, []);
@@ -34,31 +35,31 @@ export function Configuration() {
   function modifyGuideLoop(name: string, value: boolean | string) {
     updateGuideLoop({
       variables: {
-        pk: state.pk,
+        pk: state.pk!,
         [name]: value,
       },
       onCompleted(data) {
-        setState(data.updateGuideLoop);
+        setState(data.updateGuideLoop!);
       },
     });
   }
 
-  function translateStateGuideInput() {
-    const m2Inputs = [];
+  function translateStateGuideInput(): GuideConfigurationInput {
+    const m2Inputs: 'OIWFS'[] = [];
     if (state.m2TipTiltEnable) {
-      if (state.m2TipTiltSource.split(',').includes('OIWFS')) {
+      if (state.m2TipTiltSource!.split(',').includes('OIWFS')) {
         m2Inputs.push('OIWFS');
       }
     }
     const m1Input = state.m2ComaM1CorrectionsSource;
-    const [probeFrom] = state.probeTracking.split('➡');
+    const [probeFrom] = state.probeTracking!.split('➡');
 
     return {
       m2Inputs: m2Inputs,
       m2Coma: state.m2ComaEnable,
-      m1Input: m1Input,
-      mountOffload: state.mountOffload,
-      daytimeMode: state.daytimeMode,
+      m1Input: m1Input as 'OIWFS',
+      mountOffload: state.mountOffload ?? false,
+      daytimeMode: state.daytimeMode ?? false,
       probeGuide: {
         from: probeFrom === 'OI' ? 'GMOS_OIWFS' : probeFrom === 'P1' ? 'PWFS_1' : 'PWFS_2',
         to: probeFrom === 'OI' ? 'GMOS_OIWFS' : probeFrom === 'P1' ? 'PWFS_1' : 'PWFS_2',

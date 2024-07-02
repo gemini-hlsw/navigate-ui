@@ -1,6 +1,7 @@
-import { gql, useLazyQuery, useMutation } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
+import { graphql } from './gen';
 
-const GET_GUIDE_LOOP = gql`
+const GET_GUIDE_LOOP = graphql(`
   query getGuideLoop {
     guideLoop {
       pk
@@ -18,7 +19,7 @@ const GET_GUIDE_LOOP = gql`
       lightPath
     }
   }
-`;
+`);
 
 export function useGetGuideLoop() {
   const [queryFunction] = useLazyQuery(GET_GUIDE_LOOP, {
@@ -28,7 +29,7 @@ export function useGetGuideLoop() {
   return queryFunction;
 }
 
-const UPDATE_GUIDE_LOOP = gql`
+const UPDATE_GUIDE_LOOP = graphql(`
   mutation updateGuideLoop(
     $pk: Int!
     $m2TipTiltEnable: Boolean
@@ -74,7 +75,7 @@ const UPDATE_GUIDE_LOOP = gql`
       lightPath
     }
   }
-`;
+`);
 
 export function useUpdateGuideLoop() {
   const [mutationFunction] = useMutation(UPDATE_GUIDE_LOOP, {

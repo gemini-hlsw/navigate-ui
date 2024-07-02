@@ -15,7 +15,7 @@ export function Altair() {
   useEffect(() => {
     getAltairGuideLoop({
       onCompleted(data) {
-        setState(data.altairGuideLoop);
+        setState(data.altairGuideLoop!);
       },
     });
   }, []);
@@ -23,11 +23,11 @@ export function Altair() {
   function modifyAltairGuideLoop(name: string, value: boolean) {
     updateAltairGuideLoop({
       variables: {
-        pk: state.pk,
+        pk: state.pk!,
         [name]: value,
       },
       onCompleted(data) {
-        setState(data.updateAltairGuideLoop);
+        setState(data.updateAltairGuideLoop!);
       },
     });
   }
@@ -75,7 +75,7 @@ export function Altair() {
         <span className="label">TTGS</span>
         <Checkbox
           disabled={!canEdit}
-          checked={state.ttgs}
+          checked={state?.ttgs}
           onChange={() => modifyAltairGuideLoop('ttgs', !state.ttgs)}
         />
         <span className="label">SFO</span>
@@ -94,7 +94,7 @@ export function GeMS() {
   useEffect(() => {
     getGemsGuideLoop({
       onCompleted(data) {
-        setState(data.gemsGuideLoop);
+        setState(data.gemsGuideLoop!);
       },
     });
   }, []);

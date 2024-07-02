@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 // Apollo
 import { ApolloProvider } from '@apollo/client';
@@ -20,19 +20,17 @@ import Token from './components/Token/Token';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
+const router = createBrowserRouter([
+  { path: '/', element: <Layout />, children: [{ index: true, element: <Home /> }] },
+  { path: '/login', element: <Login /> },
+  { path: '/token', element: <Token /> },
+]);
+
 root.render(
   <AuthProvider>
     <ApolloProvider client={client}>
       <VariablesProvider>
-        <BrowserRouter basename={import.meta.env.BASE_URL}>
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<Home />} />
-            </Route>
-            <Route path="/login" element={<Login />} />
-            <Route path="/token" element={<Token />} />
-          </Routes>
-        </BrowserRouter>
+        <RouterProvider router={router} />
       </VariablesProvider>
     </ApolloProvider>
   </AuthProvider>,

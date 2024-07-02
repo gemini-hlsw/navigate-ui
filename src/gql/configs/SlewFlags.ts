@@ -1,6 +1,7 @@
-import { gql, useLazyQuery, useMutation } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
+import { graphql } from './gen';
 
-const GET_SLEW_FLAGS = gql`
+const GET_SLEW_FLAGS = graphql(`
   query getSlewFlags {
     slewFlags {
       pk
@@ -22,7 +23,7 @@ const GET_SLEW_FLAGS = gql`
       autoparkAowfs
     }
   }
-`;
+`);
 
 export function useGetSlewFlags() {
   const [queryFunction] = useLazyQuery(GET_SLEW_FLAGS, {
@@ -32,7 +33,7 @@ export function useGetSlewFlags() {
   return queryFunction;
 }
 
-const UPDATE_SLEW_FLAGS = gql`
+const UPDATE_SLEW_FLAGS = graphql(`
   mutation updateSlewFlags(
     $pk: Int!
     $zeroChopThrow: Boolean
@@ -90,7 +91,7 @@ const UPDATE_SLEW_FLAGS = gql`
       autoparkAowfs
     }
   }
-`;
+`);
 
 export function useUpdateSlewFlags() {
   const [mutationFunction] = useMutation(UPDATE_SLEW_FLAGS, {

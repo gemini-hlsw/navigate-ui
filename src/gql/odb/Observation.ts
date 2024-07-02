@@ -1,8 +1,9 @@
-import { gql, useLazyQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
 import { useContext } from 'react';
+import { graphql } from './gen';
 
-const GET_OBSERVATIONS = gql`
+const GET_OBSERVATIONS = graphql(`
   query getObservations {
     observations {
       matches {
@@ -51,7 +52,7 @@ const GET_OBSERVATIONS = gql`
       }
     }
   }
-`;
+`);
 
 export function useGetObservations() {
   const { odbToken } = useContext(VariablesContext);
@@ -67,8 +68,8 @@ export function useGetObservations() {
   return { getObservations, loading, data, error };
 }
 
-const GET_GUIDE_TARGETS = gql`
-  query getGuideTargets($observationId: String!, $observationTime: String!) {
+const GET_GUIDE_TARGETS = graphql(`
+  query getGuideTargets($observationId: ObservationId!, $observationTime: Timestamp!) {
     observation(observationId: $observationId) {
       targetEnvironment {
         guideEnvironments(observationTime: $observationTime) {
@@ -91,7 +92,7 @@ const GET_GUIDE_TARGETS = gql`
       }
     }
   }
-`;
+`);
 
 export function useGetGuideTargets() {
   const { odbToken } = useContext(VariablesContext);

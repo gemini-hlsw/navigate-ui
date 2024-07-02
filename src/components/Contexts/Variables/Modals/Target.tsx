@@ -24,39 +24,43 @@ export function Target() {
   } = useContext(VariablesContext);
   const updateTarget = useUpdateTarget();
   const [coordsType, setCoordsType] = useState('celestial');
-  const [auxTarget, setAuxTarget] = useState({} as TargetType);
+  const [auxTarget, setAuxTarget] = useState<TargetType>({});
   const [c1String, setc1String] = useState<string | undefined>('');
   const [c2String, setc2String] = useState<string | undefined>('');
 
   useEffect(() => {
     if (targetEdit !== undefined) {
       setAuxTarget(targetEdit.target);
-      if (targetEdit.target.type === 'FIXED') {
+      if (targetEdit.target?.type === 'FIXED') {
         setc1String(targetEdit.target.az?.dms ?? '');
         setc2String(targetEdit.target.el?.dms ?? '');
         setCoordsType('horizontal');
       } else {
         setCoordsType('celestial');
-        setc1String(targetEdit.target.ra?.hms ?? '');
-        setc2String(targetEdit.target.dec?.dms ?? '');
+        setc1String(targetEdit.target?.ra?.hms ?? '');
+        setc2String(targetEdit.target?.dec?.dms ?? '');
       }
     }
   }, [targetEdit]);
 
   function updateObservation() {
     const tIdx = targetEdit.targetIndex ?? -1;
-    switch (auxTarget.type) {
+    switch (auxTarget?.type) {
       case 'SCIENCE':
       case 'BLINDOFFSET':
       case 'FIXED':
         updateTarget({
           variables: {
-            ...auxTarget,
+            ...(auxTarget as TargetType & { pk: number }),
             coord1: auxTarget.ra ? auxTarget.ra.degrees : auxTarget.az?.degrees,
             coord2: auxTarget.dec ? auxTarget.dec.degrees : auxTarget.el?.degrees,
           },
           onCompleted(data) {
-            setBaseTargets([...baseTargets.slice(0, tIdx), data.updateTarget, ...baseTargets.slice(tIdx + 1)]);
+            setBaseTargets([
+              ...baseTargets.slice(0, tIdx),
+              data.updateTarget,
+              ...baseTargets.slice(tIdx + 1),
+            ] as TargetType[]);
           },
         });
         break;
@@ -64,12 +68,16 @@ export function Target() {
       case 'OIWFS':
         updateTarget({
           variables: {
-            ...auxTarget,
+            ...(auxTarget as TargetType & { pk: number }),
             coord1: auxTarget.ra ? auxTarget.ra.degrees : auxTarget.az?.degrees,
             coord2: auxTarget.dec ? auxTarget.dec.degrees : auxTarget.el?.degrees,
           },
           onCompleted(data) {
-            setOiTargets([...oiTargets.slice(0, tIdx), data.target, ...oiTargets.slice(tIdx + 1)]);
+            setOiTargets([
+              ...oiTargets.slice(0, tIdx),
+              data.updateTarget,
+              ...oiTargets.slice(tIdx + 1),
+            ] as TargetType[]);
           },
         });
         break;
@@ -77,12 +85,16 @@ export function Target() {
       case 'PWFS1':
         updateTarget({
           variables: {
-            ...auxTarget,
+            ...(auxTarget as TargetType & { pk: number }),
             coord1: auxTarget.ra ? auxTarget.ra.degrees : auxTarget.az?.degrees,
             coord2: auxTarget.dec ? auxTarget.dec.degrees : auxTarget.el?.degrees,
           },
           onCompleted(data) {
-            setP1Targets([...p1Targets.slice(0, tIdx), data.target, ...p1Targets.slice(tIdx + 1)]);
+            setP1Targets([
+              ...p1Targets.slice(0, tIdx),
+              data.updateTarget,
+              ...p1Targets.slice(tIdx + 1),
+            ] as TargetType[]);
           },
         });
         break;
@@ -90,12 +102,16 @@ export function Target() {
       case 'PWFS2':
         updateTarget({
           variables: {
-            ...auxTarget,
+            ...(auxTarget as TargetType & { pk: number }),
             coord1: auxTarget.ra ? auxTarget.ra.degrees : auxTarget.az?.degrees,
             coord2: auxTarget.dec ? auxTarget.dec.degrees : auxTarget.el?.degrees,
           },
           onCompleted(data) {
-            setP2Targets([...p2Targets.slice(0, tIdx), data.target, ...p2Targets.slice(tIdx + 1)]);
+            setP2Targets([
+              ...p2Targets.slice(0, tIdx),
+              data.updateTarget,
+              ...p2Targets.slice(tIdx + 1),
+            ] as TargetType[]);
           },
         });
         break;
@@ -237,9 +253,9 @@ export function Target() {
           }}
           onBlur={() => {
             if (coordsType === 'celestial') {
-              setc1String(auxTarget.ra?.hms);
+              setc1String(auxTarget.ra?.hms ?? undefined);
             } else {
-              setc1String(auxTarget.az?.dms);
+              setc1String(auxTarget.az?.dms ?? undefined);
             }
           }}
         />
@@ -297,9 +313,9 @@ export function Target() {
           }}
           onBlur={() => {
             if (coordsType === 'celestial') {
-              setc2String(auxTarget.dec?.dms);
+              setc2String(auxTarget.dec?.dms ?? undefined);
             } else {
-              setc2String(auxTarget.el?.dms);
+              setc2String(auxTarget.el?.dms ?? undefined);
             }
           }}
         />

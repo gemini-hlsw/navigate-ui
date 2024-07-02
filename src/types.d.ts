@@ -1,3 +1,18 @@
+import { StatusType } from '@gql/configs/gen/graphql';
+import { RotatorTrackingMode } from '@gql/server/gen/graphql';
+import {
+  TargetType as ConfigsTargetType,
+  GetAllInfoQuery,
+  GetAltairGuideLoopQuery,
+  GetAltairInstrumentQuery,
+  GetConfigurationQuery,
+  GetGemsInstrumentQuery,
+  GetGuideLoopQuery,
+  GetInstrumentsQuery,
+  GetMechanismQuery,
+} from './gql/configs/gen/graphql';
+import { SiteType, GuidingType, TargetInput } from '@gql/configs/gen/graphql';
+import { GetObservationsQuery } from '@gql/odb/gen/graphql';
 export type ThemeType = 'light' | 'dark';
 
 export type UserType = {
@@ -5,123 +20,33 @@ export type UserType = {
   name: string;
 };
 
-export type ConfigurationType = {
-  pk: number;
-  site: SiteType;
-  selectedTarget: number;
-  selectedOiTarget: number;
-  selectedP1Target: number;
-  selectedP2Target: number;
-  oiGuidingType: GuidingType;
-  p1GuidingType: GuidingType;
-  p2GuidingType: GuidingType;
-  obsTitle: string;
-  obsId: string;
-  obsInstrument: string;
-  obsSubtitle: string;
-};
+export type ConfigurationType = NonNullable<GetConfigurationQuery['configuration']>;
 
-export type SiteType = 'GN' | 'GS';
+export type { SiteType };
 
-export type GuidingType = 'NORMAL';
+export type { GuidingType };
 
-export type InstrumentType = {
-  pk: number;
-  name: string;
-  iaa: number;
-  issPort: number;
-  focusOffset: number;
-  wfs: WfsType;
-  originX: number;
-  originY: number;
-  ao: boolean;
-  extraParams: object;
-};
+export type InstrumentType = NonNullable<NonNullable<GetInstrumentsQuery['instruments']>[0]>;
 
-export type RotatorType = {
-  pk: number;
-  angle: number;
-  tracking: TrackingType;
-};
+export type RotatorType = NonNullable<GetAllInfoQuery['rotator']>;
 
-export type TargetType = {
-  pk: number;
-  id: string;
-  name: string;
-  ra?: RaType | null;
-  dec?: DecType | null;
-  az?: AzType | null;
-  el?: ElType | null;
-  epoch?: string;
-  type: TypeOfTarget;
-  createdAt: Date;
-};
+export type TargetType = NonNullable<NonNullable<GetAllInfoQuery['targets']>[0]>;
 
-export type RaType = {
-  degrees?: number;
-  hms?: string;
-};
+export type TrackingType = RotatorTrackingMode;
 
-export type DecType = {
-  degrees?: number;
-  dms?: string;
-};
-
-export type AzType = {
-  degrees?: number;
-  dms?: string;
-};
-
-export type ElType = {
-  degrees?: number;
-  dms?: string;
-};
-
-export type WfsType = 'NONE' | 'PWFS1' | 'PWFS2' | 'OIWFS';
-
-export type TrackingType = 'TRACKING' | 'FIXED';
-
-export type TypeOfTarget = 'FIXED' | 'SCIENCE' | 'BLINDOFFSET' | 'OIWFS' | 'PWFS1' | 'PWFS2';
+export type TypeOfTarget = ConfigsTargetType;
 
 export type PanelType = 'Telescope' | 'WavefrontSensors' | 'Guider';
 
 export type ButtonStateType = 'PENDING' | 'ACTIVE' | 'DONE';
 
-export type NodeStatusType = 'inactive' | 'active' | 'idle';
+export type SlewFlagsType = NonNullable<GetAllInfoQuery['slewFlags']>;
 
-export interface SlewFlagsType {
-  __typename: string;
-  pk: number;
-  zeroChopThrow: boolean;
-  zeroSourceOffset: boolean;
-  zeroSourceDiffTrack: boolean;
-  zeroMountOffset: boolean;
-  zeroMountDiffTrack: boolean;
-  shortcircuitTargetFilter: boolean;
-  shortcircuitMountFilter: boolean;
-  resetPointing: boolean;
-  stopGuide: boolean;
-  zeroGuideOffset: boolean;
-  zeroInstrumentOffset: boolean;
-  autoparkPwfs1: boolean;
-  autoparkPwfs2: boolean;
-  autoparkOiwfs: boolean;
-  autoparkGems: boolean;
-  autoparkAowfs: boolean;
-}
-
-export interface TargetInput {
-  id?: string;
-  name: string;
-  coord1?: number;
-  coord2?: number;
-  epoch?: string;
-  type: TypeOfTarget;
-}
+export type { TargetInput };
 
 export interface ParamsInterface {
   loading: boolean;
-  observations_list: any;
+  observations_list: GetObservationsQuery['observations'] | undefined;
   selectedObservation: OdbObservationType;
   setSelectedObservation: (_: OdbObservationType) => void;
 }
@@ -132,27 +57,7 @@ export interface TargetEditType {
   targetIndex: number | undefined;
 }
 
-export interface OdbObservationType {
-  id: string;
-  title: string;
-  subtitle: string;
-  instrument: string;
-  targetEnvironment: {
-    firstScienceTarget: {
-      id: string;
-      name: string;
-      sidereal: {
-        ra: {
-          degrees: number;
-        };
-        dec: {
-          degrees: number;
-        };
-        epoch: string;
-      };
-    };
-  };
-}
+export type OdbObservationType = NonNullable<NonNullable<GetObservationsQuery['observations']>['matches'][0]>;
 
 export interface VariablesContextType {
   theme: ThemeType;
@@ -186,103 +91,16 @@ export interface VariablesContextType {
   odbToken: string;
 }
 
-export interface AltairGuideLoopType {
-  pk: number;
-  aoEnabled: boolean;
-  oiBlend: boolean;
-  focus: boolean;
-  p1Ttf: boolean;
-  strap: boolean;
-  oiTtf: boolean;
-  ttgs: boolean;
-  sfo: boolean;
-}
+export type AltairGuideLoopType = NonNullable<GetAltairGuideLoopQuery['altairGuideLoop']>;
 
-export interface GemsGuideLoopType {
-  pk: number;
-  aoEnabled: boolean;
-  focus: boolean;
-  rotation: boolean;
-  tipTilt: boolean;
-  anisopl: boolean;
-  flexure: boolean;
-}
+export type GemsGuideLoopType = NonNullable<GetGemsGuideLoopQuery['gemsGuideLoop']>;
 
-export interface GuideLoopType {
-  pk: number;
-  m2TipTiltEnable: boolean;
-  m2TipTiltSource: string;
-  m2FocusEnable: boolean;
-  m2FocusSource: string;
-  m2TipTiltFocusLink: boolean;
-  m2ComaEnable: boolean;
-  m1CorrectionsEnable: boolean;
-  m2ComaM1CorrectionsSource: string;
-  mountOffload: boolean;
-  daytimeMode: boolean;
-  probeTracking: string;
-  lightPath: string;
-}
+export type GuideLoopType = NonNullable<GetGuideLoopQuery['guideLoop']>;
 
-export interface GemsInstrumentType {
-  pk: number;
-  beamsplitter: string;
-  adc: boolean;
-  astrometricMode: string;
-}
+export type GemsInstrumentType = NonNullable<GetGemsInstrumentQuery['gemsInstrument']>;
 
-export interface AltairInstrumentType {
-  pk: number;
-  beamsplitter: string;
-  startMagnitude: number;
-  seeing: number;
-  windSpeed: number;
-  forceMode: boolean;
-  ndFilter: boolean;
-  fieldLens: boolean;
-  deployAdc: boolean;
-  adjustAdc: boolean;
-  lgs: boolean;
-}
+export type AltairInstrumentType = NonNullable<GetAltairInstrumentQuery['altairInstrument']>;
 
-export type StatusType = 'PENDING' | 'ACTIVE' | 'DONE' | 'ERROR';
+export type { StatusType };
 
-export interface MechanismType {
-  pk: number;
-  mcs: StatusType;
-  mcsPark: StatusType;
-  mcsUnwrap: StatusType;
-  scs: StatusType;
-  crcs: StatusType;
-  crcsPark: StatusType;
-  crcsUnwrap: StatusType;
-  pwfs1: StatusType;
-  pwfs1Park: StatusType;
-  pwfs1Unwrap: StatusType;
-  pwfs2: StatusType;
-  pwfs2Park: StatusType;
-  pwfs2Unwrap: StatusType;
-  oiwfs: StatusType;
-  oiwfsPark: StatusType;
-  odgw: StatusType;
-  odgwPark: StatusType;
-  aowfs: StatusType;
-  aowfsPark: StatusType;
-  dome: StatusType;
-  domePark: StatusType;
-  domeMode: string;
-  shutters: StatusType;
-  shuttersPark: StatusType;
-  shutterMode: string;
-  shutterAperture: number;
-  wVGate: StatusType;
-  wVGateClose: StatusType;
-  wVGateValue: number;
-  eVGate: StatusType;
-  eVGateClose: StatusType;
-  eVGateValue: number;
-  agScienceFoldPark: StatusType;
-  agAoFoldPark: StatusType;
-  agAcPickoffPark: StatusType;
-  agParkAll: StatusType;
-}
+export type MechanismType = NonNullable<GetMechanismQuery['mechanism']>;

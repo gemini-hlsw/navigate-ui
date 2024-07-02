@@ -1,6 +1,7 @@
-import { gql, useLazyQuery, useMutation } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
+import { graphql } from './gen';
 
-const GET_CONFIGURATION = gql`
+const GET_CONFIGURATION = graphql(`
   query getConfiguration {
     configuration {
       pk
@@ -18,7 +19,7 @@ const GET_CONFIGURATION = gql`
       obsSubtitle
     }
   }
-`;
+`);
 
 export function useGetConfiguration() {
   const [queryFunction] = useLazyQuery(GET_CONFIGURATION, {
@@ -28,7 +29,7 @@ export function useGetConfiguration() {
   return queryFunction;
 }
 
-const UPDATE_CONFIGURATION = gql`
+const UPDATE_CONFIGURATION = graphql(`
   mutation updateConfiguration(
     $pk: Int!
     $site: SiteType
@@ -74,7 +75,7 @@ const UPDATE_CONFIGURATION = gql`
       obsSubtitle
     }
   }
-`;
+`);
 
 export function useUpdateConfiguration() {
   const [mutationFunction] = useMutation(UPDATE_CONFIGURATION, {

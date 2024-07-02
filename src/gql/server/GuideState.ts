@@ -1,6 +1,7 @@
-import { gql, useMutation, useSubscription } from '@apollo/client';
+import { useMutation, useSubscription } from '@apollo/client';
+import { graphql } from './gen';
 
-const GUIDE_STATE_SUBSCRIPTION = gql`
+const GUIDE_STATE_SUBSCRIPTION = graphql(`
   subscription guideState {
     guideState {
       m2Inputs
@@ -9,7 +10,7 @@ const GUIDE_STATE_SUBSCRIPTION = gql`
       mountOffload
     }
   }
-`;
+`);
 
 export function useGuideState() {
   const { data, loading } = useSubscription(GUIDE_STATE_SUBSCRIPTION);
@@ -17,14 +18,14 @@ export function useGuideState() {
   return { data, loading };
 }
 
-const GUIDE_ENABLE = gql`
+const GUIDE_ENABLE = graphql(`
   mutation guideEnable($config: GuideConfigurationInput!) {
     guideEnable(config: $config) {
       result
       msg
     }
   }
-`;
+`);
 
 export function useGuideEnable() {
   const [mutationFunction] = useMutation(GUIDE_ENABLE);
@@ -32,14 +33,14 @@ export function useGuideEnable() {
   return mutationFunction;
 }
 
-const GUIDE_DISABLE = gql`
+const GUIDE_DISABLE = graphql(`
   mutation guideDisable {
     guideDisable {
       result
       msg
     }
   }
-`;
+`);
 
 export function useGuideDisable() {
   const [mutationFunction] = useMutation(GUIDE_DISABLE);

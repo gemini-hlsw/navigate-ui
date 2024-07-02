@@ -6,6 +6,7 @@ import { useContext, useRef } from 'react';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
 import { useRemoveAndCreateWfsTargets } from '@gql/configs/Target';
+import { isNotNullish } from '@/Helpers/functions';
 
 export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
   const { setOiTargets, setP1Targets, setP2Targets, setLoadingGuideTarget, configuration } =
@@ -19,22 +20,22 @@ export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
     const crtTime = new Date().toISOString();
     getGuideTargets({
       variables: {
-        observationId: configuration.obsId,
+        observationId: configuration.obsId!,
         observationTime: crtTime,
       },
       onCompleted(data) {
         const OiwfsTargets: TargetInput[] = [];
         const Pwfs1Targets: TargetInput[] = [];
         const Pwfs2Targets: TargetInput[] = [];
-        data.observation.targetEnvironment.guideEnvironments.map((env: any) => {
-          env.guideTargets.map((t: any) => {
+        data.observation?.targetEnvironment.guideEnvironments.map((env) => {
+          env.guideTargets.map((t) => {
             const auxTarget: TargetInput = {
               name: t.name,
               id: undefined,
               type: 'OIWFS',
-              epoch: t.sidereal.epoch,
-              coord1: t.sidereal.ra.degrees,
-              coord2: t.sidereal.dec.degrees,
+              epoch: t.sidereal?.epoch,
+              coord1: t.sidereal?.ra.degrees,
+              coord2: t.sidereal?.dec.degrees,
             };
             if (t.probe.includes('OIWFS')) {
               OiwfsTargets.push({ ...auxTarget, type: 'OIWFS' });
@@ -52,7 +53,7 @@ export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
             targets: OiwfsTargets,
           },
           onCompleted(data) {
-            setOiTargets(data.removeAndCreateWfsTargets);
+            setOiTargets(data.removeAndCreateWfsTargets?.filter(isNotNullish) ?? []);
           },
         });
         removeAndCreateWfsTargets({
@@ -61,7 +62,7 @@ export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
             targets: Pwfs1Targets,
           },
           onCompleted(data) {
-            setP1Targets(data.removeAndCreateWfsTargets);
+            setP1Targets(data.removeAndCreateWfsTargets?.filter(isNotNullish) ?? []);
           },
         });
         removeAndCreateWfsTargets({
@@ -70,7 +71,7 @@ export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
             targets: Pwfs2Targets,
           },
           onCompleted(data) {
-            setP2Targets(data.removeAndCreateWfsTargets);
+            setP2Targets(data.removeAndCreateWfsTargets?.filter(isNotNullish) ?? []);
           },
         });
 

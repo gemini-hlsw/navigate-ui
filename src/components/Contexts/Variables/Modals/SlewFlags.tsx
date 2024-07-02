@@ -13,11 +13,11 @@ export function SlewFlags() {
   function updateFlags(flagName: string, value: boolean) {
     updateSlewFlags({
       variables: {
-        pk: slewFlags.pk,
+        pk: slewFlags.pk!,
         [flagName]: value,
       },
       onCompleted: (data) => {
-        setSlewFlags(data.updateSlewFlags);
+        setSlewFlags(data.updateSlewFlags!);
       },
     });
   }
