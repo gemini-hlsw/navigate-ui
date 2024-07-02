@@ -35,7 +35,7 @@ export function Target({
 
   function targetClicked(e: React.MouseEvent | React.TouchEvent) {
     if (!canEdit) return;
-    if (e.nativeEvent instanceof TouchEvent) {
+    if (window.TouchEvent && e.nativeEvent instanceof TouchEvent) {
       updateSelectedTarget(target.pk!);
     } else if (e.nativeEvent instanceof MouseEvent) {
       switch (e.detail) {
