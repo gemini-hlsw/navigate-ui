@@ -1,5 +1,6 @@
-import { useLazyQuery, useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { graphql } from './gen';
+import { VariablesOf } from '@graphql-typed-document-node/core';
 
 const GET_GUIDE_LOOP = graphql(`
   query getGuideLoop {
@@ -22,11 +23,9 @@ const GET_GUIDE_LOOP = graphql(`
 `);
 
 export function useGetGuideLoop() {
-  const [queryFunction] = useLazyQuery(GET_GUIDE_LOOP, {
+  return useQuery(GET_GUIDE_LOOP, {
     context: { clientName: 'navigateConfigs' },
   });
-
-  return queryFunction;
 }
 
 const UPDATE_GUIDE_LOOP = graphql(`
@@ -78,9 +77,9 @@ const UPDATE_GUIDE_LOOP = graphql(`
 `);
 
 export function useUpdateGuideLoop() {
-  const [mutationFunction] = useMutation(UPDATE_GUIDE_LOOP, {
+  return useMutation(UPDATE_GUIDE_LOOP, {
     context: { clientName: 'navigateConfigs' },
   });
-
-  return mutationFunction;
 }
+
+export type UpdateGuideLoopVariables = VariablesOf<typeof UPDATE_GUIDE_LOOP>;

@@ -1,45 +1,38 @@
 import { Button } from 'primereact/button';
 import { Title } from '@Shared/Title/Title';
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { AuthContext } from '@Contexts/Auth/AuthProvider';
 import { Dropdown } from 'primereact/dropdown';
-import { useGetGuideLoop, useUpdateGuideLoop } from '@gql/configs/GuideLoop';
-import { GuideLoopType } from '@/types';
+import { UpdateGuideLoopVariables, useGetGuideLoop, useUpdateGuideLoop } from '@gql/configs/GuideLoop';
+import { GuideLoop } from '@gql/configs/gen/graphql';
 
 export function LightPath() {
   const { canEdit } = useContext(AuthContext);
-  const [lightPath, setLightPath] = useState('');
-  const [state, setState] = useState<GuideLoopType>({});
-  const getGuideLoop = useGetGuideLoop();
-  const updateGuideLoop = useUpdateGuideLoop();
 
-  useEffect(() => {
-    getGuideLoop({
-      onCompleted(data) {
-        setState(data.guideLoop!);
-        setLightPath(data.guideLoop?.lightPath ?? '');
-      },
-    });
-  }, []);
+  const { data, updateQuery, loading } = useGetGuideLoop();
+  const [updateGuideLoop, { loading: updateLoading }] = useUpdateGuideLoop();
+  const state = data?.guideLoop ?? ({} as GuideLoop);
+  const lightPath = state.lightPath;
 
-  function modifyGuideLoop(name: string, value: boolean | string) {
+  function modifyGuideLoop<T extends keyof UpdateGuideLoopVariables>(name: T, value: UpdateGuideLoopVariables[T]) {
     updateGuideLoop({
       variables: {
-        pk: state.pk!,
+        pk: state.pk,
         [name]: value,
       },
       onCompleted(data) {
-        setState(data.updateGuideLoop!);
+        updateQuery(() => ({ guideLoop: data.updateGuideLoop }));
       },
     });
   }
+  const disabled = !canEdit || loading || updateLoading;
 
   return (
     <div className="light-path">
       <Title title="Light path" />
       <div className="body">
         <Dropdown
-          disabled={!canEdit}
+          disabled={disabled}
           value={lightPath}
           options={[
             'Sky ➡ Instrument',
@@ -49,10 +42,10 @@ export function LightPath() {
             'GCAL ➡ Instrument',
             'GAOS ➡ Instrument',
           ]}
-          onChange={(e) => setLightPath(e.target.value)}
+          onChange={() => modifyGuideLoop('lightPath', lightPath)}
           placeholder="Select a light  path"
         />
-        <Button disabled={!canEdit} label="Set" onClick={() => modifyGuideLoop('lightPath', lightPath)} />
+        <Button disabled={disabled} label="Set" onClick={() => modifyGuideLoop('lightPath', lightPath)} />
         {/* <Button disabled={!canEdit} label="Sky → Instrument" />
         <Button disabled={!canEdit} label="Sky → AO → Instrument" />
         <Button disabled={!canEdit} label="Sky → AC" />

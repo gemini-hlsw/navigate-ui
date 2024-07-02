@@ -110,9 +110,13 @@ const SLEW_MUTATION = graphql(`
 export function Slew({ label, disabled, className }: { label: string; disabled: boolean; className: string }) {
   const { baseTargets, oiTargets, instrument, slewFlags, rotator, configuration } = useContext(VariablesContext);
 
-  const selectedTarget = baseTargets.filter((t) => t.pk === configuration.selectedTarget)[0];
+  const selectedTarget = baseTargets.find((t) => t.pk === configuration.selectedTarget);
 
-  const selectedOiTarget = oiTargets.filter((t) => t.pk === configuration.selectedOiTarget)[0];
+  const selectedOiTarget = oiTargets.find((t) => t.pk === configuration.selectedOiTarget);
+
+  if (!selectedTarget) {
+    return <></>;
+  }
 
   const variables: VariablesOf<typeof SLEW_MUTATION> = {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -121,15 +125,15 @@ export function Slew({ label, disabled, className }: { label: string; disabled: 
       instParams: {
         iaa: { degrees: instrument.iaa },
         focusOffset: { micrometers: instrument.focusOffset },
-        agName: instrument.name!,
+        agName: instrument.name,
         origin: {
           x: { micrometers: instrument.originX },
           y: { micrometers: instrument.originY },
         },
       },
       sourceATarget: {
-        id: selectedTarget?.id as string,
-        name: selectedTarget?.name as string,
+        id: selectedTarget.id!,
+        name: selectedTarget.name,
         sidereal: {
           ra: { hms: selectedTarget?.ra?.hms },
           dec: { dms: selectedTarget?.dec?.dms },
@@ -138,15 +142,15 @@ export function Slew({ label, disabled, className }: { label: string; disabled: 
         wavelength: { nanometers: 400 },
       },
       instrument: instrument.name as Instrument,
-      rotator: { ipa: { degrees: rotator.angle }, mode: rotator.tracking! },
-      ...(Boolean(selectedOiTarget) && {
+      rotator: { ipa: { degrees: rotator.angle }, mode: rotator.tracking },
+      ...(selectedOiTarget && {
         oiwfs: {
           target: {
-            name: selectedOiTarget?.name as string,
+            name: selectedOiTarget.name,
             sidereal: {
-              ra: { hms: selectedOiTarget?.ra?.hms },
-              dec: { dms: selectedOiTarget?.dec?.dms },
-              epoch: selectedOiTarget?.epoch,
+              ra: { hms: selectedOiTarget.ra?.hms },
+              dec: { dms: selectedOiTarget.dec?.dms },
+              epoch: selectedOiTarget.epoch,
             },
           },
           tracking: {
@@ -166,7 +170,7 @@ export function Slew({ label, disabled, className }: { label: string; disabled: 
       variables={variables}
       className={className}
       label={label}
-      disabled={disabled || !selectedTarget?.id}
+      disabled={disabled || !selectedTarget.id}
     />
   );
 }
@@ -196,22 +200,24 @@ const OIWFS_MUTATION = graphql(`
 
 export function Oiwfs({ label, disabled, className = '' }: { label: string; disabled: boolean; className?: string }) {
   const { oiTargets, configuration } = useContext(VariablesContext);
-  const selectedTarget = oiTargets.filter((t) => t.pk === configuration.selectedOiTarget)[0];
+  const selectedTarget = oiTargets.find((t) => t.pk === configuration.selectedOiTarget);
 
-  return (
+  return selectedTarget ? (
     <MutationButton
       mutation={OIWFS_MUTATION}
       variables={{
-        id: selectedTarget?.id as string,
-        name: selectedTarget?.name as string,
-        ra: selectedTarget?.ra?.hms,
-        dec: selectedTarget?.dec?.dms,
-        epoch: selectedTarget?.epoch,
+        id: selectedTarget.id!,
+        name: selectedTarget.name,
+        ra: selectedTarget.ra?.hms,
+        dec: selectedTarget.dec?.dms,
+        epoch: selectedTarget.epoch,
         wavelength: 400,
       }}
       className={className}
       label={label}
-      disabled={disabled || !selectedTarget?.name}
+      disabled={disabled || !selectedTarget.name}
     />
+  ) : (
+    <></>
   );
 }

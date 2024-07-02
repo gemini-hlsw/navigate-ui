@@ -24,7 +24,7 @@ export function Target() {
   } = useContext(VariablesContext);
   const updateTarget = useUpdateTarget();
   const [coordsType, setCoordsType] = useState('celestial');
-  const [auxTarget, setAuxTarget] = useState<TargetType>({});
+  const [auxTarget, setAuxTarget] = useState<TargetType>({} as TargetType);
   const [c1String, setc1String] = useState<string | undefined>('');
   const [c2String, setc2String] = useState<string | undefined>('');
 
@@ -186,12 +186,12 @@ export function Target() {
               stringC2 = deg2dms(auxTarget.el?.degrees ?? 0);
               setAuxTarget({
                 ...auxTarget,
-                ra: {
-                  degrees: auxTarget.az?.degrees,
+                ra: auxTarget.az && {
+                  degrees: auxTarget.az.degrees,
                   hms: stringC1,
                 },
-                dec: {
-                  degrees: auxTarget.el?.degrees,
+                dec: auxTarget.el && {
+                  degrees: auxTarget.el.degrees,
                   dms: stringC2,
                 },
                 az: null,
@@ -203,12 +203,12 @@ export function Target() {
               stringC2 = deg2dms(auxTarget.dec?.degrees ?? 0);
               setAuxTarget({
                 ...auxTarget,
-                az: {
-                  degrees: auxTarget.ra?.degrees,
+                az: auxTarget.ra && {
+                  degrees: auxTarget.ra.degrees,
                   dms: deg2dms(auxTarget.ra?.degrees ?? 0),
                 },
-                el: {
-                  degrees: auxTarget.dec?.degrees,
+                el: auxTarget.dec && {
+                  degrees: auxTarget.dec.degrees,
                   dms: deg2dms(auxTarget.dec?.degrees ?? 0),
                 },
                 ra: null,
@@ -236,7 +236,7 @@ export function Target() {
               setAuxTarget({
                 ...auxTarget,
                 ra: {
-                  degrees: e.target.value ?? undefined,
+                  degrees: e.target.value!,
                   hms: stringC1,
                 },
               });
@@ -245,7 +245,7 @@ export function Target() {
               setAuxTarget({
                 ...auxTarget,
                 az: {
-                  degrees: e.target.value ?? undefined,
+                  degrees: e.target.value!,
                   dms: stringC1,
                 },
               });
@@ -297,7 +297,7 @@ export function Target() {
               setAuxTarget({
                 ...auxTarget,
                 dec: {
-                  degrees: e.target.value ?? undefined,
+                  degrees: e.target.value!,
                   dms: stringC2,
                 },
               });
@@ -305,7 +305,7 @@ export function Target() {
               setAuxTarget({
                 ...auxTarget,
                 el: {
-                  degrees: e.target.value ?? undefined,
+                  degrees: e.target.value!,
                   dms: stringC2,
                 },
               });

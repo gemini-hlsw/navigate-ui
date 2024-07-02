@@ -5,11 +5,11 @@ import { Title } from './Title';
 describe('Title test with args', () => {
   const title = 'My title';
   const nextPanelObject = {
-    nextPanel: () => {},
+    nextPanel: () => undefined,
   };
 
   const prevPanelObject = {
-    prevPanel: () => {},
+    prevPanel: () => undefined,
   };
 
   const nextPanelFunction = vi.spyOn(nextPanelObject, 'nextPanel');
@@ -49,8 +49,8 @@ describe('Title test with args', () => {
 describe('Title test with args', () => {
   const title = 'My title';
 
-  const nextPanel = () => {};
-  const prevPanel = () => {};
+  const nextPanel = () => undefined;
+  const prevPanel = () => undefined;
 
   const nextPanelMock = vi.fn().mockImplementation(nextPanel);
   const prevPanelMock = vi.fn().mockImplementation(prevPanel);

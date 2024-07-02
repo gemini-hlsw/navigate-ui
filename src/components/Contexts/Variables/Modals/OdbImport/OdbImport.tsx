@@ -8,7 +8,6 @@ import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
 import { ConfigurationType, OdbObservationType } from '@/types';
 import { useRemoveAndCreateBaseTargets } from '@gql/configs/Target';
 import { useUpdateConfiguration } from '@gql/configs/Configuration';
-import { isNotNullish } from '@/Helpers/functions';
 
 export function OdbImport() {
   const { canEdit } = useContext(AuthContext);
@@ -30,7 +29,7 @@ export function OdbImport() {
         obsInstrument: selectedObservation.instrument,
       },
       onCompleted(data) {
-        setConfiguration(data.updateConfiguration!);
+        setConfiguration(data.updateConfiguration);
         setOdbVisible(false);
         removeAndCreateBaseTargets({
           variables: {
@@ -46,7 +45,7 @@ export function OdbImport() {
             ],
           },
           onCompleted(data) {
-            setBaseTargets(data.removeAndCreateBaseTargets?.filter(isNotNullish) ?? []);
+            setBaseTargets(data.removeAndCreateBaseTargets);
             setOiTargets([]);
             setP1Targets([]);
             setP2Targets([]);

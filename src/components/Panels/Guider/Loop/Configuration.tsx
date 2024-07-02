@@ -1,45 +1,41 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { AuthContext } from '@Contexts/Auth/AuthProvider';
 import { Dropdown } from 'primereact/dropdown';
 import { MultiSelect } from 'primereact/multiselect';
 import { Checkbox } from 'primereact/checkbox';
 import { BrokenChain, ConnectedChain } from './Chain';
 import { Button } from 'primereact/button';
-import { GuideLoopType } from '@/types';
-import { useGetGuideLoop, useUpdateGuideLoop } from '@gql/configs/GuideLoop';
+import { UpdateGuideLoopVariables, useGetGuideLoop, useUpdateGuideLoop } from '@gql/configs/GuideLoop';
 import { Altair, GeMS } from './AdaptiveOptics';
 import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
 import { useGuideDisable, useGuideEnable } from '@gql/server/GuideState';
 import { GuideConfigurationInput } from '@gql/server/gen/graphql';
+import { GuideLoop } from '@gql/configs/gen/graphql';
 
 export function Configuration() {
   const { canEdit } = useContext(AuthContext);
   const { configuration } = useContext(VariablesContext);
-  const [state, setState] = useState<GuideLoopType>({
-    m1CorrectionsEnable: true,
-    m2ComaM1CorrectionsSource: 'OIWFS',
-  } as GuideLoopType);
-  const getGuideLoop = useGetGuideLoop();
-  const updateGuideLoop = useUpdateGuideLoop();
+  const { data, updateQuery, loading: getLoading } = useGetGuideLoop();
+
+  const state =
+    data?.guideLoop ??
+    ({
+      m1CorrectionsEnable: true,
+      m2ComaM1CorrectionsSource: 'OIWFS',
+    } as GuideLoop);
+
+  const [updateGuideLoop, { loading: updateLoading }] = useUpdateGuideLoop();
   const guideEnable = useGuideEnable();
   const guideDisable = useGuideDisable();
 
-  useEffect(() => {
-    getGuideLoop({
-      onCompleted(data) {
-        setState(data.guideLoop!);
-      },
-    });
-  }, []);
-
-  function modifyGuideLoop(name: string, value: boolean | string) {
+  function modifyGuideLoop<T extends keyof UpdateGuideLoopVariables>(name: T, value: UpdateGuideLoopVariables[T]) {
     updateGuideLoop({
       variables: {
-        pk: state.pk!,
+        pk: state.pk,
         [name]: value,
       },
       onCompleted(data) {
-        setState(data.updateGuideLoop!);
+        updateQuery(() => ({ guideLoop: data.updateGuideLoop }));
       },
     });
   }
@@ -47,12 +43,12 @@ export function Configuration() {
   function translateStateGuideInput(): GuideConfigurationInput {
     const m2Inputs: 'OIWFS'[] = [];
     if (state.m2TipTiltEnable) {
-      if (state.m2TipTiltSource!.split(',').includes('OIWFS')) {
+      if (state.m2TipTiltSource.split(',').includes('OIWFS')) {
         m2Inputs.push('OIWFS');
       }
     }
     const m1Input = state.m2ComaM1CorrectionsSource;
-    const [probeFrom] = state.probeTracking!.split('➡');
+    const [probeFrom] = state.probeTracking.split('➡');
 
     return {
       m2Inputs: m2Inputs,
@@ -69,8 +65,8 @@ export function Configuration() {
 
   let aoSystem = null;
   if (
-    (state.m2TipTiltSource && state.m2TipTiltSource.split(',').includes('GAOS')) ||
-    (state.m2FocusSource && state.m2FocusSource.split(',').includes('GAOS')) ||
+    state.m2TipTiltSource?.split(',').includes('GAOS') ||
+    state.m2FocusSource?.split(',').includes('GAOS') ||
     state.m2ComaM1CorrectionsSource === 'GAOS'
   ) {
     if (configuration.site === 'GN') {
@@ -79,6 +75,8 @@ export function Configuration() {
       aoSystem = <GeMS />;
     }
   }
+
+  const disabled = !canEdit || getLoading || updateLoading;
 
   return (
     <>
@@ -89,7 +87,7 @@ export function Configuration() {
           </span>
           <Checkbox
             style={{ gridArea: 's1' }}
-            disabled={!canEdit}
+            disabled={disabled}
             checked={state.m2TipTiltEnable}
             onChange={() => modifyGuideLoop('m2TipTiltEnable', !state.m2TipTiltEnable)}
           />
@@ -107,7 +105,7 @@ export function Configuration() {
             showClear={false}
             showSelectAll={false}
             style={{ gridArea: 'd1' }}
-            disabled={!canEdit || !state.m2TipTiltEnable}
+            disabled={disabled || !state.m2TipTiltEnable}
           />
           <div className="lever" onClick={() => modifyGuideLoop('m2TipTiltFocusLink', !state.m2TipTiltFocusLink)}>
             {state.m2TipTiltFocusLink ? <ConnectedChain /> : <BrokenChain />}
@@ -117,7 +115,7 @@ export function Configuration() {
           </span>
           <Checkbox
             style={{ gridArea: 's2' }}
-            disabled={!canEdit}
+            disabled={disabled}
             checked={state.m2FocusEnable}
             onChange={() => modifyGuideLoop('m2FocusEnable', !state.m2FocusEnable)}
           />
@@ -143,19 +141,19 @@ export function Configuration() {
             showClear={false}
             showSelectAll={false}
             style={{ gridArea: 'd2' }}
-            disabled={!canEdit || state.m2TipTiltFocusLink || !state.m2FocusEnable}
+            disabled={disabled || state.m2TipTiltFocusLink || !state.m2FocusEnable}
           />
           <span className="label" style={{ gridArea: 'l3' }}>
             M2 Coma
           </span>
           <Checkbox
-            disabled={!canEdit}
+            disabled={disabled}
             checked={state.m2ComaEnable}
             onChange={() => modifyGuideLoop('m2ComaEnable', !state.m2ComaEnable)}
           />
           <Dropdown
             style={{ gridArea: 'd3' }}
-            disabled={!canEdit || (!state.m2ComaEnable && !state.m1CorrectionsEnable)}
+            disabled={disabled || (!state.m2ComaEnable && !state.m1CorrectionsEnable)}
             value={state.m2ComaM1CorrectionsSource}
             // options={["PWFS1", "PWFS2", "PWFS1 & PWFS2", "OIWFS", "GAOS"]}
             options={['OIWFS']}
@@ -167,19 +165,16 @@ export function Configuration() {
           </span>
           <Checkbox
             style={{ gridArea: 's4' }}
-            disabled={!canEdit}
+            disabled={disabled}
             checked={state.m1CorrectionsEnable}
-            onChange={() =>
-              // modifyGuideLoop("m1CorrectionsEnable", !state.m1CorrectionsEnable)
-              modifyGuideLoop('m1CorrectionsEnable', true)
-            }
+            onChange={() => modifyGuideLoop('m1CorrectionsEnable', !state.m1CorrectionsEnable)}
           />
           <span className="label" style={{ gridArea: 'l5' }}>
             Mount offload
           </span>
           <Checkbox
             style={{ gridArea: 's5' }}
-            disabled={!canEdit}
+            disabled={disabled}
             checked={state.mountOffload}
             onChange={() => modifyGuideLoop('mountOffload', !state.mountOffload)}
           />
@@ -188,7 +183,7 @@ export function Configuration() {
           </span>
           <Checkbox
             style={{ gridArea: 's6' }}
-            disabled={!canEdit}
+            disabled={disabled}
             checked={state.daytimeMode}
             onChange={() => modifyGuideLoop('daytimeMode', !state.daytimeMode)}
           />
@@ -197,7 +192,7 @@ export function Configuration() {
           </span>
           <Dropdown
             style={{ gridArea: 'd7' }}
-            disabled={!canEdit}
+            disabled={disabled}
             value={state.probeTracking}
             options={[
               'OI➡OI',
@@ -217,7 +212,7 @@ export function Configuration() {
         </div>
         <div className="buttons">
           <Button
-            disabled={!canEdit}
+            disabled={disabled}
             onClick={() =>
               void guideEnable({
                 variables: {
@@ -232,7 +227,7 @@ export function Configuration() {
             Enable
           </Button>
           <Button
-            disabled={!canEdit}
+            disabled={disabled}
             onClick={() =>
               void guideDisable({
                 onCompleted() {
