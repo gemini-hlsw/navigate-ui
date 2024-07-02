@@ -17,6 +17,8 @@ const scalars = {
   DatasetFilename: 'string',
   DatasetId: 'string',
   DatasetReferenceLabel: 'string',
+  Date: 'string',
+  DateTime: 'string',
   DmsString: 'string',
   EmailAddress: 'string',
   EpochString: 'string',

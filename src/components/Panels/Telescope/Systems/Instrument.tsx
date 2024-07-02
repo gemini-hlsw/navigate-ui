@@ -64,7 +64,7 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
         <span className="label">SF Name</span>
         <InputText
           disabled={!canEdit}
-          value={instrument.name!}
+          value={instrument.name}
           onChange={(e) => updateInstrument({ key: 'name', val: e.target.value })}
         />
         <span className="label">Port</span>

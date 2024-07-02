@@ -5,7 +5,6 @@ import { VariablesContext } from '../VariablesProvider';
 import { useGetDistinctInstruments, useGetDistinctPorts, useGetInstruments } from '@gql/configs/Instrument';
 import { Dropdown } from 'primereact/dropdown';
 import { InstrumentType } from '@/types';
-import { isNotNullish } from '@/Helpers/functions';
 
 export function Instrument() {
   const { setInstrument, importInstrument, setImportInstrument } = useContext(VariablesContext);
@@ -23,7 +22,7 @@ export function Instrument() {
     if (importInstrument)
       getNames({
         onCompleted: (data) => {
-          setNameOptions(data.distinctInstruments?.map((e) => e?.name).filter(isNotNullish) ?? []);
+          setNameOptions(data.distinctInstruments.map((e) => e.name));
         },
       });
   }, [importInstrument]);
@@ -34,7 +33,7 @@ export function Instrument() {
       getPorts({
         variables: { name: name },
         onCompleted: (data) => {
-          setPortOptions(data.distinctPorts?.map((e) => e?.issPort).filter(isNotNullish) ?? []);
+          setPortOptions(data.distinctPorts.map((e) => e.issPort));
         },
       });
     }
@@ -45,7 +44,7 @@ export function Instrument() {
       getInstuments({
         variables: { name: name, issPort: port },
         onCompleted: (data) => {
-          setInstrumentOptions(data.instruments?.filter(isNotNullish) ?? []);
+          setInstrumentOptions(data.instruments);
         },
       });
     }
@@ -70,7 +69,7 @@ export function Instrument() {
     tableData.push(
       <InstrumentDetails
         instrument={i}
-        selectedPk={currentInstrument.pk!}
+        selectedPk={currentInstrument.pk}
         setInstrument={setCurrentInstrument}
         key={idx}
       />,

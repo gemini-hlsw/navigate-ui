@@ -6,7 +6,6 @@ import { useContext, useRef } from 'react';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
 import { useRemoveAndCreateWfsTargets } from '@gql/configs/Target';
-import { isNotNullish } from '@/Helpers/functions';
 
 export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
   const { setOiTargets, setP1Targets, setP2Targets, setLoadingGuideTarget, configuration } =
@@ -53,7 +52,7 @@ export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
             targets: OiwfsTargets,
           },
           onCompleted(data) {
-            setOiTargets(data.removeAndCreateWfsTargets?.filter(isNotNullish) ?? []);
+            setOiTargets(data.removeAndCreateWfsTargets);
           },
         });
         removeAndCreateWfsTargets({
@@ -62,7 +61,7 @@ export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
             targets: Pwfs1Targets,
           },
           onCompleted(data) {
-            setP1Targets(data.removeAndCreateWfsTargets?.filter(isNotNullish) ?? []);
+            setP1Targets(data.removeAndCreateWfsTargets);
           },
         });
         removeAndCreateWfsTargets({
@@ -71,7 +70,7 @@ export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
             targets: Pwfs2Targets,
           },
           onCompleted(data) {
-            setP2Targets(data.removeAndCreateWfsTargets?.filter(isNotNullish) ?? []);
+            setP2Targets(data.removeAndCreateWfsTargets);
           },
         });
 

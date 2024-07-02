@@ -32,6 +32,8 @@ export type Scalars = {
    * 3 is the exposure index.
    */
   DatasetReferenceLabel: { input: string; output: string };
+  /** Date in ISO-8601 representation in format YYYY-MM-DD (e.g., '2024-07-31'). */
+  Date: { input: string; output: string };
   /** Target declination coordinate in format '[+/-]DD:MM:SS.sss' */
   DmsString: { input: string; output: string };
   /** Email address, matching ^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$ */
@@ -617,17 +619,9 @@ export type CallForProposals = {
    * The active period during which accepted observations for this call may be
    * observed.
    */
-  active: TimestampInterval;
-  /**
-   * When specified specified, the end limit defines the end (inclusive) of
-   * a declination range in which observations will be accepted.
-   */
-  decLimitEnd?: Maybe<Declination>;
-  /**
-   * When specified specified, the start limit defines the beginning (inclusive) of
-   * a declination range in which observations will be accepted.
-   */
-  decLimitStart?: Maybe<Declination>;
+  active: DateInterval;
+  /** Coordinate limits for targets that may be observed in this Call for Proposals. */
+  coordinateLimits: SiteCoordinateLimits;
   /** Whether this Call is PRESENT or has been DELETED. */
   existence: Existence;
   /** The unique Call for Proposals id associated with this Call. */
@@ -640,16 +634,6 @@ export type CallForProposals = {
   instruments: Array<Instrument>;
   /** Partners that may participate in this Call. */
   partners: Array<CallForProposalsPartner>;
-  /**
-   * When specified specified, the end limit defines the end (inclusive) of an RA
-   * range in which observations will be accepted.
-   */
-  raLimitEnd?: Maybe<RightAscension>;
-  /**
-   * When specified specified, the start limit defines the beginning (inclusive) of
-   * an RA range in which observations will be accepted.
-   */
-  raLimitStart?: Maybe<RightAscension>;
   /**
    * The semester associated with the Call.  Some types may have multiple Calls
    * per semester.
@@ -696,25 +680,24 @@ export type CallForProposalsPartnerInput = {
 /** The properties of a Call for Proposal in an input for creation and editing. */
 export type CallForProposalsPropertiesInput = {
   /**
-   * Active period end time for this call.  Required on create.  Must be after
-   * the activeStart time.  Not nullable.
+   * Active period end date (exclusive) for this call.  Required on create.  The
+   * active period for this call will end on the morning of the provided `Date`
+   * value.  Must be after the `activeStart` date.  Not nullable.  Limited to dates
+   * between 1900 and 2100 (exclusive).
    */
-  activeEnd?: InputMaybe<Scalars['Timestamp']['input']>;
+  activeEnd?: InputMaybe<Scalars['Date']['input']>;
   /**
-   * Active period start time for this call.  Required on create.  Must be before
-   * the activeEnd time.  Not nullable.
+   * Active period start date (inclusive) for this call.  Required on create.  The
+   * active period for this call will start on the night of the provided `Date`
+   * value. Must be before the `activeEnd` date.  Not nullable.  Limited to dates
+   * between 1900 and 2100 (exclusive).
    */
-  activeStart?: InputMaybe<Scalars['Timestamp']['input']>;
+  activeStart?: InputMaybe<Scalars['Date']['input']>;
   /**
-   * Optional declination limit end declination. Required only if decLimitStart is
-   * specified.  Nullable on edit if decLimitStart is also set to 'null'.
+   * Coordinate limits.  If not specified, they will default according to the
+   * coordinates that are safely visible during the active period of the call.
    */
-  decLimitEnd?: InputMaybe<DeclinationInput>;
-  /**
-   * Optional declination limit start declination. Required only if decLimitEnd is
-   * specified.  Nullable on edit if decLimitEnd is also set to 'null'.
-   */
-  decLimitStart?: InputMaybe<DeclinationInput>;
+  coordinateLimits?: InputMaybe<SiteCoordinateLimitsInput>;
   /** DELETED or PRESENT.  On create defaults to PRESENT. */
   existence?: InputMaybe<Existence>;
   /**
@@ -729,16 +712,6 @@ export type CallForProposalsPropertiesInput = {
    * all partners.
    */
   partners?: InputMaybe<Array<CallForProposalsPartnerInput>>;
-  /**
-   * Optional RA limit end RA. Required only if raLimitStart is specified. Nullable
-   * on edit if raLimitStart is also set to 'null'.
-   */
-  raLimitEnd?: InputMaybe<RightAscensionInput>;
-  /**
-   * Optional RA limit start RA. Required only if raLimitEnd is specified. Nullable
-   * on edit if raLimitEnd is also set to 'null'.
-   */
-  raLimitStart?: InputMaybe<RightAscensionInput>;
   /** Semester associated with the call. Required on create. */
   semester?: InputMaybe<Scalars['Semester']['input']>;
   /**
@@ -1098,6 +1071,42 @@ export type CoolStarTemperature =
   /** 2800 K */
   | 'T2800_K';
 
+/** RA/Dec limits. */
+export type CoordinateLimits = {
+  __typename?: 'CoordinateLimits';
+  /**
+   * The end limit defines the end (inclusive) of a declination range in which
+   * observations will be accepted.
+   */
+  decEnd: Declination;
+  /**
+   * The start limit defines the beginning (inclusive) of a declination range in
+   * which observations will be accepted.
+   */
+  decStart: Declination;
+  /**
+   * The end limit defines the end (inclusive) of an RA range in which observations
+   * will be accepted.
+   */
+  raEnd: RightAscension;
+  /**
+   * The start limit defines the beginning (inclusive) of an RA range in which
+   * observations will be accepted.
+   */
+  raStart: RightAscension;
+};
+
+export type CoordinateLimitsInput = {
+  /** Optional declination limit end declination. */
+  decEnd?: InputMaybe<DeclinationInput>;
+  /** Optional declination limit start declination. */
+  decStart?: InputMaybe<DeclinationInput>;
+  /** Optional RA limit end RA. */
+  raEnd?: InputMaybe<RightAscensionInput>;
+  /** Optional RA limit start RA. */
+  raStart?: InputMaybe<RightAscensionInput>;
+};
+
 export type Coordinates = {
   __typename?: 'Coordinates';
   /** Declination */
@@ -1346,6 +1355,15 @@ export type DatasetStage =
   | 'START_EXPOSE'
   | 'START_READOUT'
   | 'START_WRITE';
+
+/** Date interval marked by a start 'Date' (inclusive) and an end 'Date' (exclusive). */
+export type DateInterval = {
+  __typename?: 'DateInterval';
+  /** End date of the interval (exclusive). */
+  end: Scalars['Date']['output'];
+  /** Start date of the interval (inclusive). */
+  start: Scalars['Date']['output'];
+};
 
 export type Declination = {
   __typename?: 'Declination';
@@ -3083,6 +3101,7 @@ export type Group = {
   parentIndex: Scalars['NonNegShort']['output'];
   /** The program in which this group is found. */
   program: Program;
+  system: Scalars['Boolean']['output'];
   /**
    * Remaining execution time estimate range, assuming it can be calculated.  In
    * order for an observation to have an estimate, it must be fully defined such
@@ -5170,6 +5189,21 @@ export type Site =
   /** Gemini South */
   | 'GS';
 
+/** Coordinate limits per site. */
+export type SiteCoordinateLimits = {
+  __typename?: 'SiteCoordinateLimits';
+  /** Gemini North coordinate limits. */
+  north: CoordinateLimits;
+  /** Gemini South coordinate limits. */
+  south: CoordinateLimits;
+};
+
+/** Coordinate limits input per site. */
+export type SiteCoordinateLimitsInput = {
+  north?: InputMaybe<CoordinateLimitsInput>;
+  south?: InputMaybe<CoordinateLimitsInput>;
+};
+
 /** Sky background */
 export type SkyBackground =
   /** SkyBackground Bright */
@@ -6688,9 +6722,9 @@ export type WhereCallForProposals = {
    */
   OR?: InputMaybe<Array<WhereCallForProposals>>;
   /** Matches the active period end. */
-  activeEnd?: InputMaybe<WhereOrderTimestamp>;
+  activeEnd?: InputMaybe<WhereOrderDate>;
   /** Matches the active period start. */
-  activeStart?: InputMaybe<WhereOrderTimestamp>;
+  activeStart?: InputMaybe<WhereOrderDate>;
   /** Matches the call for propsals id. */
   id?: InputMaybe<WhereOrderCallForProposalsId>;
   /** Matches whether the call is still open for some partner. */
@@ -7210,6 +7244,30 @@ export type WhereOrderDatasetStage = {
   NEQ?: InputMaybe<DatasetStage>;
   /** Matches if the property value is none of the supplied values. */
   NIN?: InputMaybe<Array<DatasetStage>>;
+};
+
+/**
+ * Filters on equality or order comparisons of the Date property.  All supplied
+ * criteria must match, but usually only one is selected.  Dates are specified
+ * in ISO 8601 format (e.g., YYYY-MM-DD).
+ */
+export type WhereOrderDate = {
+  /** Matches if the date is exactly the supplied value. */
+  EQ?: InputMaybe<Scalars['Date']['input']>;
+  /** Matches if the date is ordered after (>) the supplied value. */
+  GT?: InputMaybe<Scalars['Date']['input']>;
+  /** Matches if the date is ordered after or equal (>=) the supplied value. */
+  GTE?: InputMaybe<Scalars['Date']['input']>;
+  /** Matches if the date value is any of the supplied options. */
+  IN?: InputMaybe<Array<Scalars['Date']['input']>>;
+  /** Matches if the date is ordered before (<) the supplied value. */
+  LT?: InputMaybe<Scalars['Date']['input']>;
+  /** Matches if the date is ordered before or equal (<=) the supplied value. */
+  LTE?: InputMaybe<Scalars['Date']['input']>;
+  /** Matches if the date is not the supplied value. */
+  NEQ?: InputMaybe<Scalars['Date']['input']>;
+  /** Matches if the date value is none of the supplied values. */
+  NIN?: InputMaybe<Array<Scalars['Date']['input']>>;
 };
 
 /**
