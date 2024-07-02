@@ -33,7 +33,7 @@ export function ObservationTable({
   function onGlobalFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
     const _filters = { ...filters };
-    _filters['global'].value = value;
+    _filters.global.value = value;
 
     setFilters(_filters);
     setGlobalFilterValue(value);

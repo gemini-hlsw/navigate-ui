@@ -8,7 +8,7 @@ import { useGetGemsInstrument, useUpdateGemsInstrument } from '@gql/configs/Gems
 import { useGetAltairInstrument, useUpdateAltairInstrument } from '@gql/configs/AltairInstrument';
 
 export function GeMS({ canEdit }: { canEdit: boolean }) {
-  const [state, setState] = useState<GemsInstrumentType>({});
+  const [state, setState] = useState<GemsInstrumentType>({} as GemsInstrumentType);
   const getGemsInstrument = useGetGemsInstrument();
   const updateGemsInstrument = useUpdateGemsInstrument();
 
@@ -23,11 +23,11 @@ export function GeMS({ canEdit }: { canEdit: boolean }) {
   function modifyGemsInstrument(name: string, value: boolean | string | number) {
     updateGemsInstrument({
       variables: {
-        pk: state.pk!,
+        pk: state.pk,
         [name]: value,
       },
       onCompleted(data) {
-        setState(data.updateGemsInstrument!);
+        setState(data.updateGemsInstrument);
       },
     });
   }
@@ -75,11 +75,11 @@ export function Altair({ canEdit }: { canEdit: boolean }) {
   function modifyAltairInstrument(name: string, value: boolean | string | number) {
     updateAltairInstrument({
       variables: {
-        pk: state.pk!,
+        pk: state.pk,
         [name]: value,
       },
       onCompleted(data) {
-        setState(data.updateAltairInstrument!);
+        setState(data.updateAltairInstrument);
       },
     });
   }
@@ -100,7 +100,7 @@ export function Altair({ canEdit }: { canEdit: boolean }) {
         <Checkbox
           disabled={!canEdit}
           checked={state.ndFilter}
-          onChange={(e) => modifyAltairInstrument('ndFilter', e.target.value)}
+          onChange={() => modifyAltairInstrument('ndFilter', !state.ndFilter)}
         />
         <span className="label">Star Mag</span>
         <InputNumber

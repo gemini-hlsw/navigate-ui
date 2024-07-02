@@ -3,11 +3,12 @@ import { Column } from 'primereact/column';
 import { Title } from '@Shared/Title/Title';
 import { useLogMessages } from '@gql/server/Logs';
 import { useEffect, useState } from 'react';
+import { LogMessage } from '@gql/server/gen/graphql';
 
 export default function Logs() {
   const MAX_LOG_DISPLAY = 20;
   const { data } = useLogMessages();
-  const [messages, setMessages] = useState<unknown[]>([]);
+  const [messages, setMessages] = useState<LogMessage[]>([]);
 
   useEffect(() => {
     if (data?.logMessage) {
@@ -28,7 +29,7 @@ export default function Logs() {
       <Title title="Log" />
       <DataTable
         value={messages}
-        rowClassName={(data: { level: string }) => data.level.toLowerCase()}
+        rowClassName={(data: LogMessage) => data.level.toLowerCase()}
         stripedRows
         responsiveLayout="scroll"
       >

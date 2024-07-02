@@ -195,7 +195,7 @@ function Flow() {
     } else {
       tiptiltState = 'inactive';
     }
-    initialNodes.filter((n) => n.id === 'tiptilt')[0].className = tiptiltState;
+    initialNodes.find((n) => n.id === 'tiptilt')!.className = tiptiltState;
 
     // Mount
     let mountState = 'active';
@@ -208,8 +208,8 @@ function Flow() {
     } else {
       mountState = 'inactive';
     }
-    initialNodes.filter((n) => n.id === 'mount')[0].className = mountState;
-    initialEdges.filter((n) => n.id === 'tiptilt-mount')[0].className = mountState;
+    initialNodes.find((n) => n.id === 'mount')!.className = mountState;
+    initialEdges.find((n) => n.id === 'tiptilt-mount')!.className = mountState;
 
     // Focus
     let focusState;
@@ -222,7 +222,7 @@ function Flow() {
     } else {
       focusState = 'inactive';
     }
-    initialNodes.filter((n) => n.id === 'focus')[0].className = focusState;
+    initialNodes.find((n) => n.id === 'focus')!.className = focusState;
 
     // Coma
     let comaState;
@@ -235,7 +235,7 @@ function Flow() {
     } else {
       comaState = 'inactive';
     }
-    initialNodes.filter((n) => n.id === 'coma')[0].className = comaState;
+    initialNodes.find((n) => n.id === 'coma')!.className = comaState;
 
     // High-O
     let highoState;
@@ -248,7 +248,7 @@ function Flow() {
     } else {
       highoState = 'inactive';
     }
-    initialNodes.filter((n) => n.id === 'higho')[0].className = highoState;
+    initialNodes.find((n) => n.id === 'higho')!.className = highoState;
 
     // Check probe tracking
 

@@ -1,5 +1,6 @@
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { StrictMode } from 'react';
 
 // Apollo
 import { ApolloProvider } from '@apollo/client';
@@ -18,7 +19,7 @@ import Login from './components/Login/Login';
 import VariablesProvider from '@Contexts/Variables/VariablesProvider';
 import Token from './components/Token/Token';
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+const root = ReactDOM.createRoot(document.getElementById('root')!);
 
 const router = createBrowserRouter([
   { path: '/', element: <Layout />, children: [{ index: true, element: <Home /> }] },
@@ -27,11 +28,13 @@ const router = createBrowserRouter([
 ]);
 
 root.render(
-  <AuthProvider>
-    <ApolloProvider client={client}>
-      <VariablesProvider>
-        <RouterProvider router={router} />
-      </VariablesProvider>
-    </ApolloProvider>
-  </AuthProvider>,
+  <StrictMode>
+    <AuthProvider>
+      <ApolloProvider client={client}>
+        <VariablesProvider>
+          <RouterProvider router={router} />
+        </VariablesProvider>
+      </ApolloProvider>
+    </AuthProvider>
+  </StrictMode>,
 );

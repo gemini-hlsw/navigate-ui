@@ -15,10 +15,10 @@ import { SiteType, GuidingType, TargetInput } from '@gql/configs/gen/graphql';
 import { GetObservationsQuery } from '@gql/odb/gen/graphql';
 export type ThemeType = 'light' | 'dark';
 
-export type UserType = {
+export interface UserType {
   pk: number;
   name: string;
-};
+}
 
 export type ConfigurationType = NonNullable<GetConfigurationQuery['configuration']>;
 
