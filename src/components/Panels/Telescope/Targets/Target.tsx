@@ -35,9 +35,7 @@ export function Target({
 
   function targetClicked(e: React.MouseEvent | React.TouchEvent) {
     if (!canEdit) return;
-    if (window.TouchEvent && e.nativeEvent instanceof TouchEvent) {
-      updateSelectedTarget(target.pk!);
-    } else if (e.nativeEvent instanceof MouseEvent) {
+    if (e.nativeEvent instanceof MouseEvent) {
       switch (e.detail) {
         case 1:
           clickRef.current = setTimeout(() => {
@@ -55,6 +53,8 @@ export function Target({
         default:
           break;
       }
+    } else if (e.nativeEvent instanceof TouchEvent) {
+      updateSelectedTarget(target.pk!);
     }
   }
 
