@@ -53,7 +53,7 @@ export function Target({
         default:
           break;
       }
-    } else if (e.nativeEvent instanceof TouchEvent) {
+    } else {
       updateSelectedTarget(target.pk!);
     }
   }
