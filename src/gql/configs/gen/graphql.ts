@@ -14,41 +14,44 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
   Float: { input: number; output: number };
+  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
+  DateTime: { input: string; output: string };
+  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: { input: any; output: any };
 };
 
 export type AltairGuideLoop = {
   __typename?: 'AltairGuideLoop';
-  aoEnabled?: Maybe<Scalars['Boolean']['output']>;
-  focus?: Maybe<Scalars['Boolean']['output']>;
-  oiBlend?: Maybe<Scalars['Boolean']['output']>;
-  oiTtf?: Maybe<Scalars['Boolean']['output']>;
-  p1Ttf?: Maybe<Scalars['Boolean']['output']>;
-  pk?: Maybe<Scalars['Int']['output']>;
-  sfo?: Maybe<Scalars['Boolean']['output']>;
-  strap?: Maybe<Scalars['Boolean']['output']>;
-  ttgs?: Maybe<Scalars['Boolean']['output']>;
+  aoEnabled: Scalars['Boolean']['output'];
+  focus: Scalars['Boolean']['output'];
+  oiBlend: Scalars['Boolean']['output'];
+  oiTtf: Scalars['Boolean']['output'];
+  p1Ttf: Scalars['Boolean']['output'];
+  pk: Scalars['Int']['output'];
+  sfo: Scalars['Boolean']['output'];
+  strap: Scalars['Boolean']['output'];
+  ttgs: Scalars['Boolean']['output'];
 };
 
 export type AltairInstrument = {
   __typename?: 'AltairInstrument';
-  adjustAdc?: Maybe<Scalars['Boolean']['output']>;
-  beamsplitter?: Maybe<Scalars['String']['output']>;
-  deployAdc?: Maybe<Scalars['Boolean']['output']>;
-  fieldLens?: Maybe<Scalars['Boolean']['output']>;
-  forceMode?: Maybe<Scalars['Boolean']['output']>;
-  lgs?: Maybe<Scalars['Boolean']['output']>;
-  ndFilter?: Maybe<Scalars['Boolean']['output']>;
-  pk?: Maybe<Scalars['Int']['output']>;
-  seeing?: Maybe<Scalars['Float']['output']>;
-  startMagnitude?: Maybe<Scalars['Float']['output']>;
-  windSpeed?: Maybe<Scalars['Float']['output']>;
+  adjustAdc: Scalars['Boolean']['output'];
+  beamsplitter: Scalars['String']['output'];
+  deployAdc: Scalars['Boolean']['output'];
+  fieldLens: Scalars['Boolean']['output'];
+  forceMode: Scalars['Boolean']['output'];
+  lgs: Scalars['Boolean']['output'];
+  ndFilter: Scalars['Boolean']['output'];
+  pk: Scalars['Int']['output'];
+  seeing: Scalars['Float']['output'];
+  startMagnitude: Scalars['Float']['output'];
+  windSpeed: Scalars['Float']['output'];
 };
 
 export type Az = {
   __typename?: 'Az';
-  degrees?: Maybe<Scalars['Float']['output']>;
-  dms?: Maybe<Scalars['String']['output']>;
+  degrees: Scalars['Float']['output'];
+  dms: Scalars['String']['output'];
 };
 
 export type Configuration = {
@@ -57,140 +60,150 @@ export type Configuration = {
   obsInstrument?: Maybe<Scalars['String']['output']>;
   obsSubtitle?: Maybe<Scalars['String']['output']>;
   obsTitle?: Maybe<Scalars['String']['output']>;
-  oiGuidingType?: Maybe<GuidingType>;
-  p1GuidingType?: Maybe<GuidingType>;
-  p2GuidingType?: Maybe<GuidingType>;
-  pk?: Maybe<Scalars['Int']['output']>;
+  oiGuidingType: GuidingType;
+  p1GuidingType: GuidingType;
+  p2GuidingType: GuidingType;
+  pk: Scalars['Int']['output'];
   selectedOiTarget?: Maybe<Scalars['Int']['output']>;
   selectedP1Target?: Maybe<Scalars['Int']['output']>;
   selectedP2Target?: Maybe<Scalars['Int']['output']>;
   selectedTarget?: Maybe<Scalars['Int']['output']>;
-  site?: Maybe<SiteType>;
+  site: SiteType;
 };
 
 export type Dec = {
   __typename?: 'Dec';
-  degrees?: Maybe<Scalars['Float']['output']>;
-  dms?: Maybe<Scalars['String']['output']>;
+  degrees: Scalars['Float']['output'];
+  dms: Scalars['String']['output'];
+};
+
+export type DistinctInstrument = {
+  __typename?: 'DistinctInstrument';
+  name: Scalars['String']['output'];
+};
+
+export type DistinctPort = {
+  __typename?: 'DistinctPort';
+  issPort: Scalars['Int']['output'];
 };
 
 export type El = {
   __typename?: 'El';
-  degrees?: Maybe<Scalars['Float']['output']>;
-  dms?: Maybe<Scalars['String']['output']>;
+  degrees: Scalars['Float']['output'];
+  dms: Scalars['String']['output'];
 };
 
 export type GemsGuideLoop = {
   __typename?: 'GemsGuideLoop';
-  anisopl?: Maybe<Scalars['Boolean']['output']>;
-  aoEnabled?: Maybe<Scalars['Boolean']['output']>;
-  flexure?: Maybe<Scalars['Boolean']['output']>;
-  focus?: Maybe<Scalars['Boolean']['output']>;
-  pk?: Maybe<Scalars['Int']['output']>;
-  rotation?: Maybe<Scalars['Boolean']['output']>;
-  tipTilt?: Maybe<Scalars['Boolean']['output']>;
+  anisopl: Scalars['Boolean']['output'];
+  aoEnabled: Scalars['Boolean']['output'];
+  flexure: Scalars['Boolean']['output'];
+  focus: Scalars['Boolean']['output'];
+  pk: Scalars['Int']['output'];
+  rotation: Scalars['Boolean']['output'];
+  tipTilt: Scalars['Boolean']['output'];
 };
 
 export type GemsInstrument = {
   __typename?: 'GemsInstrument';
-  adc?: Maybe<Scalars['Boolean']['output']>;
-  astrometricMode?: Maybe<Scalars['String']['output']>;
-  beamsplitter?: Maybe<Scalars['String']['output']>;
-  pk?: Maybe<Scalars['Int']['output']>;
+  adc: Scalars['Boolean']['output'];
+  astrometricMode: Scalars['String']['output'];
+  beamsplitter: Scalars['String']['output'];
+  pk: Scalars['Int']['output'];
 };
 
 export type GuideLoop = {
   __typename?: 'GuideLoop';
-  daytimeMode?: Maybe<Scalars['Boolean']['output']>;
-  lightPath?: Maybe<Scalars['String']['output']>;
-  m1CorrectionsEnable?: Maybe<Scalars['Boolean']['output']>;
-  m2ComaEnable?: Maybe<Scalars['Boolean']['output']>;
-  m2ComaM1CorrectionsSource?: Maybe<Scalars['String']['output']>;
-  m2FocusEnable?: Maybe<Scalars['Boolean']['output']>;
-  m2FocusSource?: Maybe<Scalars['String']['output']>;
-  m2TipTiltEnable?: Maybe<Scalars['Boolean']['output']>;
-  m2TipTiltFocusLink?: Maybe<Scalars['Boolean']['output']>;
-  m2TipTiltSource?: Maybe<Scalars['String']['output']>;
-  mountOffload?: Maybe<Scalars['Boolean']['output']>;
-  pk?: Maybe<Scalars['Int']['output']>;
-  probeTracking?: Maybe<Scalars['String']['output']>;
+  daytimeMode: Scalars['Boolean']['output'];
+  lightPath: Scalars['String']['output'];
+  m1CorrectionsEnable: Scalars['Boolean']['output'];
+  m2ComaEnable: Scalars['Boolean']['output'];
+  m2ComaM1CorrectionsSource: Scalars['String']['output'];
+  m2FocusEnable: Scalars['Boolean']['output'];
+  m2FocusSource: Scalars['String']['output'];
+  m2TipTiltEnable: Scalars['Boolean']['output'];
+  m2TipTiltFocusLink: Scalars['Boolean']['output'];
+  m2TipTiltSource: Scalars['String']['output'];
+  mountOffload: Scalars['Boolean']['output'];
+  pk: Scalars['Int']['output'];
+  probeTracking: Scalars['String']['output'];
 };
 
 export type GuidingType = 'NORMAL';
 
 export type Instrument = {
   __typename?: 'Instrument';
-  ao?: Maybe<Scalars['Boolean']['output']>;
-  extraParams?: Maybe<Scalars['JSON']['output']>;
-  focusOffset?: Maybe<Scalars['Float']['output']>;
-  iaa?: Maybe<Scalars['Float']['output']>;
-  issPort?: Maybe<Scalars['Int']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  originX?: Maybe<Scalars['Float']['output']>;
-  originY?: Maybe<Scalars['Float']['output']>;
-  pk?: Maybe<Scalars['Int']['output']>;
-  wfs?: Maybe<WfsType>;
+  ao: Scalars['Boolean']['output'];
+  extraParams: Scalars['JSON']['output'];
+  focusOffset: Scalars['Float']['output'];
+  iaa: Scalars['Float']['output'];
+  issPort: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  originX: Scalars['Float']['output'];
+  originY: Scalars['Float']['output'];
+  pk: Scalars['Int']['output'];
+  wfs: WfsType;
 };
 
 export type Mechanism = {
   __typename?: 'Mechanism';
-  agAcPickoffPark?: Maybe<StatusType>;
-  agAoFoldPark?: Maybe<StatusType>;
-  agParkAll?: Maybe<StatusType>;
-  agScienceFoldPark?: Maybe<StatusType>;
-  aowfs?: Maybe<StatusType>;
-  aowfsPark?: Maybe<StatusType>;
-  crcs?: Maybe<StatusType>;
-  crcsPark?: Maybe<StatusType>;
-  crcsUnwrap?: Maybe<StatusType>;
-  dome?: Maybe<StatusType>;
-  domeMode?: Maybe<Scalars['String']['output']>;
-  domePark?: Maybe<StatusType>;
-  eVGate?: Maybe<StatusType>;
-  eVGateClose?: Maybe<StatusType>;
-  eVGateValue?: Maybe<Scalars['Int']['output']>;
-  mcs?: Maybe<StatusType>;
-  mcsPark?: Maybe<StatusType>;
-  mcsUnwrap?: Maybe<StatusType>;
-  odgw?: Maybe<StatusType>;
-  odgwPark?: Maybe<StatusType>;
-  oiwfs?: Maybe<StatusType>;
-  oiwfsPark?: Maybe<StatusType>;
-  pk?: Maybe<Scalars['Int']['output']>;
-  pwfs1?: Maybe<StatusType>;
-  pwfs1Park?: Maybe<StatusType>;
-  pwfs1Unwrap?: Maybe<StatusType>;
-  pwfs2?: Maybe<StatusType>;
-  pwfs2Park?: Maybe<StatusType>;
-  pwfs2Unwrap?: Maybe<StatusType>;
-  scs?: Maybe<StatusType>;
-  shutterAperture?: Maybe<Scalars['Int']['output']>;
-  shutterMode?: Maybe<Scalars['String']['output']>;
-  shutters?: Maybe<StatusType>;
-  shuttersPark?: Maybe<StatusType>;
-  wVGate?: Maybe<StatusType>;
-  wVGateClose?: Maybe<StatusType>;
-  wVGateValue?: Maybe<Scalars['Int']['output']>;
+  agAcPickoffPark: StatusType;
+  agAoFoldPark: StatusType;
+  agParkAll: StatusType;
+  agScienceFoldPark: StatusType;
+  aowfs: StatusType;
+  aowfsPark: StatusType;
+  crcs: StatusType;
+  crcsPark: StatusType;
+  crcsUnwrap: StatusType;
+  dome: StatusType;
+  domeMode: Scalars['String']['output'];
+  domePark: StatusType;
+  eVGate: StatusType;
+  eVGateClose: StatusType;
+  eVGateValue: Scalars['Int']['output'];
+  mcs: StatusType;
+  mcsPark: StatusType;
+  mcsUnwrap: StatusType;
+  odgw: StatusType;
+  odgwPark: StatusType;
+  oiwfs: StatusType;
+  oiwfsPark: StatusType;
+  pk: Scalars['Int']['output'];
+  pwfs1: StatusType;
+  pwfs1Park: StatusType;
+  pwfs1Unwrap: StatusType;
+  pwfs2: StatusType;
+  pwfs2Park: StatusType;
+  pwfs2Unwrap: StatusType;
+  scs: StatusType;
+  shutterAperture: Scalars['Int']['output'];
+  shutterMode: Scalars['String']['output'];
+  shutters: StatusType;
+  shuttersPark: StatusType;
+  wVGate: StatusType;
+  wVGateClose: StatusType;
+  wVGateValue: Scalars['Int']['output'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createConfiguration?: Maybe<Configuration>;
-  createInstrument?: Maybe<Instrument>;
-  createTarget?: Maybe<Target>;
-  createUser?: Maybe<User>;
-  removeAndCreateBaseTargets?: Maybe<Array<Maybe<Target>>>;
-  removeAndCreateWfsTargets?: Maybe<Array<Maybe<Target>>>;
-  updateAltairGuideLoop?: Maybe<AltairGuideLoop>;
-  updateAltairInstrument?: Maybe<AltairInstrument>;
-  updateConfiguration?: Maybe<Configuration>;
-  updateGemsGuideLoop?: Maybe<GemsGuideLoop>;
-  updateGemsInstrument?: Maybe<GemsInstrument>;
-  updateGuideLoop?: Maybe<GuideLoop>;
-  updateMechanism?: Maybe<Mechanism>;
-  updateRotator?: Maybe<Rotator>;
-  updateSlewFlags?: Maybe<SlewFlags>;
-  updateTarget?: Maybe<Target>;
+  createConfiguration: Configuration;
+  createInstrument: Instrument;
+  createTarget: Target;
+  createUser: User;
+  removeAndCreateBaseTargets: Array<Target>;
+  removeAndCreateWfsTargets: Array<Target>;
+  updateAltairGuideLoop: AltairGuideLoop;
+  updateAltairInstrument: AltairInstrument;
+  updateConfiguration: Configuration;
+  updateGemsGuideLoop: GemsGuideLoop;
+  updateGemsInstrument: GemsInstrument;
+  updateGuideLoop: GuideLoop;
+  updateMechanism: Mechanism;
+  updateRotator: Rotator;
+  updateSlewFlags: SlewFlags;
+  updateTarget: Target;
 };
 
 export type MutationCreateConfigurationArgs = {
@@ -198,9 +211,9 @@ export type MutationCreateConfigurationArgs = {
   obsInstrument?: InputMaybe<Scalars['String']['input']>;
   obsSubtitle?: InputMaybe<Scalars['String']['input']>;
   obsTitle?: InputMaybe<Scalars['String']['input']>;
-  oiGuidingType?: InputMaybe<GuidingType>;
-  p1GuidingType?: InputMaybe<GuidingType>;
-  p2GuidingType?: InputMaybe<GuidingType>;
+  oiGuidingType: GuidingType;
+  p1GuidingType: GuidingType;
+  p2GuidingType: GuidingType;
   selectedOiTarget?: InputMaybe<Scalars['Int']['input']>;
   selectedP1Target?: InputMaybe<Scalars['Int']['input']>;
   selectedP2Target?: InputMaybe<Scalars['Int']['input']>;
@@ -236,11 +249,11 @@ export type MutationCreateUserArgs = {
 };
 
 export type MutationRemoveAndCreateBaseTargetsArgs = {
-  targets?: InputMaybe<Array<InputMaybe<TargetInput>>>;
+  targets?: InputMaybe<Array<TargetInput>>;
 };
 
 export type MutationRemoveAndCreateWfsTargetsArgs = {
-  targets?: InputMaybe<Array<InputMaybe<TargetInput>>>;
+  targets?: InputMaybe<Array<TargetInput>>;
   wfs?: InputMaybe<TargetType>;
 };
 
@@ -400,20 +413,20 @@ export type Query = {
   altairGuideLoop?: Maybe<AltairGuideLoop>;
   altairInstrument?: Maybe<AltairInstrument>;
   configuration?: Maybe<Configuration>;
-  distinctInstruments?: Maybe<Array<Maybe<Instrument>>>;
-  distinctPorts?: Maybe<Array<Maybe<Instrument>>>;
+  distinctInstruments: Array<DistinctInstrument>;
+  distinctPorts: Array<DistinctPort>;
   gemsGuideLoop?: Maybe<GemsGuideLoop>;
   gemsInstrument?: Maybe<GemsInstrument>;
   guideLoop?: Maybe<GuideLoop>;
   instrument?: Maybe<Instrument>;
-  instruments?: Maybe<Array<Maybe<Instrument>>>;
+  instruments: Array<Instrument>;
   mechanism?: Maybe<Mechanism>;
   rotator?: Maybe<Rotator>;
   slewFlags?: Maybe<SlewFlags>;
   target?: Maybe<Target>;
-  targets?: Maybe<Array<Maybe<Target>>>;
+  targets: Array<Target>;
   user?: Maybe<User>;
-  users?: Maybe<Array<Maybe<User>>>;
+  users: Array<User>;
 };
 
 export type QueryConfigurationArgs = {
@@ -454,38 +467,38 @@ export type QueryUserArgs = {
 
 export type Ra = {
   __typename?: 'RA';
-  degrees?: Maybe<Scalars['Float']['output']>;
-  hms?: Maybe<Scalars['String']['output']>;
+  degrees: Scalars['Float']['output'];
+  hms: Scalars['String']['output'];
 };
 
 export type Rotator = {
   __typename?: 'Rotator';
-  angle?: Maybe<Scalars['Float']['output']>;
-  pk?: Maybe<Scalars['Int']['output']>;
-  tracking?: Maybe<TrackingType>;
+  angle: Scalars['Float']['output'];
+  pk: Scalars['Int']['output'];
+  tracking: TrackingType;
 };
 
 export type SiteType = 'GN' | 'GS';
 
 export type SlewFlags = {
   __typename?: 'SlewFlags';
-  autoparkAowfs?: Maybe<Scalars['Boolean']['output']>;
-  autoparkGems?: Maybe<Scalars['Boolean']['output']>;
-  autoparkOiwfs?: Maybe<Scalars['Boolean']['output']>;
-  autoparkPwfs1?: Maybe<Scalars['Boolean']['output']>;
-  autoparkPwfs2?: Maybe<Scalars['Boolean']['output']>;
-  pk?: Maybe<Scalars['Int']['output']>;
-  resetPointing?: Maybe<Scalars['Boolean']['output']>;
-  shortcircuitMountFilter?: Maybe<Scalars['Boolean']['output']>;
-  shortcircuitTargetFilter?: Maybe<Scalars['Boolean']['output']>;
-  stopGuide?: Maybe<Scalars['Boolean']['output']>;
-  zeroChopThrow?: Maybe<Scalars['Boolean']['output']>;
-  zeroGuideOffset?: Maybe<Scalars['Boolean']['output']>;
-  zeroInstrumentOffset?: Maybe<Scalars['Boolean']['output']>;
-  zeroMountDiffTrack?: Maybe<Scalars['Boolean']['output']>;
-  zeroMountOffset?: Maybe<Scalars['Boolean']['output']>;
-  zeroSourceDiffTrack?: Maybe<Scalars['Boolean']['output']>;
-  zeroSourceOffset?: Maybe<Scalars['Boolean']['output']>;
+  autoparkAowfs: Scalars['Boolean']['output'];
+  autoparkGems: Scalars['Boolean']['output'];
+  autoparkOiwfs: Scalars['Boolean']['output'];
+  autoparkPwfs1: Scalars['Boolean']['output'];
+  autoparkPwfs2: Scalars['Boolean']['output'];
+  pk: Scalars['Int']['output'];
+  resetPointing: Scalars['Boolean']['output'];
+  shortcircuitMountFilter: Scalars['Boolean']['output'];
+  shortcircuitTargetFilter: Scalars['Boolean']['output'];
+  stopGuide: Scalars['Boolean']['output'];
+  zeroChopThrow: Scalars['Boolean']['output'];
+  zeroGuideOffset: Scalars['Boolean']['output'];
+  zeroInstrumentOffset: Scalars['Boolean']['output'];
+  zeroMountDiffTrack: Scalars['Boolean']['output'];
+  zeroMountOffset: Scalars['Boolean']['output'];
+  zeroSourceDiffTrack: Scalars['Boolean']['output'];
+  zeroSourceOffset: Scalars['Boolean']['output'];
 };
 
 export type StatusType = 'ACTIVE' | 'DONE' | 'ERROR' | 'PENDING';
@@ -493,15 +506,15 @@ export type StatusType = 'ACTIVE' | 'DONE' | 'ERROR' | 'PENDING';
 export type Target = {
   __typename?: 'Target';
   az?: Maybe<Az>;
-  createdAt?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
   dec?: Maybe<Dec>;
   el?: Maybe<El>;
-  epoch?: Maybe<Scalars['String']['output']>;
+  epoch: Scalars['String']['output'];
   id?: Maybe<Scalars['String']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  pk?: Maybe<Scalars['Int']['output']>;
+  name: Scalars['String']['output'];
+  pk: Scalars['Int']['output'];
   ra?: Maybe<Ra>;
-  type?: Maybe<TargetType>;
+  type: TargetType;
 };
 
 export type TargetInput = {
@@ -519,8 +532,8 @@ export type TrackingType = 'FIXED' | 'TRACKING';
 
 export type User = {
   __typename?: 'User';
-  name?: Maybe<Scalars['String']['output']>;
-  pk?: Maybe<Scalars['Int']['output']>;
+  name: Scalars['String']['output'];
+  pk: Scalars['Int']['output'];
 };
 
 export type WfsType = 'NONE' | 'OIWFS' | 'PWFS1' | 'PWFS2';
@@ -531,59 +544,54 @@ export type GetAllInfoQuery = {
   __typename?: 'Query';
   configuration?: {
     __typename?: 'Configuration';
-    pk?: number | null;
-    site?: SiteType | null;
+    pk: number;
+    site: SiteType;
     selectedTarget?: number | null;
     selectedOiTarget?: number | null;
     selectedP1Target?: number | null;
     selectedP2Target?: number | null;
-    oiGuidingType?: GuidingType | null;
-    p1GuidingType?: GuidingType | null;
-    p2GuidingType?: GuidingType | null;
+    oiGuidingType: GuidingType;
+    p1GuidingType: GuidingType;
+    p2GuidingType: GuidingType;
     obsTitle?: string | null;
     obsSubtitle?: string | null;
     obsId?: string | null;
     obsInstrument?: string | null;
   } | null;
-  rotator?: {
-    __typename?: 'Rotator';
-    pk?: number | null;
-    angle?: number | null;
-    tracking?: TrackingType | null;
-  } | null;
+  rotator?: { __typename?: 'Rotator'; pk: number; angle: number; tracking: TrackingType } | null;
   slewFlags?: {
     __typename?: 'SlewFlags';
-    pk?: number | null;
-    zeroChopThrow?: boolean | null;
-    zeroSourceOffset?: boolean | null;
-    zeroSourceDiffTrack?: boolean | null;
-    zeroMountOffset?: boolean | null;
-    zeroMountDiffTrack?: boolean | null;
-    shortcircuitTargetFilter?: boolean | null;
-    shortcircuitMountFilter?: boolean | null;
-    resetPointing?: boolean | null;
-    stopGuide?: boolean | null;
-    zeroGuideOffset?: boolean | null;
-    zeroInstrumentOffset?: boolean | null;
-    autoparkPwfs1?: boolean | null;
-    autoparkPwfs2?: boolean | null;
-    autoparkOiwfs?: boolean | null;
-    autoparkGems?: boolean | null;
-    autoparkAowfs?: boolean | null;
+    pk: number;
+    zeroChopThrow: boolean;
+    zeroSourceOffset: boolean;
+    zeroSourceDiffTrack: boolean;
+    zeroMountOffset: boolean;
+    zeroMountDiffTrack: boolean;
+    shortcircuitTargetFilter: boolean;
+    shortcircuitMountFilter: boolean;
+    resetPointing: boolean;
+    stopGuide: boolean;
+    zeroGuideOffset: boolean;
+    zeroInstrumentOffset: boolean;
+    autoparkPwfs1: boolean;
+    autoparkPwfs2: boolean;
+    autoparkOiwfs: boolean;
+    autoparkGems: boolean;
+    autoparkAowfs: boolean;
   } | null;
-  targets?: Array<{
+  targets: Array<{
     __typename?: 'Target';
-    pk?: number | null;
+    pk: number;
     id?: string | null;
-    name?: string | null;
-    epoch?: string | null;
-    type?: TargetType | null;
-    createdAt?: string | null;
-    ra?: { __typename?: 'RA'; degrees?: number | null; hms?: string | null } | null;
-    dec?: { __typename?: 'Dec'; degrees?: number | null; dms?: string | null } | null;
-    az?: { __typename?: 'Az'; degrees?: number | null; dms?: string | null } | null;
-    el?: { __typename?: 'El'; degrees?: number | null; dms?: string | null } | null;
-  } | null> | null;
+    name: string;
+    epoch: string;
+    type: TargetType;
+    createdAt: string;
+    ra?: { __typename?: 'RA'; degrees: number; hms: string } | null;
+    dec?: { __typename?: 'Dec'; degrees: number; dms: string } | null;
+    az?: { __typename?: 'Az'; degrees: number; dms: string } | null;
+    el?: { __typename?: 'El'; degrees: number; dms: string } | null;
+  }>;
 };
 
 export type GetAltairGuideLoopQueryVariables = Exact<{ [key: string]: never }>;
@@ -592,15 +600,15 @@ export type GetAltairGuideLoopQuery = {
   __typename?: 'Query';
   altairGuideLoop?: {
     __typename?: 'AltairGuideLoop';
-    pk?: number | null;
-    aoEnabled?: boolean | null;
-    oiBlend?: boolean | null;
-    focus?: boolean | null;
-    p1Ttf?: boolean | null;
-    strap?: boolean | null;
-    oiTtf?: boolean | null;
-    ttgs?: boolean | null;
-    sfo?: boolean | null;
+    pk: number;
+    aoEnabled: boolean;
+    oiBlend: boolean;
+    focus: boolean;
+    p1Ttf: boolean;
+    strap: boolean;
+    oiTtf: boolean;
+    ttgs: boolean;
+    sfo: boolean;
   } | null;
 };
 
@@ -618,18 +626,18 @@ export type UpdateAltairGuideLoopMutationVariables = Exact<{
 
 export type UpdateAltairGuideLoopMutation = {
   __typename?: 'Mutation';
-  updateAltairGuideLoop?: {
+  updateAltairGuideLoop: {
     __typename?: 'AltairGuideLoop';
-    pk?: number | null;
-    aoEnabled?: boolean | null;
-    oiBlend?: boolean | null;
-    focus?: boolean | null;
-    p1Ttf?: boolean | null;
-    strap?: boolean | null;
-    oiTtf?: boolean | null;
-    ttgs?: boolean | null;
-    sfo?: boolean | null;
-  } | null;
+    pk: number;
+    aoEnabled: boolean;
+    oiBlend: boolean;
+    focus: boolean;
+    p1Ttf: boolean;
+    strap: boolean;
+    oiTtf: boolean;
+    ttgs: boolean;
+    sfo: boolean;
+  };
 };
 
 export type GetAltairInstrumentQueryVariables = Exact<{ [key: string]: never }>;
@@ -638,17 +646,17 @@ export type GetAltairInstrumentQuery = {
   __typename?: 'Query';
   altairInstrument?: {
     __typename?: 'AltairInstrument';
-    pk?: number | null;
-    beamsplitter?: string | null;
-    startMagnitude?: number | null;
-    seeing?: number | null;
-    windSpeed?: number | null;
-    forceMode?: boolean | null;
-    ndFilter?: boolean | null;
-    fieldLens?: boolean | null;
-    deployAdc?: boolean | null;
-    adjustAdc?: boolean | null;
-    lgs?: boolean | null;
+    pk: number;
+    beamsplitter: string;
+    startMagnitude: number;
+    seeing: number;
+    windSpeed: number;
+    forceMode: boolean;
+    ndFilter: boolean;
+    fieldLens: boolean;
+    deployAdc: boolean;
+    adjustAdc: boolean;
+    lgs: boolean;
   } | null;
 };
 
@@ -668,20 +676,20 @@ export type UpdateAltairInstrumentMutationVariables = Exact<{
 
 export type UpdateAltairInstrumentMutation = {
   __typename?: 'Mutation';
-  updateAltairInstrument?: {
+  updateAltairInstrument: {
     __typename?: 'AltairInstrument';
-    pk?: number | null;
-    beamsplitter?: string | null;
-    startMagnitude?: number | null;
-    seeing?: number | null;
-    windSpeed?: number | null;
-    forceMode?: boolean | null;
-    ndFilter?: boolean | null;
-    fieldLens?: boolean | null;
-    deployAdc?: boolean | null;
-    adjustAdc?: boolean | null;
-    lgs?: boolean | null;
-  } | null;
+    pk: number;
+    beamsplitter: string;
+    startMagnitude: number;
+    seeing: number;
+    windSpeed: number;
+    forceMode: boolean;
+    ndFilter: boolean;
+    fieldLens: boolean;
+    deployAdc: boolean;
+    adjustAdc: boolean;
+    lgs: boolean;
+  };
 };
 
 export type GetConfigurationQueryVariables = Exact<{ [key: string]: never }>;
@@ -690,15 +698,15 @@ export type GetConfigurationQuery = {
   __typename?: 'Query';
   configuration?: {
     __typename?: 'Configuration';
-    pk?: number | null;
-    site?: SiteType | null;
+    pk: number;
+    site: SiteType;
     selectedTarget?: number | null;
     selectedOiTarget?: number | null;
     selectedP1Target?: number | null;
     selectedP2Target?: number | null;
-    oiGuidingType?: GuidingType | null;
-    p1GuidingType?: GuidingType | null;
-    p2GuidingType?: GuidingType | null;
+    oiGuidingType: GuidingType;
+    p1GuidingType: GuidingType;
+    p2GuidingType: GuidingType;
     obsTitle?: string | null;
     obsId?: string | null;
     obsInstrument?: string | null;
@@ -724,22 +732,22 @@ export type UpdateConfigurationMutationVariables = Exact<{
 
 export type UpdateConfigurationMutation = {
   __typename?: 'Mutation';
-  updateConfiguration?: {
+  updateConfiguration: {
     __typename?: 'Configuration';
-    pk?: number | null;
-    site?: SiteType | null;
+    pk: number;
+    site: SiteType;
     selectedTarget?: number | null;
     selectedOiTarget?: number | null;
     selectedP1Target?: number | null;
     selectedP2Target?: number | null;
-    oiGuidingType?: GuidingType | null;
-    p1GuidingType?: GuidingType | null;
-    p2GuidingType?: GuidingType | null;
+    oiGuidingType: GuidingType;
+    p1GuidingType: GuidingType;
+    p2GuidingType: GuidingType;
     obsTitle?: string | null;
     obsId?: string | null;
     obsInstrument?: string | null;
     obsSubtitle?: string | null;
-  } | null;
+  };
 };
 
 export type GetGemsGuideLoopQueryVariables = Exact<{ [key: string]: never }>;
@@ -748,13 +756,13 @@ export type GetGemsGuideLoopQuery = {
   __typename?: 'Query';
   gemsGuideLoop?: {
     __typename?: 'GemsGuideLoop';
-    pk?: number | null;
-    aoEnabled?: boolean | null;
-    focus?: boolean | null;
-    rotation?: boolean | null;
-    tipTilt?: boolean | null;
-    anisopl?: boolean | null;
-    flexure?: boolean | null;
+    pk: number;
+    aoEnabled: boolean;
+    focus: boolean;
+    rotation: boolean;
+    tipTilt: boolean;
+    anisopl: boolean;
+    flexure: boolean;
   } | null;
 };
 
@@ -770,16 +778,16 @@ export type UpdateGemsGuideLoopMutationVariables = Exact<{
 
 export type UpdateGemsGuideLoopMutation = {
   __typename?: 'Mutation';
-  updateGemsGuideLoop?: {
+  updateGemsGuideLoop: {
     __typename?: 'GemsGuideLoop';
-    pk?: number | null;
-    aoEnabled?: boolean | null;
-    focus?: boolean | null;
-    rotation?: boolean | null;
-    tipTilt?: boolean | null;
-    anisopl?: boolean | null;
-    flexure?: boolean | null;
-  } | null;
+    pk: number;
+    aoEnabled: boolean;
+    focus: boolean;
+    rotation: boolean;
+    tipTilt: boolean;
+    anisopl: boolean;
+    flexure: boolean;
+  };
 };
 
 export type GetGemsInstrumentQueryVariables = Exact<{ [key: string]: never }>;
@@ -788,10 +796,10 @@ export type GetGemsInstrumentQuery = {
   __typename?: 'Query';
   gemsInstrument?: {
     __typename?: 'GemsInstrument';
-    pk?: number | null;
-    beamsplitter?: string | null;
-    adc?: boolean | null;
-    astrometricMode?: string | null;
+    pk: number;
+    beamsplitter: string;
+    adc: boolean;
+    astrometricMode: string;
   } | null;
 };
 
@@ -804,13 +812,13 @@ export type UpdateGemsInstrumentMutationVariables = Exact<{
 
 export type UpdateGemsInstrumentMutation = {
   __typename?: 'Mutation';
-  updateGemsInstrument?: {
+  updateGemsInstrument: {
     __typename?: 'GemsInstrument';
-    pk?: number | null;
-    beamsplitter?: string | null;
-    adc?: boolean | null;
-    astrometricMode?: string | null;
-  } | null;
+    pk: number;
+    beamsplitter: string;
+    adc: boolean;
+    astrometricMode: string;
+  };
 };
 
 export type GetGuideLoopQueryVariables = Exact<{ [key: string]: never }>;
@@ -819,19 +827,19 @@ export type GetGuideLoopQuery = {
   __typename?: 'Query';
   guideLoop?: {
     __typename?: 'GuideLoop';
-    pk?: number | null;
-    m2TipTiltEnable?: boolean | null;
-    m2TipTiltSource?: string | null;
-    m2FocusEnable?: boolean | null;
-    m2FocusSource?: string | null;
-    m2TipTiltFocusLink?: boolean | null;
-    m2ComaEnable?: boolean | null;
-    m1CorrectionsEnable?: boolean | null;
-    m2ComaM1CorrectionsSource?: string | null;
-    mountOffload?: boolean | null;
-    daytimeMode?: boolean | null;
-    probeTracking?: string | null;
-    lightPath?: string | null;
+    pk: number;
+    m2TipTiltEnable: boolean;
+    m2TipTiltSource: string;
+    m2FocusEnable: boolean;
+    m2FocusSource: string;
+    m2TipTiltFocusLink: boolean;
+    m2ComaEnable: boolean;
+    m1CorrectionsEnable: boolean;
+    m2ComaM1CorrectionsSource: string;
+    mountOffload: boolean;
+    daytimeMode: boolean;
+    probeTracking: string;
+    lightPath: string;
   } | null;
 };
 
@@ -853,29 +861,29 @@ export type UpdateGuideLoopMutationVariables = Exact<{
 
 export type UpdateGuideLoopMutation = {
   __typename?: 'Mutation';
-  updateGuideLoop?: {
+  updateGuideLoop: {
     __typename?: 'GuideLoop';
-    pk?: number | null;
-    m2TipTiltEnable?: boolean | null;
-    m2TipTiltSource?: string | null;
-    m2FocusEnable?: boolean | null;
-    m2FocusSource?: string | null;
-    m2TipTiltFocusLink?: boolean | null;
-    m2ComaEnable?: boolean | null;
-    m1CorrectionsEnable?: boolean | null;
-    m2ComaM1CorrectionsSource?: string | null;
-    mountOffload?: boolean | null;
-    daytimeMode?: boolean | null;
-    probeTracking?: string | null;
-    lightPath?: string | null;
-  } | null;
+    pk: number;
+    m2TipTiltEnable: boolean;
+    m2TipTiltSource: string;
+    m2FocusEnable: boolean;
+    m2FocusSource: string;
+    m2TipTiltFocusLink: boolean;
+    m2ComaEnable: boolean;
+    m1CorrectionsEnable: boolean;
+    m2ComaM1CorrectionsSource: string;
+    mountOffload: boolean;
+    daytimeMode: boolean;
+    probeTracking: string;
+    lightPath: string;
+  };
 };
 
 export type GetDistinctInstrumentsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetDistinctInstrumentsQuery = {
   __typename?: 'Query';
-  distinctInstruments?: Array<{ __typename?: 'Instrument'; name?: string | null } | null> | null;
+  distinctInstruments: Array<{ __typename?: 'DistinctInstrument'; name: string }>;
 };
 
 export type GetDistinctPortsQueryVariables = Exact<{
@@ -884,7 +892,7 @@ export type GetDistinctPortsQueryVariables = Exact<{
 
 export type GetDistinctPortsQuery = {
   __typename?: 'Query';
-  distinctPorts?: Array<{ __typename?: 'Instrument'; issPort?: number | null } | null> | null;
+  distinctPorts: Array<{ __typename?: 'DistinctPort'; issPort: number }>;
 };
 
 export type GetInstrumentsQueryVariables = Exact<{
@@ -894,19 +902,19 @@ export type GetInstrumentsQueryVariables = Exact<{
 
 export type GetInstrumentsQuery = {
   __typename?: 'Query';
-  instruments?: Array<{
+  instruments: Array<{
     __typename?: 'Instrument';
-    pk?: number | null;
-    name?: string | null;
-    iaa?: number | null;
-    issPort?: number | null;
-    focusOffset?: number | null;
-    wfs?: WfsType | null;
-    originX?: number | null;
-    originY?: number | null;
-    ao?: boolean | null;
-    extraParams?: any | null;
-  } | null> | null;
+    pk: number;
+    name: string;
+    iaa: number;
+    issPort: number;
+    focusOffset: number;
+    wfs: WfsType;
+    originX: number;
+    originY: number;
+    ao: boolean;
+    extraParams: any;
+  }>;
 };
 
 export type GetInstrumentQueryVariables = Exact<{
@@ -919,16 +927,16 @@ export type GetInstrumentQuery = {
   __typename?: 'Query';
   instrument?: {
     __typename?: 'Instrument';
-    pk?: number | null;
-    name?: string | null;
-    iaa?: number | null;
-    issPort?: number | null;
-    focusOffset?: number | null;
-    wfs?: WfsType | null;
-    originX?: number | null;
-    originY?: number | null;
-    ao?: boolean | null;
-    extraParams?: any | null;
+    pk: number;
+    name: string;
+    iaa: number;
+    issPort: number;
+    focusOffset: number;
+    wfs: WfsType;
+    originX: number;
+    originY: number;
+    ao: boolean;
+    extraParams: any;
   } | null;
 };
 
@@ -938,43 +946,43 @@ export type GetMechanismQuery = {
   __typename?: 'Query';
   mechanism?: {
     __typename?: 'Mechanism';
-    pk?: number | null;
-    mcs?: StatusType | null;
-    mcsPark?: StatusType | null;
-    mcsUnwrap?: StatusType | null;
-    scs?: StatusType | null;
-    crcs?: StatusType | null;
-    crcsPark?: StatusType | null;
-    crcsUnwrap?: StatusType | null;
-    pwfs1?: StatusType | null;
-    pwfs1Park?: StatusType | null;
-    pwfs1Unwrap?: StatusType | null;
-    pwfs2?: StatusType | null;
-    pwfs2Park?: StatusType | null;
-    pwfs2Unwrap?: StatusType | null;
-    oiwfs?: StatusType | null;
-    oiwfsPark?: StatusType | null;
-    odgw?: StatusType | null;
-    odgwPark?: StatusType | null;
-    aowfs?: StatusType | null;
-    aowfsPark?: StatusType | null;
-    dome?: StatusType | null;
-    domePark?: StatusType | null;
-    domeMode?: string | null;
-    shutters?: StatusType | null;
-    shuttersPark?: StatusType | null;
-    shutterMode?: string | null;
-    shutterAperture?: number | null;
-    wVGate?: StatusType | null;
-    wVGateClose?: StatusType | null;
-    wVGateValue?: number | null;
-    eVGate?: StatusType | null;
-    eVGateClose?: StatusType | null;
-    eVGateValue?: number | null;
-    agScienceFoldPark?: StatusType | null;
-    agAoFoldPark?: StatusType | null;
-    agAcPickoffPark?: StatusType | null;
-    agParkAll?: StatusType | null;
+    pk: number;
+    mcs: StatusType;
+    mcsPark: StatusType;
+    mcsUnwrap: StatusType;
+    scs: StatusType;
+    crcs: StatusType;
+    crcsPark: StatusType;
+    crcsUnwrap: StatusType;
+    pwfs1: StatusType;
+    pwfs1Park: StatusType;
+    pwfs1Unwrap: StatusType;
+    pwfs2: StatusType;
+    pwfs2Park: StatusType;
+    pwfs2Unwrap: StatusType;
+    oiwfs: StatusType;
+    oiwfsPark: StatusType;
+    odgw: StatusType;
+    odgwPark: StatusType;
+    aowfs: StatusType;
+    aowfsPark: StatusType;
+    dome: StatusType;
+    domePark: StatusType;
+    domeMode: string;
+    shutters: StatusType;
+    shuttersPark: StatusType;
+    shutterMode: string;
+    shutterAperture: number;
+    wVGate: StatusType;
+    wVGateClose: StatusType;
+    wVGateValue: number;
+    eVGate: StatusType;
+    eVGateClose: StatusType;
+    eVGateValue: number;
+    agScienceFoldPark: StatusType;
+    agAoFoldPark: StatusType;
+    agAcPickoffPark: StatusType;
+    agParkAll: StatusType;
   } | null;
 };
 
@@ -1020,58 +1028,53 @@ export type UpdateMechanismMutationVariables = Exact<{
 
 export type UpdateMechanismMutation = {
   __typename?: 'Mutation';
-  updateMechanism?: {
+  updateMechanism: {
     __typename?: 'Mechanism';
-    pk?: number | null;
-    mcs?: StatusType | null;
-    mcsPark?: StatusType | null;
-    mcsUnwrap?: StatusType | null;
-    scs?: StatusType | null;
-    crcs?: StatusType | null;
-    crcsPark?: StatusType | null;
-    crcsUnwrap?: StatusType | null;
-    pwfs1?: StatusType | null;
-    pwfs1Park?: StatusType | null;
-    pwfs1Unwrap?: StatusType | null;
-    pwfs2?: StatusType | null;
-    pwfs2Park?: StatusType | null;
-    pwfs2Unwrap?: StatusType | null;
-    oiwfs?: StatusType | null;
-    oiwfsPark?: StatusType | null;
-    odgw?: StatusType | null;
-    odgwPark?: StatusType | null;
-    aowfs?: StatusType | null;
-    aowfsPark?: StatusType | null;
-    dome?: StatusType | null;
-    domePark?: StatusType | null;
-    domeMode?: string | null;
-    shutters?: StatusType | null;
-    shuttersPark?: StatusType | null;
-    shutterMode?: string | null;
-    shutterAperture?: number | null;
-    wVGate?: StatusType | null;
-    wVGateClose?: StatusType | null;
-    wVGateValue?: number | null;
-    eVGate?: StatusType | null;
-    eVGateClose?: StatusType | null;
-    eVGateValue?: number | null;
-    agScienceFoldPark?: StatusType | null;
-    agAoFoldPark?: StatusType | null;
-    agAcPickoffPark?: StatusType | null;
-    agParkAll?: StatusType | null;
-  } | null;
+    pk: number;
+    mcs: StatusType;
+    mcsPark: StatusType;
+    mcsUnwrap: StatusType;
+    scs: StatusType;
+    crcs: StatusType;
+    crcsPark: StatusType;
+    crcsUnwrap: StatusType;
+    pwfs1: StatusType;
+    pwfs1Park: StatusType;
+    pwfs1Unwrap: StatusType;
+    pwfs2: StatusType;
+    pwfs2Park: StatusType;
+    pwfs2Unwrap: StatusType;
+    oiwfs: StatusType;
+    oiwfsPark: StatusType;
+    odgw: StatusType;
+    odgwPark: StatusType;
+    aowfs: StatusType;
+    aowfsPark: StatusType;
+    dome: StatusType;
+    domePark: StatusType;
+    domeMode: string;
+    shutters: StatusType;
+    shuttersPark: StatusType;
+    shutterMode: string;
+    shutterAperture: number;
+    wVGate: StatusType;
+    wVGateClose: StatusType;
+    wVGateValue: number;
+    eVGate: StatusType;
+    eVGateClose: StatusType;
+    eVGateValue: number;
+    agScienceFoldPark: StatusType;
+    agAoFoldPark: StatusType;
+    agAcPickoffPark: StatusType;
+    agParkAll: StatusType;
+  };
 };
 
 export type GetRotatorQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetRotatorQuery = {
   __typename?: 'Query';
-  rotator?: {
-    __typename?: 'Rotator';
-    pk?: number | null;
-    angle?: number | null;
-    tracking?: TrackingType | null;
-  } | null;
+  rotator?: { __typename?: 'Rotator'; pk: number; angle: number; tracking: TrackingType } | null;
 };
 
 export type UpdateRotatorMutationVariables = Exact<{
@@ -1082,12 +1085,7 @@ export type UpdateRotatorMutationVariables = Exact<{
 
 export type UpdateRotatorMutation = {
   __typename?: 'Mutation';
-  updateRotator?: {
-    __typename?: 'Rotator';
-    pk?: number | null;
-    angle?: number | null;
-    tracking?: TrackingType | null;
-  } | null;
+  updateRotator: { __typename?: 'Rotator'; pk: number; angle: number; tracking: TrackingType };
 };
 
 export type GetSlewFlagsQueryVariables = Exact<{ [key: string]: never }>;
@@ -1096,23 +1094,23 @@ export type GetSlewFlagsQuery = {
   __typename?: 'Query';
   slewFlags?: {
     __typename?: 'SlewFlags';
-    pk?: number | null;
-    zeroChopThrow?: boolean | null;
-    zeroSourceOffset?: boolean | null;
-    zeroSourceDiffTrack?: boolean | null;
-    zeroMountOffset?: boolean | null;
-    zeroMountDiffTrack?: boolean | null;
-    shortcircuitTargetFilter?: boolean | null;
-    shortcircuitMountFilter?: boolean | null;
-    resetPointing?: boolean | null;
-    stopGuide?: boolean | null;
-    zeroGuideOffset?: boolean | null;
-    zeroInstrumentOffset?: boolean | null;
-    autoparkPwfs1?: boolean | null;
-    autoparkPwfs2?: boolean | null;
-    autoparkOiwfs?: boolean | null;
-    autoparkGems?: boolean | null;
-    autoparkAowfs?: boolean | null;
+    pk: number;
+    zeroChopThrow: boolean;
+    zeroSourceOffset: boolean;
+    zeroSourceDiffTrack: boolean;
+    zeroMountOffset: boolean;
+    zeroMountDiffTrack: boolean;
+    shortcircuitTargetFilter: boolean;
+    shortcircuitMountFilter: boolean;
+    resetPointing: boolean;
+    stopGuide: boolean;
+    zeroGuideOffset: boolean;
+    zeroInstrumentOffset: boolean;
+    autoparkPwfs1: boolean;
+    autoparkPwfs2: boolean;
+    autoparkOiwfs: boolean;
+    autoparkGems: boolean;
+    autoparkAowfs: boolean;
   } | null;
 };
 
@@ -1138,26 +1136,26 @@ export type UpdateSlewFlagsMutationVariables = Exact<{
 
 export type UpdateSlewFlagsMutation = {
   __typename?: 'Mutation';
-  updateSlewFlags?: {
+  updateSlewFlags: {
     __typename?: 'SlewFlags';
-    pk?: number | null;
-    zeroChopThrow?: boolean | null;
-    zeroSourceOffset?: boolean | null;
-    zeroSourceDiffTrack?: boolean | null;
-    zeroMountOffset?: boolean | null;
-    zeroMountDiffTrack?: boolean | null;
-    shortcircuitTargetFilter?: boolean | null;
-    shortcircuitMountFilter?: boolean | null;
-    resetPointing?: boolean | null;
-    stopGuide?: boolean | null;
-    zeroGuideOffset?: boolean | null;
-    zeroInstrumentOffset?: boolean | null;
-    autoparkPwfs1?: boolean | null;
-    autoparkPwfs2?: boolean | null;
-    autoparkOiwfs?: boolean | null;
-    autoparkGems?: boolean | null;
-    autoparkAowfs?: boolean | null;
-  } | null;
+    pk: number;
+    zeroChopThrow: boolean;
+    zeroSourceOffset: boolean;
+    zeroSourceDiffTrack: boolean;
+    zeroMountOffset: boolean;
+    zeroMountDiffTrack: boolean;
+    shortcircuitTargetFilter: boolean;
+    shortcircuitMountFilter: boolean;
+    resetPointing: boolean;
+    stopGuide: boolean;
+    zeroGuideOffset: boolean;
+    zeroInstrumentOffset: boolean;
+    autoparkPwfs1: boolean;
+    autoparkPwfs2: boolean;
+    autoparkOiwfs: boolean;
+    autoparkGems: boolean;
+    autoparkAowfs: boolean;
+  };
 };
 
 export type GetTargetsQueryVariables = Exact<{
@@ -1166,19 +1164,19 @@ export type GetTargetsQueryVariables = Exact<{
 
 export type GetTargetsQuery = {
   __typename?: 'Query';
-  targets?: Array<{
+  targets: Array<{
     __typename?: 'Target';
-    pk?: number | null;
+    pk: number;
     id?: string | null;
-    name?: string | null;
-    epoch?: string | null;
-    type?: TargetType | null;
-    createdAt?: string | null;
-    ra?: { __typename?: 'RA'; degrees?: number | null; hms?: string | null } | null;
-    dec?: { __typename?: 'Dec'; degrees?: number | null; dms?: string | null } | null;
-    az?: { __typename?: 'Az'; degrees?: number | null; dms?: string | null } | null;
-    el?: { __typename?: 'El'; degrees?: number | null; dms?: string | null } | null;
-  } | null> | null;
+    name: string;
+    epoch: string;
+    type: TargetType;
+    createdAt: string;
+    ra?: { __typename?: 'RA'; degrees: number; hms: string } | null;
+    dec?: { __typename?: 'Dec'; degrees: number; dms: string } | null;
+    az?: { __typename?: 'Az'; degrees: number; dms: string } | null;
+    el?: { __typename?: 'El'; degrees: number; dms: string } | null;
+  }>;
 };
 
 export type UpdateTargetMutationVariables = Exact<{
@@ -1193,19 +1191,19 @@ export type UpdateTargetMutationVariables = Exact<{
 
 export type UpdateTargetMutation = {
   __typename?: 'Mutation';
-  updateTarget?: {
+  updateTarget: {
     __typename?: 'Target';
-    pk?: number | null;
+    pk: number;
     id?: string | null;
-    name?: string | null;
-    epoch?: string | null;
-    type?: TargetType | null;
-    createdAt?: string | null;
-    ra?: { __typename?: 'RA'; degrees?: number | null; hms?: string | null } | null;
-    dec?: { __typename?: 'Dec'; degrees?: number | null; dms?: string | null } | null;
-    az?: { __typename?: 'Az'; degrees?: number | null; dms?: string | null } | null;
-    el?: { __typename?: 'El'; degrees?: number | null; dms?: string | null } | null;
-  } | null;
+    name: string;
+    epoch: string;
+    type: TargetType;
+    createdAt: string;
+    ra?: { __typename?: 'RA'; degrees: number; hms: string } | null;
+    dec?: { __typename?: 'Dec'; degrees: number; dms: string } | null;
+    az?: { __typename?: 'Az'; degrees: number; dms: string } | null;
+    el?: { __typename?: 'El'; degrees: number; dms: string } | null;
+  };
 };
 
 export type CreateTargetMutationVariables = Exact<{
@@ -1221,62 +1219,62 @@ export type CreateTargetMutationVariables = Exact<{
 
 export type CreateTargetMutation = {
   __typename?: 'Mutation';
-  createTarget?: {
+  createTarget: {
     __typename?: 'Target';
-    pk?: number | null;
+    pk: number;
     id?: string | null;
-    name?: string | null;
-    epoch?: string | null;
-    type?: TargetType | null;
-    createdAt?: string | null;
-    ra?: { __typename?: 'RA'; degrees?: number | null; hms?: string | null } | null;
-    dec?: { __typename?: 'Dec'; degrees?: number | null; dms?: string | null } | null;
-    az?: { __typename?: 'Az'; degrees?: number | null; dms?: string | null } | null;
-    el?: { __typename?: 'El'; degrees?: number | null; dms?: string | null } | null;
-  } | null;
+    name: string;
+    epoch: string;
+    type: TargetType;
+    createdAt: string;
+    ra?: { __typename?: 'RA'; degrees: number; hms: string } | null;
+    dec?: { __typename?: 'Dec'; degrees: number; dms: string } | null;
+    az?: { __typename?: 'Az'; degrees: number; dms: string } | null;
+    el?: { __typename?: 'El'; degrees: number; dms: string } | null;
+  };
 };
 
 export type RemoveAndCreateBaseTargetsMutationVariables = Exact<{
-  targets?: InputMaybe<Array<InputMaybe<TargetInput>> | InputMaybe<TargetInput>>;
+  targets?: InputMaybe<Array<TargetInput> | TargetInput>;
 }>;
 
 export type RemoveAndCreateBaseTargetsMutation = {
   __typename?: 'Mutation';
-  removeAndCreateBaseTargets?: Array<{
+  removeAndCreateBaseTargets: Array<{
     __typename?: 'Target';
-    pk?: number | null;
+    pk: number;
     id?: string | null;
-    name?: string | null;
-    epoch?: string | null;
-    type?: TargetType | null;
-    createdAt?: string | null;
-    ra?: { __typename?: 'RA'; degrees?: number | null; hms?: string | null } | null;
-    dec?: { __typename?: 'Dec'; degrees?: number | null; dms?: string | null } | null;
-    az?: { __typename?: 'Az'; degrees?: number | null; dms?: string | null } | null;
-    el?: { __typename?: 'El'; degrees?: number | null; dms?: string | null } | null;
-  } | null> | null;
+    name: string;
+    epoch: string;
+    type: TargetType;
+    createdAt: string;
+    ra?: { __typename?: 'RA'; degrees: number; hms: string } | null;
+    dec?: { __typename?: 'Dec'; degrees: number; dms: string } | null;
+    az?: { __typename?: 'Az'; degrees: number; dms: string } | null;
+    el?: { __typename?: 'El'; degrees: number; dms: string } | null;
+  }>;
 };
 
 export type RemoveAndCreateWfsTargetsMutationVariables = Exact<{
   wfs?: InputMaybe<TargetType>;
-  targets?: InputMaybe<Array<InputMaybe<TargetInput>> | InputMaybe<TargetInput>>;
+  targets?: InputMaybe<Array<TargetInput> | TargetInput>;
 }>;
 
 export type RemoveAndCreateWfsTargetsMutation = {
   __typename?: 'Mutation';
-  removeAndCreateWfsTargets?: Array<{
+  removeAndCreateWfsTargets: Array<{
     __typename?: 'Target';
-    pk?: number | null;
+    pk: number;
     id?: string | null;
-    name?: string | null;
-    epoch?: string | null;
-    type?: TargetType | null;
-    createdAt?: string | null;
-    ra?: { __typename?: 'RA'; degrees?: number | null; hms?: string | null } | null;
-    dec?: { __typename?: 'Dec'; degrees?: number | null; dms?: string | null } | null;
-    az?: { __typename?: 'Az'; degrees?: number | null; dms?: string | null } | null;
-    el?: { __typename?: 'El'; degrees?: number | null; dms?: string | null } | null;
-  } | null> | null;
+    name: string;
+    epoch: string;
+    type: TargetType;
+    createdAt: string;
+    ra?: { __typename?: 'RA'; degrees: number; hms: string } | null;
+    dec?: { __typename?: 'Dec'; degrees: number; dms: string } | null;
+    az?: { __typename?: 'Az'; degrees: number; dms: string } | null;
+    el?: { __typename?: 'El'; degrees: number; dms: string } | null;
+  }>;
 };
 
 export const GetAllInfoDocument = {
@@ -3840,7 +3838,10 @@ export const RemoveAndCreateBaseTargetsDocument = {
         {
           kind: 'VariableDefinition',
           variable: { kind: 'Variable', name: { kind: 'Name', value: 'targets' } },
-          type: { kind: 'ListType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'TargetInput' } } },
+          type: {
+            kind: 'ListType',
+            type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'TargetInput' } } },
+          },
         },
       ],
       selectionSet: {
@@ -3933,7 +3934,10 @@ export const RemoveAndCreateWfsTargetsDocument = {
         {
           kind: 'VariableDefinition',
           variable: { kind: 'Variable', name: { kind: 'Name', value: 'targets' } },
-          type: { kind: 'ListType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'TargetInput' } } },
+          type: {
+            kind: 'ListType',
+            type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'TargetInput' } } },
+          },
         },
       ],
       selectionSet: {

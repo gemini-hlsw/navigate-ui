@@ -28,7 +28,7 @@ export function useGetGuideState() {
     m2ComaM1CorrectionsSource: data.guideState.m1Input,
     m2FocusEnable: false,
     m2FocusSource: 'OIWFS',
-    m2TipTiltEnable: data.guideState.m2Inputs ? Boolean(data.guideState.m2Inputs.length > 0) : false,
+    m2TipTiltEnable: data.guideState.m2Inputs ? data.guideState.m2Inputs.length > 0 : false,
     m2TipTiltFocusLink: true,
     m2TipTiltSource: data.guideState.m2Inputs ? (data.guideState.m2Inputs as string[]).join(',') : 'NONE',
     probeTracking: 'OI➡OI',

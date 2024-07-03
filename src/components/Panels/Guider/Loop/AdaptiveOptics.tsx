@@ -23,11 +23,11 @@ export function Altair() {
   function modifyAltairGuideLoop(name: string, value: boolean) {
     updateAltairGuideLoop({
       variables: {
-        pk: state.pk!,
+        pk: state.pk,
         [name]: value,
       },
       onCompleted(data) {
-        setState(data.updateAltairGuideLoop!);
+        setState(data.updateAltairGuideLoop);
       },
     });
   }
