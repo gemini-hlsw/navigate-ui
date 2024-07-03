@@ -22,36 +22,36 @@ export function TargetList({
       case 'BLINDOFFSET':
       case 'FIXED':
         updateConfiguration({
-          variables: { pk: configuration.pk!, selectedTarget: targetPk },
+          variables: { pk: configuration.pk, selectedTarget: targetPk },
           onCompleted(data) {
-            setConfiguration(data.updateConfiguration!);
+            setConfiguration(data.updateConfiguration);
           },
         });
         break;
 
       case 'OIWFS':
         updateConfiguration({
-          variables: { pk: configuration.pk!, selectedOiTarget: targetPk },
+          variables: { pk: configuration.pk, selectedOiTarget: targetPk },
           onCompleted(data) {
-            setConfiguration(data.updateConfiguration!);
+            setConfiguration(data.updateConfiguration);
           },
         });
         break;
 
       case 'PWFS1':
         updateConfiguration({
-          variables: { pk: configuration.pk!, selectedP1Target: targetPk },
+          variables: { pk: configuration.pk, selectedP1Target: targetPk },
           onCompleted(data) {
-            setConfiguration(data.updateConfiguration!);
+            setConfiguration(data.updateConfiguration);
           },
         });
         break;
 
       case 'PWFS2':
         updateConfiguration({
-          variables: { pk: configuration.pk!, selectedP2Target: targetPk },
+          variables: { pk: configuration.pk, selectedP2Target: targetPk },
           onCompleted(data) {
-            setConfiguration(data.updateConfiguration!);
+            setConfiguration(data.updateConfiguration);
           },
         });
         break;
@@ -77,7 +77,7 @@ export function TargetList({
   if (displayTargets.length === 0) {
     // Return an empty target as placeholder
     displayTargets.push(
-      <Target key={`obsTarget-0`} target={{} as TargetType} updateSelectedTarget={() => {}} selectedTarget={0} />,
+      <Target key={`obsTarget-0`} target={{} as TargetType} updateSelectedTarget={() => ({})} selectedTarget={0} />,
     );
   }
   return (

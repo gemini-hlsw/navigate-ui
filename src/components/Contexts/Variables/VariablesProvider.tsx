@@ -11,7 +11,6 @@ import {
 } from '@/types';
 import { Modals } from './Modals/Modals';
 import { useGetAllInformation } from '@gql/configs/AllConfiguration';
-import { isNotNullish } from '@/Helpers/functions';
 
 export const VariablesContext = createContext<VariablesContextType>(null!);
 
@@ -78,11 +77,12 @@ export default function VariablesProvider({ children }: { children: ReactNode })
         setConfiguration(configuration!);
         setRotator(rotator!);
         setSlewFlags(slewFlags!);
-        const t: TargetType[] = targets?.filter(isNotNullish) ?? [];
-        setBaseTargets(t.filter((t) => t?.type === 'SCIENCE' || t?.type === 'BLINDOFFSET' || t?.type === 'FIXED'));
-        setOiTargets(t.filter((t) => t?.type === 'OIWFS'));
-        setP1Targets(t.filter((t) => t?.type === 'PWFS1'));
-        setP2Targets(t.filter((t) => t?.type === 'PWFS2'));
+        setBaseTargets(
+          targets.filter((t) => t?.type === 'SCIENCE' || t?.type === 'BLINDOFFSET' || t?.type === 'FIXED'),
+        );
+        setOiTargets(targets.filter((t) => t?.type === 'OIWFS'));
+        setP1Targets(targets.filter((t) => t?.type === 'PWFS1'));
+        setP2Targets(targets.filter((t) => t?.type === 'PWFS2'));
       },
     });
   }, []);

@@ -40,7 +40,7 @@ const SHUTTER_MODE = [
 ];
 
 export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
-  const [state, setState] = useState<MechanismType>({});
+  const [state, setState] = useState<MechanismType>({} as MechanismType);
   const [domeMode, setDomeMode] = useState('MinVibration');
   const [shutterMode, setShutterMode] = useState('Tracking');
   const [aperture, setAperture] = useState(90);
@@ -55,9 +55,9 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         setState(data.mechanism!);
         setEVGate(data.mechanism!.eVGateValue);
         setWVGate(data.mechanism!.wVGateValue);
-        setAperture(data.mechanism!.shutterAperture!);
-        setDomeMode(data.mechanism!.domeMode!);
-        setShutterMode(data.mechanism!.shutterMode!);
+        setAperture(data.mechanism!.shutterAperture);
+        setDomeMode(data.mechanism!.domeMode);
+        setShutterMode(data.mechanism!.shutterMode);
       },
     });
   }, []);
@@ -65,21 +65,21 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
   function modifyMechanism(vars: object) {
     updateMechanism({
       variables: {
-        pk: state.pk!,
+        pk: state.pk,
         ...vars,
       },
       onCompleted(data) {
-        setState(data.updateMechanism!);
+        setState(data.updateMechanism);
       },
     });
   }
 
   return (
     <div className="bottom">
-      <Button disabled={!canEdit} style={{ gridArea: 'g11' }} label="Park" className={BTN_CLASSES[state.oiwfsPark!]} />
-      <Button disabled={!canEdit} style={{ gridArea: 'g21' }} label="Park" className={BTN_CLASSES[state.odgwPark!]} />
-      <Button disabled={!canEdit} style={{ gridArea: 'g31' }} label="Park" className={BTN_CLASSES[state.aowfsPark!]} />
-      <Button disabled={!canEdit} style={{ gridArea: 'g41' }} label="Park" className={BTN_CLASSES[state.domePark!]} />
+      <Button disabled={!canEdit} style={{ gridArea: 'g11' }} label="Park" className={BTN_CLASSES[state.oiwfsPark]} />
+      <Button disabled={!canEdit} style={{ gridArea: 'g21' }} label="Park" className={BTN_CLASSES[state.odgwPark]} />
+      <Button disabled={!canEdit} style={{ gridArea: 'g31' }} label="Park" className={BTN_CLASSES[state.aowfsPark]} />
+      <Button disabled={!canEdit} style={{ gridArea: 'g41' }} label="Park" className={BTN_CLASSES[state.domePark]} />
       <span
         style={{
           textAlign: 'center',
@@ -107,7 +107,7 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         disabled={!canEdit}
         style={{ gridArea: 'g51' }}
         label="Park"
-        className={BTN_CLASSES[state.shuttersPark!]}
+        className={BTN_CLASSES[state.shuttersPark]}
       />
       <span
         style={{
@@ -157,7 +157,7 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         disabled={!canEdit}
         style={{ gridArea: 'g61' }}
         label="Close"
-        className={BTN_CLASSES[state.wVGateClose!]}
+        className={BTN_CLASSES[state.wVGateClose]}
       />
       <InputNumber
         disabled={!canEdit}
@@ -182,7 +182,7 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         disabled={!canEdit}
         style={{ gridArea: 'g71' }}
         label="Close"
-        className={BTN_CLASSES[state.eVGateClose!]}
+        className={BTN_CLASSES[state.eVGateClose]}
       />
       <InputNumber
         disabled={!canEdit}

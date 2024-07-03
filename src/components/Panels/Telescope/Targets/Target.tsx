@@ -41,7 +41,7 @@ export function Target({
       switch (e.detail) {
         case 1:
           clickRef.current = setTimeout(() => {
-            updateSelectedTarget(target.pk!);
+            updateSelectedTarget(target.pk);
           }, 300);
           break;
         case 2:
