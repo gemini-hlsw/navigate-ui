@@ -275,6 +275,7 @@ export type Allocation = {
   __typename?: 'Allocation';
   duration: TimeSpan;
   partner: Partner;
+  scienceBand: ScienceBand;
 };
 
 export type Angle = {
@@ -680,17 +681,21 @@ export type CallForProposalsPartnerInput = {
 /** The properties of a Call for Proposal in an input for creation and editing. */
 export type CallForProposalsPropertiesInput = {
   /**
-   * Active period end date (exclusive) for this call.  Required on create.  The
-   * active period for this call will end on the morning of the provided `Date`
-   * value.  Must be after the `activeStart` date.  Not nullable.  Limited to dates
-   * between 1900 and 2100 (exclusive).
+   * Active period end date (exclusive) for this call.  The date is considered to
+   * be the local date at each observation site.  Observations may end the
+   * morning of the indicated date at the site of the observation.
+   *
+   * The end date is required on create and must be after the `activeStart` date.
+   * Not nullable.  Limited to dates between 1900 and 2100 (exclusive).
    */
   activeEnd?: InputMaybe<Scalars['Date']['input']>;
   /**
-   * Active period start date (inclusive) for this call.  Required on create.  The
-   * active period for this call will start on the night of the provided `Date`
-   * value. Must be before the `activeEnd` date.  Not nullable.  Limited to dates
-   * between 1900 and 2100 (exclusive).
+   * Active period start date (inclusive) for this call.  The date is considered to
+   * be the local date at each observation site.  Observations may begin the
+   * evening of the indicated date at the site of the observation.
+   *
+   * The start date is required on create and must be before the `activeEnd` date.
+   * Not nullable.  Limited to dates between 1900 and 2100 (exclusive).
    */
   activeStart?: InputMaybe<Scalars['Date']['input']>;
   /**
@@ -1356,12 +1361,15 @@ export type DatasetStage =
   | 'START_READOUT'
   | 'START_WRITE';
 
-/** Date interval marked by a start 'Date' (inclusive) and an end 'Date' (exclusive). */
+/**
+ * Date interval marked by a start 'Date' (inclusive) and an end 'Date' (exclusive).
+ * Dates are interpreted as local dates.
+ */
 export type DateInterval = {
   __typename?: 'DateInterval';
-  /** End date of the interval (exclusive). */
+  /** End date, local to the observation site, of the interval (exclusive). */
   end: Scalars['Date']['output'];
-  /** Start date of the interval (inclusive). */
+  /** Start date, local to the observation site, of the interval (inclusive). */
   start: Scalars['Date']['output'];
 };
 
@@ -3820,6 +3828,8 @@ export type Observation = {
   __typename?: 'Observation';
   /** Observation operational status */
   activeStatus: ObsActiveStatus;
+  /** The Calibration role of this observation */
+  calibrationRole?: Maybe<CalibrationRole>;
   /** The constraint set for the observation */
   constraintSet: ConstraintSet;
   /** Execution sequence and runtime artifacts */
@@ -3843,6 +3853,8 @@ export type Observation = {
   itc: Itc;
   /** attachments */
   obsAttachments: Array<ObsAttachment>;
+  /** Notes for the observer */
+  observerNotes?: Maybe<Scalars['NonEmptyString']['output']>;
   /** The science configuration */
   observingMode?: Maybe<ObservingMode>;
   /** Position angle constraint, if any. */
@@ -3854,6 +3866,11 @@ export type Observation = {
    * program itself).
    */
   reference?: Maybe<ObservationReference>;
+  /**
+   * Observations are associated with a science band once time has been allocated
+   * to a program.
+   */
+  scienceBand?: Maybe<ScienceBand>;
   /** The top level science requirements */
   scienceRequirements: ScienceRequirements;
   /** Observation status */
@@ -3902,10 +3919,17 @@ export type ObservationPropertiesInput = {
   groupIndex?: InputMaybe<Scalars['NonNegShort']['input']>;
   /** The obsAttachments defaults to empty if not specified on creation, and may be edited by specifying a new whole array */
   obsAttachments?: InputMaybe<Array<Scalars['ObsAttachmentId']['input']>>;
+  /** Set the notes for  thhe observer */
+  observerNotes?: InputMaybe<Scalars['NonEmptyString']['input']>;
   /** The observingMode describes the chosen observing mode and instrument, is optional and may be deleted */
   observingMode?: InputMaybe<ObservingModeInput>;
   /** Position angle constraint, if any. Set to null to remove all position angle constraints */
   posAngleConstraint?: InputMaybe<PosAngleConstraintInput>;
+  /**
+   * The science band to assign to this observation.  Set to `null` to remove the
+   * science band.
+   */
+  scienceBand?: InputMaybe<ScienceBand>;
   /** The scienceRequirements defaults to spectroscopy if not specified on creation, and may be edited but not deleted */
   scienceRequirements?: InputMaybe<ScienceRequirementsInput>;
   /** The observation status will default to New if not specified when an observation is created and may be edited but not deleted */
@@ -4939,6 +4963,9 @@ export type Science = StepConfig & {
   stepType: StepType;
 };
 
+/** Science observation priorities. */
+export type ScienceBand = 'BAND1' | 'BAND2' | 'BAND3' | 'BAND4';
+
 /** Mode Spectroscopy/Imaging */
 export type ScienceMode =
   /** ScienceMode Imaging */
@@ -5076,6 +5103,7 @@ export type SetAllocationInput = {
   duration: TimeSpanInput;
   partner: Partner;
   programId: Scalars['ProgramId']['input'];
+  scienceBand: ScienceBand;
 };
 
 export type SetAllocationResult = {
@@ -7061,6 +7089,8 @@ export type WhereObservation = {
   program?: InputMaybe<WhereProgram>;
   /** Matches the observation reference, if any. */
   reference?: InputMaybe<WhereObservationReference>;
+  /** Matches the observation science band. */
+  scienceBand?: InputMaybe<WhereOptionOrderScienceBand>;
   /** Matches the observation status. */
   status?: InputMaybe<WhereOrderObsStatus>;
   /** Matches the subtitle of the observation. */
@@ -7134,6 +7164,34 @@ export type WhereOptionEqTacCategory = {
   NEQ?: InputMaybe<TacCategory>;
   /** Matches if the property value is none of the supplied values. */
   NIN?: InputMaybe<Array<TacCategory>>;
+};
+
+/**
+ * Filters on equality or order comparisons of science bands.  All supplied
+ * criteria must match, but usually only one is selected.
+ */
+export type WhereOptionOrderScienceBand = {
+  /** Matches if the science band is exactly the supplied value. */
+  EQ?: InputMaybe<ScienceBand>;
+  /** Matches if the science band is ordered after (>) the supplied value. */
+  GT?: InputMaybe<ScienceBand>;
+  /** Matches if the science band is ordered after or equal (>=) the supplied value. */
+  GTE?: InputMaybe<ScienceBand>;
+  /** Matches if the science band is any of the supplied options. */
+  IN?: InputMaybe<Array<ScienceBand>>;
+  /**
+   * When `true`, matches if the science band is not defined. When `false` matches
+   * if the science band is defined.
+   */
+  IS_NULL?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Matches if the science band is ordered before (<) the supplied value. */
+  LT?: InputMaybe<ScienceBand>;
+  /** Matches if the science band is ordered before or equal (<=) the supplied value. */
+  LTE?: InputMaybe<ScienceBand>;
+  /** Matches if the science band is not the supplied value. */
+  NEQ?: InputMaybe<ScienceBand>;
+  /** Matches if the science band is none of the supplied values. */
+  NIN?: InputMaybe<Array<ScienceBand>>;
 };
 
 /** String matching options. */
