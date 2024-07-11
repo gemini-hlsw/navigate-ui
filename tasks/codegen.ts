@@ -1,12 +1,5 @@
 import type { CodegenConfig } from '@graphql-codegen/cli';
 
-const odbToken = process.env.ODB_TOKEN;
-
-if (!odbToken) {
-  console.error('ODB_TOKEN is not defined');
-  process.exit(1);
-}
-
 // Simple mapping of scalar types to their TypeScript representation
 // Some of these might be wrong or incomplete, feel free to adjust as needed
 const scalars = {
@@ -64,13 +57,7 @@ const sharedConfig = {
 const config: CodegenConfig = {
   generates: {
     './src/gql/odb/gen/': {
-      schema: {
-        'https://lucuma-postgres-odb-dev.herokuapp.com/odb': {
-          headers: {
-            Authorization: `Bearer ${odbToken}`,
-          },
-        },
-      },
+      schema: require.resolve('lucuma-schemas/odb'),
       config: sharedConfig,
       documents: './src/gql/odb/*.{ts,tsx}',
       preset: 'client',

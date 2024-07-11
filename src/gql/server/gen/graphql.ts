@@ -119,6 +119,12 @@ export type GuideConfigurationState = {
 
 export type GuideProbe = 'GMOS_OIWFS' | 'PWFS_1' | 'PWFS_2';
 
+export type GuideQuality = {
+  __typename?: 'GuideQuality';
+  centroidDetected: Scalars['Boolean']['output'];
+  flux: Scalars['Int']['output'];
+};
+
 export type GuideTargetPropertiesInput = {
   name: Scalars['NonEmptyString']['input'];
   nonsidereal?: InputMaybe<NonsiderealInput>;
@@ -128,6 +134,13 @@ export type GuideTargetPropertiesInput = {
 export type GuiderConfig = {
   target: GuideTargetPropertiesInput;
   tracking: ProbeTrackingInput;
+};
+
+export type GuidersQualityValues = {
+  __typename?: 'GuidersQualityValues';
+  oiwfs: GuideQuality;
+  pwfs1: GuideQuality;
+  pwfs2: GuideQuality;
 };
 
 export type Instrument =
@@ -413,6 +426,7 @@ export type SlewOptionsInput = {
 export type Subscription = {
   __typename?: 'Subscription';
   guideState: GuideConfigurationState;
+  guidersQualityValues: GuidersQualityValues;
   logMessage: LogMessage;
 };
 
