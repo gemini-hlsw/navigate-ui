@@ -18,6 +18,7 @@ import Home from './components/Layout/Home/Home';
 import Login from './components/Login/Login';
 import VariablesProvider from '@Contexts/Variables/VariablesProvider';
 import Token from './components/Token/Token';
+import { Modals } from './components/Contexts/Variables/Modals/Modals';
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 
@@ -32,6 +33,7 @@ root.render(
     <AuthProvider>
       <ApolloProvider client={client}>
         <VariablesProvider>
+          <Modals />
           <RouterProvider router={router} />
         </VariablesProvider>
       </ApolloProvider>

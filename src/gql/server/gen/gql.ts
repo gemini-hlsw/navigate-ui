@@ -20,6 +20,8 @@ const documents = {
     types.RunSlewDocument,
   '\n  mutation setOiwfsTarget(\n    $id: TargetId!\n    $name: NonEmptyString!\n    $ra: HmsString\n    $dec: DmsString\n    $epoch: EpochString\n    $wavelength: PosBigDecimal\n  ) {\n    oiwfsTarget(\n      target: {\n        id: $id\n        name: $name\n        sidereal: { ra: { hms: $ra }, dec: { dms: $dec }, epoch: $epoch }\n        wavelength: { nanometers: $wavelength }\n      }\n    ) {\n      result\n    }\n  }\n':
     types.SetOiwfsTargetDocument,
+  '\n  subscription guidersQualityValues {\n    guidersQualityValues {\n      pwfs1 {\n        flux\n        centroidDetected\n      }\n      pwfs2 {\n        flux\n        centroidDetected\n      }\n      oiwfs {\n        flux\n        centroidDetected\n      }\n    }\n  }\n':
+    types.GuidersQualityValuesDocument,
   '\n  subscription guideState {\n    guideState {\n      m2Inputs\n      m2Coma\n      m1Input\n      mountOffload\n    }\n  }\n':
     types.GuideStateDocument,
   '\n  mutation guideEnable($config: GuideConfigurationInput!) {\n    guideEnable(config: $config) {\n      result\n      msg\n    }\n  }\n':
@@ -71,6 +73,12 @@ export function graphql(
 export function graphql(
   source: '\n  mutation setOiwfsTarget(\n    $id: TargetId!\n    $name: NonEmptyString!\n    $ra: HmsString\n    $dec: DmsString\n    $epoch: EpochString\n    $wavelength: PosBigDecimal\n  ) {\n    oiwfsTarget(\n      target: {\n        id: $id\n        name: $name\n        sidereal: { ra: { hms: $ra }, dec: { dms: $dec }, epoch: $epoch }\n        wavelength: { nanometers: $wavelength }\n      }\n    ) {\n      result\n    }\n  }\n',
 ): (typeof documents)['\n  mutation setOiwfsTarget(\n    $id: TargetId!\n    $name: NonEmptyString!\n    $ra: HmsString\n    $dec: DmsString\n    $epoch: EpochString\n    $wavelength: PosBigDecimal\n  ) {\n    oiwfsTarget(\n      target: {\n        id: $id\n        name: $name\n        sidereal: { ra: { hms: $ra }, dec: { dms: $dec }, epoch: $epoch }\n        wavelength: { nanometers: $wavelength }\n      }\n    ) {\n      result\n    }\n  }\n'];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  subscription guidersQualityValues {\n    guidersQualityValues {\n      pwfs1 {\n        flux\n        centroidDetected\n      }\n      pwfs2 {\n        flux\n        centroidDetected\n      }\n      oiwfs {\n        flux\n        centroidDetected\n      }\n    }\n  }\n',
+): (typeof documents)['\n  subscription guidersQualityValues {\n    guidersQualityValues {\n      pwfs1 {\n        flux\n        centroidDetected\n      }\n      pwfs2 {\n        flux\n        centroidDetected\n      }\n      oiwfs {\n        flux\n        centroidDetected\n      }\n    }\n  }\n'];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

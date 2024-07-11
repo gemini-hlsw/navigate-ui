@@ -24,6 +24,7 @@ const wsLink = new WebSocketLink(
 );
 
 export const client = new ApolloClient({
+  name: 'navigate-ui',
   link: ApolloLink.split(
     (operation) => operation.getContext().clientName === 'odb',
     odbLink,

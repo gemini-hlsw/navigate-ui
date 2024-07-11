@@ -18,10 +18,10 @@ function fixCssRoot() {
 fixCssRoot.postcss = true;
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  // define: {
-  //   "process.env": process.env,
-  // },
+export default defineConfig(({ mode }) => ({
+  define: {
+    'globalThis.__DEV__': JSON.stringify(mode !== 'production'),
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -77,4 +77,4 @@ export default defineConfig({
     environment: 'happy-dom',
   },
   base: '/',
-});
+}));

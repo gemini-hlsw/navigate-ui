@@ -1,7 +1,7 @@
 import { useLazyQuery } from '@apollo/client';
 import { graphql } from './gen';
 
-const GET_All = graphql(`
+export const GET_ALL_INFO_QUERY = graphql(`
   query getAllInfo {
     configuration {
       pk
@@ -70,7 +70,7 @@ const GET_All = graphql(`
 `);
 
 export function useGetAllInformation() {
-  const [queryFunction] = useLazyQuery(GET_All, {
+  const [queryFunction] = useLazyQuery(GET_ALL_INFO_QUERY, {
     context: { clientName: 'navigateConfigs' },
   });
 

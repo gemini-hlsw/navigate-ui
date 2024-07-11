@@ -522,6 +522,18 @@ export type SetOiwfsTargetMutation = {
   oiwfsTarget: { __typename?: 'OperationOutcome'; result: OperationResult };
 };
 
+export type GuidersQualityValuesSubscriptionVariables = Exact<{ [key: string]: never }>;
+
+export type GuidersQualityValuesSubscription = {
+  __typename?: 'Subscription';
+  guidersQualityValues: {
+    __typename?: 'GuidersQualityValues';
+    pwfs1: { __typename?: 'GuideQuality'; flux: number; centroidDetected: boolean };
+    pwfs2: { __typename?: 'GuideQuality'; flux: number; centroidDetected: boolean };
+    oiwfs: { __typename?: 'GuideQuality'; flux: number; centroidDetected: boolean };
+  };
+};
+
 export type GuideStateSubscriptionVariables = Exact<{ [key: string]: never }>;
 
 export type GuideStateSubscription = {
@@ -819,6 +831,63 @@ export const SetOiwfsTargetDocument = {
     },
   ],
 } as unknown as DocumentNode<SetOiwfsTargetMutation, SetOiwfsTargetMutationVariables>;
+export const GuidersQualityValuesDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'subscription',
+      name: { kind: 'Name', value: 'guidersQualityValues' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'guidersQualityValues' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'pwfs1' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'flux' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'centroidDetected' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'pwfs2' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'flux' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'centroidDetected' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'oiwfs' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'flux' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'centroidDetected' } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GuidersQualityValuesSubscription, GuidersQualityValuesSubscriptionVariables>;
 export const GuideStateDocument = {
   kind: 'Document',
   definitions: [
