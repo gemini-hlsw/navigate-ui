@@ -9,7 +9,6 @@ import {
   InstrumentType,
   RotatorType,
 } from '@/types';
-import { Modals } from './Modals/Modals';
 import { useGetAllInformation } from '@gql/configs/AllConfiguration';
 
 export const VariablesContext = createContext<VariablesContextType>(null!);
@@ -119,10 +118,5 @@ export default function VariablesProvider({ children }: { children: ReactNode })
     odbToken,
   };
 
-  return (
-    <VariablesContext.Provider value={value}>
-      <Modals />
-      {children}
-    </VariablesContext.Provider>
-  );
+  return <VariablesContext.Provider value={value}>{children}</VariablesContext.Provider>;
 }

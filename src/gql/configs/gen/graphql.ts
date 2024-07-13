@@ -112,6 +112,19 @@ export type GemsInstrument = {
   pk: Scalars['Int']['output'];
 };
 
+export type GuideAlarm = {
+  __typename?: 'GuideAlarm';
+  enabled: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+};
+
+export type GuideAlarms = {
+  __typename?: 'GuideAlarms';
+  OIWFS: GuideAlarm;
+  PWFS1: GuideAlarm;
+  PWFS2: GuideAlarm;
+};
+
 export type GuideLoop = {
   __typename?: 'GuideLoop';
   daytimeMode: Scalars['Boolean']['output'];
@@ -199,6 +212,7 @@ export type Mutation = {
   updateConfiguration: Configuration;
   updateGemsGuideLoop: GemsGuideLoop;
   updateGemsInstrument: GemsInstrument;
+  updateGuideAlarm: GuideAlarm;
   updateGuideLoop: GuideLoop;
   updateMechanism: Mechanism;
   updateRotator: Rotator;
@@ -316,6 +330,12 @@ export type MutationUpdateGemsInstrumentArgs = {
   pk: Scalars['Int']['input'];
 };
 
+export type MutationUpdateGuideAlarmArgs = {
+  enabled?: InputMaybe<Scalars['Boolean']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  wfs: WfsType;
+};
+
 export type MutationUpdateGuideLoopArgs = {
   daytimeMode?: InputMaybe<Scalars['Boolean']['input']>;
   lightPath?: InputMaybe<Scalars['String']['input']>;
@@ -417,6 +437,7 @@ export type Query = {
   distinctPorts: Array<DistinctPort>;
   gemsGuideLoop?: Maybe<GemsGuideLoop>;
   gemsInstrument?: Maybe<GemsInstrument>;
+  guideAlarms: GuideAlarms;
   guideLoop?: Maybe<GuideLoop>;
   instrument?: Maybe<Instrument>;
   instruments: Array<Instrument>;
@@ -819,6 +840,29 @@ export type UpdateGemsInstrumentMutation = {
     adc: boolean;
     astrometricMode: string;
   };
+};
+
+export type GuideAlarmsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GuideAlarmsQuery = {
+  __typename?: 'Query';
+  guideAlarms: {
+    __typename?: 'GuideAlarms';
+    OIWFS: { __typename?: 'GuideAlarm'; limit: number; enabled: boolean };
+    PWFS1: { __typename?: 'GuideAlarm'; limit: number; enabled: boolean };
+    PWFS2: { __typename?: 'GuideAlarm'; limit: number; enabled: boolean };
+  };
+};
+
+export type UpdateGuideAlarmMutationVariables = Exact<{
+  wfs: WfsType;
+  enabled?: InputMaybe<Scalars['Boolean']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type UpdateGuideAlarmMutation = {
+  __typename?: 'Mutation';
+  updateGuideAlarm: { __typename?: 'GuideAlarm'; enabled: boolean; limit: number };
 };
 
 export type GetGuideLoopQueryVariables = Exact<{ [key: string]: never }>;
@@ -2199,6 +2243,123 @@ export const UpdateGemsInstrumentDocument = {
     },
   ],
 } as unknown as DocumentNode<UpdateGemsInstrumentMutation, UpdateGemsInstrumentMutationVariables>;
+export const GuideAlarmsDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'guideAlarms' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'guideAlarms' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'OIWFS' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'limit' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'enabled' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'PWFS1' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'limit' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'enabled' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'PWFS2' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'limit' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'enabled' } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GuideAlarmsQuery, GuideAlarmsQueryVariables>;
+export const UpdateGuideAlarmDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'updateGuideAlarm' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'wfs' } },
+          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'WfsType' } } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'enabled' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Boolean' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'limit' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'updateGuideAlarm' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'wfs' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'wfs' } },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'enabled' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'enabled' } },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'limit' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'limit' } },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'enabled' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'limit' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<UpdateGuideAlarmMutation, UpdateGuideAlarmMutationVariables>;
 export const GetGuideLoopDocument = {
   kind: 'Document',
   definitions: [

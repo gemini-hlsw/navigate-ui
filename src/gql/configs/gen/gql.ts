@@ -35,6 +35,10 @@ const documents = {
     types.GetGemsInstrumentDocument,
   '\n  mutation updateGemsInstrument($pk: Int!, $beamsplitter: String, $adc: Boolean, $astrometricMode: String) {\n    updateGemsInstrument(pk: $pk, beamsplitter: $beamsplitter, adc: $adc, astrometricMode: $astrometricMode) {\n      pk\n      beamsplitter\n      adc\n      astrometricMode\n    }\n  }\n':
     types.UpdateGemsInstrumentDocument,
+  '\n  query guideAlarms {\n    guideAlarms {\n      OIWFS {\n        limit\n        enabled\n      }\n      PWFS1 {\n        limit\n        enabled\n      }\n      PWFS2 {\n        limit\n        enabled\n      }\n    }\n  }\n':
+    types.GuideAlarmsDocument,
+  '\n  mutation updateGuideAlarm($wfs: WfsType!, $enabled: Boolean, $limit: Int) {\n    updateGuideAlarm(wfs: $wfs, enabled: $enabled, limit: $limit) {\n      enabled\n      limit\n    }\n  }\n':
+    types.UpdateGuideAlarmDocument,
   '\n  query getGuideLoop {\n    guideLoop {\n      pk\n      m2TipTiltEnable\n      m2TipTiltSource\n      m2FocusEnable\n      m2FocusSource\n      m2TipTiltFocusLink\n      m2ComaEnable\n      m1CorrectionsEnable\n      m2ComaM1CorrectionsSource\n      mountOffload\n      daytimeMode\n      probeTracking\n      lightPath\n    }\n  }\n':
     types.GetGuideLoopDocument,
   '\n  mutation updateGuideLoop(\n    $pk: Int!\n    $m2TipTiltEnable: Boolean\n    $m2TipTiltSource: String\n    $m2FocusEnable: Boolean\n    $m2FocusSource: String\n    $m2TipTiltFocusLink: Boolean\n    $m2ComaEnable: Boolean\n    $m1CorrectionsEnable: Boolean\n    $m2ComaM1CorrectionsSource: String\n    $mountOffload: Boolean\n    $daytimeMode: Boolean\n    $probeTracking: String\n    $lightPath: String\n  ) {\n    updateGuideLoop(\n      pk: $pk\n      m2TipTiltEnable: $m2TipTiltEnable\n      m2TipTiltSource: $m2TipTiltSource\n      m2FocusEnable: $m2FocusEnable\n      m2FocusSource: $m2FocusSource\n      m2TipTiltFocusLink: $m2TipTiltFocusLink\n      m2ComaEnable: $m2ComaEnable\n      m1CorrectionsEnable: $m1CorrectionsEnable\n      m2ComaM1CorrectionsSource: $m2ComaM1CorrectionsSource\n      mountOffload: $mountOffload\n      daytimeMode: $daytimeMode\n      probeTracking: $probeTracking\n      lightPath: $lightPath\n    ) {\n      pk\n      m2TipTiltEnable\n      m2TipTiltSource\n      m2FocusEnable\n      m2FocusSource\n      m2TipTiltFocusLink\n      m2ComaEnable\n      m1CorrectionsEnable\n      m2ComaM1CorrectionsSource\n      mountOffload\n      daytimeMode\n      probeTracking\n      lightPath\n    }\n  }\n':
@@ -151,6 +155,18 @@ export function graphql(
 export function graphql(
   source: '\n  mutation updateGemsInstrument($pk: Int!, $beamsplitter: String, $adc: Boolean, $astrometricMode: String) {\n    updateGemsInstrument(pk: $pk, beamsplitter: $beamsplitter, adc: $adc, astrometricMode: $astrometricMode) {\n      pk\n      beamsplitter\n      adc\n      astrometricMode\n    }\n  }\n',
 ): (typeof documents)['\n  mutation updateGemsInstrument($pk: Int!, $beamsplitter: String, $adc: Boolean, $astrometricMode: String) {\n    updateGemsInstrument(pk: $pk, beamsplitter: $beamsplitter, adc: $adc, astrometricMode: $astrometricMode) {\n      pk\n      beamsplitter\n      adc\n      astrometricMode\n    }\n  }\n'];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query guideAlarms {\n    guideAlarms {\n      OIWFS {\n        limit\n        enabled\n      }\n      PWFS1 {\n        limit\n        enabled\n      }\n      PWFS2 {\n        limit\n        enabled\n      }\n    }\n  }\n',
+): (typeof documents)['\n  query guideAlarms {\n    guideAlarms {\n      OIWFS {\n        limit\n        enabled\n      }\n      PWFS1 {\n        limit\n        enabled\n      }\n      PWFS2 {\n        limit\n        enabled\n      }\n    }\n  }\n'];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation updateGuideAlarm($wfs: WfsType!, $enabled: Boolean, $limit: Int) {\n    updateGuideAlarm(wfs: $wfs, enabled: $enabled, limit: $limit) {\n      enabled\n      limit\n    }\n  }\n',
+): (typeof documents)['\n  mutation updateGuideAlarm($wfs: WfsType!, $enabled: Boolean, $limit: Int) {\n    updateGuideAlarm(wfs: $wfs, enabled: $enabled, limit: $limit) {\n      enabled\n      limit\n    }\n  }\n'];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -9,7 +9,7 @@ export function TargetList({
   type,
   selectedTarget,
 }: {
-  targets: TargetType[] | undefined;
+  targets: TargetType[];
   type?: TypeOfTarget;
   selectedTarget?: number | null;
 }) {
@@ -61,18 +61,15 @@ export function TargetList({
     }
   }
 
-  const displayTargets: JSX.Element[] = [];
-  targets?.map((target: TargetType, index: number) => {
-    displayTargets.push(
-      <Target
-        key={`obsTarget-${index}`}
-        target={target}
-        updateSelectedTarget={updateSelectedTarget}
-        selectedTarget={selectedTarget}
-        targetIndex={index}
-      />,
-    );
-  });
+  const displayTargets = targets.map((target: TargetType, index: number) => (
+    <Target
+      key={`obsTarget-${target.pk}-${target.id}`}
+      target={target}
+      updateSelectedTarget={updateSelectedTarget}
+      selectedTarget={selectedTarget}
+      targetIndex={index}
+    />
+  ));
 
   if (displayTargets.length === 0) {
     // Return an empty target as placeholder

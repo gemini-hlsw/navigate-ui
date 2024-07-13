@@ -1,34 +1,73 @@
-import { Checkbox } from 'primereact/checkbox';
+import { GuideAlarm, UpdateGuideAlarmMutationVariables, WfsType } from '@gql/configs/gen/graphql';
+import { GuideQuality } from '@gql/server/gen/graphql';
 import { Title } from '@Shared/Title/Title';
-import { InputNumber } from 'primereact/inputnumber';
+import { clsx } from 'clsx';
+import { Checkbox, CheckboxChangeParams } from 'primereact/checkbox';
+import { InputNumber, InputNumberValueChangeParams } from 'primereact/inputnumber';
+import { useId } from 'react';
 
 export function Alarm({
   wfs,
-  counts,
-  limit,
-  subaperture,
-  enabled,
   disabled,
+  guideQuality,
+  alarm,
+  onUpdateAlarm,
 }: {
-  wfs: string;
-  counts: number;
-  limit: number;
-  subaperture: string;
-  enabled: boolean;
+  wfs: WfsType;
   disabled: boolean;
+  guideQuality: GuideQuality | undefined;
+  alarm: GuideAlarm | undefined;
+  onUpdateAlarm: (alarm: UpdateGuideAlarmMutationVariables) => void;
 }) {
+  const id = useId();
+
+  const limit = alarm?.limit;
+  const enabled = alarm?.enabled ?? true;
+
+  function onLimitChange(e: InputNumberValueChangeParams) {
+    onUpdateAlarm({ wfs, limit: e.value });
+  }
+
+  function onEnabledChange(e: CheckboxChangeParams): void {
+    onUpdateAlarm({ wfs, enabled: e.checked });
+  }
+
+  const disabledOrNoData = disabled || !guideQuality || !alarm;
+  const hasAlarm = enabled && ((guideQuality?.flux ?? 0) < (limit ?? 0) || !guideQuality?.centroidDetected);
+
   return (
-    <div className="alarm">
-      <Title title={wfs} />
+    <div className={clsx('alarm', hasAlarm && 'has-alarm')}>
+      <div className="title-bar">
+        <Title title={wfs} />
+        <div className="alarm-indicator animate-ping" />
+      </div>
       <div className="body">
-        <span className="label">Counts</span>
-        <span style={{ alignSelf: 'center' }}>{counts}</span>
-        <span className="label">Limit</span>
-        <InputNumber disabled={disabled} value={limit} onValueChange={(e) => console.log(e.value ? e.value : 0)} />
-        <span className="label">Subaperture</span>
-        <span style={{ alignSelf: 'center' }}>{subaperture}</span>
-        <span className="label">Enabled</span>
-        <Checkbox disabled={disabled} checked={enabled} />
+        <label htmlFor={`flux-${id}`} className="label">
+          Counts
+        </label>
+        <output id={`flux-${id}`} style={{ alignSelf: 'center' }}>
+          {guideQuality?.flux ?? ''}
+        </output>
+        <label htmlFor={`limit-${id}`} className="label">
+          Limit
+        </label>
+        <InputNumber
+          inputId={`limit-${id}`}
+          min={0}
+          disabled={disabledOrNoData}
+          value={limit}
+          onValueChange={onLimitChange}
+        />
+        <label htmlFor={`centroid-${id}`} className="label">
+          Subaperture
+        </label>
+        <output id={`centroid-${id}`} style={{ alignSelf: 'center' }}>
+          {guideQuality?.centroidDetected ? 'OK' : 'NOK'}
+        </output>
+        <label htmlFor={`enabled-${id}`} className="label">
+          Enabled
+        </label>
+        <Checkbox inputId={`enabled-${id}`} disabled={disabledOrNoData} checked={enabled} onChange={onEnabledChange} />
       </div>
     </div>
   );
