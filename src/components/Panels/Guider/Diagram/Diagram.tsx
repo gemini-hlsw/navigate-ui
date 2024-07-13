@@ -1,16 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
-import ReactFlow, {
-  Node, // Node Type
-  Edge, // Edge Type
-  NodeChange, // NodeChange Type
-  EdgeChange, // EdgeChange Type
-  ReactFlowProvider,
-  useReactFlow,
-  Controls,
-  Background,
-  applyEdgeChanges,
-  applyNodeChanges,
-} from 'reactflow';
+import { useEffect } from 'react';
+import ReactFlow, { Background, Controls, Edge, Node, ReactFlowProvider, useReactFlow } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { useGetGuideState } from './useGetGuideState';
 
@@ -62,25 +51,16 @@ const initialEdges: Edge[] = [
 ];
 
 function Flow() {
-  // const [state, setState] = useState<GuideLoopType>({} as GuideLoopType)
-  const [nodes, setNodes] = useState<Node[]>(initialNodes);
-  const [edges, setEdges] = useState<Edge[]>(initialEdges);
-  // eslint-disable-next-line no-empty-pattern
-  const {} = useReactFlow();
+  const { setNodes, setEdges } = useReactFlow();
   const state = useGetGuideState();
 
-  const onNodesChange = useCallback((changes: NodeChange[]) => setNodes((nds) => applyNodeChanges(changes, nds)), []);
-
-  const onEdgesChange = useCallback((changes: EdgeChange[]) => setEdges((eds) => applyEdgeChanges(changes, eds)), []);
-
   useEffect(() => {
-    const auxState = { ...state };
     // fitView()
     // Get active sources first
     const sourceNodes: Node[] = [];
     const sourceEdges: Edge[] = [];
-    if (auxState.m2TipTiltEnable && auxState.m2TipTiltSource) {
-      auxState.m2TipTiltSource.split(',').map((source: string) => {
+    if (state.m2TipTiltEnable && state.m2TipTiltSource) {
+      state.m2TipTiltSource.split(',').map((source: string) => {
         sourceNodes.push({
           id: source,
           data: { label: source },
@@ -98,7 +78,7 @@ function Flow() {
       });
     }
 
-    if (auxState.m2TipTiltFocusLink) {
+    if (state.m2TipTiltFocusLink) {
       sourceNodes.map((n) => {
         sourceEdges.push({
           id: `${n.id}-focus`,
@@ -109,8 +89,8 @@ function Flow() {
         });
       });
     } else {
-      if (auxState.m2FocusEnable && auxState.m2FocusSource) {
-        auxState.m2FocusSource.split(',').map((s) => {
+      if (state.m2FocusEnable && state.m2FocusSource) {
+        state.m2FocusSource.split(',').map((s) => {
           if (sourceNodes.filter((n) => n.id === s).length === 0) {
             sourceNodes.push({
               id: s,
@@ -131,12 +111,12 @@ function Flow() {
       }
     }
 
-    if (auxState.m2ComaEnable) {
-      const pos = sourceNodes.map((n) => n.id).indexOf(auxState.m2ComaM1CorrectionsSource!);
+    if (state.m2ComaEnable) {
+      const pos = sourceNodes.map((n) => n.id).indexOf(state.m2ComaM1CorrectionsSource!);
       if (pos === -1) {
         sourceNodes.push({
-          id: auxState.m2ComaM1CorrectionsSource ?? '',
-          data: { label: auxState.m2ComaM1CorrectionsSource },
+          id: state.m2ComaM1CorrectionsSource ?? '',
+          data: { label: state.m2ComaM1CorrectionsSource },
           position: { x: 0, y: 0 },
           className: 'active',
           type: 'input',
@@ -147,20 +127,20 @@ function Flow() {
         }
       }
       sourceEdges.push({
-        id: `${auxState.m2ComaM1CorrectionsSource}-coma`,
-        source: auxState.m2ComaM1CorrectionsSource ?? '',
+        id: `${state.m2ComaM1CorrectionsSource}-coma`,
+        source: state.m2ComaM1CorrectionsSource ?? '',
         target: 'coma',
         animated: true,
         className: 'active',
       });
     }
 
-    if (auxState.m1CorrectionsEnable) {
-      const pos = sourceNodes.map((n) => n.id).indexOf(auxState.m2ComaM1CorrectionsSource!);
+    if (state.m1CorrectionsEnable) {
+      const pos = sourceNodes.map((n) => n.id).indexOf(state.m2ComaM1CorrectionsSource!);
       if (pos === -1) {
         sourceNodes.push({
-          id: auxState.m2ComaM1CorrectionsSource ?? '',
-          data: { label: auxState.m2ComaM1CorrectionsSource },
+          id: state.m2ComaM1CorrectionsSource ?? '',
+          data: { label: state.m2ComaM1CorrectionsSource },
           position: { x: 0, y: 0 },
           className: 'active',
           type: 'input',
@@ -171,8 +151,8 @@ function Flow() {
         }
       }
       sourceEdges.push({
-        id: `${auxState.m2ComaM1CorrectionsSource}-higho`,
-        source: auxState.m2ComaM1CorrectionsSource ?? '',
+        id: `${state.m2ComaM1CorrectionsSource}-higho`,
+        source: state.m2ComaM1CorrectionsSource ?? '',
         target: 'higho',
         animated: true,
         className: 'active',
@@ -186,7 +166,7 @@ function Flow() {
 
     // Tip/Tilt
     let tiptiltState;
-    if (auxState.m2TipTiltEnable) {
+    if (state.m2TipTiltEnable) {
       if (sourceEdges.filter((n) => n.target === 'tiptilt').length > 0) {
         tiptiltState = 'active';
       } else {
@@ -199,7 +179,7 @@ function Flow() {
 
     // Mount
     let mountState = 'active';
-    if (auxState.mountOffload) {
+    if (state.mountOffload) {
       if (tiptiltState === 'active') {
         mountState = 'active';
       } else {
@@ -213,7 +193,7 @@ function Flow() {
 
     // Focus
     let focusState;
-    if (auxState.m2FocusEnable) {
+    if (state.m2FocusEnable) {
       if (sourceEdges.filter((n) => n.target === 'focus').length > 0) {
         focusState = 'active';
       } else {
@@ -226,7 +206,7 @@ function Flow() {
 
     // Coma
     let comaState;
-    if (auxState.m2ComaEnable) {
+    if (state.m2ComaEnable) {
       if (sourceEdges.filter((n) => n.target === 'coma').length > 0) {
         comaState = 'active';
       } else {
@@ -239,7 +219,7 @@ function Flow() {
 
     // High-O
     let highoState;
-    if (auxState.m1CorrectionsEnable) {
+    if (state.m1CorrectionsEnable) {
       if (sourceEdges.filter((n) => n.target === 'higho').length > 0) {
         highoState = 'active';
       } else {
@@ -264,14 +244,7 @@ function Flow() {
 
   return (
     <div className="diagram">
-      <ReactFlow
-        nodes={nodes}
-        onNodesChange={onNodesChange}
-        edges={edges}
-        onEdgesChange={onEdgesChange}
-        proOptions={{ hideAttribution: true }}
-        fitView
-      >
+      <ReactFlow defaultNodes={initialNodes} defaultEdges={initialEdges} proOptions={{ hideAttribution: true }} fitView>
         <Background />
         <Controls showZoom={false} showInteractive={false} position="bottom-right" />
       </ReactFlow>
