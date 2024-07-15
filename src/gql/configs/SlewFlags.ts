@@ -94,9 +94,7 @@ const UPDATE_SLEW_FLAGS = graphql(`
 `);
 
 export function useUpdateSlewFlags() {
-  const [mutationFunction] = useMutation(UPDATE_SLEW_FLAGS, {
+  return useMutation(UPDATE_SLEW_FLAGS, {
     context: { clientName: 'navigateConfigs' },
   });
-
-  return mutationFunction;
 }

@@ -1,13 +1,14 @@
 import { Checkbox } from 'primereact/checkbox';
 import { Title } from '@Shared/Title/Title';
-import { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '@Contexts/Auth/AuthProvider';
+import { useEffect, useState } from 'react';
 import { useGetAltairGuideLoop, useUpdateAltairGuideLoop } from '@gql/configs/AltairGuideLoop';
 import { AltairGuideLoopType, GemsGuideLoopType } from '@/types';
 import { useGetGemsGuideLoop, useUpdateGemsGuideLoop } from '@gql/configs/GemsGuideLoop';
+import { UpdateAltairGuideLoopMutationVariables, UpdateGemsGuideLoopMutationVariables } from '@gql/configs/gen/graphql';
+import { useCanEdit } from '@/components/atoms/auth';
 
 export function Altair() {
-  const { canEdit } = useContext(AuthContext);
+  const canEdit = useCanEdit();
   const [state, setState] = useState<AltairGuideLoopType>({} as AltairGuideLoopType);
   const getAltairGuideLoop = useGetAltairGuideLoop();
   const updateAltairGuideLoop = useUpdateAltairGuideLoop();
@@ -20,7 +21,10 @@ export function Altair() {
     });
   }, []);
 
-  function modifyAltairGuideLoop(name: string, value: boolean) {
+  function modifyAltairGuideLoop<T extends keyof UpdateAltairGuideLoopMutationVariables>(
+    name: T,
+    value: NonNullable<UpdateAltairGuideLoopMutationVariables[T]>,
+  ) {
     updateAltairGuideLoop({
       variables: {
         pk: state.pk,
@@ -86,7 +90,7 @@ export function Altair() {
 }
 
 export function GeMS() {
-  const { canEdit } = useContext(AuthContext);
+  const canEdit = useCanEdit();
   const [state, setState] = useState<GemsGuideLoopType>({} as GemsGuideLoopType);
   const getGemsGuideLoop = useGetGemsGuideLoop();
   const updateGemsGuideLoop = useUpdateGemsGuideLoop();
@@ -99,7 +103,10 @@ export function GeMS() {
     });
   }, []);
 
-  function modifyGemsGuideLoop(name: string, value: boolean) {
+  function modifyGemsGuideLoop<T extends keyof UpdateGemsGuideLoopMutationVariables>(
+    name: T,
+    value: NonNullable<UpdateGemsGuideLoopMutationVariables[T]>,
+  ) {
     updateGemsGuideLoop({
       variables: {
         pk: state.pk,

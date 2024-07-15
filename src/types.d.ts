@@ -60,35 +60,3 @@ export interface TargetEditType {
   target: TargetType;
   targetIndex: number | undefined;
 }
-
-export interface VariablesContextType {
-  theme: ThemeType;
-  toggleTheme(): void;
-  odbVisible: boolean;
-  setOdbVisible(_: boolean): void;
-  slewVisible: boolean;
-  setSlewVisible(_: boolean): void;
-  targetEdit: TargetEditType;
-  setTargetEdit(_: TargetEditType): void;
-  importInstrument: boolean;
-  setImportInstrument(_: boolean): void;
-  configuration: ConfigurationType;
-  setConfiguration(_: ConfigurationType): void;
-  loadingGuideTarget: boolean;
-  setLoadingGuideTarget(_: boolean): void;
-  slewFlags: SlewFlagsType;
-  setSlewFlags(_: SlewFlagsType): void;
-  baseTargets: TargetType[];
-  setBaseTargets(_: TargetType[]): void;
-  oiTargets: TargetType[];
-  setOiTargets(_: TargetType[]): void;
-  p1Targets: TargetType[];
-  setP1Targets(_: TargetType[]): void;
-  p2Targets: TargetType[];
-  setP2Targets(_: TargetType[]): void;
-  instrument: InstrumentType;
-  setInstrument(_: InstrumentType): void;
-  rotator: RotatorType;
-  setRotator(_: RotatorType): void;
-  odbToken: string;
-}

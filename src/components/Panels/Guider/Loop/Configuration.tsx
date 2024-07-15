@@ -1,5 +1,3 @@
-import { useContext } from 'react';
-import { AuthContext } from '@Contexts/Auth/AuthProvider';
 import { Dropdown } from 'primereact/dropdown';
 import { MultiSelect } from 'primereact/multiselect';
 import { Checkbox } from 'primereact/checkbox';
@@ -7,14 +5,15 @@ import { BrokenChain, ConnectedChain } from './Chain';
 import { Button } from 'primereact/button';
 import { UpdateGuideLoopVariables, useGetGuideLoop, useUpdateGuideLoop } from '@gql/configs/GuideLoop';
 import { Altair, GeMS } from './AdaptiveOptics';
-import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
 import { useGuideDisable, useGuideEnable } from '@gql/server/GuideState';
 import { GuideConfigurationInput } from '@gql/server/gen/graphql';
 import { GuideLoop } from '@gql/configs/gen/graphql';
+import { useConfigurationValue } from '@/components/atoms/configs';
+import { useCanEdit } from '@/components/atoms/auth';
 
 export function Configuration() {
-  const { canEdit } = useContext(AuthContext);
-  const { configuration } = useContext(VariablesContext);
+  const canEdit = useCanEdit();
+  const configuration = useConfigurationValue();
   const { data, updateQuery, loading: getLoading } = useGetGuideLoop();
 
   const state =

@@ -1,15 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
 import { useGetGuideTargets } from '@gql/odb/Observation';
 import { TargetInput } from '@/types';
-import { useContext, useRef } from 'react';
+import { useRef } from 'react';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
 import { useRemoveAndCreateWfsTargets } from '@gql/configs/Target';
+import { useSetLoadingGuideTarget } from '@/components/atoms/guideTarget';
+import { useConfigurationValue, useSetOiTargets, useSetP1Targets, useSetP2Targets } from '@/components/atoms/configs';
 
 export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
-  const { setOiTargets, setP1Targets, setP2Targets, setLoadingGuideTarget, configuration } =
-    useContext(VariablesContext);
+  const setOiTargets = useSetOiTargets();
+  const setP1Targets = useSetP1Targets();
+  const setP2Targets = useSetP2Targets();
+  const configuration = useConfigurationValue();
+  const setLoadingGuideTarget = useSetLoadingGuideTarget();
   const getGuideTargets = useGetGuideTargets();
   const removeAndCreateWfsTargets = useRemoveAndCreateWfsTargets();
   const toast = useRef<Toast>(null);

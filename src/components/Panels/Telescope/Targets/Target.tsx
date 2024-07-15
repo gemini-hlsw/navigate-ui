@@ -1,8 +1,8 @@
-import { useContext, useRef } from 'react';
+import { useRef } from 'react';
 import { TargetType } from '@/types';
-import { AuthContext } from '@Contexts/Auth/AuthProvider';
-import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
 import { useLongPress } from '@/Helpers/longPress';
+import { useSetTargetEdit } from '@/components/atoms/target';
+import { useCanEdit } from '@/components/atoms/auth';
 
 export function Target({
   target,
@@ -15,8 +15,8 @@ export function Target({
   selectedTarget?: number | null;
   targetIndex?: number | undefined;
 }) {
-  const { canEdit } = useContext(AuthContext);
-  const { setTargetEdit } = useContext(VariablesContext);
+  const canEdit = useCanEdit();
+  const setTargetEdit = useSetTargetEdit();
   const clickRef = useRef<ReturnType<typeof setTimeout>>();
 
   function onLongPress() {

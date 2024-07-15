@@ -1,13 +1,12 @@
 import { Button } from 'primereact/button';
 import { Slew } from '@gql/server/Buttons';
-import { AuthContext } from '@Contexts/Auth/AuthProvider';
-import { useContext } from 'react';
 import { TitleDropdown } from '@Shared/Title/Title';
-import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
+import { useSetSlewVisible } from '@/components/atoms/slew';
+import { useCanEdit } from '@/components/atoms/auth';
 
 export function Footer() {
-  const { canEdit } = useContext(AuthContext);
-  const { setSlewVisible } = useContext(VariablesContext);
+  const canEdit = useCanEdit();
+  const setSlewVisible = useSetSlewVisible();
   return (
     <div className="footer">
       <TitleDropdown icon="cog">

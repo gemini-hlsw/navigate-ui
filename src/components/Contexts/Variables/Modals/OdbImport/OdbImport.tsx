@@ -1,19 +1,29 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
 import { ObservationTable } from './ObservationTable';
 import { useGetObservations } from '@gql/odb/Observation';
-import { AuthContext } from '@Contexts/Auth/AuthProvider';
-import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
 import { ConfigurationType, OdbObservationType } from '@/types';
 import { useRemoveAndCreateBaseTargets } from '@gql/configs/Target';
 import { useUpdateConfiguration } from '@gql/configs/Configuration';
+import { useOdbVisible } from '@/components/atoms/odb';
+import {
+  useConfiguration,
+  useSetBaseTargets,
+  useSetOiTargets,
+  useSetP1Targets,
+  useSetP2Targets,
+} from '@/components/atoms/configs';
+import { useCanEdit } from '@/components/atoms/auth';
 
 export function OdbImport() {
-  const { canEdit } = useContext(AuthContext);
-  const { configuration, setConfiguration } = useContext(VariablesContext);
-  const { odbVisible, setOdbVisible, setBaseTargets, setOiTargets, setP1Targets, setP2Targets } =
-    useContext(VariablesContext);
+  const canEdit = useCanEdit();
+  const [configuration, setConfiguration] = useConfiguration();
+  const setBaseTargets = useSetBaseTargets();
+  const setOiTargets = useSetOiTargets();
+  const setP1Targets = useSetP1Targets();
+  const setP2Targets = useSetP2Targets();
+  const [odbVisible, setOdbVisible] = useOdbVisible();
   const [selectedObservation, setSelectedObservation] = useState<OdbObservationType>({} as OdbObservationType);
   const { getObservations, loading, data } = useGetObservations();
   const removeAndCreateBaseTargets = useRemoveAndCreateBaseTargets();

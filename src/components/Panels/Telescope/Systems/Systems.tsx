@@ -1,16 +1,16 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { Rotator } from './Rotator';
 import { Altair, GeMS } from './AdaptiveOptics';
-import { AuthContext } from '@Contexts/Auth/AuthProvider';
 import { Indicators } from './Indicators';
 import { AgMechanism } from './AgMechanism';
 import { BotSubsystems, TopSubsystems } from './Subsystems';
 import { Instrument } from './Instrument';
-import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
+import { useConfigurationValue } from '@/components/atoms/configs';
+import { useCanEdit } from '@/components/atoms/auth';
 
 export function Systems() {
-  const { canEdit } = useContext(AuthContext);
-  const { configuration } = useContext(VariablesContext);
+  const canEdit = useCanEdit();
+  const configuration = useConfigurationValue();
   const [collapsed, setCollapsed] = useState<boolean>(false);
 
   function toggle() {

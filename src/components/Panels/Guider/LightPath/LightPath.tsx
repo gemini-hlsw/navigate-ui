@@ -1,13 +1,12 @@
 import { Button } from 'primereact/button';
 import { Title } from '@Shared/Title/Title';
-import { useContext } from 'react';
-import { AuthContext } from '@Contexts/Auth/AuthProvider';
 import { Dropdown } from 'primereact/dropdown';
 import { UpdateGuideLoopVariables, useGetGuideLoop, useUpdateGuideLoop } from '@gql/configs/GuideLoop';
 import { GuideLoop } from '@gql/configs/gen/graphql';
+import { useCanEdit } from '@/components/atoms/auth';
 
 export function LightPath() {
-  const { canEdit } = useContext(AuthContext);
+  const canEdit = useCanEdit();
 
   const { data, updateQuery, loading } = useGetGuideLoop();
   const [updateGuideLoop, { loading: updateLoading }] = useUpdateGuideLoop();

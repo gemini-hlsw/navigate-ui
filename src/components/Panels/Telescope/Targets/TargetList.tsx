@@ -1,8 +1,7 @@
 import { Target } from './Target';
 import { TargetType, TypeOfTarget } from '@/types';
-import { useContext } from 'react';
-import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
 import { useUpdateConfiguration } from '@gql/configs/Configuration';
+import { useConfiguration } from '@/components/atoms/configs';
 
 export function TargetList({
   targets,
@@ -13,7 +12,7 @@ export function TargetList({
   type?: TypeOfTarget;
   selectedTarget?: number | null;
 }) {
-  const { configuration, setConfiguration } = useContext(VariablesContext);
+  const [configuration, setConfiguration] = useConfiguration();
   const updateConfiguration = useUpdateConfiguration();
 
   function updateSelectedTarget(targetPk: number) {

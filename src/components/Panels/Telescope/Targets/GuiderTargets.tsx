@@ -3,11 +3,16 @@ import { ProgressBar } from 'primereact/progressbar';
 import { Title } from '@Shared/Title/Title';
 import { TargetList } from './TargetList';
 import { Button } from 'primereact/button';
-import { useContext } from 'react';
-import { AuthContext } from '@Contexts/Auth/AuthProvider';
-import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
 import { UpdateGuideTargets } from './UpdateGuideTargets';
-// import { UpdateGuideTargets } from "./UpdateGuideTargets"
+import {
+  useP2TargetsValue,
+  useP1TargetsValue,
+  useOiTargetsValue,
+  useConfigurationValue,
+} from '@/components/atoms/configs';
+
+import { useLoadingGuideTargetValue } from '@/components/atoms/guideTarget';
+import { useCanEdit } from '@/components/atoms/auth';
 
 function GuiderFooter({ disabled }: { disabled: boolean }) {
   return (
@@ -22,8 +27,12 @@ function GuiderFooter({ disabled }: { disabled: boolean }) {
 }
 
 export function GuiderTargets() {
-  const { canEdit } = useContext(AuthContext);
-  const { loadingGuideTarget, configuration, p1Targets, p2Targets, oiTargets } = useContext(VariablesContext);
+  const canEdit = useCanEdit();
+  const oiTargets = useOiTargetsValue();
+  const p1Targets = useP1TargetsValue();
+  const p2Targets = useP2TargetsValue();
+  const configuration = useConfigurationValue();
+  const loadingGuideTarget = useLoadingGuideTargetValue();
 
   const displayProbes: JSX.Element[] = [];
   if (oiTargets.length > 0) {
