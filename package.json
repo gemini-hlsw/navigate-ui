@@ -25,7 +25,7 @@
     "jotai": "^2.9.0",
     "lucuma-ui-css": "^0.56.2-2-af44dc4-SNAPSHOT",
     "primeicons": "^6.0.1",
-    "primereact": "^8.7.1",
+    "primereact": "^10.7.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.24.1",
