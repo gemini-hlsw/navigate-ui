@@ -6,6 +6,10 @@ import { Checkbox } from 'primereact/checkbox';
 import { AltairInstrumentType, GemsInstrumentType } from '@/types';
 import { useGetGemsInstrument, useUpdateGemsInstrument } from '@gql/configs/GemsInstrument';
 import { useGetAltairInstrument, useUpdateAltairInstrument } from '@gql/configs/AltairInstrument';
+import {
+  UpdateAltairInstrumentMutationVariables,
+  UpdateGemsInstrumentMutationVariables,
+} from '@gql/configs/gen/graphql';
 
 export function GeMS({ canEdit }: { canEdit: boolean }) {
   const [state, setState] = useState<GemsInstrumentType>({} as GemsInstrumentType);
@@ -20,7 +24,10 @@ export function GeMS({ canEdit }: { canEdit: boolean }) {
     });
   }, []);
 
-  function modifyGemsInstrument(name: string, value: boolean | string | number) {
+  function modifyGemsInstrument<T extends keyof UpdateGemsInstrumentMutationVariables>(
+    name: T,
+    value: NonNullable<UpdateGemsInstrumentMutationVariables[T]>,
+  ) {
     updateGemsInstrument({
       variables: {
         pk: state.pk,
@@ -72,7 +79,10 @@ export function Altair({ canEdit }: { canEdit: boolean }) {
     });
   }, []);
 
-  function modifyAltairInstrument(name: string, value: boolean | string | number) {
+  function modifyAltairInstrument<T extends keyof UpdateAltairInstrumentMutationVariables>(
+    name: T,
+    value: NonNullable<UpdateAltairInstrumentMutationVariables[T]>,
+  ) {
     updateAltairInstrument({
       variables: {
         pk: state.pk,

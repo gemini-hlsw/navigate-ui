@@ -1,13 +1,12 @@
-import { AuthContext } from '@Contexts/Auth/AuthProvider';
 import { UpdateGuideAlarmMutationVariables } from '@gql/configs/gen/graphql';
 import { useGuideAlarms, useUpdateGuideAlarm } from '@gql/configs/GuideAlarm';
 import { useGuideQualities } from '@gql/server/GuideQuality';
 import { Title } from '@Shared/Title/Title';
-import { useContext } from 'react';
 import { Alarm } from './Alarm';
+import { useCanEdit } from '@/components/atoms/auth';
 
 export function Alarms() {
-  const { canEdit } = useContext(AuthContext);
+  const canEdit = useCanEdit();
 
   const { data, loading: subscriptionLoading } = useGuideQualities();
   const guideQualities = data?.guidersQualityValues;

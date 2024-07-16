@@ -1,11 +1,11 @@
-import { useContext, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../Contexts/Auth/AuthProvider';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
 import './Login.scss';
+import { useSignIn } from '../atoms/auth';
 
 interface LocationInterface {
   from: {
@@ -16,17 +16,17 @@ interface LocationInterface {
 export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
-  const auth = useContext(AuthContext);
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const signin = useSignIn();
   const toast = useRef<Toast>(null);
 
   const from = (location.state as LocationInterface)?.from?.pathname ?? '/';
 
   function handleSubmit() {
     setLoading(true);
-    auth.signin(username, password).then((isLogged) => {
+    signin(username, password).then((isLogged) => {
       if (isLogged) {
         // Send them back to the page they tried to visit when they were
         // redirected to the login page. Use { replace: true } so we don't create

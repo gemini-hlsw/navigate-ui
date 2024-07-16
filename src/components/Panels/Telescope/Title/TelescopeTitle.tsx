@@ -1,10 +1,9 @@
-import { useContext } from 'react';
 import { Title } from '@Shared/Title/Title';
 import { TitleDropdown } from '@Shared/Title/Title';
 import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
-import { AuthContext } from '@Contexts/Auth/AuthProvider';
-import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
+import { useSetOdbVisible } from '@/components/atoms/odb';
+import { useCanEdit } from '@/components/atoms/auth';
 
 interface ParamsInterface {
   prevPanel: () => void;
@@ -12,8 +11,8 @@ interface ParamsInterface {
 }
 
 export function TelescopeTitle({ prevPanel, nextPanel }: ParamsInterface) {
-  const { canEdit } = useContext(AuthContext);
-  const { setOdbVisible } = useContext(VariablesContext);
+  const canEdit = useCanEdit();
+  const setOdbVisible = useSetOdbVisible();
 
   return (
     <Title title="TELESCOPE SETUP" prevPanel={prevPanel} nextPanel={nextPanel}>

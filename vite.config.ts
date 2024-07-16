@@ -71,7 +71,15 @@ export default defineConfig(({ mode }) => ({
       plugins: [fixCssRoot()],
     },
   },
-  plugins: [react()],
+  plugins: [
+    react({
+      plugins: [
+        // https://jotai.org/docs/tools/swc
+        ['@swc-jotai/react-refresh', {}],
+        ['@swc-jotai/debug-label', {}],
+      ],
+    }),
+  ],
   test: {
     globals: true,
     environment: 'happy-dom',

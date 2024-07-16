@@ -17,6 +17,9 @@ importers:
       graphql:
         specifier: ^16.6.0
         version: 16.9.0
+      jotai:
+        specifier: ^2.9.0
+        version: 2.9.0(@types/react@18.3.3)(react@18.2.0)
       lucuma-ui-css:
         specifier: ^0.56.2-2-af44dc4-SNAPSHOT
         version: 0.56.2
@@ -57,6 +60,12 @@ importers:
       '@parcel/watcher':
         specifier: ^2.4.1
         version: 2.4.1
+      '@swc-jotai/debug-label':
+        specifier: ^0.1.1
+        version: 0.1.1
+      '@swc-jotai/react-refresh':
+        specifier: ^0.1.1
+        version: 0.1.1
       '@testing-library/react':
         specifier: ^16.0.0
         version: 16.0.0(@testing-library/dom@10.2.0)(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -1078,6 +1087,12 @@ packages:
 
   '@sinclair/typebox@0.27.8':
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
+
+  '@swc-jotai/debug-label@0.1.1':
+    resolution: {integrity: sha512-QXn/fNksCLObDqc/g5v0KALpG/paFiWeeVmXG3Dzan2HPFzhGHU1JEq9ryzeLm5mDDJ2lcK9o68nLWA/5vVS7Q==}
+
+  '@swc-jotai/react-refresh@0.1.1':
+    resolution: {integrity: sha512-Zke+Wd8tJIpGkzXhoWA9yLVcfV57hSef2EE5K/Cp1n3A1yl9E+Umpz/b1OyIuwXAALeiHah+MQM4JtXEN0tMsg==}
 
   '@swc/core-darwin-arm64@1.6.13':
     resolution: {integrity: sha512-SOF4buAis72K22BGJ3N8y88mLNfxLNprTuJUpzikyMGrvkuBFNcxYtMhmomO0XHsgLDzOJ+hWzcgjRNzjMsUcQ==}
@@ -2519,6 +2534,18 @@ packages:
 
   jose@5.6.2:
     resolution: {integrity: sha512-F1t1/WZJ4JdmCE/XoMYw1dPOW5g8JF0xGm6Ox2fwaCAPlCzt+4Bh0EWP59iQuZNHHauDkCdjx+kCZSh5z/PGow==}
+
+  jotai@2.9.0:
+    resolution: {integrity: sha512-MioTpMvR78IGfJ+W8EwQj3kwTkb+u0reGnTyg3oJZMWK9rK9v8NBSC9Rhrg9jrrFYA6bGZtzJa96zsuAYF6W3w==}
+    engines: {node: '>=12.20.0'}
+    peerDependencies:
+      '@types/react': '>=17.0.0'
+      react: '>=17.0.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      react:
+        optional: true
 
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
@@ -4907,6 +4934,10 @@ snapshots:
 
   '@sinclair/typebox@0.27.8': {}
 
+  '@swc-jotai/debug-label@0.1.1': {}
+
+  '@swc-jotai/react-refresh@0.1.1': {}
+
   '@swc/core-darwin-arm64@1.6.13':
     optional: true
 
@@ -6639,6 +6670,11 @@ snapshots:
   jiti@1.21.6: {}
 
   jose@5.6.2: {}
+
+  jotai@2.9.0(@types/react@18.3.3)(react@18.2.0):
+    optionalDependencies:
+      '@types/react': 18.3.3
+      react: 18.2.0
 
   js-tokens@4.0.0: {}
 

@@ -3,13 +3,16 @@ import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
-import { useContext, useEffect } from 'react';
-import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
+import { useEffect } from 'react';
 import { InstrumentType } from '@/types';
 import { useGetInstrument } from '@gql/configs/Instrument';
+import { useInstrument, useSetImportInstrument } from '@/components/atoms/instrument';
+import { useConfigurationValue } from '@/components/atoms/configs';
 
 export function Instrument({ canEdit }: { canEdit: boolean }) {
-  const { instrument, setInstrument, setImportInstrument, configuration } = useContext(VariablesContext);
+  const configuration = useConfigurationValue();
+  const [instrument, setInstrument] = useInstrument();
+  const setImportInstrument = useSetImportInstrument();
   const getInstrument = useGetInstrument();
 
   useEffect(() => {

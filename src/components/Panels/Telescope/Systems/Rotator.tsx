@@ -1,12 +1,11 @@
 import { Title } from '@Shared/Title/Title';
 import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
-import { useContext } from 'react';
-import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
 import { useUpdateRotator } from '@gql/configs/Rotator';
+import { useRotator } from '@/components/atoms/configs';
 
 export function Rotator({ canEdit }: { canEdit: boolean }) {
-  const { rotator, setRotator } = useContext(VariablesContext);
+  const [rotator, setRotator] = useRotator();
   const updateRotator = useUpdateRotator();
 
   return (

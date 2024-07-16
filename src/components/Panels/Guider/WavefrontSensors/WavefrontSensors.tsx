@@ -1,12 +1,11 @@
 import { TabView, TabPanel } from 'primereact/tabview';
 import { Title } from '@Shared/Title/Title';
 import { PWFS1 } from './PWFS1';
-import { useContext } from 'react';
-import { AuthContext } from '@Contexts/Auth/AuthProvider';
 import { ACHR } from './ACHR';
+import { useCanEdit } from '@/components/atoms/auth';
 
 export function WavefrontSensors() {
-  const { canEdit } = useContext(AuthContext);
+  const canEdit = useCanEdit();
   return (
     <div className="wavefront-sensors">
       <Title title="Wavefront Sensors" />

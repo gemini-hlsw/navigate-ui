@@ -1,13 +1,13 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { InputText } from 'primereact/inputtext';
 import './Login.scss';
-import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
 import { Button } from 'primereact/button';
 import { useNavigate } from 'react-router-dom';
+import { useOdbToken } from '../atoms/odb';
 
 export default function Token() {
   const navigate = useNavigate();
-  const { odbToken } = useContext(VariablesContext);
+  const [odbToken, setOdbToken] = useOdbToken();
   const [auxOdbToken, setAuxOdbToken] = useState(odbToken);
 
   return (
@@ -20,12 +20,7 @@ export default function Token() {
           <span className="p-inputgroup-addon">
             <i className="pi pi-key"></i>
           </span>
-          <InputText
-            placeholder="ODB Token"
-            defaultValue={odbToken}
-            value={auxOdbToken}
-            onChange={(e) => setAuxOdbToken(e.target.value)}
-          />
+          <InputText placeholder="ODB Token" value={auxOdbToken} onChange={(e) => setAuxOdbToken(e.target.value)} />
         </div>
         <Button
           label="Done"
@@ -33,7 +28,7 @@ export default function Token() {
           iconPos="right"
           className=" p-button-success"
           onClick={() => {
-            localStorage.setItem('odbToken', auxOdbToken);
+            setOdbToken(auxOdbToken);
             navigate('/');
           }}
         />

@@ -1,13 +1,12 @@
-import { useContext } from 'react';
-import { AuthContext } from '@Contexts/Auth/AuthProvider';
 import { Title } from '@Shared/Title/Title';
 import WavefrontSensor from './WavefrontSensor/WavefrontSensor';
 // import AcquisitionCamera from "./AcquisitionCamera/AcquisitionCamera"
 import Logs from './Logs/Logs';
 import './WavefrontSensors.scss';
+import { useCanEdit } from '@/components/atoms/auth';
 
 export function WavefrontSensors({ prevPanel, nextPanel }: { prevPanel: () => void; nextPanel: () => void }) {
-  const { canEdit } = useContext(AuthContext);
+  const canEdit = useCanEdit();
 
   return (
     <div className="wavefront-sensors">

@@ -1,9 +1,13 @@
+export interface User {
+  displayName: string;
+}
+
 export const Authentication = {
   getUser() {
     const user = localStorage.getItem('user');
     if (user) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return JSON.parse(user);
+      return JSON.parse(user) as User;
     } else {
       return null;
     }
@@ -22,7 +26,7 @@ export const Authentication = {
     }
   },
 
-  async signin(username: string, password: string) {
+  async signin(username: string, password: string): Promise<[User, null] | [null, string]> {
     try {
       const res = await fetch(`/api/navigate/login`, {
         method: 'POST',
@@ -34,10 +38,9 @@ export const Authentication = {
       });
 
       if (res.status === 200) {
-        const data = await res.json();
+        const data: User = await res.json();
         localStorage.setItem('user', JSON.stringify(data));
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        return [data, undefined];
+        return [data, null];
       } else {
         return [null, res.statusText];
       }

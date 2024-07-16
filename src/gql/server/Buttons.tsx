@@ -1,14 +1,21 @@
 import { useMutation, OperationVariables } from '@apollo/client';
 import { VariablesOf, TypedDocumentNode } from '@graphql-typed-document-node/core';
 
-import { useContext, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Button } from 'primereact/button';
 import { ButtonStateType } from '@/types';
-import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
 import { Toast } from 'primereact/toast';
 import { BTN_CLASSES } from '@/Helpers/constants';
 import { graphql } from './gen';
-import { Instrument, SlewOptionsInput } from './gen/graphql';
+import { Instrument } from './gen/graphql';
+import {
+  useBaseTargetsValue,
+  useConfigurationValue,
+  useOiTargetsValue,
+  useRotatorValue,
+} from '@/components/atoms/configs';
+import { useInstrumentValue } from '@/components/atoms/instrument';
+import { useSlewFlagsValue } from '@/components/atoms/slew';
 
 // Generic mutation button
 function MutationButton<A, B, T extends TypedDocumentNode<A, B>>({
@@ -108,7 +115,12 @@ const SLEW_MUTATION = graphql(`
 `);
 
 export function Slew({ label, disabled, className }: { label: string; disabled: boolean; className: string }) {
-  const { baseTargets, oiTargets, instrument, slewFlags, rotator, configuration } = useContext(VariablesContext);
+  const baseTargets = useBaseTargetsValue();
+  const oiTargets = useOiTargetsValue();
+  const instrument = useInstrumentValue();
+  const slewFlags = useSlewFlagsValue();
+  const rotator = useRotatorValue();
+  const configuration = useConfigurationValue();
 
   const selectedTarget = baseTargets.find((t) => t.pk === configuration.selectedTarget);
 
@@ -120,7 +132,7 @@ export function Slew({ label, disabled, className }: { label: string; disabled: 
 
   const variables: VariablesOf<typeof SLEW_MUTATION> = {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    slewOptions: (({ __typename, pk, ...o }) => o)(slewFlags) as SlewOptionsInput,
+    slewOptions: (({ __typename, pk, ...o }) => o)(slewFlags),
     config: {
       instParams: {
         iaa: { degrees: instrument.iaa },
@@ -199,7 +211,8 @@ const OIWFS_MUTATION = graphql(`
 `);
 
 export function Oiwfs({ label, disabled, className = '' }: { label: string; disabled: boolean; className?: string }) {
-  const { oiTargets, configuration } = useContext(VariablesContext);
+  const oiTargets = useOiTargetsValue();
+  const configuration = useConfigurationValue();
   const selectedTarget = oiTargets.find((t) => t.pk === configuration.selectedOiTarget);
 
   return selectedTarget ? (

@@ -1,6 +1,5 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Dialog } from 'primereact/dialog';
-import { VariablesContext } from '../VariablesProvider';
 import { TargetType } from '@/types';
 import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
@@ -8,25 +7,21 @@ import { InputText } from 'primereact/inputtext';
 import { deg2dms, deg2hms, dms2deg, hms2deg } from '@/Helpers/functions';
 import { Button } from 'primereact/button';
 import { useUpdateTarget } from '@gql/configs/Target';
+import { useTargetEdit } from '@/components/atoms/target';
+import { useBaseTargets, useOiTargets, useP1Targets, useP2Targets } from '@/components/atoms/configs';
 
 export function Target() {
-  const {
-    targetEdit,
-    setTargetEdit,
-    baseTargets,
-    setBaseTargets,
-    oiTargets,
-    setOiTargets,
-    p1Targets,
-    setP1Targets,
-    p2Targets,
-    setP2Targets,
-  } = useContext(VariablesContext);
-  const updateTarget = useUpdateTarget();
+  const [baseTargets, setBaseTargets] = useBaseTargets();
+  const [oiTargets, setOiTargets] = useOiTargets();
+  const [p1Targets, setP1Targets] = useP1Targets();
+  const [p2Targets, setP2Targets] = useP2Targets();
+  const [targetEdit, setTargetEdit] = useTargetEdit();
   const [coordsType, setCoordsType] = useState('celestial');
   const [auxTarget, setAuxTarget] = useState<TargetType>({} as TargetType);
   const [c1String, setc1String] = useState<string | undefined>('');
   const [c2String, setc2String] = useState<string | undefined>('');
+
+  const updateTarget = useUpdateTarget();
 
   useEffect(() => {
     if (targetEdit !== undefined) {

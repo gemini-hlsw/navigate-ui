@@ -1,24 +1,28 @@
-import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { VariablesContext } from '@Contexts/Variables/VariablesProvider';
-import { AuthContext } from '@Contexts/Auth/AuthProvider';
 import { SplitButton } from 'primereact/splitbutton';
 import { Button } from 'primereact/button';
+import { useTheme } from '@/components/atoms/theme';
 import './Navbar.scss';
+import { useOdbTokenValue } from '@/components/atoms/odb';
+import { useConfigurationValue } from '@/components/atoms/configs';
+import { useIsLoggedIn, useSignout, useUser } from '@/components/atoms/auth';
 
 export default function Navbar() {
-  const { theme, toggleTheme, configuration } = useContext(VariablesContext);
-  const auth = useContext(AuthContext);
+  const configuration = useConfigurationValue();
+  const [theme, toggleTheme] = useTheme();
+  const user = useUser();
+  const isLoggedIn = useIsLoggedIn();
+  const signout = useSignout();
   const navigate = useNavigate();
 
   // Will be removed in the future
-  const { odbToken } = useContext(VariablesContext);
+  const odbToken = useOdbTokenValue();
 
   const themeIcon: string = theme === 'dark' ? 'pi pi-moon' : 'pi pi-sun';
 
   function userSession() {
-    if (auth.isUserLoggedIn) {
-      auth.signout();
+    if (isLoggedIn) {
+      signout();
     } else {
       navigate('/login');
     }
@@ -31,8 +35,8 @@ export default function Navbar() {
       command: toggleTheme,
     },
     {
-      label: auth.isUserLoggedIn ? 'Logout' : 'Login',
-      icon: auth.isUserLoggedIn ? 'pi pi-sign-out' : 'pi pi-sign-in',
+      label: isLoggedIn ? 'Logout' : 'Login',
+      icon: isLoggedIn ? 'pi pi-sign-out' : 'pi pi-sign-in',
       command: userSession,
     },
     {
@@ -69,7 +73,7 @@ export default function Navbar() {
           </Link>
         )}
         <SplitButton
-          label={auth.isUserLoggedIn ? auth.user.displayName : 'Guest'}
+          label={user ? user.displayName : 'Guest'}
           icon="pi pi-user"
           className="p-button-text nav-btn"
           model={items}
