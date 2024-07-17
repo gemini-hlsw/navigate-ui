@@ -1,26 +1,26 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { Rotator } from './Rotator';
 import { Altair, GeMS } from './AdaptiveOptics';
 import { Indicators } from './Indicators';
 import { AgMechanism } from './AgMechanism';
 import { BotSubsystems, TopSubsystems } from './Subsystems';
 import { Instrument } from './Instrument';
-import { useConfigurationValue } from '@/components/atoms/configs';
 import { useCanEdit } from '@/components/atoms/auth';
+import { useConfiguration } from '@gql/configs/Configuration';
 
 export function Systems() {
   const canEdit = useCanEdit();
-  const configuration = useConfigurationValue();
+  const configuration = useConfiguration().data?.configuration;
   const [collapsed, setCollapsed] = useState<boolean>(false);
 
   function toggle() {
     setCollapsed(!collapsed);
   }
 
-  let aoSystem = null;
-  if (configuration.site === 'GN') {
+  let aoSystem: ReactNode | null = null;
+  if (configuration?.site === 'GN') {
     aoSystem = <Altair canEdit={canEdit} />;
-  } else if (configuration.site === 'GS') {
+  } else if (configuration?.site === 'GS') {
     aoSystem = <GeMS canEdit={canEdit} />;
   }
 

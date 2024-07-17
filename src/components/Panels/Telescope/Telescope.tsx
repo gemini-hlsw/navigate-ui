@@ -8,13 +8,14 @@ import { GuiderTargets } from './Targets/GuiderTargets';
 import './Telescope.scss';
 import { Title } from '@Shared/Title/Title';
 import { TargetType } from '@/types';
-import { useBaseTargetsValue, useConfigurationValue } from '@/components/atoms/configs';
+import { useConfiguration } from '@gql/configs/Configuration';
+import { useTargets } from '@gql/configs/Target';
 
 export function Telescope({ prevPanel, nextPanel }: { prevPanel: () => void; nextPanel: () => void }) {
-  const baseTargets = useBaseTargetsValue();
-  const configuration = useConfigurationValue();
+  const { baseTargets } = useTargets().data;
+  const configuration = useConfiguration().data?.configuration;
 
-  const selectedTarget = baseTargets.find((t) => t.pk === configuration.selectedTarget);
+  const selectedTarget = baseTargets.find((t) => t.pk === configuration?.selectedTarget);
 
   return (
     <div className="telescope">
@@ -22,7 +23,7 @@ export function Telescope({ prevPanel, nextPanel }: { prevPanel: () => void; nex
       <div className="body">
         <div className="base-target">
           <Title title={selectedTarget ? `Base Target: ${selectedTarget.name}` : 'Base Target'} />
-          <TargetList targets={baseTargets} selectedTarget={configuration.selectedTarget} type={'SCIENCE'} />
+          <TargetList targets={baseTargets} />
         </div>
         <GuiderTargets />
         <Systems />

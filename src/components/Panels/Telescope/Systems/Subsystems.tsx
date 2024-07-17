@@ -3,10 +3,11 @@ import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 import { Slider } from 'primereact/slider';
 import { McsPark } from '@gql/server/Buttons';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { MechanismType } from '@/types';
-import { useGetMechanism, useUpdateMechanism } from '@gql/configs/Mechanism';
+import { useMechanism, useUpdateMechanism } from '@gql/configs/Mechanism';
 import { BTN_CLASSES } from '@/Helpers/constants';
+import { UpdateMechanismMutationVariables } from '@gql/configs/gen/graphql';
 
 export function TopSubsystems({ canEdit }: { canEdit: boolean }) {
   return (
@@ -40,36 +41,32 @@ const SHUTTER_MODE = [
 ];
 
 export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
-  const [state, setState] = useState<MechanismType>({} as MechanismType);
   const [domeMode, setDomeMode] = useState('MinVibration');
   const [shutterMode, setShutterMode] = useState('Tracking');
   const [aperture, setAperture] = useState(90);
   const [WVGate, setWVGate] = useState<any>(50);
   const [EVGate, setEVGate] = useState<any>(50);
-  const getMechanism = useGetMechanism();
+
+  const { data } = useMechanism({
+    onCompleted(data) {
+      if (data.mechanism) {
+        setDomeMode(data.mechanism.domeMode);
+        setShutterMode(data.mechanism.shutterMode);
+        setAperture(data.mechanism.shutterAperture);
+        setWVGate(data.mechanism.wVGateValue);
+        setEVGate(data.mechanism.eVGateValue);
+      }
+    },
+  });
+  const state = data?.mechanism ?? ({} as MechanismType);
+
   const updateMechanism = useUpdateMechanism();
 
-  useEffect(() => {
-    getMechanism({
-      onCompleted(data) {
-        setState(data.mechanism!);
-        setEVGate(data.mechanism!.eVGateValue);
-        setWVGate(data.mechanism!.wVGateValue);
-        setAperture(data.mechanism!.shutterAperture);
-        setDomeMode(data.mechanism!.domeMode);
-        setShutterMode(data.mechanism!.shutterMode);
-      },
-    });
-  }, []);
-
-  function modifyMechanism(vars: object) {
+  function modifyMechanism(vars: Omit<UpdateMechanismMutationVariables, 'pk'>) {
     updateMechanism({
       variables: {
         pk: state.pk,
         ...vars,
-      },
-      onCompleted(data) {
-        setState(data.updateMechanism);
       },
     });
   }

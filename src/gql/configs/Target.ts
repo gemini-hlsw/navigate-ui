@@ -1,9 +1,11 @@
-import { useLazyQuery, useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { graphql } from './gen';
+import { isBaseTarget, isOiTarget, isP1Target, isP2Target } from '@gql/util';
+import { useMemo } from 'react';
 
 const GET_TARGETS = graphql(`
-  query getTargets($type: TargetType) {
-    targets(type: $type) {
+  query getTargets {
+    targets {
       pk
       id
       name
@@ -30,12 +32,22 @@ const GET_TARGETS = graphql(`
   }
 `);
 
-export function useGetTargets() {
-  const [queryFunction] = useLazyQuery(GET_TARGETS, {
+export function useTargets() {
+  const result = useQuery(GET_TARGETS, {
     context: { clientName: 'navigateConfigs' },
   });
 
-  return queryFunction;
+  const filteredData = useMemo(() => {
+    const targets = result.data?.targets ?? [];
+    return {
+      baseTargets: targets.filter(isBaseTarget),
+      oiTargets: targets.filter(isOiTarget),
+      p1Targets: targets.filter(isP1Target),
+      p2Targets: targets.filter(isP2Target),
+    };
+  }, [result.data]);
+
+  return { ...result, data: filteredData };
 }
 
 const UPDATE_TARGET = graphql(`
@@ -124,6 +136,7 @@ const CREATE_TARGET = graphql(`
 export function useCreateTarget() {
   const [mutationFunction] = useMutation(CREATE_TARGET, {
     context: { clientName: 'navigateConfigs' },
+    refetchQueries: [GET_TARGETS],
   });
 
   return mutationFunction;
@@ -161,6 +174,7 @@ const REMOVE_AND_CREATE_BASE_TARGETS = graphql(`
 export function useRemoveAndCreateBaseTargets() {
   const [mutationFunction] = useMutation(REMOVE_AND_CREATE_BASE_TARGETS, {
     context: { clientName: 'navigateConfigs' },
+    refetchQueries: [GET_TARGETS],
   });
 
   return mutationFunction;
@@ -198,6 +212,7 @@ const REMOVE_AND_CREATE_WFS_TARGETS = graphql(`
 export function useRemoveAndCreateWfsTargets() {
   const [mutationFunction] = useMutation(REMOVE_AND_CREATE_WFS_TARGETS, {
     context: { clientName: 'navigateConfigs' },
+    refetchQueries: [GET_TARGETS],
   });
 
   return mutationFunction;

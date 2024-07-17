@@ -13,8 +13,6 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-  '\n  query getAllInfo {\n    configuration {\n      pk\n      site\n      selectedTarget\n      selectedOiTarget\n      selectedP1Target\n      selectedP2Target\n      oiGuidingType\n      p1GuidingType\n      p2GuidingType\n      obsTitle\n      obsSubtitle\n      obsId\n      obsInstrument\n    }\n    rotator {\n      pk\n      angle\n      tracking\n    }\n    slewFlags {\n      pk\n      zeroChopThrow\n      zeroSourceOffset\n      zeroSourceDiffTrack\n      zeroMountOffset\n      zeroMountDiffTrack\n      shortcircuitTargetFilter\n      shortcircuitMountFilter\n      resetPointing\n      stopGuide\n      zeroGuideOffset\n      zeroInstrumentOffset\n      autoparkPwfs1\n      autoparkPwfs2\n      autoparkOiwfs\n      autoparkGems\n      autoparkAowfs\n    }\n    targets {\n      pk\n      id\n      name\n      ra {\n        degrees\n        hms\n      }\n      dec {\n        degrees\n        dms\n      }\n      az {\n        degrees\n        dms\n      }\n      el {\n        degrees\n        dms\n      }\n      epoch\n      type\n      createdAt\n    }\n  }\n':
-    types.GetAllInfoDocument,
   '\n  query getAltairGuideLoop {\n    altairGuideLoop {\n      pk\n      aoEnabled\n      oiBlend\n      focus\n      p1Ttf\n      strap\n      oiTtf\n      ttgs\n      sfo\n    }\n  }\n':
     types.GetAltairGuideLoopDocument,
   '\n  mutation updateAltairGuideLoop(\n    $pk: Int!\n    $aoEnabled: Boolean\n    $oiBlend: Boolean\n    $focus: Boolean\n    $p1Ttf: Boolean\n    $strap: Boolean\n    $oiTtf: Boolean\n    $ttgs: Boolean\n    $sfo: Boolean\n  ) {\n    updateAltairGuideLoop(\n      pk: $pk\n      aoEnabled: $aoEnabled\n      oiBlend: $oiBlend\n      focus: $focus\n      p1Ttf: $p1Ttf\n      strap: $strap\n      oiTtf: $oiTtf\n      ttgs: $ttgs\n      sfo: $sfo\n    ) {\n      pk\n      aoEnabled\n      oiBlend\n      focus\n      p1Ttf\n      strap\n      oiTtf\n      ttgs\n      sfo\n    }\n  }\n':
@@ -35,9 +33,9 @@ const documents = {
     types.GetGemsInstrumentDocument,
   '\n  mutation updateGemsInstrument($pk: Int!, $beamsplitter: String, $adc: Boolean, $astrometricMode: String) {\n    updateGemsInstrument(pk: $pk, beamsplitter: $beamsplitter, adc: $adc, astrometricMode: $astrometricMode) {\n      pk\n      beamsplitter\n      adc\n      astrometricMode\n    }\n  }\n':
     types.UpdateGemsInstrumentDocument,
-  '\n  query guideAlarms {\n    guideAlarms {\n      OIWFS {\n        limit\n        enabled\n      }\n      PWFS1 {\n        limit\n        enabled\n      }\n      PWFS2 {\n        limit\n        enabled\n      }\n    }\n  }\n':
+  '\n  query guideAlarms {\n    guideAlarms {\n      OIWFS {\n        wfs\n        limit\n        enabled\n      }\n      PWFS1 {\n        wfs\n        limit\n        enabled\n      }\n      PWFS2 {\n        wfs\n        limit\n        enabled\n      }\n    }\n  }\n':
     types.GuideAlarmsDocument,
-  '\n  mutation updateGuideAlarm($wfs: WfsType!, $enabled: Boolean, $limit: Int) {\n    updateGuideAlarm(wfs: $wfs, enabled: $enabled, limit: $limit) {\n      enabled\n      limit\n    }\n  }\n':
+  '\n  mutation updateGuideAlarm($wfs: WfsType!, $enabled: Boolean, $limit: Int) {\n    updateGuideAlarm(wfs: $wfs, enabled: $enabled, limit: $limit) {\n      wfs\n      limit\n      enabled\n    }\n  }\n':
     types.UpdateGuideAlarmDocument,
   '\n  query getGuideLoop {\n    guideLoop {\n      pk\n      m2TipTiltEnable\n      m2TipTiltSource\n      m2FocusEnable\n      m2FocusSource\n      m2TipTiltFocusLink\n      m2ComaEnable\n      m1CorrectionsEnable\n      m2ComaM1CorrectionsSource\n      mountOffload\n      daytimeMode\n      probeTracking\n      lightPath\n    }\n  }\n':
     types.GetGuideLoopDocument,
@@ -63,7 +61,7 @@ const documents = {
     types.GetSlewFlagsDocument,
   '\n  mutation updateSlewFlags(\n    $pk: Int!\n    $zeroChopThrow: Boolean\n    $zeroSourceOffset: Boolean\n    $zeroSourceDiffTrack: Boolean\n    $zeroMountOffset: Boolean\n    $zeroMountDiffTrack: Boolean\n    $shortcircuitTargetFilter: Boolean\n    $shortcircuitMountFilter: Boolean\n    $resetPointing: Boolean\n    $stopGuide: Boolean\n    $zeroGuideOffset: Boolean\n    $zeroInstrumentOffset: Boolean\n    $autoparkPwfs1: Boolean\n    $autoparkPwfs2: Boolean\n    $autoparkOiwfs: Boolean\n    $autoparkGems: Boolean\n    $autoparkAowfs: Boolean\n  ) {\n    updateSlewFlags(\n      pk: $pk\n      zeroChopThrow: $zeroChopThrow\n      zeroSourceOffset: $zeroSourceOffset\n      zeroSourceDiffTrack: $zeroSourceDiffTrack\n      zeroMountOffset: $zeroMountOffset\n      zeroMountDiffTrack: $zeroMountDiffTrack\n      shortcircuitTargetFilter: $shortcircuitTargetFilter\n      shortcircuitMountFilter: $shortcircuitMountFilter\n      resetPointing: $resetPointing\n      stopGuide: $stopGuide\n      zeroGuideOffset: $zeroGuideOffset\n      zeroInstrumentOffset: $zeroInstrumentOffset\n      autoparkPwfs1: $autoparkPwfs1\n      autoparkPwfs2: $autoparkPwfs2\n      autoparkOiwfs: $autoparkOiwfs\n      autoparkGems: $autoparkGems\n      autoparkAowfs: $autoparkAowfs\n    ) {\n      pk\n      zeroChopThrow\n      zeroSourceOffset\n      zeroSourceDiffTrack\n      zeroMountOffset\n      zeroMountDiffTrack\n      shortcircuitTargetFilter\n      shortcircuitMountFilter\n      resetPointing\n      stopGuide\n      zeroGuideOffset\n      zeroInstrumentOffset\n      autoparkPwfs1\n      autoparkPwfs2\n      autoparkOiwfs\n      autoparkGems\n      autoparkAowfs\n    }\n  }\n':
     types.UpdateSlewFlagsDocument,
-  '\n  query getTargets($type: TargetType) {\n    targets(type: $type) {\n      pk\n      id\n      name\n      ra {\n        degrees\n        hms\n      }\n      dec {\n        degrees\n        dms\n      }\n      az {\n        degrees\n        dms\n      }\n      el {\n        degrees\n        dms\n      }\n      epoch\n      type\n      createdAt\n    }\n  }\n':
+  '\n  query getTargets {\n    targets {\n      pk\n      id\n      name\n      ra {\n        degrees\n        hms\n      }\n      dec {\n        degrees\n        dms\n      }\n      az {\n        degrees\n        dms\n      }\n      el {\n        degrees\n        dms\n      }\n      epoch\n      type\n      createdAt\n    }\n  }\n':
     types.GetTargetsDocument,
   '\n  mutation updateTarget(\n    $pk: Int!\n    $id: String\n    $name: String\n    $coord1: Float\n    $coord2: Float\n    $epoch: String\n    $type: TargetType\n  ) {\n    updateTarget(pk: $pk, id: $id, name: $name, coord1: $coord1, coord2: $coord2, epoch: $epoch, type: $type) {\n      pk\n      id\n      name\n      ra {\n        degrees\n        hms\n      }\n      dec {\n        degrees\n        dms\n      }\n      az {\n        degrees\n        dms\n      }\n      el {\n        degrees\n        dms\n      }\n      epoch\n      type\n      createdAt\n    }\n  }\n':
     types.UpdateTargetDocument,
@@ -89,12 +87,6 @@ const documents = {
  */
 export function graphql(source: string): unknown;
 
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: '\n  query getAllInfo {\n    configuration {\n      pk\n      site\n      selectedTarget\n      selectedOiTarget\n      selectedP1Target\n      selectedP2Target\n      oiGuidingType\n      p1GuidingType\n      p2GuidingType\n      obsTitle\n      obsSubtitle\n      obsId\n      obsInstrument\n    }\n    rotator {\n      pk\n      angle\n      tracking\n    }\n    slewFlags {\n      pk\n      zeroChopThrow\n      zeroSourceOffset\n      zeroSourceDiffTrack\n      zeroMountOffset\n      zeroMountDiffTrack\n      shortcircuitTargetFilter\n      shortcircuitMountFilter\n      resetPointing\n      stopGuide\n      zeroGuideOffset\n      zeroInstrumentOffset\n      autoparkPwfs1\n      autoparkPwfs2\n      autoparkOiwfs\n      autoparkGems\n      autoparkAowfs\n    }\n    targets {\n      pk\n      id\n      name\n      ra {\n        degrees\n        hms\n      }\n      dec {\n        degrees\n        dms\n      }\n      az {\n        degrees\n        dms\n      }\n      el {\n        degrees\n        dms\n      }\n      epoch\n      type\n      createdAt\n    }\n  }\n',
-): (typeof documents)['\n  query getAllInfo {\n    configuration {\n      pk\n      site\n      selectedTarget\n      selectedOiTarget\n      selectedP1Target\n      selectedP2Target\n      oiGuidingType\n      p1GuidingType\n      p2GuidingType\n      obsTitle\n      obsSubtitle\n      obsId\n      obsInstrument\n    }\n    rotator {\n      pk\n      angle\n      tracking\n    }\n    slewFlags {\n      pk\n      zeroChopThrow\n      zeroSourceOffset\n      zeroSourceDiffTrack\n      zeroMountOffset\n      zeroMountDiffTrack\n      shortcircuitTargetFilter\n      shortcircuitMountFilter\n      resetPointing\n      stopGuide\n      zeroGuideOffset\n      zeroInstrumentOffset\n      autoparkPwfs1\n      autoparkPwfs2\n      autoparkOiwfs\n      autoparkGems\n      autoparkAowfs\n    }\n    targets {\n      pk\n      id\n      name\n      ra {\n        degrees\n        hms\n      }\n      dec {\n        degrees\n        dms\n      }\n      az {\n        degrees\n        dms\n      }\n      el {\n        degrees\n        dms\n      }\n      epoch\n      type\n      createdAt\n    }\n  }\n'];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -159,14 +151,14 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query guideAlarms {\n    guideAlarms {\n      OIWFS {\n        limit\n        enabled\n      }\n      PWFS1 {\n        limit\n        enabled\n      }\n      PWFS2 {\n        limit\n        enabled\n      }\n    }\n  }\n',
-): (typeof documents)['\n  query guideAlarms {\n    guideAlarms {\n      OIWFS {\n        limit\n        enabled\n      }\n      PWFS1 {\n        limit\n        enabled\n      }\n      PWFS2 {\n        limit\n        enabled\n      }\n    }\n  }\n'];
+  source: '\n  query guideAlarms {\n    guideAlarms {\n      OIWFS {\n        wfs\n        limit\n        enabled\n      }\n      PWFS1 {\n        wfs\n        limit\n        enabled\n      }\n      PWFS2 {\n        wfs\n        limit\n        enabled\n      }\n    }\n  }\n',
+): (typeof documents)['\n  query guideAlarms {\n    guideAlarms {\n      OIWFS {\n        wfs\n        limit\n        enabled\n      }\n      PWFS1 {\n        wfs\n        limit\n        enabled\n      }\n      PWFS2 {\n        wfs\n        limit\n        enabled\n      }\n    }\n  }\n'];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  mutation updateGuideAlarm($wfs: WfsType!, $enabled: Boolean, $limit: Int) {\n    updateGuideAlarm(wfs: $wfs, enabled: $enabled, limit: $limit) {\n      enabled\n      limit\n    }\n  }\n',
-): (typeof documents)['\n  mutation updateGuideAlarm($wfs: WfsType!, $enabled: Boolean, $limit: Int) {\n    updateGuideAlarm(wfs: $wfs, enabled: $enabled, limit: $limit) {\n      enabled\n      limit\n    }\n  }\n'];
+  source: '\n  mutation updateGuideAlarm($wfs: WfsType!, $enabled: Boolean, $limit: Int) {\n    updateGuideAlarm(wfs: $wfs, enabled: $enabled, limit: $limit) {\n      wfs\n      limit\n      enabled\n    }\n  }\n',
+): (typeof documents)['\n  mutation updateGuideAlarm($wfs: WfsType!, $enabled: Boolean, $limit: Int) {\n    updateGuideAlarm(wfs: $wfs, enabled: $enabled, limit: $limit) {\n      wfs\n      limit\n      enabled\n    }\n  }\n'];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -243,8 +235,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query getTargets($type: TargetType) {\n    targets(type: $type) {\n      pk\n      id\n      name\n      ra {\n        degrees\n        hms\n      }\n      dec {\n        degrees\n        dms\n      }\n      az {\n        degrees\n        dms\n      }\n      el {\n        degrees\n        dms\n      }\n      epoch\n      type\n      createdAt\n    }\n  }\n',
-): (typeof documents)['\n  query getTargets($type: TargetType) {\n    targets(type: $type) {\n      pk\n      id\n      name\n      ra {\n        degrees\n        hms\n      }\n      dec {\n        degrees\n        dms\n      }\n      az {\n        degrees\n        dms\n      }\n      el {\n        degrees\n        dms\n      }\n      epoch\n      type\n      createdAt\n    }\n  }\n'];
+  source: '\n  query getTargets {\n    targets {\n      pk\n      id\n      name\n      ra {\n        degrees\n        hms\n      }\n      dec {\n        degrees\n        dms\n      }\n      az {\n        degrees\n        dms\n      }\n      el {\n        degrees\n        dms\n      }\n      epoch\n      type\n      createdAt\n    }\n  }\n',
+): (typeof documents)['\n  query getTargets {\n    targets {\n      pk\n      id\n      name\n      ra {\n        degrees\n        hms\n      }\n      dec {\n        degrees\n        dms\n      }\n      az {\n        degrees\n        dms\n      }\n      el {\n        degrees\n        dms\n      }\n      epoch\n      type\n      createdAt\n    }\n  }\n'];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

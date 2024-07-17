@@ -60,7 +60,7 @@ export function ObservationTable({
   return (
     <div className="target-table">
       <DataTable
-        value={(observations_list.matches as { activeStatus: string }[]).filter((el) => el.activeStatus === 'ACTIVE')}
+        value={observations_list.filter((el) => el.activeStatus === 'ACTIVE')}
         paginator
         selectionMode="single"
         onSelectionChange={(e) => setSelectedObservation(e.value)}

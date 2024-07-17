@@ -24,7 +24,7 @@ describe('Title test with args', () => {
     ));
   });
 
-  it('sholud show title', () => {
+  it('should show title', () => {
     expect(screen.getByText(title)).toBeDefined();
   });
 
@@ -72,7 +72,7 @@ describe('Title test with args', () => {
 describe('Title test without args', () => {
   const title = 'My title';
 
-  it('sholud show title', () => {
+  it('should show title', () => {
     render(<Title title={title}></Title>);
 
     expect(screen.getByText(title)).toBeDefined();

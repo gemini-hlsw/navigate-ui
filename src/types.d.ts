@@ -17,10 +17,12 @@ import {
   TargetType as TypeOfTarget,
   User as UserType,
 } from '@gql/configs/gen/graphql';
-import { GetObservationsQuery, Observation as OdbObservationType } from '@gql/odb/gen/graphql';
+import { GetObservationsQuery } from '@gql/odb/gen/graphql';
 import { RotatorTrackingMode as TrackingType } from '@gql/server/gen/graphql';
 
 export type ThemeType = 'light' | 'dark';
+
+export type OdbObservationType = NonNullable<GetObservationsQuery['observations']['matches'][number]>;
 
 export type {
   AltairGuideLoopType,
@@ -50,7 +52,7 @@ export type ButtonStateType = 'PENDING' | 'ACTIVE' | 'DONE';
 
 export interface ParamsInterface {
   loading: boolean;
-  observations_list: GetObservationsQuery['observations'] | undefined;
+  observations_list: OdbObservationType[] | undefined;
   selectedObservation: OdbObservationType;
   setSelectedObservation: (_: OdbObservationType) => void;
 }

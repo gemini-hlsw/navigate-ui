@@ -2,13 +2,15 @@ import { fireEvent, render, RenderResult, screen } from '@testing-library/react'
 import { ComponentProps } from 'react';
 import { Alarm } from './Alarm';
 import { MockedFunction } from 'vitest';
+import { GuideAlarm } from '@gql/configs/gen/graphql';
+import { GuideQuality } from '@gql/server/gen/graphql';
 
 describe(Alarm.name, () => {
   let sut: RenderResult;
   let onUpdateAlarm: MockedFunction<ComponentProps<typeof Alarm>['onUpdateAlarm']>;
 
-  const guideQuality = { centroidDetected: true, flux: 1000 };
-  const alarm = { enabled: true, limit: 900 };
+  const guideQuality: GuideQuality = { centroidDetected: true, flux: 1000 };
+  const alarm: GuideAlarm = { wfs: 'PWFS1', enabled: true, limit: 900 };
 
   beforeEach(() => {
     onUpdateAlarm = vi.fn();

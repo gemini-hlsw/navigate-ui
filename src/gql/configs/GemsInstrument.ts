@@ -1,4 +1,4 @@
-import { useLazyQuery, useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { graphql } from './gen';
 
 const GET_GEMS_INSTRUMENT = graphql(`
@@ -12,12 +12,10 @@ const GET_GEMS_INSTRUMENT = graphql(`
   }
 `);
 
-export function useGetGemsInstrument() {
-  const [queryFunction] = useLazyQuery(GET_GEMS_INSTRUMENT, {
+export function useGemsInstrument() {
+  return useQuery(GET_GEMS_INSTRUMENT, {
     context: { clientName: 'navigateConfigs' },
   });
-
-  return queryFunction;
 }
 
 const UPDATE_GEMS_INSTRUMENT = graphql(`

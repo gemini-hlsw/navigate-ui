@@ -1,6 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { graphql } from './gen';
-import { VariablesOf } from '@graphql-typed-document-node/core';
 
 const GET_GUIDE_LOOP = graphql(`
   query getGuideLoop {
@@ -81,5 +80,3 @@ export function useUpdateGuideLoop() {
     context: { clientName: 'navigateConfigs' },
   });
 }
-
-export type UpdateGuideLoopVariables = VariablesOf<typeof UPDATE_GUIDE_LOOP>;

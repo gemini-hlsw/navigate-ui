@@ -41,14 +41,17 @@ const mocks: MockedResponse[] = [
       data: {
         guideAlarms: {
           OIWFS: {
+            wfs: 'OIWFS',
             limit: 900,
             enabled: true,
           },
           PWFS1: {
+            wfs: 'PWFS1',
             limit: 901,
             enabled: false,
           },
           PWFS2: {
+            wfs: 'PWFS2',
             limit: 902,
             enabled: false,
           },
@@ -89,6 +92,7 @@ const mocks: MockedResponse[] = [
     result: {
       data: {
         updateGuideAlarm: {
+          wfs: 'PWFS1',
           limit: 900,
           enabled: true,
         },

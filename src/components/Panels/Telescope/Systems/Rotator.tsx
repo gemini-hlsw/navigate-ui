@@ -1,11 +1,10 @@
 import { Title } from '@Shared/Title/Title';
 import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
-import { useUpdateRotator } from '@gql/configs/Rotator';
-import { useRotator } from '@/components/atoms/configs';
+import { useRotator, useUpdateRotator } from '@gql/configs/Rotator';
 
 export function Rotator({ canEdit }: { canEdit: boolean }) {
-  const [rotator, setRotator] = useRotator();
+  const rotator = useRotator().data?.rotator;
   const updateRotator = useUpdateRotator();
 
   return (
@@ -15,32 +14,28 @@ export function Rotator({ canEdit }: { canEdit: boolean }) {
         <span className="label">Mode</span>
         <Dropdown
           disabled={!canEdit}
-          value={rotator.tracking}
+          value={rotator?.tracking}
           options={['TRACKING', 'FIXED']}
-          onChange={(e) =>
-            void updateRotator({
-              variables: { pk: rotator.pk, tracking: e.target.value },
-              onCompleted(data) {
-                setRotator(data.updateRotator);
-              },
-            })
-          }
+          onChange={(e) => {
+            if (rotator)
+              updateRotator({
+                variables: { pk: rotator.pk, tracking: e.target.value },
+              });
+          }}
           placeholder="Select a tracking"
         />
         <span className="label">Position Angle</span>
         <InputNumber
           disabled={!canEdit}
-          value={rotator.angle}
+          value={rotator?.angle}
           minFractionDigits={2}
           maxFractionDigits={7}
-          onValueChange={(e) =>
-            void updateRotator({
-              variables: { pk: rotator.pk, angle: e.target.value },
-              onCompleted(data) {
-                setRotator(data.updateRotator);
-              },
-            })
-          }
+          onValueChange={(e) => {
+            if (rotator)
+              updateRotator({
+                variables: { pk: rotator.pk, angle: e.target.value },
+              });
+          }}
           mode="decimal"
         />
       </div>

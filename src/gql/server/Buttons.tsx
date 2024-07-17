@@ -3,30 +3,28 @@ import { VariablesOf, TypedDocumentNode } from '@graphql-typed-document-node/cor
 
 import { useEffect, useRef } from 'react';
 import { Button } from 'primereact/button';
-import { ButtonStateType } from '@/types';
+import { ButtonStateType, SlewFlagsType } from '@/types';
 import { Toast } from 'primereact/toast';
 import { BTN_CLASSES } from '@/Helpers/constants';
 import { graphql } from './gen';
 import { Instrument } from './gen/graphql';
-import {
-  useBaseTargetsValue,
-  useConfigurationValue,
-  useOiTargetsValue,
-  useRotatorValue,
-} from '@/components/atoms/configs';
-import { useInstrumentValue } from '@/components/atoms/instrument';
-import { useSlewFlagsValue } from '@/components/atoms/slew';
+import { useSlewFlags } from '@gql/configs/SlewFlags';
+import { useConfiguration } from '@gql/configs/Configuration';
+import { useRotator } from '@gql/configs/Rotator';
+import { useTargets } from '@gql/configs/Target';
+import { useInstrument } from '@gql/configs/Instrument';
 
 // Generic mutation button
-function MutationButton<A, B, T extends TypedDocumentNode<A, B>>({
+function MutationButton<T>({
   mutation,
   variables,
   className,
   label,
   disabled = false,
 }: {
-  mutation: T;
-  variables: B;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  mutation: T extends TypedDocumentNode<infer _TData, infer _TVariables> ? T : never;
+  variables: VariablesOf<T> extends OperationVariables ? VariablesOf<T> : never;
   className: string;
   label: string;
   disabled: boolean;
@@ -34,7 +32,7 @@ function MutationButton<A, B, T extends TypedDocumentNode<A, B>>({
   const TOAST_LIFE = 5000;
   const toast = useRef<Toast>(null);
   const [mutationFunction, { loading, error }] = useMutation<T>(mutation, {
-    variables: variables as OperationVariables,
+    variables: variables,
   });
 
   useEffect(() => {
@@ -115,18 +113,18 @@ const SLEW_MUTATION = graphql(`
 `);
 
 export function Slew({ label, disabled, className }: { label: string; disabled: boolean; className: string }) {
-  const baseTargets = useBaseTargetsValue();
-  const oiTargets = useOiTargetsValue();
-  const instrument = useInstrumentValue();
-  const slewFlags = useSlewFlagsValue();
-  const rotator = useRotatorValue();
-  const configuration = useConfigurationValue();
+  const { oiTargets, baseTargets } = useTargets().data;
+  const instrument = useInstrument().data?.instrument;
+  const { data, loading } = useSlewFlags();
+  const slewFlags = data?.slewFlags ?? ({} as SlewFlagsType);
+  const rotator = useRotator().data?.rotator;
+  const configuration = useConfiguration().data?.configuration;
 
-  const selectedTarget = baseTargets.find((t) => t.pk === configuration.selectedTarget);
+  const selectedTarget = baseTargets.find((t) => t.pk === configuration?.selectedTarget);
 
-  const selectedOiTarget = oiTargets.find((t) => t.pk === configuration.selectedOiTarget);
+  const selectedOiTarget = oiTargets.find((t) => t.pk === configuration?.selectedOiTarget);
 
-  if (!selectedTarget) {
+  if (!selectedTarget || !instrument || !rotator) {
     return <></>;
   }
 
@@ -182,7 +180,7 @@ export function Slew({ label, disabled, className }: { label: string; disabled: 
       variables={variables}
       className={className}
       label={label}
-      disabled={disabled || !selectedTarget.id}
+      disabled={disabled || !selectedTarget.id || loading}
     />
   );
 }
@@ -211,9 +209,9 @@ const OIWFS_MUTATION = graphql(`
 `);
 
 export function Oiwfs({ label, disabled, className = '' }: { label: string; disabled: boolean; className?: string }) {
-  const oiTargets = useOiTargetsValue();
-  const configuration = useConfigurationValue();
-  const selectedTarget = oiTargets.find((t) => t.pk === configuration.selectedOiTarget);
+  const { oiTargets } = useTargets().data;
+  const configuration = useConfiguration().data?.configuration;
+  const selectedTarget = oiTargets.find((t) => t.pk === configuration?.selectedOiTarget);
 
   return selectedTarget ? (
     <MutationButton

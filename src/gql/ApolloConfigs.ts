@@ -1,5 +1,5 @@
 // Apollo
-import { ApolloClient, InMemoryCache, ApolloLink, HttpLink } from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloLink, HttpLink, defaultDataIdFromObject } from '@apollo/client';
 
 // Subscription channel
 import { WebSocketLink } from '@apollo/client/link/ws';
@@ -43,5 +43,20 @@ export const client = new ApolloClient({
       ),
     ),
   ),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    dataIdFromObject(responseObject) {
+      // Configure primary-key fields for cache normalization to use 'pk' field
+      if ('pk' in responseObject && (typeof responseObject.pk === 'string' || typeof responseObject.pk === 'number')) {
+        return `${responseObject.__typename}:pk:${responseObject.pk}`;
+      } else {
+        return defaultDataIdFromObject(responseObject);
+      }
+    },
+    // Configure primary-key fields for cache normalization
+    typePolicies: {
+      GuideAlarm: {
+        keyFields: ['wfs'],
+      },
+    },
+  }),
 });
