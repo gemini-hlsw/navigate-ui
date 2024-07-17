@@ -51,7 +51,7 @@
     "eslint-plugin-react": "^7.34.4",
     "globals": "^15.8.0",
     "happy-dom": "^14.12.3",
-    "husky": "^9.0.11",
+    "husky": "^9.1.0",
     "lint-staged": "^15.2.7",
     "lucuma-schemas": "^0.91.0",
     "prettier": "^3.3.3",
