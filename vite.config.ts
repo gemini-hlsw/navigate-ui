@@ -35,6 +35,15 @@ export default defineConfig(({ mode }) => ({
       '@gql': path.resolve(__dirname, './src/gql'),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('primereact')) return 'prime';
+        },
+      },
+    },
+  },
   server: {
     host: '0.0.0.0',
     proxy: {
