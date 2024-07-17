@@ -77,6 +77,7 @@ export default function Navbar() {
           icon="pi pi-user"
           className="p-button-text nav-btn"
           model={items}
+          dropdownIcon="pi pi-chevron-down"
         ></SplitButton>
       </div>
     </nav>

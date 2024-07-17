@@ -29,8 +29,8 @@ export default function Logs() {
         value={messages}
         rowClassName={(data: LogMessage) => data.level.toLowerCase()}
         stripedRows
-        responsiveLayout="scroll"
         dataKey="id"
+        emptyMessage="No logs yet"
       >
         <Column field="timestamp" header="Timestamp" className="text-small"></Column>
         {/* <Column field="level" header="Level"></Column> */}
