@@ -2,6 +2,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import path from 'path';
+import mkcert from 'vite-plugin-mkcert';
 
 function fixCssRoot() {
   return {
@@ -45,21 +46,19 @@ export default defineConfig(({ mode }) => ({
         target: 'http://navigate.lucuma.xyz:4000',
         changeOrigin: true,
       },
-      // "ws://localhost/navigate/ws": {
-      //   target: "ws://localhost:7070",
-      //   changeOrigin: true,
-      //   ws: true,
-      // },
+      '^/odb': {
+        target: 'https://lucuma-postgres-odb-dev.herokuapp.com',
+        changeOrigin: true,
+      },
+      '^/navigate/ws': {
+        target: 'ws://localhost:9070',
+        changeOrigin: true,
+        ws: true,
+      },
     },
   },
   preview: {
     host: '0.0.0.0',
-    // proxy: {
-    //   "^/navigate/graphql": {
-    //     target: "http://server:7070",
-    //     changeOrigin: true,
-    //   },
-    // },
   },
   css: {
     preprocessorOptions: {
@@ -79,6 +78,7 @@ export default defineConfig(({ mode }) => ({
         ['@swc-jotai/debug-label', {}],
       ],
     }),
+    mkcert({ hosts: ['localhost', 'local.lucuma.xyz', 'navigate.lucuma.xyz'] }),
   ],
   test: {
     globals: true,
