@@ -1,5 +1,6 @@
-import { useLazyQuery, useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { graphql } from './gen';
+import { OptionsOf } from '@gql/util';
 
 const GET_MECHANISM = graphql(`
   query getMechanism {
@@ -45,12 +46,11 @@ const GET_MECHANISM = graphql(`
   }
 `);
 
-export function useGetMechanism() {
-  const [queryFunction] = useLazyQuery(GET_MECHANISM, {
+export function useMechanism(options: OptionsOf<typeof GET_MECHANISM> = {}) {
+  return useQuery(GET_MECHANISM, {
+    ...options,
     context: { clientName: 'navigateConfigs' },
   });
-
-  return queryFunction;
 }
 
 const UPDATE_MECHANISM = graphql(`

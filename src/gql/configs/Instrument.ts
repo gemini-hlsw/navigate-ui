@@ -1,5 +1,6 @@
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useQuery } from '@apollo/client';
 import { graphql } from './gen';
+import { OptionsOf } from '@gql/util';
 
 const GET_DISTINCT_INSTRUMENTS = graphql(`
   query getDistinctInstruments {
@@ -75,10 +76,9 @@ const GET_INSTRUMENT = graphql(`
   }
 `);
 
-export function useGetInstrument() {
-  const [queryFunction] = useLazyQuery(GET_INSTRUMENT, {
+export function useInstrument(options: OptionsOf<typeof GET_INSTRUMENT> = {}) {
+  return useQuery(GET_INSTRUMENT, {
+    ...options,
     context: { clientName: 'navigateConfigs' },
   });
-
-  return queryFunction;
 }

@@ -1,4 +1,4 @@
-import { useLazyQuery, useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { graphql } from './gen';
 
 const GET_ALTAIR_INSTRUMENT = graphql(`
@@ -19,12 +19,10 @@ const GET_ALTAIR_INSTRUMENT = graphql(`
   }
 `);
 
-export function useGetAltairInstrument() {
-  const [queryFunction] = useLazyQuery(GET_ALTAIR_INSTRUMENT, {
+export function useAltairInstrument() {
+  return useQuery(GET_ALTAIR_INSTRUMENT, {
     context: { clientName: 'navigateConfigs' },
   });
-
-  return queryFunction;
 }
 
 const UPDATE_ALTAIR_INSTRUMENT = graphql(`

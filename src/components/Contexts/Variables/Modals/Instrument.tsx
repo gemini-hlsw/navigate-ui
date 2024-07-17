@@ -4,10 +4,9 @@ import { useEffect, useState } from 'react';
 import { useGetDistinctInstruments, useGetDistinctPorts, useGetInstruments } from '@gql/configs/Instrument';
 import { Dropdown } from 'primereact/dropdown';
 import { InstrumentType } from '@/types';
-import { useImportInstrument, useSetInstrument } from '@/components/atoms/instrument';
+import { useImportInstrument } from '@/components/atoms/instrument';
 
 export function Instrument() {
-  const setInstrument = useSetInstrument();
   const [importInstrument, setImportInstrument] = useImportInstrument();
   const getNames = useGetDistinctInstruments();
   const getPorts = useGetDistinctPorts();
@@ -52,7 +51,6 @@ export function Instrument() {
   }, [port]);
 
   function modifyInstrument() {
-    setInstrument(currentInstrument);
     setImportInstrument(false);
   }
 

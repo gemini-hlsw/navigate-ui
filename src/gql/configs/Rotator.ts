@@ -1,4 +1,4 @@
-import { useLazyQuery, useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { graphql } from './gen';
 
 const GET_ROTATOR = graphql(`
@@ -11,12 +11,10 @@ const GET_ROTATOR = graphql(`
   }
 `);
 
-export function useGetRotator() {
-  const [queryFunction] = useLazyQuery(GET_ROTATOR, {
+export function useRotator() {
+  return useQuery(GET_ROTATOR, {
     context: { clientName: 'navigateConfigs' },
   });
-
-  return queryFunction;
 }
 
 const UPDATE_ROTATOR = graphql(`

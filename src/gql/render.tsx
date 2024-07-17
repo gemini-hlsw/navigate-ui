@@ -3,7 +3,7 @@ import { render, RenderOptions } from '@testing-library/react';
 import { Provider, WritableAtom } from 'jotai';
 import { useHydrateAtoms } from 'jotai/utils';
 import { PropsWithChildren, ReactElement } from 'react';
-import { GET_ALL_INFO_QUERY } from './configs/AllConfiguration';
+import { GET_SLEW_FLAGS } from './configs/SlewFlags';
 
 interface CreateOptions<T> {
   mocks?: MockedResponse[];
@@ -41,8 +41,32 @@ export function renderWithContext<T extends AtomTuples>(
 const mocks: MockedResponse[] = [
   {
     request: {
-      query: GET_ALL_INFO_QUERY,
+      query: GET_SLEW_FLAGS,
       variables: {},
+    },
+    result: {
+      data: {
+        slewFlags: {
+          pk: 1,
+          zeroChopThrow: true,
+          zeroSourceOffset: true,
+          zeroSourceDiffTrack: true,
+          zeroMountOffset: true,
+          zeroMountDiffTrack: true,
+          shortcircuitTargetFilter: false,
+          shortcircuitMountFilter: true,
+          resetPointing: true,
+          stopGuide: true,
+          zeroGuideOffset: false,
+          zeroInstrumentOffset: true,
+          autoparkPwfs1: false,
+          autoparkPwfs2: true,
+          autoparkOiwfs: false,
+          autoparkGems: true,
+          autoparkAowfs: false,
+          __typename: 'SlewFlags',
+        },
+      },
     },
   },
 ];

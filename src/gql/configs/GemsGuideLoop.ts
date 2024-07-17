@@ -1,4 +1,4 @@
-import { useLazyQuery, useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { graphql } from './gen';
 
 const GET_GEMS_GUIDE_LOOP = graphql(`
@@ -16,11 +16,9 @@ const GET_GEMS_GUIDE_LOOP = graphql(`
 `);
 
 export function useGetGemsGuideLoop() {
-  const [queryFunction] = useLazyQuery(GET_GEMS_GUIDE_LOOP, {
+  return useQuery(GET_GEMS_GUIDE_LOOP, {
     context: { clientName: 'navigateConfigs' },
   });
-
-  return queryFunction;
 }
 
 const UPDATE_GEMS_GUIDE_LOOP = graphql(`
@@ -54,9 +52,7 @@ const UPDATE_GEMS_GUIDE_LOOP = graphql(`
 `);
 
 export function useUpdateGemsGuideLoop() {
-  const [mutationFunction] = useMutation(UPDATE_GEMS_GUIDE_LOOP, {
+  return useMutation(UPDATE_GEMS_GUIDE_LOOP, {
     context: { clientName: 'navigateConfigs' },
   });
-
-  return mutationFunction;
 }

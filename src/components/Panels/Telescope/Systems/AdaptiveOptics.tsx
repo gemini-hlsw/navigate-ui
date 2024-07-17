@@ -1,42 +1,31 @@
 import { Title } from '../../../Shared/Title/Title';
 import { InputNumber } from 'primereact/inputnumber';
 import { Dropdown } from 'primereact/dropdown';
-import { useEffect, useState } from 'react';
 import { Checkbox } from 'primereact/checkbox';
 import { AltairInstrumentType, GemsInstrumentType } from '@/types';
-import { useGetGemsInstrument, useUpdateGemsInstrument } from '@gql/configs/GemsInstrument';
-import { useGetAltairInstrument, useUpdateAltairInstrument } from '@gql/configs/AltairInstrument';
+import { useGemsInstrument, useUpdateGemsInstrument } from '@gql/configs/GemsInstrument';
+import { useAltairInstrument, useUpdateAltairInstrument } from '@gql/configs/AltairInstrument';
 import {
   UpdateAltairInstrumentMutationVariables,
   UpdateGemsInstrumentMutationVariables,
 } from '@gql/configs/gen/graphql';
+import { isNotNullish } from '@/Helpers/functions';
 
 export function GeMS({ canEdit }: { canEdit: boolean }) {
-  const [state, setState] = useState<GemsInstrumentType>({} as GemsInstrumentType);
-  const getGemsInstrument = useGetGemsInstrument();
+  const state = useGemsInstrument().data?.gemsInstrument ?? ({} as GemsInstrumentType);
   const updateGemsInstrument = useUpdateGemsInstrument();
-
-  useEffect(() => {
-    getGemsInstrument({
-      onCompleted(data) {
-        setState(data.gemsInstrument!);
-      },
-    });
-  }, []);
 
   function modifyGemsInstrument<T extends keyof UpdateGemsInstrumentMutationVariables>(
     name: T,
     value: NonNullable<UpdateGemsInstrumentMutationVariables[T]>,
   ) {
-    updateGemsInstrument({
-      variables: {
-        pk: state.pk,
-        [name]: value,
-      },
-      onCompleted(data) {
-        setState(data.updateGemsInstrument);
-      },
-    });
+    if (state.pk)
+      updateGemsInstrument({
+        variables: {
+          pk: state.pk,
+          [name]: value,
+        },
+      });
   }
 
   return (
@@ -67,31 +56,20 @@ export function GeMS({ canEdit }: { canEdit: boolean }) {
 }
 
 export function Altair({ canEdit }: { canEdit: boolean }) {
-  const [state, setState] = useState<AltairInstrumentType>({} as AltairInstrumentType);
-  const getAltairInstrument = useGetAltairInstrument();
+  const state = useAltairInstrument().data?.altairInstrument ?? ({} as AltairInstrumentType);
   const updateAltairInstrument = useUpdateAltairInstrument();
-
-  useEffect(() => {
-    getAltairInstrument({
-      onCompleted(data) {
-        setState(data.altairInstrument!);
-      },
-    });
-  }, []);
 
   function modifyAltairInstrument<T extends keyof UpdateAltairInstrumentMutationVariables>(
     name: T,
-    value: NonNullable<UpdateAltairInstrumentMutationVariables[T]>,
+    value: UpdateAltairInstrumentMutationVariables[T],
   ) {
-    updateAltairInstrument({
-      variables: {
-        pk: state.pk,
-        [name]: value,
-      },
-      onCompleted(data) {
-        setState(data.updateAltairInstrument);
-      },
-    });
+    if (isNotNullish(value) && state.pk)
+      updateAltairInstrument({
+        variables: {
+          pk: state.pk,
+          [name]: value,
+        },
+      });
   }
 
   return (

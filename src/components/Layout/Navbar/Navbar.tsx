@@ -4,11 +4,11 @@ import { Button } from 'primereact/button';
 import { useTheme } from '@/components/atoms/theme';
 import './Navbar.scss';
 import { useOdbTokenValue } from '@/components/atoms/odb';
-import { useConfigurationValue } from '@/components/atoms/configs';
 import { useIsLoggedIn, useSignout, useUser } from '@/components/atoms/auth';
+import { useConfiguration } from '@gql/configs/Configuration';
 
 export default function Navbar() {
-  const configuration = useConfigurationValue();
+  const configuration = useConfiguration().data?.configuration;
   const [theme, toggleTheme] = useTheme();
   const user = useUser();
   const isLoggedIn = useIsLoggedIn();
@@ -61,10 +61,10 @@ export default function Navbar() {
             <span>E</span>
           </Button>
         </Link>
-        <span className="site">{configuration.site ?? ''}</span>
+        <span className="site">{configuration?.site ?? ''}</span>
       </div>
       <div className="center">
-        <span className="observation">{configuration.obsTitle ?? ''}</span>
+        <span className="observation">{configuration?.obsTitle ?? ''}</span>
       </div>
       <div className="right">
         {!odbToken && (

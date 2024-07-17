@@ -8,13 +8,9 @@ import { deg2dms, deg2hms, dms2deg, hms2deg } from '@/Helpers/functions';
 import { Button } from 'primereact/button';
 import { useUpdateTarget } from '@gql/configs/Target';
 import { useTargetEdit } from '@/components/atoms/target';
-import { useBaseTargets, useOiTargets, useP1Targets, useP2Targets } from '@/components/atoms/configs';
+import { isBaseTarget } from '@gql/util';
 
 export function Target() {
-  const [baseTargets, setBaseTargets] = useBaseTargets();
-  const [oiTargets, setOiTargets] = useOiTargets();
-  const [p1Targets, setP1Targets] = useP1Targets();
-  const [p2Targets, setP2Targets] = useP2Targets();
   const [targetEdit, setTargetEdit] = useTargetEdit();
   const [coordsType, setCoordsType] = useState('celestial');
   const [auxTarget, setAuxTarget] = useState<TargetType>({} as TargetType);
@@ -39,81 +35,13 @@ export function Target() {
   }, [targetEdit]);
 
   function updateObservation() {
-    const tIdx = targetEdit.targetIndex ?? -1;
-    switch (auxTarget?.type) {
-      case 'SCIENCE':
-      case 'BLINDOFFSET':
-      case 'FIXED':
-        updateTarget({
-          variables: {
-            ...(auxTarget as TargetType & { pk: number }),
-            coord1: auxTarget.ra ? auxTarget.ra.degrees : auxTarget.az?.degrees,
-            coord2: auxTarget.dec ? auxTarget.dec.degrees : auxTarget.el?.degrees,
-          },
-          onCompleted(data) {
-            setBaseTargets([
-              ...baseTargets.slice(0, tIdx),
-              data.updateTarget,
-              ...baseTargets.slice(tIdx + 1),
-            ] as TargetType[]);
-          },
-        });
-        break;
-
-      case 'OIWFS':
-        updateTarget({
-          variables: {
-            ...(auxTarget as TargetType & { pk: number }),
-            coord1: auxTarget.ra ? auxTarget.ra.degrees : auxTarget.az?.degrees,
-            coord2: auxTarget.dec ? auxTarget.dec.degrees : auxTarget.el?.degrees,
-          },
-          onCompleted(data) {
-            setOiTargets([
-              ...oiTargets.slice(0, tIdx),
-              data.updateTarget,
-              ...oiTargets.slice(tIdx + 1),
-            ] as TargetType[]);
-          },
-        });
-        break;
-
-      case 'PWFS1':
-        updateTarget({
-          variables: {
-            ...(auxTarget as TargetType & { pk: number }),
-            coord1: auxTarget.ra ? auxTarget.ra.degrees : auxTarget.az?.degrees,
-            coord2: auxTarget.dec ? auxTarget.dec.degrees : auxTarget.el?.degrees,
-          },
-          onCompleted(data) {
-            setP1Targets([
-              ...p1Targets.slice(0, tIdx),
-              data.updateTarget,
-              ...p1Targets.slice(tIdx + 1),
-            ] as TargetType[]);
-          },
-        });
-        break;
-
-      case 'PWFS2':
-        updateTarget({
-          variables: {
-            ...(auxTarget as TargetType & { pk: number }),
-            coord1: auxTarget.ra ? auxTarget.ra.degrees : auxTarget.az?.degrees,
-            coord2: auxTarget.dec ? auxTarget.dec.degrees : auxTarget.el?.degrees,
-          },
-          onCompleted(data) {
-            setP2Targets([
-              ...p2Targets.slice(0, tIdx),
-              data.updateTarget,
-              ...p2Targets.slice(tIdx + 1),
-            ] as TargetType[]);
-          },
-        });
-        break;
-
-      default:
-        break;
-    }
+    updateTarget({
+      variables: {
+        ...auxTarget,
+        coord1: auxTarget.ra ? auxTarget.ra.degrees : auxTarget.az?.degrees,
+        coord2: auxTarget.dec ? auxTarget.dec.degrees : auxTarget.el?.degrees,
+      },
+    });
 
     setTargetEdit({
       isVisible: false,
@@ -169,7 +97,7 @@ export function Target() {
           Coordinates
         </span>
         <Dropdown
-          disabled={!(auxTarget.type === 'SCIENCE' || auxTarget.type === 'BLINDOFFSET' || auxTarget.type === 'FIXED')}
+          disabled={!isBaseTarget(auxTarget)}
           style={{ gridArea: 'd1' }}
           value={coordsType}
           options={['celestial', 'horizontal']}

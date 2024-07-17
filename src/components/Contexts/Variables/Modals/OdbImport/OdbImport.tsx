@@ -5,24 +5,14 @@ import { ObservationTable } from './ObservationTable';
 import { useGetObservations } from '@gql/odb/Observation';
 import { ConfigurationType, OdbObservationType } from '@/types';
 import { useRemoveAndCreateBaseTargets } from '@gql/configs/Target';
-import { useUpdateConfiguration } from '@gql/configs/Configuration';
+import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
 import { useOdbVisible } from '@/components/atoms/odb';
-import {
-  useConfiguration,
-  useSetBaseTargets,
-  useSetOiTargets,
-  useSetP1Targets,
-  useSetP2Targets,
-} from '@/components/atoms/configs';
 import { useCanEdit } from '@/components/atoms/auth';
 
 export function OdbImport() {
   const canEdit = useCanEdit();
-  const [configuration, setConfiguration] = useConfiguration();
-  const setBaseTargets = useSetBaseTargets();
-  const setOiTargets = useSetOiTargets();
-  const setP1Targets = useSetP1Targets();
-  const setP2Targets = useSetP2Targets();
+  const configuration = useConfiguration().data?.configuration;
+
   const [odbVisible, setOdbVisible] = useOdbVisible();
   const [selectedObservation, setSelectedObservation] = useState<OdbObservationType>({} as OdbObservationType);
   const { getObservations, loading, data } = useGetObservations();
@@ -32,14 +22,13 @@ export function OdbImport() {
   function updateObs() {
     updateConfiguration({
       variables: {
-        ...(configuration as ConfigurationType & { pk: number }),
+        ...(configuration as ConfigurationType),
         obsId: selectedObservation.id,
         obsTitle: selectedObservation.title,
         obsSubtitle: selectedObservation.subtitle,
         obsInstrument: selectedObservation.instrument,
       },
-      onCompleted(data) {
-        setConfiguration(data.updateConfiguration);
+      onCompleted() {
         setOdbVisible(false);
         removeAndCreateBaseTargets({
           variables: {
@@ -53,12 +42,6 @@ export function OdbImport() {
                 type: 'SCIENCE',
               },
             ],
-          },
-          onCompleted(data) {
-            setBaseTargets(data.removeAndCreateBaseTargets);
-            setOiTargets([]);
-            setP1Targets([]);
-            setP2Targets([]);
           },
         });
       },
@@ -96,7 +79,7 @@ export function OdbImport() {
       ) : (
         <ObservationTable
           loading={!data}
-          observations_list={data?.observations}
+          observations_list={data?.observations?.matches}
           selectedObservation={selectedObservation}
           setSelectedObservation={setSelectedObservation}
         />

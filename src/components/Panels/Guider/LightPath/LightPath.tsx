@@ -1,8 +1,8 @@
 import { Button } from 'primereact/button';
 import { Title } from '@Shared/Title/Title';
 import { Dropdown } from 'primereact/dropdown';
-import { UpdateGuideLoopVariables, useGetGuideLoop, useUpdateGuideLoop } from '@gql/configs/GuideLoop';
-import { GuideLoop } from '@gql/configs/gen/graphql';
+import { useGetGuideLoop, useUpdateGuideLoop } from '@gql/configs/GuideLoop';
+import { GuideLoop, UpdateGuideLoopMutationVariables } from '@gql/configs/gen/graphql';
 import { useCanEdit } from '@/components/atoms/auth';
 
 export function LightPath() {
@@ -13,7 +13,10 @@ export function LightPath() {
   const state = data?.guideLoop ?? ({} as GuideLoop);
   const lightPath = state.lightPath;
 
-  function modifyGuideLoop<T extends keyof UpdateGuideLoopVariables>(name: T, value: UpdateGuideLoopVariables[T]) {
+  function modifyGuideLoop<T extends keyof UpdateGuideLoopMutationVariables>(
+    name: T,
+    value: UpdateGuideLoopMutationVariables[T],
+  ) {
     updateGuideLoop({
       variables: {
         pk: state.pk,

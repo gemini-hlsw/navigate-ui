@@ -1,4 +1,4 @@
-import { useLazyQuery, useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { graphql } from './gen';
 
 const GET_CONFIGURATION = graphql(`
@@ -21,12 +21,10 @@ const GET_CONFIGURATION = graphql(`
   }
 `);
 
-export function useGetConfiguration() {
-  const [queryFunction] = useLazyQuery(GET_CONFIGURATION, {
+export function useConfiguration() {
+  return useQuery(GET_CONFIGURATION, {
     context: { clientName: 'navigateConfigs' },
   });
-
-  return queryFunction;
 }
 
 const UPDATE_CONFIGURATION = graphql(`

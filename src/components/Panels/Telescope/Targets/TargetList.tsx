@@ -1,19 +1,28 @@
 import { Target } from './Target';
 import { TargetType, TypeOfTarget } from '@/types';
-import { useUpdateConfiguration } from '@gql/configs/Configuration';
-import { useConfiguration } from '@/components/atoms/configs';
+import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
 
-export function TargetList({
-  targets,
-  type,
-  selectedTarget,
-}: {
-  targets: TargetType[];
-  type?: TypeOfTarget;
-  selectedTarget?: number | null;
-}) {
-  const [configuration, setConfiguration] = useConfiguration();
+export function TargetList({ targets, type }: { targets: TargetType[]; type?: TypeOfTarget }) {
+  const configuration = useConfiguration().data?.configuration;
   const updateConfiguration = useUpdateConfiguration();
+
+  let selectedTarget: number | null | undefined = null;
+  switch (type) {
+    case 'SCIENCE':
+    case 'BLINDOFFSET':
+    case 'FIXED':
+      selectedTarget = configuration?.selectedTarget;
+      break;
+    case 'OIWFS':
+      selectedTarget = configuration?.selectedOiTarget;
+      break;
+    case 'PWFS1':
+      selectedTarget = configuration?.selectedP1Target;
+      break;
+    case 'PWFS2':
+      selectedTarget = configuration?.selectedP2Target;
+      break;
+  }
 
   function updateSelectedTarget(targetPk: number) {
     switch (type) {
@@ -21,37 +30,25 @@ export function TargetList({
       case 'BLINDOFFSET':
       case 'FIXED':
         updateConfiguration({
-          variables: { pk: configuration.pk, selectedTarget: targetPk },
-          onCompleted(data) {
-            setConfiguration(data.updateConfiguration);
-          },
+          variables: { pk: configuration!.pk, selectedTarget: targetPk },
         });
         break;
 
       case 'OIWFS':
         updateConfiguration({
-          variables: { pk: configuration.pk, selectedOiTarget: targetPk },
-          onCompleted(data) {
-            setConfiguration(data.updateConfiguration);
-          },
+          variables: { pk: configuration!.pk, selectedOiTarget: targetPk },
         });
         break;
 
       case 'PWFS1':
         updateConfiguration({
-          variables: { pk: configuration.pk, selectedP1Target: targetPk },
-          onCompleted(data) {
-            setConfiguration(data.updateConfiguration);
-          },
+          variables: { pk: configuration!.pk, selectedP1Target: targetPk },
         });
         break;
 
       case 'PWFS2':
         updateConfiguration({
-          variables: { pk: configuration.pk, selectedP2Target: targetPk },
-          onCompleted(data) {
-            setConfiguration(data.updateConfiguration);
-          },
+          variables: { pk: configuration!.pk, selectedP2Target: targetPk },
         });
         break;
 

@@ -3,48 +3,30 @@ import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
-import { useEffect } from 'react';
-import { InstrumentType } from '@/types';
-import { useGetInstrument } from '@gql/configs/Instrument';
-import { useInstrument, useSetImportInstrument } from '@/components/atoms/instrument';
-import { useConfigurationValue } from '@/components/atoms/configs';
+import { useInstrument } from '@gql/configs/Instrument';
+import { useSetImportInstrument } from '@/components/atoms/instrument';
+import { useConfiguration } from '@gql/configs/Configuration';
 
 export function Instrument({ canEdit }: { canEdit: boolean }) {
-  const configuration = useConfigurationValue();
-  const [instrument, setInstrument] = useInstrument();
+  const configuration = useConfiguration().data?.configuration;
   const setImportInstrument = useSetImportInstrument();
-  const getInstrument = useGetInstrument();
 
-  useEffect(() => {
-    if (configuration.obsInstrument) {
-      // Get Instrument port from TCS
-      // Then get instrument configuration from local configs
-      getInstrument({
-        variables: {
-          name: configuration.obsInstrument,
-          issPort: 3,
-          wfs: 'NONE',
-        },
-        onCompleted(data) {
-          setInstrument(data.instrument ?? ({} as InstrumentType));
-        },
-      });
-    }
-  }, [configuration]);
+  const { data } = useInstrument({
+    variables: {
+      name: configuration?.obsInstrument ?? '',
+      issPort: 3,
+      wfs: 'NONE',
+    },
+  });
+
+  const instrument = data?.instrument;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function updateInstrument({ key, val }: { key: string; val: any }) {
     console.log('Update instrument');
-    // setConfiguration({
-    //   ...configuration,
-    //   instrument: {
-    //     ...(configuration.instrument ?? ({} as InstrumentType)),
-    //     [key]: val,
-    //   },
-    // })
   }
 
-  if (!('name' in instrument)) {
+  if (!instrument?.name || !configuration?.obsInstrument) {
     return null;
   }
 

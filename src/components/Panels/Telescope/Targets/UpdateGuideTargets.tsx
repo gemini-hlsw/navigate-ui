@@ -6,13 +6,10 @@ import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
 import { useRemoveAndCreateWfsTargets } from '@gql/configs/Target';
 import { useSetLoadingGuideTarget } from '@/components/atoms/guideTarget';
-import { useConfigurationValue, useSetOiTargets, useSetP1Targets, useSetP2Targets } from '@/components/atoms/configs';
+import { useConfiguration } from '@gql/configs/Configuration';
 
 export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
-  const setOiTargets = useSetOiTargets();
-  const setP1Targets = useSetP1Targets();
-  const setP2Targets = useSetP2Targets();
-  const configuration = useConfigurationValue();
+  const configuration = useConfiguration().data?.configuration;
   const setLoadingGuideTarget = useSetLoadingGuideTarget();
   const getGuideTargets = useGetGuideTargets();
   const removeAndCreateWfsTargets = useRemoveAndCreateWfsTargets();
@@ -23,7 +20,7 @@ export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
     const crtTime = new Date().toISOString();
     getGuideTargets({
       variables: {
-        observationId: configuration.obsId!,
+        observationId: configuration!.obsId!,
         observationTime: crtTime,
       },
       onCompleted(data) {
@@ -55,26 +52,17 @@ export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
             wfs: 'OIWFS',
             targets: OiwfsTargets,
           },
-          onCompleted(data) {
-            setOiTargets(data.removeAndCreateWfsTargets);
-          },
         });
         removeAndCreateWfsTargets({
           variables: {
             wfs: 'PWFS1',
             targets: Pwfs1Targets,
           },
-          onCompleted(data) {
-            setP1Targets(data.removeAndCreateWfsTargets);
-          },
         });
         removeAndCreateWfsTargets({
           variables: {
             wfs: 'PWFS2',
             targets: Pwfs2Targets,
-          },
-          onCompleted(data) {
-            setP2Targets(data.removeAndCreateWfsTargets);
           },
         });
 
@@ -95,26 +83,17 @@ export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
             wfs: 'OIWFS',
             targets: [],
           },
-          onCompleted() {
-            setOiTargets([]);
-          },
         });
         removeAndCreateWfsTargets({
           variables: {
             wfs: 'PWFS1',
             targets: [],
           },
-          onCompleted() {
-            setP1Targets([]);
-          },
         });
         removeAndCreateWfsTargets({
           variables: {
             wfs: 'PWFS2',
             targets: [],
-          },
-          onCompleted() {
-            setP2Targets([]);
           },
         });
       },

@@ -116,6 +116,7 @@ export type GuideAlarm = {
   __typename?: 'GuideAlarm';
   enabled: Scalars['Boolean']['output'];
   limit: Scalars['Int']['output'];
+  wfs: WfsType;
 };
 
 export type GuideAlarms = {
@@ -443,7 +444,7 @@ export type Query = {
   instruments: Array<Instrument>;
   mechanism?: Maybe<Mechanism>;
   rotator?: Maybe<Rotator>;
-  slewFlags?: Maybe<SlewFlags>;
+  slewFlags: SlewFlags;
   target?: Maybe<Target>;
   targets: Array<Target>;
   user?: Maybe<User>;
@@ -558,62 +559,6 @@ export type User = {
 };
 
 export type WfsType = 'NONE' | 'OIWFS' | 'PWFS1' | 'PWFS2';
-
-export type GetAllInfoQueryVariables = Exact<{ [key: string]: never }>;
-
-export type GetAllInfoQuery = {
-  __typename?: 'Query';
-  configuration?: {
-    __typename?: 'Configuration';
-    pk: number;
-    site: SiteType;
-    selectedTarget?: number | null;
-    selectedOiTarget?: number | null;
-    selectedP1Target?: number | null;
-    selectedP2Target?: number | null;
-    oiGuidingType: GuidingType;
-    p1GuidingType: GuidingType;
-    p2GuidingType: GuidingType;
-    obsTitle?: string | null;
-    obsSubtitle?: string | null;
-    obsId?: string | null;
-    obsInstrument?: string | null;
-  } | null;
-  rotator?: { __typename?: 'Rotator'; pk: number; angle: number; tracking: TrackingType } | null;
-  slewFlags?: {
-    __typename?: 'SlewFlags';
-    pk: number;
-    zeroChopThrow: boolean;
-    zeroSourceOffset: boolean;
-    zeroSourceDiffTrack: boolean;
-    zeroMountOffset: boolean;
-    zeroMountDiffTrack: boolean;
-    shortcircuitTargetFilter: boolean;
-    shortcircuitMountFilter: boolean;
-    resetPointing: boolean;
-    stopGuide: boolean;
-    zeroGuideOffset: boolean;
-    zeroInstrumentOffset: boolean;
-    autoparkPwfs1: boolean;
-    autoparkPwfs2: boolean;
-    autoparkOiwfs: boolean;
-    autoparkGems: boolean;
-    autoparkAowfs: boolean;
-  } | null;
-  targets: Array<{
-    __typename?: 'Target';
-    pk: number;
-    id?: string | null;
-    name: string;
-    epoch: string;
-    type: TargetType;
-    createdAt: string;
-    ra?: { __typename?: 'RA'; degrees: number; hms: string } | null;
-    dec?: { __typename?: 'Dec'; degrees: number; dms: string } | null;
-    az?: { __typename?: 'Az'; degrees: number; dms: string } | null;
-    el?: { __typename?: 'El'; degrees: number; dms: string } | null;
-  }>;
-};
 
 export type GetAltairGuideLoopQueryVariables = Exact<{ [key: string]: never }>;
 
@@ -848,9 +793,9 @@ export type GuideAlarmsQuery = {
   __typename?: 'Query';
   guideAlarms: {
     __typename?: 'GuideAlarms';
-    OIWFS: { __typename?: 'GuideAlarm'; limit: number; enabled: boolean };
-    PWFS1: { __typename?: 'GuideAlarm'; limit: number; enabled: boolean };
-    PWFS2: { __typename?: 'GuideAlarm'; limit: number; enabled: boolean };
+    OIWFS: { __typename?: 'GuideAlarm'; wfs: WfsType; limit: number; enabled: boolean };
+    PWFS1: { __typename?: 'GuideAlarm'; wfs: WfsType; limit: number; enabled: boolean };
+    PWFS2: { __typename?: 'GuideAlarm'; wfs: WfsType; limit: number; enabled: boolean };
   };
 };
 
@@ -862,7 +807,7 @@ export type UpdateGuideAlarmMutationVariables = Exact<{
 
 export type UpdateGuideAlarmMutation = {
   __typename?: 'Mutation';
-  updateGuideAlarm: { __typename?: 'GuideAlarm'; enabled: boolean; limit: number };
+  updateGuideAlarm: { __typename?: 'GuideAlarm'; wfs: WfsType; limit: number; enabled: boolean };
 };
 
 export type GetGuideLoopQueryVariables = Exact<{ [key: string]: never }>;
@@ -1136,7 +1081,7 @@ export type GetSlewFlagsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetSlewFlagsQuery = {
   __typename?: 'Query';
-  slewFlags?: {
+  slewFlags: {
     __typename?: 'SlewFlags';
     pk: number;
     zeroChopThrow: boolean;
@@ -1155,7 +1100,7 @@ export type GetSlewFlagsQuery = {
     autoparkOiwfs: boolean;
     autoparkGems: boolean;
     autoparkAowfs: boolean;
-  } | null;
+  };
 };
 
 export type UpdateSlewFlagsMutationVariables = Exact<{
@@ -1202,9 +1147,7 @@ export type UpdateSlewFlagsMutation = {
   };
 };
 
-export type GetTargetsQueryVariables = Exact<{
-  type?: InputMaybe<TargetType>;
-}>;
+export type GetTargetsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetTargetsQuery = {
   __typename?: 'Query';
@@ -1321,140 +1264,6 @@ export type RemoveAndCreateWfsTargetsMutation = {
   }>;
 };
 
-export const GetAllInfoDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'getAllInfo' },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'configuration' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'pk' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'site' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'selectedTarget' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'selectedOiTarget' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'selectedP1Target' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'selectedP2Target' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'oiGuidingType' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'p1GuidingType' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'p2GuidingType' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'obsTitle' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'obsSubtitle' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'obsId' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'obsInstrument' } },
-              ],
-            },
-          },
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'rotator' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'pk' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'angle' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'tracking' } },
-              ],
-            },
-          },
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'slewFlags' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'pk' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'zeroChopThrow' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'zeroSourceOffset' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'zeroSourceDiffTrack' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'zeroMountOffset' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'zeroMountDiffTrack' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'shortcircuitTargetFilter' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'shortcircuitMountFilter' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'resetPointing' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'stopGuide' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'zeroGuideOffset' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'zeroInstrumentOffset' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'autoparkPwfs1' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'autoparkPwfs2' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'autoparkOiwfs' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'autoparkGems' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'autoparkAowfs' } },
-              ],
-            },
-          },
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'targets' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'pk' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'ra' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'degrees' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'hms' } },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'dec' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'degrees' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'dms' } },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'az' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'degrees' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'dms' } },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'el' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'degrees' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'dms' } },
-                    ],
-                  },
-                },
-                { kind: 'Field', name: { kind: 'Name', value: 'epoch' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GetAllInfoQuery, GetAllInfoQueryVariables>;
 export const GetAltairGuideLoopDocument = {
   kind: 'Document',
   definitions: [
@@ -2265,6 +2074,7 @@ export const GuideAlarmsDocument = {
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'wfs' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'limit' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'enabled' } },
                     ],
@@ -2276,6 +2086,7 @@ export const GuideAlarmsDocument = {
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'wfs' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'limit' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'enabled' } },
                     ],
@@ -2287,6 +2098,7 @@ export const GuideAlarmsDocument = {
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'wfs' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'limit' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'enabled' } },
                     ],
@@ -2350,8 +2162,9 @@ export const UpdateGuideAlarmDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'enabled' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'wfs' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'limit' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'enabled' } },
               ],
             },
           },
@@ -3601,26 +3414,12 @@ export const GetTargetsDocument = {
       kind: 'OperationDefinition',
       operation: 'query',
       name: { kind: 'Name', value: 'getTargets' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'type' } },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'TargetType' } },
-        },
-      ],
       selectionSet: {
         kind: 'SelectionSet',
         selections: [
           {
             kind: 'Field',
             name: { kind: 'Name', value: 'targets' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'type' },
-                value: { kind: 'Variable', name: { kind: 'Name', value: 'type' } },
-              },
-            ],
             selectionSet: {
               kind: 'SelectionSet',
               selections: [

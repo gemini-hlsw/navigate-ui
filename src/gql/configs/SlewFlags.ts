@@ -1,7 +1,7 @@
-import { useLazyQuery, useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { graphql } from './gen';
 
-const GET_SLEW_FLAGS = graphql(`
+export const GET_SLEW_FLAGS = graphql(`
   query getSlewFlags {
     slewFlags {
       pk
@@ -25,12 +25,10 @@ const GET_SLEW_FLAGS = graphql(`
   }
 `);
 
-export function useGetSlewFlags() {
-  const [queryFunction] = useLazyQuery(GET_SLEW_FLAGS, {
+export function useSlewFlags() {
+  return useQuery(GET_SLEW_FLAGS, {
     context: { clientName: 'navigateConfigs' },
   });
-
-  return queryFunction;
 }
 
 const UPDATE_SLEW_FLAGS = graphql(`

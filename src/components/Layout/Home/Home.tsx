@@ -1,52 +1,14 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Telescope } from '@Telescope/Telescope';
 import { WavefrontSensors } from '@WavefrontSensors/WavefrontSensors';
 import { Guider } from '@Guider/Guider';
 import { PanelType } from '@/types';
 import './Home.scss';
-import { useGetAllInformation } from '@gql/configs/AllConfiguration';
-import {
-  useSetBaseTargets,
-  useSetConfiguration,
-  useSetOiTargets,
-  useSetP1Targets,
-  useSetP2Targets,
-  useSetRotator,
-} from '@/components/atoms/configs';
-import { useSetSlewFlags } from '@/components/atoms/slew';
 
 export default function Home() {
   const TOUCH_THRESHOLD = 50;
   const [panelDisplay, setPanelDisplay] = useState<PanelType>('Telescope');
   const [touchPos, setTouchPos] = useState<number>(0);
-
-  const getAllInfo = useGetAllInformation();
-
-  const setConfiguration = useSetConfiguration();
-  const setBaseTargets = useSetBaseTargets();
-  const setOiTargets = useSetOiTargets();
-  const setP1Targets = useSetP1Targets();
-  const setP2Targets = useSetP2Targets();
-  const setRotator = useSetRotator();
-
-  const setSlewFlags = useSetSlewFlags();
-
-  useEffect(() => {
-    // Initialize states
-    getAllInfo({
-      onCompleted({ configuration, rotator, slewFlags, targets }) {
-        setConfiguration(configuration!);
-        setRotator(rotator!);
-        setSlewFlags(slewFlags!);
-        setBaseTargets(
-          targets.filter((t) => t?.type === 'SCIENCE' || t?.type === 'BLINDOFFSET' || t?.type === 'FIXED'),
-        );
-        setOiTargets(targets.filter((t) => t?.type === 'OIWFS'));
-        setP1Targets(targets.filter((t) => t?.type === 'PWFS1'));
-        setP2Targets(targets.filter((t) => t?.type === 'PWFS2'));
-      },
-    });
-  }, []);
 
   const handleTouchStart = useCallback(
     (e: React.TouchEvent) => {

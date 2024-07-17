@@ -3,17 +3,18 @@ import { MultiSelect } from 'primereact/multiselect';
 import { Checkbox } from 'primereact/checkbox';
 import { BrokenChain, ConnectedChain } from './Chain';
 import { Button } from 'primereact/button';
-import { UpdateGuideLoopVariables, useGetGuideLoop, useUpdateGuideLoop } from '@gql/configs/GuideLoop';
+import { useGetGuideLoop, useUpdateGuideLoop } from '@gql/configs/GuideLoop';
 import { Altair, GeMS } from './AdaptiveOptics';
 import { useGuideDisable, useGuideEnable } from '@gql/server/GuideState';
 import { GuideConfigurationInput } from '@gql/server/gen/graphql';
-import { GuideLoop } from '@gql/configs/gen/graphql';
-import { useConfigurationValue } from '@/components/atoms/configs';
+import { GuideLoop, UpdateGuideLoopMutationVariables } from '@gql/configs/gen/graphql';
 import { useCanEdit } from '@/components/atoms/auth';
+import { useConfiguration } from '@gql/configs/Configuration';
+import { ReactNode } from 'react';
 
 export function Configuration() {
   const canEdit = useCanEdit();
-  const configuration = useConfigurationValue();
+  const configuration = useConfiguration().data?.configuration;
   const { data, updateQuery, loading: getLoading } = useGetGuideLoop();
 
   const state =
@@ -27,16 +28,20 @@ export function Configuration() {
   const guideEnable = useGuideEnable();
   const guideDisable = useGuideDisable();
 
-  function modifyGuideLoop<T extends keyof UpdateGuideLoopVariables>(name: T, value: UpdateGuideLoopVariables[T]) {
-    updateGuideLoop({
-      variables: {
-        pk: state.pk,
-        [name]: value,
-      },
-      onCompleted(data) {
-        updateQuery(() => ({ guideLoop: data.updateGuideLoop }));
-      },
-    });
+  function modifyGuideLoop<T extends keyof UpdateGuideLoopMutationVariables>(
+    name: T,
+    value: UpdateGuideLoopMutationVariables[T],
+  ) {
+    if (state.pk)
+      updateGuideLoop({
+        variables: {
+          pk: state.pk,
+          [name]: value,
+        },
+        onCompleted(data) {
+          updateQuery(() => ({ guideLoop: data.updateGuideLoop }));
+        },
+      });
   }
 
   function translateStateGuideInput(): GuideConfigurationInput {
@@ -62,15 +67,15 @@ export function Configuration() {
     };
   }
 
-  let aoSystem = null;
+  let aoSystem: ReactNode | null = null;
   if (
     state.m2TipTiltSource?.split(',').includes('GAOS') ||
     state.m2FocusSource?.split(',').includes('GAOS') ||
     state.m2ComaM1CorrectionsSource === 'GAOS'
   ) {
-    if (configuration.site === 'GN') {
+    if (configuration?.site === 'GN') {
       aoSystem = <Altair />;
-    } else if (configuration.site === 'GS') {
+    } else if (configuration?.site === 'GS') {
       aoSystem = <GeMS />;
     }
   }
