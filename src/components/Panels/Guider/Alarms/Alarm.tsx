@@ -1,9 +1,10 @@
+import { isNotNullish } from '@/Helpers/functions';
 import { GuideAlarm, UpdateGuideAlarmMutationVariables, WfsType } from '@gql/configs/gen/graphql';
 import { GuideQuality } from '@gql/server/gen/graphql';
 import { Title } from '@Shared/Title/Title';
 import { clsx } from 'clsx';
-import { Checkbox, CheckboxChangeParams } from 'primereact/checkbox';
-import { InputNumber, InputNumberValueChangeParams } from 'primereact/inputnumber';
+import { Checkbox, CheckboxChangeEvent } from 'primereact/checkbox';
+import { InputNumber, InputNumberValueChangeEvent } from 'primereact/inputnumber';
 import { useId } from 'react';
 
 export function Alarm({
@@ -24,12 +25,12 @@ export function Alarm({
   const limit = alarm?.limit;
   const enabled = alarm?.enabled ?? true;
 
-  function onLimitChange(e: InputNumberValueChangeParams) {
-    onUpdateAlarm({ wfs, limit: e.value });
+  function onLimitChange(e: InputNumberValueChangeEvent) {
+    if (isNotNullish(e.value)) onUpdateAlarm({ wfs, limit: e.value });
   }
 
-  function onEnabledChange(e: CheckboxChangeParams): void {
-    onUpdateAlarm({ wfs, enabled: e.checked });
+  function onEnabledChange(e: CheckboxChangeEvent): void {
+    if (isNotNullish(e.checked)) onUpdateAlarm({ wfs, enabled: e.checked });
   }
 
   const disabledOrNoData = disabled || !guideQuality || !alarm;

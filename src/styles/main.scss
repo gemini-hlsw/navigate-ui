@@ -1,3 +1,5 @@
+@import 'lucuma-ui-css/lucuma-ui-common.scss';
+
 /* stylelint-disable no-invalid-position-at-import-rule */
 .light {
   @import 'lucuma-ui-css/light-theme';
@@ -7,7 +9,8 @@
   @import 'lucuma-ui-css/dark-theme';
 }
 
-@import 'lucuma-ui-css/lucuma-ui';
+@import 'lucuma-ui-css/lucuma-ui-prime';
+
 @import 'helpers';
 /* stylelint-enable no-invalid-position-at-import-rule */
 
@@ -43,7 +46,7 @@ a {
   .p-dropdown-trigger {
     width: initial !important;
 
-    > span {
+    > .p-dropdown-trigger-icon {
       margin: 0 2px;
       font-size: var(--input-font-size);
     }
