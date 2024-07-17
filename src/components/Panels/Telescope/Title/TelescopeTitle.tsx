@@ -1,5 +1,4 @@
-import { Title } from '@Shared/Title/Title';
-import { TitleDropdown } from '@Shared/Title/Title';
+import { Title, TitleDropdown } from '@Shared/Title/Title';
 import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
 import { useSetOdbVisible } from '@/components/atoms/odb';

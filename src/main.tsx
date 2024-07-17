@@ -1,6 +1,4 @@
-import ReactDOM from 'react-dom/client';
-
-// Apollo
+import { createRoot } from 'react-dom/client';
 
 // Styles
 import './styles/main.scss';
@@ -10,7 +8,7 @@ import 'primeicons/primeicons.css';
 import { App } from './App';
 import { StrictMode } from 'react';
 
-const root = ReactDOM.createRoot(document.getElementById('root')!);
+const root = createRoot(document.getElementById('root')!);
 
 root.render(
   <StrictMode>

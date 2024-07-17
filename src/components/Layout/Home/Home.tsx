@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Telescope } from '@Telescope/Telescope';
 import { WavefrontSensors } from '@WavefrontSensors/WavefrontSensors';
 import { Guider } from '@Guider/Guider';
