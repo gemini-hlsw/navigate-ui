@@ -125,7 +125,7 @@ export function Slew({ label, disabled, className }: { label: string; disabled: 
   const selectedOiTarget = oiTargets.find((t) => t.pk === configuration?.selectedOiTarget);
 
   if (!selectedTarget || !instrument || !rotator) {
-    return <></>;
+    return <Button className={className} disabled={true} label={label} />;
   }
 
   const variables: VariablesOf<typeof SLEW_MUTATION> = {
