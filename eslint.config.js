@@ -2,16 +2,15 @@
 
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
-import reactRecommended from 'eslint-plugin-react/configs/recommended.js';
-import reactJsx from 'eslint-plugin-react/configs/jsx-runtime.js';
+import reactPlugin from 'eslint-plugin-react';
 import globals from 'globals';
 
 export default tseslint.config(
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   ...tseslint.configs.stylisticTypeChecked,
-  reactRecommended,
-  reactJsx,
+  reactPlugin.configs.flat.recommended,
+  reactPlugin.configs.flat.recommended,
   {
     languageOptions: {
       parserOptions: {
