@@ -8,6 +8,7 @@ import { useRemoveAndCreateBaseTargets } from '@gql/configs/Target';
 import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
 import { useOdbVisible } from '@/components/atoms/odb';
 import { useCanEdit } from '@/components/atoms/auth';
+import { useRotator, useUpdateRotator } from '@gql/configs/Rotator';
 
 export function OdbImport() {
   const canEdit = useCanEdit();
@@ -18,6 +19,8 @@ export function OdbImport() {
   const { getObservations, loading, data } = useGetObservations();
   const removeAndCreateBaseTargets = useRemoveAndCreateBaseTargets();
   const updateConfiguration = useUpdateConfiguration();
+  const updateRotator = useUpdateRotator();
+  const rotator = useRotator().data?.rotator;
 
   function updateObs() {
     updateConfiguration({
@@ -44,6 +47,15 @@ export function OdbImport() {
             ],
           },
         });
+        if (rotator) {
+          updateRotator({
+            variables: {
+              pk: rotator?.pk,
+              angle: selectedObservation.posAngleConstraint.angle.degrees,
+              tracking: selectedObservation.posAngleConstraint.mode === 'FIXED' ? 'FIXED' : 'TRACKING',
+            },
+          });
+        }
       },
     });
   }
