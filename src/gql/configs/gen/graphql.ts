@@ -444,7 +444,7 @@ export type Query = {
   instruments: Array<Instrument>;
   mechanism?: Maybe<Mechanism>;
   rotator?: Maybe<Rotator>;
-  slewFlags: SlewFlags;
+  slewFlags?: Maybe<SlewFlags>;
   target?: Maybe<Target>;
   targets: Array<Target>;
   user?: Maybe<User>;
@@ -1081,7 +1081,7 @@ export type GetSlewFlagsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetSlewFlagsQuery = {
   __typename?: 'Query';
-  slewFlags: {
+  slewFlags?: {
     __typename?: 'SlewFlags';
     pk: number;
     zeroChopThrow: boolean;
@@ -1100,7 +1100,7 @@ export type GetSlewFlagsQuery = {
     autoparkOiwfs: boolean;
     autoparkGems: boolean;
     autoparkAowfs: boolean;
-  };
+  } | null;
 };
 
 export type UpdateSlewFlagsMutationVariables = Exact<{

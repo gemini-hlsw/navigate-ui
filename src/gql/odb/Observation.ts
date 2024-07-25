@@ -13,6 +13,12 @@ const GET_OBSERVATIONS = graphql(`
         status
         activeStatus
         instrument
+        posAngleConstraint {
+          mode
+          angle {
+            degrees
+          }
+        }
         program {
           id
           existence

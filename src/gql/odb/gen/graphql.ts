@@ -7930,6 +7930,11 @@ export type GetObservationsQuery = {
       status: ObsStatus;
       activeStatus: ObsActiveStatus;
       instrument?: Instrument | null;
+      posAngleConstraint: {
+        __typename?: 'PosAngleConstraint';
+        mode: PosAngleConstraintMode;
+        angle: { __typename?: 'Angle'; degrees: number };
+      };
       program: {
         __typename?: 'Program';
         id: number;
@@ -8019,6 +8024,24 @@ export const GetObservationsDocument = {
                       { kind: 'Field', name: { kind: 'Name', value: 'status' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'activeStatus' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'instrument' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'posAngleConstraint' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            { kind: 'Field', name: { kind: 'Name', value: 'mode' } },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'angle' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [{ kind: 'Field', name: { kind: 'Name', value: 'degrees' } }],
+                              },
+                            },
+                          ],
+                        },
+                      },
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'program' },
