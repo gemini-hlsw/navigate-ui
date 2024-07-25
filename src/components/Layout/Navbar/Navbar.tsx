@@ -6,6 +6,8 @@ import './Navbar.scss';
 import { useOdbTokenValue } from '@/components/atoms/odb';
 import { useIsLoggedIn, useSignout, useUser } from '@/components/atoms/auth';
 import { useConfiguration } from '@gql/configs/Configuration';
+import { useAlarmValue } from '@/components/atoms/alarm';
+import clsx from 'clsx';
 
 export default function Navbar() {
   const configuration = useConfiguration().data?.configuration;
@@ -17,6 +19,8 @@ export default function Navbar() {
 
   // Will be removed in the future
   const odbToken = useOdbTokenValue();
+
+  const alarm = useAlarmValue();
 
   const themeIcon: string = theme === 'dark' ? 'pi pi-moon' : 'pi pi-sun';
 
@@ -47,7 +51,7 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="top-bar">
+    <nav className={clsx('top-bar', alarm && 'animate-error-bg')}>
       <div className="left">
         <Link to="/">
           <Button icon="pi pi-map" iconPos="left" className="p-button-text nav-btn main-title">

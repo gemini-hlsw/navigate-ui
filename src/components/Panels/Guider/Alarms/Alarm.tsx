@@ -6,6 +6,7 @@ import { clsx } from 'clsx';
 import { Checkbox, CheckboxChangeEvent } from 'primereact/checkbox';
 import { InputNumber, InputNumberValueChangeEvent } from 'primereact/inputnumber';
 import { useId } from 'react';
+import { evaluateAlarm } from './Alarms';
 
 export function Alarm({
   wfs,
@@ -34,13 +35,12 @@ export function Alarm({
   }
 
   const disabledOrNoData = disabled || !guideQuality || !alarm;
-  const hasAlarm = enabled && ((guideQuality?.flux ?? 0) < (limit ?? 0) || !guideQuality?.centroidDetected);
+  const hasAlarm = evaluateAlarm(alarm, guideQuality);
 
   return (
-    <div className={clsx('alarm', hasAlarm && 'has-alarm')}>
+    <div className={clsx('alarm', hasAlarm && 'has-alarm animate-error-bg')}>
       <div className="title-bar">
         <Title title={wfs} />
-        <div className="alarm-indicator animate-ping" />
       </div>
       <div className="body">
         <label htmlFor={`flux-${id}`} className="label">

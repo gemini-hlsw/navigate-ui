@@ -81,11 +81,14 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react({
-      plugins: [
-        // https://jotai.org/docs/tools/swc
-        ['@swc-jotai/react-refresh', {}],
-        ['@swc-jotai/debug-label', {}],
-      ],
+      plugins:
+        mode !== 'production'
+          ? [
+              // https://jotai.org/docs/tools/swc
+              ['@swc-jotai/react-refresh', {}],
+              ['@swc-jotai/debug-label', {}],
+            ]
+          : [],
     }),
     mkcert({ hosts: ['localhost', 'local.lucuma.xyz', 'navigate.lucuma.xyz'] }),
   ],
