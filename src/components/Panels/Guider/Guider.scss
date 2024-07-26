@@ -282,10 +282,6 @@
               grid-column-start: 2;
               background-color: transparent;
             }
-            > .alarm-indicator {
-              margin-left: auto;
-              margin-right: 10px;
-            }
           }
 
           > .body {
@@ -301,19 +297,9 @@
               }
             }
           }
-          .alarm-indicator {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: transparent;
-          }
 
           &.has-alarm {
             border: 1px solid var(--red-500);
-
-            .alarm-indicator {
-              background-color: var(--red-500);
-            }
           }
         }
       }
@@ -329,6 +315,21 @@
     100% {
       transform: scale(2);
       opacity: 0;
+    }
+  }
+}
+
+.animate-error-bg {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  @keyframes pulse {
+    0%,
+    100% {
+      background-color: inherit;
+      opacity: 1;
+    }
+    50% {
+      background-color: var(--red-600);
     }
   }
 }

@@ -9,9 +9,9 @@ export default function WavefrontSensor({ canEdit, wfs }: { canEdit: boolean; wf
   const [freq, setFreq] = useState(100);
   const [observeState, setObserveState] = useState(false);
   let observeButton;
+  const startObserve = useOiwfsObserve();
+  const stopObserve = useOiwfsStopObserve();
   if (wfs === 'OIWFS') {
-    const startObserve = useOiwfsObserve();
-    const stopObserve = useOiwfsStopObserve();
     if (observeState) {
       observeButton = (
         <Button

@@ -3,11 +3,13 @@ import { GET_GUIDE_ALARMS, UPDATE_GUIDE_ALARM } from '@gql/configs/GuideAlarm';
 import { renderWithContext } from '@gql/render';
 import { GUIDE_QUALITY_SUBSCRIPTION } from '@gql/server/GuideQuality';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
-import { Alarms } from './Alarms';
+import { Alarms, evaluateAlarm } from './Alarms';
+import { guideAlarmAtom } from '@/components/atoms/alarm';
 
 describe(Alarms.name, () => {
+  let store: ReturnType<typeof renderWithContext>['store'];
   beforeEach(async () => {
-    renderWithContext(<Alarms />, { mocks });
+    store = renderWithContext(<Alarms />, { mocks }).store;
 
     // Wait for the alarms to be loaded
     await waitFor(async () => !(await screen.findAllByLabelText<HTMLInputElement>('Limit'))[0].disabled);
@@ -19,7 +21,7 @@ describe(Alarms.name, () => {
     expect(screen.queryByText('OIWFS')).not.toBeNull();
   });
 
-  it('calls updatAlarm when limit is changed', async () => {
+  it('calls updateAlarm when limit is changed', async () => {
     const limitInput = screen.getAllByLabelText('Limit')[0];
 
     fireEvent.change(limitInput, { target: { value: '900' } });
@@ -28,6 +30,29 @@ describe(Alarms.name, () => {
     await waitFor(async () =>
       expect((await screen.findAllByLabelText<HTMLInputElement>('Limit'))[0].value).equals('900'),
     );
+    expect(store.get(guideAlarmAtom)).true;
+  });
+});
+
+describe(evaluateAlarm.name, () => {
+  it('should be false if no alarm is set', () => {
+    expect(evaluateAlarm(undefined, { centroidDetected: false, flux: 900 })).false;
+  });
+
+  it('should be false if no guide quality is set', () => {
+    expect(evaluateAlarm({ enabled: true, limit: 900, wfs: 'OIWFS' }, undefined)).false;
+  });
+
+  it('should be false if the flux is above the limit', () => {
+    expect(evaluateAlarm({ enabled: true, limit: 900, wfs: 'OIWFS' }, { centroidDetected: true, flux: 900 })).false;
+  });
+
+  it('should be true if no centroid is detected', () => {
+    expect(evaluateAlarm({ enabled: true, limit: 900, wfs: 'OIWFS' }, { centroidDetected: false, flux: 900 })).true;
+  });
+
+  it('should be true if flux is below the limit', () => {
+    expect(evaluateAlarm({ enabled: true, limit: 900, wfs: 'OIWFS' }, { centroidDetected: true, flux: 899 })).true;
   });
 });
 
