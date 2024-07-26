@@ -1,6 +1,6 @@
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { render, RenderOptions } from '@testing-library/react';
-import { Provider, WritableAtom } from 'jotai';
+import { createStore, Provider, WritableAtom } from 'jotai';
 import { useHydrateAtoms } from 'jotai/utils';
 import { PropsWithChildren, ReactElement } from 'react';
 import { GET_SLEW_FLAGS } from './configs/SlewFlags';
@@ -26,8 +26,9 @@ export function renderWithContext<T extends AtomTuples>(
   createOptions: CreateOptions<T> = {},
   options?: RenderOptions,
 ) {
-  return render(
-    <Provider>
+  const store = createStore();
+  const renderResult = render(
+    <Provider store={store}>
       <HydrateAtoms initialValues={createOptions.initialValues ?? ([] as InferAtomTuples<T>)}>
         <MockedProvider mocks={[...mocks, ...(createOptions.mocks ?? [])]} addTypename={false}>
           {ui}
@@ -36,6 +37,8 @@ export function renderWithContext<T extends AtomTuples>(
     </Provider>,
     options,
   );
+
+  return { ...renderResult, store };
 }
 
 const mocks: MockedResponse[] = [
