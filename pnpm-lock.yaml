@@ -80,7 +80,7 @@ importers:
         version: 18.3.0
       '@vitejs/plugin-react-swc':
         specifier: ^3.7.0
-        version: 3.7.0(vite@5.3.4(@types/node@20.14.9)(sass@1.77.8))
+        version: 3.7.0(vite@5.3.5(@types/node@20.14.9)(sass@1.77.8))
       '@vitest/coverage-v8':
         specifier: ^2.0.3
         version: 2.0.3(vitest@2.0.3(@types/node@20.14.9)(@vitest/ui@2.0.3)(happy-dom@14.12.3)(sass@1.77.8))
@@ -121,11 +121,11 @@ importers:
         specifier: ^7.17.0
         version: 7.17.0(eslint@8.57.0)(typescript@5.5.4)
       vite:
-        specifier: ^5.3.4
-        version: 5.3.4(@types/node@20.14.9)(sass@1.77.8)
+        specifier: ^5.3.5
+        version: 5.3.5(@types/node@20.14.9)(sass@1.77.8)
       vite-plugin-mkcert:
         specifier: ^1.17.5
-        version: 1.17.5(vite@5.3.4(@types/node@20.14.9)(sass@1.77.8))
+        version: 1.17.5(vite@5.3.5(@types/node@20.14.9)(sass@1.77.8))
       vitest:
         specifier: ^2.0.3
         version: 2.0.3(@types/node@20.14.9)(@vitest/ui@2.0.3)(happy-dom@14.12.3)(sass@1.77.8)
@@ -3632,8 +3632,8 @@ packages:
     peerDependencies:
       vite: '>=3'
 
-  vite@5.3.4:
-    resolution: {integrity: sha512-Cw+7zL3ZG9/NZBB8C+8QbQZmR54GwqIz+WMI4b3JgdYJvX+ny9AjJXqkGQlDXSXRP9rP0B4tbciRMOVEKulVOA==}
+  vite@5.3.5:
+    resolution: {integrity: sha512-MdjglKR6AQXQb9JGiS7Rc2wC6uMjcm7Go/NHNO63EwiJXfuk9PgqiP/n5IDJCziMkfw9n4Ubp7lttNwz+8ZVKA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
@@ -5433,10 +5433,10 @@ snapshots:
 
   '@ungap/structured-clone@1.2.0': {}
 
-  '@vitejs/plugin-react-swc@3.7.0(vite@5.3.4(@types/node@20.14.9)(sass@1.77.8))':
+  '@vitejs/plugin-react-swc@3.7.0(vite@5.3.5(@types/node@20.14.9)(sass@1.77.8))':
     dependencies:
       '@swc/core': 1.6.13
-      vite: 5.3.4(@types/node@20.14.9)(sass@1.77.8)
+      vite: 5.3.5(@types/node@20.14.9)(sass@1.77.8)
     transitivePeerDependencies:
       - '@swc/helpers'
 
@@ -7900,7 +7900,7 @@ snapshots:
       debug: 4.3.5
       pathe: 1.1.2
       tinyrainbow: 1.2.0
-      vite: 5.3.4(@types/node@20.14.9)(sass@1.77.8)
+      vite: 5.3.5(@types/node@20.14.9)(sass@1.77.8)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -7911,17 +7911,17 @@ snapshots:
       - supports-color
       - terser
 
-  vite-plugin-mkcert@1.17.5(vite@5.3.4(@types/node@20.14.9)(sass@1.77.8)):
+  vite-plugin-mkcert@1.17.5(vite@5.3.5(@types/node@20.14.9)(sass@1.77.8)):
     dependencies:
       '@octokit/rest': 20.1.1
       axios: 1.7.2(debug@4.3.5)
       debug: 4.3.5
       picocolors: 1.0.1
-      vite: 5.3.4(@types/node@20.14.9)(sass@1.77.8)
+      vite: 5.3.5(@types/node@20.14.9)(sass@1.77.8)
     transitivePeerDependencies:
       - supports-color
 
-  vite@5.3.4(@types/node@20.14.9)(sass@1.77.8):
+  vite@5.3.5(@types/node@20.14.9)(sass@1.77.8):
     dependencies:
       esbuild: 0.21.5
       postcss: 8.4.39
@@ -7949,7 +7949,7 @@ snapshots:
       tinybench: 2.8.0
       tinypool: 1.0.0
       tinyrainbow: 1.2.0
-      vite: 5.3.4(@types/node@20.14.9)(sass@1.77.8)
+      vite: 5.3.5(@types/node@20.14.9)(sass@1.77.8)
       vite-node: 2.0.3(@types/node@20.14.9)(sass@1.77.8)
       why-is-node-running: 2.2.2
     optionalDependencies:
