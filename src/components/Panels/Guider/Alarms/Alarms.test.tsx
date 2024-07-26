@@ -3,7 +3,7 @@ import { GET_GUIDE_ALARMS, UPDATE_GUIDE_ALARM } from '@gql/configs/GuideAlarm';
 import { renderWithContext } from '@gql/render';
 import { GUIDE_QUALITY_SUBSCRIPTION } from '@gql/server/GuideQuality';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
-import { Alarms } from './Alarms';
+import { Alarms, evaluateAlarm } from './Alarms';
 
 describe(Alarms.name, () => {
   beforeEach(async () => {
@@ -28,6 +28,28 @@ describe(Alarms.name, () => {
     await waitFor(async () =>
       expect((await screen.findAllByLabelText<HTMLInputElement>('Limit'))[0].value).equals('900'),
     );
+  });
+});
+
+describe(evaluateAlarm.name, () => {
+  it('should be false if no alarm is set', () => {
+    expect(evaluateAlarm(undefined, { centroidDetected: false, flux: 900 })).false;
+  });
+
+  it('should be false if no guide quality is set', () => {
+    expect(evaluateAlarm({ enabled: true, limit: 900, wfs: 'OIWFS' }, undefined)).false;
+  });
+
+  it('should be false if the flux is above the limit', () => {
+    expect(evaluateAlarm({ enabled: true, limit: 900, wfs: 'OIWFS' }, { centroidDetected: true, flux: 900 })).false;
+  });
+
+  it('should be true if no centroid is detected', () => {
+    expect(evaluateAlarm({ enabled: true, limit: 900, wfs: 'OIWFS' }, { centroidDetected: false, flux: 900 })).true;
+  });
+
+  it('should be true if flux is below the limit', () => {
+    expect(evaluateAlarm({ enabled: true, limit: 900, wfs: 'OIWFS' }, { centroidDetected: true, flux: 899 })).true;
   });
 });
 

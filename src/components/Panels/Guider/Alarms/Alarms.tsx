@@ -75,8 +75,5 @@ export function Alarms() {
 export function evaluateAlarm(alarm: GuideAlarm | undefined, guideQuality: GuideQuality | undefined): boolean {
   if (!alarm || !guideQuality) return false;
 
-  const limit = alarm.limit;
-  const enabled = alarm.enabled;
-
-  return enabled && ((guideQuality?.flux ?? 0) < (limit ?? 0) || !guideQuality?.centroidDetected);
+  return alarm.enabled && ((guideQuality?.flux ?? 0) < alarm.limit || !guideQuality.centroidDetected);
 }
