@@ -6,7 +6,7 @@ export function AgMechanism({ canEdit }: { canEdit: boolean }) {
       <div className="title">
         <span>AG Mechanisms</span>
       </div>
-      <div className="ag-body">
+      <div className="ag-body under-construction">
         <span className="label">Science Fold</span>
         <Button disabled={!canEdit} label="Park" />
         <span className="label">AO Fold</span>

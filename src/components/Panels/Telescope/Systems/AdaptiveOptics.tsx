@@ -29,7 +29,7 @@ export function GeMS({ canEdit }: { canEdit: boolean }) {
   }
 
   return (
-    <div className="ao-gems">
+    <div className="ao-gems under-construction">
       <Title title={'GeMS'} />
       <div className="body">
         <span className="label">ADC</span>
@@ -73,7 +73,7 @@ export function Altair({ canEdit }: { canEdit: boolean }) {
   }
 
   return (
-    <div className="ao-altair">
+    <div className="ao-altair under-construction">
       <Title title={'Altair'} />
       <div className="body">
         <span className="label">Beamsplitter</span>

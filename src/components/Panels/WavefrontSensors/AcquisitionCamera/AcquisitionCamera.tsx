@@ -1,4 +1,4 @@
-import imgUrl from '@assets/cat2.jpg';
+import imgUrl from '@assets/underconstruction.png';
 import MainControls from './MainControls';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
@@ -6,7 +6,7 @@ import { Checkbox } from 'primereact/checkbox';
 
 export default function AcquisitionCamera({ canEdit, ac }: { canEdit: boolean; ac: string }) {
   return (
-    <div className="acquisition-camera">
+    <div className="acquisition-camera under-construction">
       <div className="left">
         <div className="image">
           <span className="ac-name">{ac}</span>

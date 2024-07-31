@@ -1,11 +1,19 @@
-import imgUrl from '@assets/cat2.jpg';
+import imgUrl from '@assets/underconstruction.png';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { Checkbox } from 'primereact/checkbox';
 import { useOiwfsObserve, useOiwfsStopObserve } from '@gql/server/WavefrontSensors';
 import { useState } from 'react';
 
-export default function WavefrontSensor({ canEdit, wfs }: { canEdit: boolean; wfs: string }) {
+export default function WavefrontSensor({
+  canEdit,
+  wfs,
+  className = '',
+}: {
+  canEdit: boolean;
+  wfs: string;
+  className?: string;
+}) {
   const [freq, setFreq] = useState(100);
   const [observeState, setObserveState] = useState(false);
   let observeButton;
@@ -50,13 +58,33 @@ export default function WavefrontSensor({ canEdit, wfs }: { canEdit: boolean; wf
       );
     }
   } else if (wfs === 'PWFS1') {
-    /* empty */
+    /* Show placeholder */
+    observeButton = (
+      <Button
+        className="under-construction"
+        disabled={!canEdit}
+        icon="pi pi-play"
+        style={{ gridArea: 'g13' }}
+        aria-label="Start"
+        tooltip="Start"
+      />
+    );
   } else if (wfs === 'PWFS2') {
-    /* empty */
+    /* Show placeholder */
+    observeButton = (
+      <Button
+        className="under-construction"
+        disabled={!canEdit}
+        icon="pi pi-play"
+        style={{ gridArea: 'g13' }}
+        aria-label="Start"
+        tooltip="Start"
+      />
+    );
   }
 
   return (
-    <div className="wfs">
+    <div className={`wfs ${className}`}>
       <span className="wfs-name">{wfs}</span>
       <img src={imgUrl} alt="wfs" />
       <div className="controls">

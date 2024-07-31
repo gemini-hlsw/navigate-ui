@@ -13,13 +13,13 @@ export function TopSubsystems({ canEdit }: { canEdit: boolean }) {
   return (
     <div className="top-left">
       <McsPark disabled={!canEdit} style={{ gridArea: 'g11' }} label="Park" />
-      <Button disabled={!canEdit} style={{ gridArea: 'g12' }} label="Unwrap" />
-      <Button disabled={!canEdit} style={{ gridArea: 'g31' }} label="Park" />
-      <Button disabled={!canEdit} style={{ gridArea: 'g32' }} label="Unwrap" />
-      <Button disabled={!canEdit} style={{ gridArea: 'g41' }} label="Park" />
-      <Button disabled={!canEdit} style={{ gridArea: 'g42' }} label="Unwrap" />
-      <Button disabled={!canEdit} style={{ gridArea: 'g51' }} label="Park" />
-      <Button disabled={!canEdit} style={{ gridArea: 'g52' }} label="Unwrap" />
+      <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g12' }} label="Unwrap" />
+      <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g31' }} label="Park" />
+      <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g32' }} label="Unwrap" />
+      <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g41' }} label="Park" />
+      <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g42' }} label="Unwrap" />
+      <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g51' }} label="Park" />
+      <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g52' }} label="Unwrap" />
     </div>
   );
 }
@@ -72,7 +72,7 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
   }
 
   return (
-    <div className="bottom">
+    <div className="bottom under-construction">
       <Button disabled={!canEdit} style={{ gridArea: 'g11' }} label="Park" className={BTN_CLASSES[state.oiwfsPark]} />
       <Button disabled={!canEdit} style={{ gridArea: 'g21' }} label="Park" className={BTN_CLASSES[state.odgwPark]} />
       <Button disabled={!canEdit} style={{ gridArea: 'g31' }} label="Park" className={BTN_CLASSES[state.aowfsPark]} />
