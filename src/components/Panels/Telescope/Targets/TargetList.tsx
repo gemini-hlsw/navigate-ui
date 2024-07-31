@@ -8,11 +8,6 @@ export function TargetList({ targets, type }: { targets: TargetType[]; type?: Ty
 
   let selectedTarget: number | null | undefined = null;
   switch (type) {
-    case 'SCIENCE':
-    case 'BLINDOFFSET':
-    case 'FIXED':
-      selectedTarget = configuration?.selectedTarget;
-      break;
     case 'OIWFS':
       selectedTarget = configuration?.selectedOiTarget;
       break;
@@ -22,18 +17,17 @@ export function TargetList({ targets, type }: { targets: TargetType[]; type?: Ty
     case 'PWFS2':
       selectedTarget = configuration?.selectedP2Target;
       break;
+
+    default:
+    case 'SCIENCE':
+    case 'BLINDOFFSET':
+    case 'FIXED':
+      selectedTarget = configuration?.selectedTarget;
+      break;
   }
 
   function updateSelectedTarget(targetPk: number) {
     switch (type) {
-      case 'SCIENCE':
-      case 'BLINDOFFSET':
-      case 'FIXED':
-        updateConfiguration({
-          variables: { pk: configuration!.pk, selectedTarget: targetPk },
-        });
-        break;
-
       case 'OIWFS':
         updateConfiguration({
           variables: { pk: configuration!.pk, selectedOiTarget: targetPk },
@@ -53,6 +47,12 @@ export function TargetList({ targets, type }: { targets: TargetType[]; type?: Ty
         break;
 
       default:
+      case 'SCIENCE':
+      case 'BLINDOFFSET':
+      case 'FIXED':
+        updateConfiguration({
+          variables: { pk: configuration!.pk, selectedTarget: targetPk },
+        });
         break;
     }
   }
