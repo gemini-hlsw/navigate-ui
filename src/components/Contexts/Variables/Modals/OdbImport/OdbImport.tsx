@@ -46,6 +46,14 @@ export function OdbImport() {
               },
             ],
           },
+          onCompleted(t) {
+            updateConfiguration({
+              variables: {
+                pk: configuration?.pk ?? 1,
+                selectedTarget: t.removeAndCreateBaseTargets[0].pk,
+              },
+            });
+          },
         });
         if (rotator) {
           updateRotator({
