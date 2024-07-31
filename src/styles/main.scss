@@ -173,8 +173,8 @@ button.p-component.p-button {
 // Under construction styles
 button.under-construction {
   background-color: transparent !important;
-  border-color: var(--blue-400) !important;
-  color: var(--blue-400) !important;
+  border-color: var(--yellow-400) !important;
+  color: var(--yellow-400) !important;
   cursor: not-allowed;
 }
 
@@ -184,8 +184,8 @@ button.under-construction {
   .p-checkbox-box,
   .p-dropdown {
     background-color: transparent !important;
-    border-color: var(--blue-400) !important;
-    color: var(--blue-400) !important;
+    border-color: var(--yellow-400) !important;
+    color: var(--yellow-400) !important;
     cursor: not-allowed;
   }
 }
