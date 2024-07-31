@@ -229,6 +229,6 @@ export function Oiwfs({ label, disabled, className = '' }: { label: string; disa
       disabled={disabled || !selectedTarget.name}
     />
   ) : (
-    <></>
+    <Button className={className} disabled={disabled} label={label} />
   );
 }

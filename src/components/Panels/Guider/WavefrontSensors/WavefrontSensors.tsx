@@ -7,7 +7,7 @@ import { useCanEdit } from '@/components/atoms/auth';
 export function WavefrontSensors() {
   const canEdit = useCanEdit();
   return (
-    <div className="wavefront-sensors">
+    <div className="wavefront-sensors under-construction">
       <Title title="Wavefront Sensors" />
       <div className="body">
         <TabView>

@@ -5,17 +5,17 @@ export function Indicators({ canEdit }: { canEdit: boolean }) {
   return (
     <div className="left">
       <MCS label="MCS" disabled={!canEdit} />
-      <Button disabled={!canEdit} label="SCS" />
-      <Button disabled={!canEdit} label="CRCS" />
-      <Button disabled={!canEdit} label="PWFS1" />
-      <Button disabled={!canEdit} label="PWFS2" />
+      <Button className="under-construction" disabled={!canEdit} label="SCS" />
+      <Button className="under-construction" disabled={!canEdit} label="CRCS" />
+      <Button className="under-construction" disabled={!canEdit} label="PWFS1" />
+      <Button className="under-construction" disabled={!canEdit} label="PWFS2" />
       <Oiwfs label="OIWFS" disabled={!canEdit} />
-      <Button disabled={!canEdit} label="ODGW" />
-      <Button disabled={!canEdit} label="AOWFS" />
-      <Button disabled={!canEdit} label="Dome" />
-      <Button disabled={!canEdit} label="Shuters" />
-      <Button disabled={!canEdit} label="W VGate" />
-      <Button disabled={!canEdit} label="E VGate" />
+      <Button className="under-construction" disabled={!canEdit} label="ODGW" />
+      <Button className="under-construction" disabled={!canEdit} label="AOWFS" />
+      <Button className="under-construction" disabled={!canEdit} label="Dome" />
+      <Button className="under-construction" disabled={!canEdit} label="Shuters" />
+      <Button className="under-construction" disabled={!canEdit} label="W VGate" />
+      <Button className="under-construction" disabled={!canEdit} label="E VGate" />
     </div>
   );
 }

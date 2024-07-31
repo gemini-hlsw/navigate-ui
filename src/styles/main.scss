@@ -75,6 +75,8 @@ a {
 
 .p-inputtext.p-component {
   font-size: var(--input-font-size);
+  width: 100%;
+  height: 100%;
 }
 
 .p-component {
@@ -149,6 +151,7 @@ button.p-component.p-button {
 
 .dark .p-checkbox .p-checkbox-box.p-highlight {
   border-color: var(--blue-400);
+
   > span {
     color: var(--blue-400);
   }
@@ -165,4 +168,24 @@ button.p-component.p-button {
 
 .p-multiselect-panel .p-multiselect-header {
   display: none;
+}
+
+// Under construction styles
+button.under-construction {
+  background-color: transparent !important;
+  border-color: var(--yellow-400) !important;
+  color: var(--yellow-400) !important;
+  cursor: not-allowed;
+}
+
+.under-construction {
+  button.p-button,
+  .p-inputnumber-input,
+  .p-checkbox-box,
+  .p-dropdown {
+    background-color: transparent !important;
+    border-color: var(--yellow-400) !important;
+    color: var(--yellow-400) !important;
+    cursor: not-allowed;
+  }
 }
