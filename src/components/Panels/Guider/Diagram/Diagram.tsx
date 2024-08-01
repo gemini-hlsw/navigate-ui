@@ -1,5 +1,14 @@
 import { useEffect } from 'react';
-import { ReactFlow, Background, Controls, Edge, Node, ReactFlowProvider, useReactFlow } from 'reactflow';
+import {
+  ReactFlow,
+  Background,
+  Controls,
+  Edge,
+  Node,
+  ReactFlowProvider,
+  useReactFlow,
+  useNodesInitialized,
+} from 'reactflow';
 import 'reactflow/dist/style.css';
 import { useGetGuideState } from './useGetGuideState';
 
@@ -51,7 +60,8 @@ const initialEdges: Edge[] = [
 ];
 
 function Flow() {
-  const { setNodes, setEdges } = useReactFlow();
+  const { setNodes, setEdges, fitView } = useReactFlow();
+  const nodesInitialized = useNodesInitialized();
   const state = useGetGuideState();
 
   useEffect(() => {
@@ -239,8 +249,13 @@ function Flow() {
 
     setNodes([...sourceNodes, ...initialNodes]);
     setEdges([...sourceEdges, ...initialEdges]);
-    // setTimeout(() => fitView(), 100)
   }, [state]);
+
+  useEffect(() => {
+    if (nodesInitialized) {
+      fitView();
+    }
+  }, [nodesInitialized]);
 
   return (
     <div className="diagram">
