@@ -30,7 +30,7 @@ export function LightPath() {
   const disabled = !canEdit || loading || updateLoading;
 
   return (
-    <div className="light-path">
+    <div className="light-path under-construction">
       <Title title="Light path" />
       <div className="body">
         <Dropdown

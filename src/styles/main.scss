@@ -187,5 +187,13 @@ button.under-construction {
     border-color: var(--yellow-400) !important;
     color: var(--yellow-400) !important;
     cursor: not-allowed;
+
+    > span {
+      color: var(--yellow-400) !important;
+    }
+
+    svg {
+      color: var(--yellow-400) !important;
+    }
   }
 }

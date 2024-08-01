@@ -164,7 +164,7 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         mode="decimal"
       />
       <Slider
-        disabled={!canEdit}
+        disabled={!canEdit || true} // under construction!
         style={{ gridArea: 'g63', marginTop: '10px' }}
         value={WVGate}
         onChange={(e) => setWVGate(e.value)}
@@ -189,7 +189,7 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         mode="decimal"
       />
       <Slider
-        disabled={!canEdit}
+        disabled={!canEdit || true} // under construction!
         style={{ gridArea: 'g73', marginTop: '10px' }}
         value={EVGate}
         onChange={(e) => setEVGate(e.value)}
