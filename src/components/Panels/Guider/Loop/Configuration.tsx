@@ -96,7 +96,7 @@ export function Configuration() {
             onChange={() => modifyGuideLoop('m2TipTiltEnable', !state.m2TipTiltEnable)}
           />
           <MultiSelect
-            value={state.m2TipTiltSource ? state.m2TipTiltSource.split(',') : undefined}
+            value={state.m2TipTiltSource?.split(',') ?? ''}
             onChange={(e) => modifyGuideLoop('m2TipTiltSource', (e.value as string[]).join(','))}
             options={[
               // { label: "PWFS1", value: "PWFS1" },
@@ -128,10 +128,10 @@ export function Configuration() {
               state.m2TipTiltFocusLink
                 ? state.m2TipTiltSource
                   ? state.m2TipTiltSource.split(',')
-                  : undefined
+                  : ''
                 : state.m2FocusSource
                   ? state.m2FocusSource.split(',')
-                  : undefined
+                  : ''
             }
             onChange={(e) => modifyGuideLoop('m2FocusSource', (e.value as string[]).join(','))}
             options={[
