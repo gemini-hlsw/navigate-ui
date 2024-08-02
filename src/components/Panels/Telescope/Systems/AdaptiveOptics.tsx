@@ -25,6 +25,12 @@ export function GeMS({ canEdit }: { canEdit: boolean }) {
           pk: state.pk,
           [name]: value,
         },
+        optimisticResponse: {
+          updateGemsInstrument: {
+            ...state,
+            [name]: value,
+          },
+        },
       });
   }
 
@@ -68,6 +74,12 @@ export function Altair({ canEdit }: { canEdit: boolean }) {
         variables: {
           pk: state.pk,
           [name]: value,
+        },
+        optimisticResponse: {
+          updateAltairInstrument: {
+            ...state,
+            [name]: value,
+          },
         },
       });
   }

@@ -22,6 +22,12 @@ export function Altair() {
           pk: state.pk,
           [name]: value,
         },
+        optimisticResponse: {
+          updateAltairGuideLoop: {
+            ...state,
+            [name]: value,
+          },
+        },
       });
   }
 
@@ -31,50 +37,74 @@ export function Altair() {
     <div className="adaptive-optics">
       <Title title="Altair" />
       <div className="ao-body">
-        <span className="label">AO enabled</span>
+        <label htmlFor="aoEnabled" className="label">
+          AO enabled
+        </label>
         <Checkbox
+          inputId="aoEnabled"
           disabled={disabled}
           checked={!!state?.aoEnabled}
           onChange={() => modifyAltairGuideLoop('aoEnabled', !state?.aoEnabled)}
         />
-        <span className="label">OI blend</span>
+        <label htmlFor="oiBlend" className="label">
+          OI blend
+        </label>
         <Checkbox
+          inputId="oiBlend"
           disabled={disabled}
           checked={!!state?.oiBlend}
           onChange={() => modifyAltairGuideLoop('oiBlend', !state?.oiBlend)}
         />
-        <span className="label">Focus</span>
+        <label htmlFor="focus" className="label">
+          Focus
+        </label>
         <Checkbox
+          inputId="focus"
           disabled={disabled}
           checked={!!state?.focus}
           onChange={() => modifyAltairGuideLoop('focus', !state?.focus)}
         />
-        <span className="label">P1 TTF</span>
+        <label htmlFor="p1Ttf" className="label">
+          P1 TTF
+        </label>
         <Checkbox
+          inputId="p1Ttf"
           disabled={disabled}
           checked={!!state?.p1Ttf}
           onChange={() => modifyAltairGuideLoop('p1Ttf', !state?.p1Ttf)}
         />
-        <span className="label">STRAP</span>
+        <label htmlFor="strap" className="label">
+          STRAP
+        </label>
         <Checkbox
+          inputId="strap"
           disabled={disabled}
           checked={!!state?.strap}
           onChange={() => modifyAltairGuideLoop('strap', !state?.strap)}
         />
-        <span className="label">OI TTF</span>
+        <label htmlFor="oiTtf" className="label">
+          OI TTF
+        </label>
         <Checkbox
+          inputId="oiTtf"
           disabled={disabled}
           checked={!!state?.oiTtf}
           onChange={() => modifyAltairGuideLoop('oiTtf', !state?.oiTtf)}
         />
-        <span className="label">TTGS</span>
+        <label htmlFor="ttgs" className="label">
+          TTGS
+        </label>
         <Checkbox
+          inputId="ttgs"
           disabled={disabled}
           checked={!!state?.ttgs}
           onChange={() => modifyAltairGuideLoop('ttgs', !state?.ttgs)}
         />
-        <span className="label">SFO</span>
+        <label htmlFor="sfo" className="label">
+          SFO
+        </label>
         <Checkbox
+          inputId="sfo"
           disabled={disabled}
           checked={!!state?.sfo}
           onChange={() => modifyAltairGuideLoop('sfo', !state?.sfo)}
@@ -100,6 +130,12 @@ export function GeMS() {
           pk: state.pk,
           [name]: value,
         },
+        optimisticResponse: {
+          updateGemsGuideLoop: {
+            ...state,
+            [name]: value,
+          },
+        },
       });
   }
 
@@ -109,38 +145,53 @@ export function GeMS() {
     <div className="adaptive-optics">
       <Title title="GeMS" />
       <div className="ao-body">
-        <span className="label">AO enabled</span>
+        <label htmlFor="aoEnabled" className="label">
+          AO enabled
+        </label>
         <Checkbox
+          inputId="aoEnabled"
           disabled={disabled}
           checked={!!state?.aoEnabled}
           onChange={() => modifyGemsGuideLoop('aoEnabled', !state?.aoEnabled)}
         />
-        <span className="label">Focus</span>
+        <label className="label">Focus</label>
         <Checkbox
           disabled={disabled}
           checked={!!state?.focus}
           onChange={() => modifyGemsGuideLoop('focus', !state?.focus)}
         />
-        <span className="label">Rotation</span>
+        <label htmlFor="rotation" className="label">
+          Rotation
+        </label>
         <Checkbox
+          inputId="rotation"
           disabled={disabled}
           checked={!!state?.rotation}
           onChange={() => modifyGemsGuideLoop('rotation', !state?.rotation)}
         />
-        <span className="label">Tip/Tilt</span>
+        <label htmlFor="tipTilt" className="label">
+          Tip/Tilt
+        </label>
         <Checkbox
+          inputId="tipTilt"
           disabled={disabled}
           checked={!!state?.tipTilt}
           onChange={() => modifyGemsGuideLoop('tipTilt', !state?.tipTilt)}
         />
-        <span className="label">Anisopl.</span>
+        <label htmlFor="anisopl" className="label">
+          Anisopl.
+        </label>
         <Checkbox
+          inputId="anisopl"
           disabled={disabled}
           checked={!!state?.anisopl}
           onChange={() => modifyGemsGuideLoop('anisopl', !state?.anisopl)}
         />
-        <span className="label">Flexure</span>
+        <label htmlFor="flexure" className="label">
+          Flexure
+        </label>
         <Checkbox
+          inputId="flexure"
           disabled={disabled}
           checked={!!state?.flexure}
           onChange={() => modifyGemsGuideLoop('flexure', !state?.flexure)}
