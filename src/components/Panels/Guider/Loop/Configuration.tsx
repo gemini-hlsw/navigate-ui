@@ -97,7 +97,7 @@ export function Configuration() {
           />
           <MultiSelect
             value={state.m2TipTiltSource ? state.m2TipTiltSource.split(',') : []}
-            onChange={(e) => modifyGuideLoop('m2TipTiltSource', e.value.join(','))}
+            onChange={(e) => modifyGuideLoop('m2TipTiltSource', (e.value as string[]).join(','))}
             options={[
               { label: 'OIWFS', value: 'OIWFS' },
               // { label: "PWFS1", value: "PWFS1" },
