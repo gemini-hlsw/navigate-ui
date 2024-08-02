@@ -4,7 +4,7 @@ import { TargetType } from '@/types';
 import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
-import { deg2dms, deg2hms, dms2deg, hms2deg } from '@/Helpers/functions';
+import { deg2dms, deg2hms, dms2deg, hms2deg } from 'lucuma-core';
 import { Button } from 'primereact/button';
 import { useUpdateTarget } from '@gql/configs/Target';
 import { useTargetEdit } from '@/components/atoms/target';
