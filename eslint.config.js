@@ -17,6 +17,9 @@ export default tseslint.config(
         project: true,
       },
     },
+    linterOptions: {
+      reportUnusedDisableDirectives: 'error',
+    },
     rules: {
       // Custom rules here
       '@typescript-eslint/no-explicit-any': 'off',
@@ -33,6 +36,13 @@ export default tseslint.config(
     },
   },
   {
+    // Test-specific rules
+    files: ['src/**/*.{spec,test}.{ts,tsx}'],
+    rules: {
+      '@typescript-eslint/no-unused-expressions': 'off',
+    },
+  },
+  {
     files: ['*.js', '*.config.{js,ts}'],
     ...tseslint.configs.disableTypeChecked,
   },
@@ -45,6 +55,6 @@ export default tseslint.config(
     },
   },
   {
-    ignores: ['node_modules', 'dist', 'public', 'reports'],
+    ignores: ['node_modules', 'dist', 'public', 'reports', 'src/gql/*/gen/*.ts'],
   },
 );

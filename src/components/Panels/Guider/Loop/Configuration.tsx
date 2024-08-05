@@ -41,7 +41,7 @@ export function Configuration() {
         },
         optimisticResponse: {
           updateGuideLoop: {
-            ...(state as GuideLoop),
+            ...state,
             [name]: value,
           },
         },
