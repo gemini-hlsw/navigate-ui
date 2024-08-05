@@ -107,7 +107,6 @@ export function Instrument() {
         <div className="selectors">
           <span>Instrument</span>
           <Dropdown
-            disabled={false}
             value={name}
             options={nameOptions}
             onChange={(e) => setName(e.target.value)}

@@ -84,19 +84,20 @@ export function Target() {
       }
     >
       <div className="target-edit">
-        <span style={{ gridArea: 's1' }} className="label">
+        <label htmlFor="targetName" style={{ gridArea: 's1' }} className="label">
           Name
-        </span>
+        </label>
         <InputText
-          disabled={false}
+          id="targetName"
           style={{ gridArea: 's2' }}
           value={auxTarget.name ?? ''}
           onChange={(e) => setAuxTarget({ ...auxTarget, name: e.target.value })}
         />
-        <span style={{ gridArea: 'l1' }} className="label">
+        <label htmlFor="coordsType" style={{ gridArea: 'l1' }} className="label">
           Coordinates
-        </span>
+        </label>
         <Dropdown
+          inputId="coordsType"
           disabled={!isBaseTarget(auxTarget)}
           style={{ gridArea: 'd1' }}
           value={coordsType}
@@ -145,11 +146,11 @@ export function Target() {
           }}
           placeholder="Select coordinates type"
         />
-        <span style={{ gridArea: 't1' }} className="label">
+        <label htmlFor="raAzDegrees" style={{ gridArea: 't1' }} className="label">
           {coordsType === 'celestial' ? 'RA' : 'Az'}
-        </span>
+        </label>
         <InputNumber
-          disabled={false}
+          inputId="raAzDegrees"
           style={{ gridArea: 'c11' }}
           value={coordsType === 'celestial' ? auxTarget.ra?.degrees : auxTarget.az?.degrees}
           onValueChange={(e) => {
@@ -182,11 +183,11 @@ export function Target() {
             }
           }}
         />
-        <span style={{ gridArea: 'f11' }} className="label">
+        <label htmlFor="raAzDegrees" style={{ gridArea: 'f11' }} className="label">
           degrees
-        </span>
+        </label>
         <InputText
-          disabled={false}
+          id="raAzHmsDms"
           style={{ gridArea: 'c12' }}
           value={c1String}
           onChange={(e) => {
@@ -204,14 +205,14 @@ export function Target() {
             setc1String(e.target.value);
           }}
         />
-        <span style={{ gridArea: 'f12' }} className="label">
+        <label htmlFor="raAzHmsDms" style={{ gridArea: 'f12' }} className="label">
           {coordsType === 'celestial' ? 'hms' : 'dms'}
-        </span>
-        <span style={{ gridArea: 't2' }} className="label">
+        </label>
+        <label htmlFor="decElDegrees" style={{ gridArea: 't2' }} className="label">
           {coordsType === 'celestial' ? 'Dec' : 'El'}
-        </span>
+        </label>
         <InputNumber
-          disabled={false}
+          inputId="decElDegrees"
           style={{ gridArea: 'c21' }}
           value={coordsType === 'celestial' ? auxTarget.dec?.degrees : auxTarget.el?.degrees}
           onValueChange={(e) => {
@@ -242,11 +243,11 @@ export function Target() {
             }
           }}
         />
-        <span style={{ gridArea: 'f21' }} className="label">
+        <label htmlFor="decElDegrees" style={{ gridArea: 'f21' }} className="label">
           degrees
-        </span>
+        </label>
         <InputText
-          disabled={false}
+          id="decElDms"
           style={{ gridArea: 'c22' }}
           value={c2String}
           onChange={(e) => {
@@ -264,14 +265,14 @@ export function Target() {
             setc2String(e.target.value);
           }}
         />
-        <span style={{ gridArea: 'f22' }} className="label">
+        <label htmlFor="decElDms" style={{ gridArea: 'f22' }} className="label">
           dms
-        </span>
-        <span style={{ gridArea: 's3' }} className="label">
+        </label>
+        <label htmlFor="targetEpoch" style={{ gridArea: 's3' }} className="label">
           Epoch
-        </span>
+        </label>
         <InputText
-          disabled={auxTarget.type === 'FIXED'}
+          id="targetEpoch"
           style={{ gridArea: 's4' }}
           value={(auxTarget.type === 'FIXED' ? '' : auxTarget.epoch) ?? ''}
           onChange={(e) => setAuxTarget({ ...auxTarget, epoch: e.target.value })}

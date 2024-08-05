@@ -28,9 +28,7 @@ const GUIDE_ENABLE = graphql(`
 `);
 
 export function useGuideEnable() {
-  const [mutationFunction] = useMutation(GUIDE_ENABLE);
-
-  return mutationFunction;
+  return useMutation(GUIDE_ENABLE);
 }
 
 const GUIDE_DISABLE = graphql(`
@@ -43,7 +41,5 @@ const GUIDE_DISABLE = graphql(`
 `);
 
 export function useGuideDisable() {
-  const [mutationFunction] = useMutation(GUIDE_DISABLE);
-
-  return mutationFunction;
+  return useMutation(GUIDE_DISABLE);
 }
