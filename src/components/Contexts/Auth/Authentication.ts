@@ -6,7 +6,6 @@ export const Authentication = {
   getUser() {
     const user = localStorage.getItem('user');
     if (user) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return JSON.parse(user) as User;
     } else {
       return null;
@@ -67,7 +66,7 @@ export const Authentication = {
         localStorage.removeItem('user');
       }
     } catch (error) {
-      /* empty */
+      console.error(`Signout error`, error);
     }
   },
 };
