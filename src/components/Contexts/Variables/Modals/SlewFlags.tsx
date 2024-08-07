@@ -58,6 +58,12 @@ function SlewFlagInput<T extends keyof UpdateSlewFlagsMutationVariables>({
         pk: flags.pk,
         [flag]: !flags[flag],
       },
+      optimisticResponse: {
+        updateSlewFlags: {
+          ...flags,
+          [flag]: !flags[flag],
+        },
+      },
     });
   }
   const inputId = `${flag}-${id}`;

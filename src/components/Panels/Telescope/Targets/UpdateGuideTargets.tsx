@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { useGetGuideTargets } from '@gql/odb/Observation';
 import { TargetInput } from '@/types';
 import { useRef } from 'react';

@@ -39,7 +39,7 @@ export function AlarmAudio() {
     return () => {
       clearInterval(AudioRetryInterval);
       alarmAudio.pause();
-      alarmAudio.remove;
+      alarmAudio.remove();
     };
   }, [alarm, alarmAudio]);
 

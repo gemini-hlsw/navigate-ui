@@ -14,9 +14,10 @@ import { ReactNode } from 'react';
 
 export function Configuration() {
   const canEdit = useCanEdit();
-  const configuration = useConfiguration().data?.configuration;
-  const { data, updateQuery, loading: getLoading } = useGetGuideLoop();
+  const { data: confData, loading: getConfLoading } = useConfiguration();
+  const { data, loading: getLoading } = useGetGuideLoop();
 
+  const configuration = confData?.configuration;
   const state =
     data?.guideLoop ??
     ({
@@ -25,8 +26,8 @@ export function Configuration() {
     } as GuideLoop);
 
   const [updateGuideLoop, { loading: updateLoading }] = useUpdateGuideLoop();
-  const guideEnable = useGuideEnable();
-  const guideDisable = useGuideDisable();
+  const [guideEnable, { loading: enableLoading }] = useGuideEnable();
+  const [guideDisable, { loading: disableLoading }] = useGuideDisable();
 
   function modifyGuideLoop<T extends keyof UpdateGuideLoopMutationVariables>(
     name: T,
@@ -38,8 +39,11 @@ export function Configuration() {
           pk: state.pk,
           [name]: value,
         },
-        onCompleted(data) {
-          updateQuery(() => ({ guideLoop: data.updateGuideLoop }));
+        optimisticResponse: {
+          updateGuideLoop: {
+            ...state,
+            [name]: value,
+          },
         },
       });
   }
@@ -80,22 +84,29 @@ export function Configuration() {
     }
   }
 
-  const disabled = !canEdit || getLoading || updateLoading;
+  const disabled = !canEdit;
+  const loading = getLoading || getConfLoading || updateLoading;
 
   return (
     <>
       <div className="configuration">
         <div className="body">
-          <span className="label" style={{ gridArea: 'l1' }}>
+          <label
+            htmlFor={state.m2TipTiltEnable ? 'm2TipTiltSource' : 'm2TipTiltEnable'}
+            className="label"
+            style={{ gridArea: 'l1' }}
+          >
             M2 Tip/Tilt
-          </span>
+          </label>
           <Checkbox
+            inputId="m2TipTiltEnable"
             style={{ gridArea: 's1' }}
-            disabled={disabled}
+            disabled={disabled || loading}
             checked={state.m2TipTiltEnable}
             onChange={() => modifyGuideLoop('m2TipTiltEnable', !state.m2TipTiltEnable)}
           />
           <MultiSelect
+            inputId="m2TipTiltSource"
             value={state.m2TipTiltSource ? state.m2TipTiltSource.split(',') : []}
             onChange={(e) => modifyGuideLoop('m2TipTiltSource', (e.value as string[]).join(','))}
             options={[
@@ -110,20 +121,27 @@ export function Configuration() {
             showSelectAll={false}
             style={{ gridArea: 'd1' }}
             disabled={disabled || !state.m2TipTiltEnable}
+            loading={loading}
           />
           <div className="lever" onClick={() => modifyGuideLoop('m2TipTiltFocusLink', !state.m2TipTiltFocusLink)}>
             {state.m2TipTiltFocusLink ? <ConnectedChain /> : <BrokenChain />}
           </div>
-          <span className="label" style={{ gridArea: 'l2' }}>
+          <label
+            htmlFor={state.m2FocusEnable && !state.m2TipTiltFocusLink ? 'm2FocusSource' : 'm2FocusEnable'}
+            className="label"
+            style={{ gridArea: 'l2' }}
+          >
             M2 Focus
-          </span>
+          </label>
           <Checkbox
+            inputId="m2FocusEnable"
             style={{ gridArea: 's2' }}
-            disabled={disabled}
+            disabled={disabled || loading}
             checked={state.m2FocusEnable}
             onChange={() => modifyGuideLoop('m2FocusEnable', !state.m2FocusEnable)}
           />
           <MultiSelect
+            inputId="m2FocusSource"
             value={
               state.m2TipTiltFocusLink
                 ? state.m2TipTiltSource
@@ -146,57 +164,70 @@ export function Configuration() {
             showSelectAll={false}
             style={{ gridArea: 'd2' }}
             disabled={disabled || state.m2TipTiltFocusLink || !state.m2FocusEnable}
+            loading={loading}
           />
-          <span className="label" style={{ gridArea: 'l3' }}>
+          <label
+            htmlFor={state.m2ComaEnable ? 'm2ComaM1CorrectionsSource' : 'm2ComaEnable'}
+            className="label"
+            style={{ gridArea: 'l3' }}
+          >
             M2 Coma
-          </span>
+          </label>
           <Checkbox
-            disabled={disabled}
+            inputId="m2ComaEnable"
+            disabled={disabled || loading}
             checked={state.m2ComaEnable}
             onChange={() => modifyGuideLoop('m2ComaEnable', !state.m2ComaEnable)}
           />
           <Dropdown
+            inputId="m2ComaM1CorrectionsSource"
             style={{ gridArea: 'd3' }}
             disabled={disabled || (!state.m2ComaEnable && !state.m1CorrectionsEnable)}
+            loading={loading}
             value={state.m2ComaM1CorrectionsSource}
             // options={["PWFS1", "PWFS2", "PWFS1 & PWFS2", "OIWFS", "GAOS"]}
             options={['OIWFS']}
             onChange={(e) => modifyGuideLoop('m2ComaM1CorrectionsSource', e.target.value)}
             placeholder="Select a source"
           />
-          <span className="label" style={{ gridArea: 'l4' }}>
+          <label htmlFor="m1CorrectionsEnable" className="label" style={{ gridArea: 'l4' }}>
             M1 Corrections
-          </span>
+          </label>
           <Checkbox
+            inputId="m1CorrectionsEnable"
             style={{ gridArea: 's4' }}
-            disabled={disabled}
+            disabled={disabled || loading}
             checked={state.m1CorrectionsEnable}
             onChange={() => modifyGuideLoop('m1CorrectionsEnable', !state.m1CorrectionsEnable)}
           />
-          <span className="label" style={{ gridArea: 'l5' }}>
+          <label htmlFor="mountOffload" className="label" style={{ gridArea: 'l5' }}>
             Mount offload
-          </span>
+          </label>
           <Checkbox
+            inputId="mountOffload"
             style={{ gridArea: 's5' }}
-            disabled={disabled}
+            disabled={disabled || loading}
             checked={state.mountOffload}
             onChange={() => modifyGuideLoop('mountOffload', !state.mountOffload)}
           />
-          <span className="label" style={{ gridArea: 'l6' }}>
+          <label htmlFor="daytimeMode" className="label" style={{ gridArea: 'l6' }}>
             Daytime mode
-          </span>
+          </label>
           <Checkbox
+            inputId="daytimeMode"
             style={{ gridArea: 's6' }}
-            disabled={disabled}
+            disabled={disabled || loading}
             checked={state.daytimeMode}
             onChange={() => modifyGuideLoop('daytimeMode', !state.daytimeMode)}
           />
-          <span className="label" style={{ gridArea: 'l7' }}>
+          <label htmlFor="probeTracking" className="label" style={{ gridArea: 'l7' }}>
             Probe tracking
-          </span>
+          </label>
           <Dropdown
+            inputId="probeTracking"
             style={{ gridArea: 'd7' }}
             disabled={disabled}
+            loading={loading}
             value={state.probeTracking}
             options={[
               'OI➡OI',
@@ -216,30 +247,18 @@ export function Configuration() {
         </div>
         <div className="buttons">
           <Button
-            disabled={disabled}
+            disabled={disabled || enableLoading || disableLoading}
             onClick={() =>
               void guideEnable({
                 variables: {
                   config: translateStateGuideInput(),
-                },
-                onCompleted() {
-                  // console.log(data)
                 },
               })
             }
           >
             Enable
           </Button>
-          <Button
-            disabled={disabled}
-            onClick={() =>
-              void guideDisable({
-                onCompleted() {
-                  // console.log(data)
-                },
-              })
-            }
-          >
+          <Button disabled={disabled || enableLoading || disableLoading} onClick={() => void guideDisable()}>
             Disable
           </Button>
         </div>

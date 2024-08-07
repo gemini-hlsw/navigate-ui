@@ -8,26 +8,31 @@ import { useCanEdit } from '@/components/atoms/auth';
 export function LightPath() {
   const canEdit = useCanEdit();
 
-  const { data, updateQuery, loading } = useGetGuideLoop();
+  const { data, loading: getLoading } = useGetGuideLoop();
   const [updateGuideLoop, { loading: updateLoading }] = useUpdateGuideLoop();
-  const state = data?.guideLoop ?? ({} as GuideLoop);
+  const state = data?.guideLoop ?? ({} as Partial<GuideLoop>);
   const lightPath = state.lightPath;
 
   function modifyGuideLoop<T extends keyof UpdateGuideLoopMutationVariables>(
     name: T,
     value: UpdateGuideLoopMutationVariables[T],
   ) {
-    updateGuideLoop({
-      variables: {
-        pk: state.pk,
-        [name]: value,
-      },
-      onCompleted(data) {
-        updateQuery(() => ({ guideLoop: data.updateGuideLoop }));
-      },
-    });
+    if (state.pk)
+      updateGuideLoop({
+        variables: {
+          pk: state.pk,
+          [name]: value,
+        },
+        optimisticResponse: {
+          updateGuideLoop: {
+            ...(state as GuideLoop),
+            [name]: value,
+          },
+        },
+      });
   }
-  const disabled = !canEdit || loading || updateLoading;
+  const disabled = !canEdit;
+  const loading = getLoading || updateLoading;
 
   return (
     <div className="light-path under-construction">
@@ -35,6 +40,7 @@ export function LightPath() {
       <div className="body">
         <Dropdown
           disabled={disabled}
+          loading={loading}
           value={lightPath}
           options={[
             'Sky ➡ Instrument',
@@ -47,7 +53,7 @@ export function LightPath() {
           onChange={() => modifyGuideLoop('lightPath', lightPath)}
           placeholder="Select a light  path"
         />
-        <Button disabled={disabled} label="Set" onClick={() => modifyGuideLoop('lightPath', lightPath)} />
+        <Button disabled={disabled || loading} label="Set" onClick={() => modifyGuideLoop('lightPath', lightPath)} />
         {/* <Button disabled={!canEdit} label="Sky → Instrument" />
         <Button disabled={!canEdit} label="Sky → AO → Instrument" />
         <Button disabled={!canEdit} label="Sky → AC" />

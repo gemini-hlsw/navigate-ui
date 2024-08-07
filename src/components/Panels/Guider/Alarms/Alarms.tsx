@@ -15,10 +15,10 @@ export function Alarms() {
   const { data, loading: subscriptionLoading } = useGuideQualities();
   const guideQualities = data?.guidersQualityValues;
 
-  const { data: alarmsData, loading: alarmsLoading, updateQuery } = useGuideAlarms();
+  const { data: alarmsData, loading: alarmsLoading } = useGuideAlarms();
   const alarms = alarmsData?.guideAlarms;
 
-  const [updateAlarm] = useUpdateGuideAlarm();
+  const [updateAlarm, { loading: updateLoading }] = useUpdateGuideAlarm();
 
   useEffect(() => {
     const hasAlarm =
@@ -34,13 +34,10 @@ export function Alarms() {
   function onUpdateAlarm(variables: UpdateGuideAlarmMutationVariables) {
     updateAlarm({
       variables,
-      onCompleted(data) {
-        updateQuery((prev) => ({ guideAlarms: { ...prev.guideAlarms, [variables.wfs]: data.updateGuideAlarm } }));
-      },
     });
   }
 
-  const disabled = !canEdit || subscriptionLoading || alarmsLoading;
+  const disabled = !canEdit || subscriptionLoading || alarmsLoading || updateLoading;
 
   return (
     <div className="alarms">
