@@ -56,8 +56,17 @@ export function Configuration() {
       }
     }
     const m1Input = state.m2ComaM1CorrectionsSource;
-    const [probeFrom] = state.probeTracking.split('➡');
+    if (state.probeTracking === 'NONE') {
+      return {
+        m2Inputs: m2Inputs,
+        m2Coma: state.m2ComaEnable,
+        m1Input: m1Input as 'OIWFS',
+        mountOffload: state.mountOffload ?? false,
+        daytimeMode: state.daytimeMode ?? false,
+      };
+    }
 
+    const [probeFrom, probeTo] = state.probeTracking.split('➡');
     return {
       m2Inputs: m2Inputs,
       m2Coma: state.m2ComaEnable,
@@ -66,7 +75,7 @@ export function Configuration() {
       daytimeMode: state.daytimeMode ?? false,
       probeGuide: {
         from: probeFrom === 'OI' ? 'GMOS_OIWFS' : probeFrom === 'P1' ? 'PWFS_1' : 'PWFS_2',
-        to: probeFrom === 'OI' ? 'GMOS_OIWFS' : probeFrom === 'P1' ? 'PWFS_1' : 'PWFS_2',
+        to: probeTo === 'OI' ? 'GMOS_OIWFS' : probeTo === 'P1' ? 'PWFS_1' : 'PWFS_2',
       },
     };
   }
@@ -229,18 +238,7 @@ export function Configuration() {
             disabled={disabled}
             loading={loading}
             value={state.probeTracking}
-            options={[
-              'OI➡OI',
-              'OI➡P1',
-              'OI➡P2',
-              'P1➡OI',
-              'P1➡P1',
-              'P1➡P2',
-              'P2➡OI',
-              'P2➡P1',
-              'P2➡P2',
-              // "NONE",
-            ]}
+            options={['OI➡OI', 'OI➡P1', 'OI➡P2', 'P1➡P1', 'P2➡P2', 'NONE']}
             onChange={(e) => modifyGuideLoop('probeTracking', e.target.value)}
             placeholder="Select a tracking"
           />
