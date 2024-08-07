@@ -22,7 +22,7 @@
     "@apollo/client": "^3.11.3",
     "clsx": "^2.1.1",
     "graphql": "^16.6.0",
-    "jotai": "^2.9.1",
+    "jotai": "^2.9.2",
     "lucuma-core": "^0.102.0",
     "lucuma-ui-css": "^0.114.0",
     "primeicons": "^7.0.0",
