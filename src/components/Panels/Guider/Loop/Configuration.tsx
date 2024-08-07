@@ -107,12 +107,12 @@ export function Configuration() {
           />
           <MultiSelect
             inputId="m2TipTiltSource"
-            value={state.m2TipTiltSource?.split(',') ?? ''}
+            value={state.m2TipTiltSource ? state.m2TipTiltSource.split(',') : []}
             onChange={(e) => modifyGuideLoop('m2TipTiltSource', (e.value as string[]).join(','))}
             options={[
+              { label: 'OIWFS', value: 'OIWFS' },
               // { label: "PWFS1", value: "PWFS1" },
               // { label: "PWFS2", value: "PWFS2" },
-              { label: 'OIWFS', value: 'OIWFS' },
               // { label: "GAOS", value: "GAOS" },
             ]}
             placeholder="Select sources"
@@ -153,9 +153,9 @@ export function Configuration() {
             }
             onChange={(e) => modifyGuideLoop('m2FocusSource', (e.value as string[]).join(','))}
             options={[
+              { label: 'OIWFS', value: 'OIWFS' },
               // { label: "PWFS1", value: "PWFS1" },
               // { label: "PWFS2", value: "PWFS2" },
-              { label: 'OIWFS', value: 'OIWFS' },
               // { label: "GAOS", value: "GAOS" },
             ]}
             placeholder="Select sources"
