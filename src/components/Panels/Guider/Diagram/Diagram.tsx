@@ -51,11 +51,10 @@ const initialEdges: Edge[] = [
 ];
 
 function Flow() {
-  const { setNodes, setEdges } = useReactFlow();
+  const { setNodes, setEdges, fitView } = useReactFlow();
   const state = useGetGuideState();
 
   useEffect(() => {
-    // fitView()
     // Get active sources first
     const sourceNodes: Node[] = [];
     const sourceEdges: Edge[] = [];
@@ -159,7 +158,7 @@ function Flow() {
       });
     }
 
-    // Check statick boxes state
+    // Check static boxes state
     // active: Enabled and receiving input
     // idle: Enabled and waiting for input
     // inacive: Disabled
@@ -239,7 +238,10 @@ function Flow() {
 
     setNodes([...sourceNodes, ...initialNodes]);
     setEdges([...sourceEdges, ...initialEdges]);
-    // setTimeout(() => fitView(), 100)
+
+    const timeout = setTimeout(() => fitView({ duration: 1000 }), 20);
+
+    return () => clearTimeout(timeout);
   }, [state]);
 
   return (
