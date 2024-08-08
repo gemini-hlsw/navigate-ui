@@ -1,14 +1,5 @@
 import { useEffect } from 'react';
-import {
-  ReactFlow,
-  Background,
-  Controls,
-  Edge,
-  Node,
-  ReactFlowProvider,
-  useReactFlow,
-  useNodesInitialized,
-} from 'reactflow';
+import { ReactFlow, Background, Controls, Edge, Node, ReactFlowProvider, useReactFlow } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { useGetGuideState } from './useGetGuideState';
 
@@ -61,7 +52,6 @@ const initialEdges: Edge[] = [
 
 function Flow() {
   const { setNodes, setEdges, fitView } = useReactFlow();
-  const nodesInitialized = useNodesInitialized();
   const state = useGetGuideState();
 
   useEffect(() => {
