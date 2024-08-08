@@ -239,7 +239,9 @@ function Flow() {
     setNodes([...sourceNodes, ...initialNodes]);
     setEdges([...sourceEdges, ...initialEdges]);
 
-    setTimeout(() => fitView({ duration: 1000 }), 20);
+    const timeout = setTimeout(() => fitView({ duration: 1000 }), 20);
+
+    return () => clearTimeout(timeout);
   }, [state]);
 
   return (
