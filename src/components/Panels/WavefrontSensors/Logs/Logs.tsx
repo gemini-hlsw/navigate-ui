@@ -4,6 +4,7 @@ import { Title } from '@Shared/Title/Title';
 import { useLogMessages } from '@gql/server/Logs';
 import { useEffect, useState } from 'react';
 import { LogMessage } from '@gql/server/gen/graphql';
+import { v4 as uuid } from 'uuid';
 
 export default function Logs() {
   const MAX_LOG_DISPLAY = 20;
@@ -13,7 +14,7 @@ export default function Logs() {
   useEffect(() => {
     if (data?.logMessage) {
       // Give each message a unique id
-      const msg = { id: self.crypto.randomUUID?.(), ...data.logMessage };
+      const msg = { id: uuid(), ...data.logMessage };
       if (messages.length >= MAX_LOG_DISPLAY) {
         setMessages([msg, ...messages.splice(0, MAX_LOG_DISPLAY - 1)]);
       } else {
@@ -33,7 +34,6 @@ export default function Logs() {
         emptyMessage="No logs yet"
       >
         <Column field="timestamp" header="Timestamp" className="text-small"></Column>
-        {/* <Column field="level" header="Level"></Column> */}
         <Column field="message" header="Message" className="text-small"></Column>
       </DataTable>
     </div>
