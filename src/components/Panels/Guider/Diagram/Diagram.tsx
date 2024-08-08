@@ -65,7 +65,6 @@ function Flow() {
   const state = useGetGuideState();
 
   useEffect(() => {
-    // fitView()
     // Get active sources first
     const sourceNodes: Node[] = [];
     const sourceEdges: Edge[] = [];
@@ -169,7 +168,7 @@ function Flow() {
       });
     }
 
-    // Check statick boxes state
+    // Check static boxes state
     // active: Enabled and receiving input
     // idle: Enabled and waiting for input
     // inacive: Disabled
@@ -249,13 +248,11 @@ function Flow() {
 
     setNodes([...sourceNodes, ...initialNodes]);
     setEdges([...sourceEdges, ...initialEdges]);
-  }, [state]);
 
-  useEffect(() => {
-    if (nodesInitialized) {
-      fitView();
-    }
-  }, [nodesInitialized]);
+    setTimeout(() => {
+      fitView({ duration: 1000 });
+    }, 20);
+  }, [state]);
 
   return (
     <div className="diagram">
