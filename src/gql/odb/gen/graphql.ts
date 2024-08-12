@@ -270,11 +270,18 @@ export type AllDetectorEstimates = {
   selected: DetectorEstimate;
 };
 
-/** Time allocation */
+/** An individual time allocation. */
 export type Allocation = {
   __typename?: 'Allocation';
+  category: TimeAccountingCategory;
   duration: TimeSpan;
-  partner: Partner;
+  scienceBand: ScienceBand;
+};
+
+/** An individual time allocation input. */
+export type AllocationInput = {
+  category: TimeAccountingCategory;
+  duration: TimeSpanInput;
   scienceBand: ScienceBand;
 };
 
@@ -621,6 +628,8 @@ export type CallForProposals = {
    * observed.
    */
   active: DateInterval;
+  /** Whether this Call allows PIs without a partner to participate. */
+  allowsNonPartnerPi: Scalars['Boolean']['output'];
   /** Coordinate limits for targets that may be observed in this Call for Proposals. */
   coordinateLimits: SiteCoordinateLimits;
   /** Whether this Call is PRESENT or has been DELETED. */
@@ -633,6 +642,8 @@ export type CallForProposals = {
    * used.
    */
   instruments: Array<Instrument>;
+  /** The submission deadline for non-partner PIs, when allowed to participate. */
+  nonPartnerDeadline?: Maybe<Scalars['Timestamp']['output']>;
   /** Partners that may participate in this Call. */
   partners: Array<CallForProposalsPartner>;
   /**
@@ -1142,6 +1153,8 @@ export type CreateCallForProposalsResult = {
  */
 export type CreateGroupInput = {
   SET?: InputMaybe<GroupPropertiesInput>;
+  /** Group elements specified here, if any, will be moved into the created group in the specified order. */
+  initialContents?: InputMaybe<Array<InputMaybe<GroupElementInput>>>;
   programId?: InputMaybe<Scalars['ProgramId']['input']>;
   programReference?: InputMaybe<Scalars['ProgramReferenceLabel']['input']>;
   proposalReference?: InputMaybe<Scalars['ProposalReferenceLabel']['input']>;
@@ -1217,8 +1230,8 @@ export type CreateTargetResult = {
 
 /** Create an invitation. */
 export type CreateUserInvitationInput = {
-  /** Partner (co-investigators only) */
-  partner?: InputMaybe<Partner>;
+  /** Partner associated with this user, if any. */
+  partnerLink?: InputMaybe<PartnerLinkInput>;
   /** The program to add a user to. */
   programId: Scalars['ProgramId']['input'];
   /** The recipient to whom the invitation should be sent. */
@@ -3155,6 +3168,12 @@ export type GroupElement = {
   parentIndex: Scalars['NonNegShort']['output'];
 };
 
+/** A group element identifier. Exactly one of groupId and observationId must be provided. */
+export type GroupElementInput = {
+  groupId?: InputMaybe<Scalars['GroupId']['input']>;
+  observationId?: InputMaybe<Scalars['ObservationId']['input']>;
+};
+
 export type GroupPropertiesInput = {
   /** Group description (optional). */
   description?: InputMaybe<Scalars['NonEmptyString']['input']>;
@@ -3222,6 +3241,38 @@ export type GuideTarget = {
   sidereal?: Maybe<Sidereal>;
   /** source profile */
   sourceProfile: SourceProfile;
+};
+
+/**
+ * A `PartnerLink` employed when a user is explicitly associated with
+ * no `Partner`.
+ */
+export type HasNonPartner = PartnerLink & {
+  __typename?: 'HasNonPartner';
+  /** Always `HAS_NON_PARTNER */
+  linkType: PartnerLinkType;
+};
+
+/**
+ * A `PartnerLink` employed when a user is associated with a specific
+ * `Partner`.
+ */
+export type HasPartner = PartnerLink & {
+  __typename?: 'HasPartner';
+  /** Always `HAS_PARTNER` */
+  linkType: PartnerLinkType;
+  /** The associated partner. */
+  partner: Partner;
+};
+
+/**
+ * A `PartnerLink` employed when a user's `PartnerLink` has not
+ * (yet) been made.
+ */
+export type HasUnspecifiedPartner = PartnerLink & {
+  __typename?: 'HasUnspecifiedPartner';
+  /** Always `HAS_UNSPECIFIED_PARTNER` */
+  linkType: PartnerLinkType;
 };
 
 /** HII Region spectrum */
@@ -3440,8 +3491,8 @@ export type LineFluxSurfaceUnits =
 
 /** Link user */
 export type LinkUserInput = {
-  /** Partner (co-investigators only) */
-  partner?: InputMaybe<Partner>;
+  /** Partner associated with this user, if any. */
+  partnerLink?: InputMaybe<PartnerLinkInput>;
   /** The program to add a user to. */
   programId: Scalars['ProgramId']['input'];
   /** The role this user will play in the program. */
@@ -3548,8 +3599,8 @@ export type Mutation = {
   redeemUserInvitation: RedeemUserInvitationResult;
   /** Revoke a user invitation. */
   revokeUserInvitation: RevokeUserInvitationResult;
-  /** Set the allocation for a program from the specified partner. */
-  setAllocation: SetAllocationResult;
+  /** Set the allocations for a program. */
+  setAllocations: SetAllocationsResult;
   /** Set the program reference. */
   setProgramReference: SetProgramReferenceResult;
   /** Set the proposal status. */
@@ -3683,8 +3734,8 @@ export type MutationRevokeUserInvitationArgs = {
   input: RevokeUserInvitationInput;
 };
 
-export type MutationSetAllocationArgs = {
-  input: SetAllocationInput;
+export type MutationSetAllocationsArgs = {
+  input: SetAllocationsInput;
 };
 
 export type MutationSetProgramReferenceArgs = {
@@ -3981,7 +4032,9 @@ export type ObservationValidationCode =
   /** The observation does not meet the requirements of the Call for Proposals */
   | 'CFP_ERROR'
   /** The observation is not configured correctly and cannot be executed */
-  | 'CONFIGURATION_ERROR';
+  | 'CONFIGURATION_ERROR'
+  /** The observation does not have valid ITC results. */
+  | 'ITC_ERROR';
 
 /**
  * Each step in a sequence is tagged with an observe class which identifies its
@@ -4131,17 +4184,56 @@ export type Partner =
   /** United States */
   | 'US';
 
+/** Represents the association of a user with a `Partner`, if any. */
+export type PartnerLink = {
+  /** Partner link discriminator. */
+  linkType: PartnerLinkType;
+};
+
+/**
+ * Describes the user / partner association.  Only one of `partner` or `linkType`
+ * should be specified, but as long as they are consistent both may be supplied.
+ */
+export type PartnerLinkInput = {
+  /**
+   * Describes the state of the association between a user and a partner. The
+   * link type is assumed to be `HAS_PARTNER` if the `partner` is specified.
+   * Otherwise, if `partner` is `null`, the link type is required.
+   */
+  linkType?: InputMaybe<PartnerLinkType>;
+  /**
+   * If the user should be associated with a particular partner, it is specified
+   * here.  Only set `partner` or `linkType`, but not both.
+   */
+  partner?: InputMaybe<Partner>;
+};
+
+/**
+ * Partner link options (and `PartnerLink` discriminator). A user / partner
+ * relationship is one of (a) the user is associated with a particular partner
+ * (i.e., `HAS_PARTNER`), (b) the user is explicitly associated with no partner
+ * (i.e., `HAS_NON_PARTNER`), or (c) the link is simply not set.
+ */
+export type PartnerLinkType = 'HAS_NON_PARTNER' | 'HAS_PARTNER' | 'HAS_UNSPECIFIED_PARTNER';
+
+/**
+ * Partner splits detail how requested time for a Queue or Classical proposal
+ * should be distributed amongst Gemini partners.
+ */
 export type PartnerSplit = {
   __typename?: 'PartnerSplit';
-  /** Partner */
   partner: Partner;
-  /** Percentage of observation time */
+  /** Percentage of requested time that should be associated with the partner. */
   percent: Scalars['IntPercent']['output'];
 };
 
-/** Partner time allocation */
+/**
+ * Time request percentage that should be associated with a particular partner for
+ * Queue and Classical proposals.
+ */
 export type PartnerSplitInput = {
   partner: Partner;
+  /** Percentage of requested time that should be associated with the partner. */
   percent: Scalars['IntPercent']['input'];
 };
 
@@ -4399,7 +4491,7 @@ export type ProgramType = 'CALIBRATION' | 'ENGINEERING' | 'EXAMPLE' | 'LIBRARY' 
 /** An assignment of a user to a program. */
 export type ProgramUser = {
   __typename?: 'ProgramUser';
-  partner?: Maybe<Partner>;
+  partnerLink: PartnerLink;
   role: ProgramUserRole;
   user?: Maybe<User>;
   userId: Scalars['UserId']['output'];
@@ -5099,16 +5191,18 @@ export type SequenceType =
   /** SequenceType SCIENCE */
   | 'SCIENCE';
 
-export type SetAllocationInput = {
-  duration: TimeSpanInput;
-  partner: Partner;
+/**
+ * Describes the program allocations.  Each partner and band combination should
+ * appear at most once in the 'allocations' array.
+ */
+export type SetAllocationsInput = {
+  allocations: Array<AllocationInput>;
   programId: Scalars['ProgramId']['input'];
-  scienceBand: ScienceBand;
 };
 
-export type SetAllocationResult = {
-  __typename?: 'SetAllocationResult';
-  allocation: Allocation;
+export type SetAllocationsResult = {
+  __typename?: 'SetAllocationsResult';
+  allocations: Array<Allocation>;
 };
 
 /**
@@ -6025,6 +6119,44 @@ export type TargetSelectResult = {
 };
 
 /**
+ * Time Accounting Categories.  Each successful proposal is given one or more
+ * time allocations and each allocation has a time accounting category.
+ */
+export type TimeAccountingCategory =
+  /** Argentina */
+  | 'AR'
+  /** Brazil */
+  | 'BR'
+  /** Canada */
+  | 'CA'
+  /** CFHT Exchange */
+  | 'CFHT'
+  /** Chile */
+  | 'CL'
+  /** Director's Time */
+  | 'DD'
+  /** Demo Science */
+  | 'DS'
+  /** Guaranteed Time */
+  | 'GT'
+  /** Subaru */
+  | 'JP'
+  /** Keck Exchange */
+  | 'KECK'
+  /** Republic of Korea */
+  | 'KR'
+  /** Large Program */
+  | 'LP'
+  /** Limited-term Participant */
+  | 'LTP'
+  /** System Verification */
+  | 'SV'
+  /** University of Hawaii */
+  | 'UH'
+  /** United States */
+  | 'US';
+
+/**
  * A manual correction to time accounting calculations.  Note that the
  * application of a correction is bounded by a zero time span and the
  * maximum time span.
@@ -6548,8 +6680,8 @@ export type UserInvitation = {
   id: Scalars['UserInvitationId']['output'];
   /** User who issued the invitation. */
   issuer: User;
-  /** Redeemer's partner (co-investigators only) */
-  partner?: Maybe<Partner>;
+  /** Redeemer's partner, if any. */
+  partnerLink: PartnerLink;
   /** The program the redeemer will be added to. */
   program: Program;
   /** Recipient email address. */
@@ -6753,6 +6885,8 @@ export type WhereCallForProposals = {
   activeEnd?: InputMaybe<WhereOrderDate>;
   /** Matches the active period start. */
   activeStart?: InputMaybe<WhereOrderDate>;
+  /** Matches whether non-partner PIs may participate. */
+  allowsNonPartnerPi?: InputMaybe<WhereBoolean>;
   /** Matches the call for propsals id. */
   id?: InputMaybe<WhereOrderCallForProposalsId>;
   /** Matches whether the call is still open for some partner. */
@@ -7106,6 +7240,25 @@ export type WhereObservationReference = {
   label?: InputMaybe<WhereString>;
   /** Matches the program reference. */
   program?: InputMaybe<WhereProgramReference>;
+};
+
+/**
+ * Filters on equality (or not) of the property value and the supplied criteria.
+ * All supplied criteria must match, but usually only one is selected.  E.g.
+ * 'EQ = "Foo"' will match when the property value is "FOO".  Defining, `EQ`,
+ * `NEQ` etc. implies `IS_NULL` is `false`.
+ */
+export type WhereOptionEqCalibrationRole = {
+  /** Matches if the property is exactly the supplied value. */
+  EQ?: InputMaybe<CalibrationRole>;
+  /** Matches if the property value is any of the supplied options. */
+  IN?: InputMaybe<Array<CalibrationRole>>;
+  /** When `true`, matches if the QaState is not defined. When `false` matches if the QaState is defined. */
+  IS_NULL?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Matches if the property is not the supplied value. */
+  NEQ?: InputMaybe<CalibrationRole>;
+  /** Matches if the property value is none of the supplied values. */
+  NIN?: InputMaybe<Array<CalibrationRole>>;
 };
 
 /**
@@ -7758,6 +7911,8 @@ export type WhereProgram = {
   NOT?: InputMaybe<WhereProgram>;
   /** A list of nested program filters where any one match causes the entire OR group as a whole to match. */
   OR?: InputMaybe<Array<WhereProgram>>;
+  /** Matches the calibration role. */
+  calibrationRole?: InputMaybe<WhereOptionEqCalibrationRole>;
   /** Matches the program ID. */
   id?: InputMaybe<WhereOrderProgramId>;
   /** Matches the program name. */
@@ -7897,6 +8052,8 @@ export type WhereTarget = {
   NOT?: InputMaybe<WhereTarget>;
   /** A list of nested target filters where any one match causes the entire OR group as a whole to match. */
   OR?: InputMaybe<Array<WhereTarget>>;
+  /** Matches the calibration role. */
+  calibrationRole?: InputMaybe<WhereOptionEqCalibrationRole>;
   /** Matches the target id. */
   id?: InputMaybe<WhereOrderTargetId>;
   /** Matches the target name. */
