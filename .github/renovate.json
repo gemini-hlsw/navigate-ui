@@ -28,6 +28,10 @@
     {
       "groupName": "Types",
       "matchPackageNames": ["@types/**"]
+    },
+    {
+      "groupName": "Vite packages",
+      "matchPackageNames": ["**vite**"]
     }
   ]
 }
