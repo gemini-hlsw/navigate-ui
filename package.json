@@ -63,7 +63,7 @@
     "typescript-eslint": "8.2.0",
     "vite": "5.4.1",
     "vite-plugin-mkcert": "1.17.5",
-    "vitest": "^2.0.3"
+    "vitest": "2.0.3"
   },
   "lint-staged": {
     "*.{js,mjs,ts,tsx,jsx,css,md,json,yml}": "prettier --write"
