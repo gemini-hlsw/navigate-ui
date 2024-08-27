@@ -31,7 +31,7 @@
     },
     {
       "groupName": "Vite packages",
-      "matchPackageNames": ["**vite**"]
+      "matchPackageNames": ["**vite**", "@vitest/**"]
     }
   ]
 }
