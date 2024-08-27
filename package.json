@@ -21,7 +21,7 @@
   "dependencies": {
     "@apollo/client": "^3.11.4",
     "clsx": "2.1.1",
-    "graphql": "^16.6.0",
+    "graphql": "16.9.0",
     "jotai": "^2.9.3",
     "lucuma-core": "0.103.0",
     "lucuma-ui-css": "0.114.0",
@@ -37,8 +37,8 @@
   "devDependencies": {
     "@eslint/js": "^9.9.0",
     "@graphql-codegen/cli": "5.0.2",
-    "@graphql-codegen/client-preset": "^4.3.3",
-    "@graphql-typed-document-node/core": "^3.2.0",
+    "@graphql-codegen/client-preset": "4.3.3",
+    "@graphql-typed-document-node/core": "3.2.0",
     "@parcel/watcher": "2.4.1",
     "@swc-jotai/debug-label": "^0.1.1",
     "@swc-jotai/react-refresh": "^0.1.1",

@@ -15,7 +15,7 @@ importers:
         specifier: 2.1.1
         version: 2.1.1
       graphql:
-        specifier: ^16.6.0
+        specifier: 16.9.0
         version: 16.9.0
       jotai:
         specifier: ^2.9.3
@@ -58,10 +58,10 @@ importers:
         specifier: 5.0.2
         version: 5.0.2(@parcel/watcher@2.4.1)(@types/node@20.14.9)(graphql@16.9.0)(typescript@5.5.4)
       '@graphql-codegen/client-preset':
-        specifier: ^4.3.3
+        specifier: 4.3.3
         version: 4.3.3(graphql@16.9.0)
       '@graphql-typed-document-node/core':
-        specifier: ^3.2.0
+        specifier: 3.2.0
         version: 3.2.0(graphql@16.9.0)
       '@parcel/watcher':
         specifier: 2.4.1
