@@ -853,6 +853,17 @@ export type ClassicalInput = {
   partnerSplits?: InputMaybe<Array<PartnerSplitInput>>;
 };
 
+export type CloneGroupInput = {
+  SET?: InputMaybe<GroupPropertiesInput>;
+  groupId: Scalars['GroupId']['input'];
+};
+
+export type CloneGroupResult = {
+  __typename?: 'CloneGroupResult';
+  newGroup: Group;
+  originalGroup: Group;
+};
+
 /**
  * Describes an observation clone operation, making any edits in the `SET`
  * parameter.  The observation status in the cloned observation defaults to NEW.
@@ -1506,8 +1517,21 @@ export type EditAsterismsPatchInput = {
 export type EditType =
   /** EditType Created */
   | 'CREATED'
+  /** EditType Deleted. Used for hard deletion of calibrations */
+  | 'DELETED_CAL'
   /** EditType Updated */
   | 'UPDATED';
+
+/** Educational Status Phd/Grad/Undergrad/Other */
+export type EducationalStatus =
+  /** Educational Status Grad Student */
+  | 'GRAD_STUDENT'
+  /** Educational Status Other */
+  | 'OTHER'
+  /** Educational Status PhD */
+  | 'PHD'
+  /** Educational Status Undergrad Student */
+  | 'UNDERGRAD_STUDENT';
 
 /** Either air mass range or elevation range */
 export type ElevationRange = {
@@ -3559,6 +3583,8 @@ export type Mutation = {
    * be introduced.
    */
   addTimeChargeCorrection: AddTimeChargeCorrectionResult;
+  /** Copy this group and its contents, recursively, as a sibling of itself. */
+  cloneGroup: CloneGroupResult;
   cloneObservation: CloneObservationResult;
   /** Makes a copy of an existing target, setting it to unobserved and to PRESENT.  If `REPLACE_IN` observationIds are specified in the input, the clone will replace the existing target in those observations */
   cloneTarget: CloneTargetResult;
@@ -3622,6 +3648,10 @@ export type Mutation = {
   updateObsAttachments: UpdateObsAttachmentsResult;
   /** Updates existing observations */
   updateObservations: UpdateObservationsResult;
+  /** Updates existing observations times (execution and duration) */
+  updateObservationsTimes: UpdateObservationsResult;
+  /** Updates existing program users. */
+  updateProgramUsers: UpdateProgramUsersResult;
   /** Updates existing programs. */
   updatePrograms: UpdateProgramsResult;
   /** Updates an existing proposal. */
@@ -3656,6 +3686,10 @@ export type MutationAddStepEventArgs = {
 
 export type MutationAddTimeChargeCorrectionArgs = {
   input: AddTimeChargeCorrectionInput;
+};
+
+export type MutationCloneGroupArgs = {
+  input: CloneGroupInput;
 };
 
 export type MutationCloneObservationArgs = {
@@ -3772,6 +3806,14 @@ export type MutationUpdateObsAttachmentsArgs = {
 
 export type MutationUpdateObservationsArgs = {
   input: UpdateObservationsInput;
+};
+
+export type MutationUpdateObservationsTimesArgs = {
+  input: UpdateObservationsTimesInput;
+};
+
+export type MutationUpdateProgramUsersArgs = {
+  input: UpdateProgramUsersInput;
 };
 
 export type MutationUpdateProgramsArgs = {
@@ -3904,6 +3946,8 @@ export type Observation = {
   itc: Itc;
   /** attachments */
   obsAttachments: Array<ObsAttachment>;
+  /** Reference time used for execution and visualization and time-dependent calculations (e.g., average parallactic angle) */
+  observationTime?: Maybe<Scalars['Timestamp']['output']>;
   /** Notes for the observer */
   observerNotes?: Maybe<Scalars['NonEmptyString']['output']>;
   /** The science configuration */
@@ -3936,8 +3980,6 @@ export type Observation = {
   title: Scalars['NonEmptyString']['output'];
   /** A list of observation validation problems */
   validations: Array<ObservationValidation>;
-  /** Reference time used by default for visualization and time-dependent calculations (e.g., average parallactic angle) */
-  visualizationTime?: Maybe<Scalars['Timestamp']['output']>;
 };
 
 /** Event sent when a new object is created or updated */
@@ -3945,10 +3987,10 @@ export type ObservationEdit = {
   __typename?: 'ObservationEdit';
   /** Type of edit */
   editType: EditType;
-  /** @deprecated id is no longer computed; a constant value is returned */
-  id: Scalars['Long']['output'];
-  /** Edited object */
-  value: Observation;
+  /** The observationId of the edited object */
+  observationId: Scalars['ObservationId']['output'];
+  /** Edited object, can be null if the value was deleted */
+  value?: Maybe<Observation>;
 };
 
 export type ObservationEditInput = {
@@ -3991,8 +4033,6 @@ export type ObservationPropertiesInput = {
   targetEnvironment?: InputMaybe<TargetEnvironmentInput>;
   /** The timingWindows defaults to empty if not specified on creation, and may be edited by specifying a new whole array */
   timingWindows?: InputMaybe<Array<TimingWindowInput>>;
-  /** Reference time used for time-dependent calculations such as average parallactic angle */
-  visualizationTime?: InputMaybe<Scalars['Timestamp']['input']>;
 };
 
 /**
@@ -4016,6 +4056,12 @@ export type ObservationSelectResult = {
   hasMore: Scalars['Boolean']['output'];
   /** Matching observations up to the return size limit of 1000 */
   matches: Array<Observation>;
+};
+
+/** Observation times properties */
+export type ObservationTimesInput = {
+  /** Expected execution time used for time-dependent calculations such as average parallactic angle */
+  observationTime?: InputMaybe<Scalars['Timestamp']['input']>;
 };
 
 /** An observation validation problem */
@@ -4343,7 +4389,7 @@ export type Program = {
   /** All observations associated with the program. */
   observations: ObservationSelectResult;
   /** Principal Investigator */
-  pi?: Maybe<User>;
+  pi?: Maybe<ProgramUser>;
   /** Program proposal */
   proposal?: Maybe<Proposal>;
   /** ProposalAttachments associated with the program */
@@ -4491,10 +4537,24 @@ export type ProgramType = 'CALIBRATION' | 'ENGINEERING' | 'EXAMPLE' | 'LIBRARY' 
 /** An assignment of a user to a program. */
 export type ProgramUser = {
   __typename?: 'ProgramUser';
+  /** User educational status. PHD/Undergrad/Grad/Other */
+  educationalStatus?: Maybe<EducationalStatus>;
   partnerLink: PartnerLink;
+  program?: Maybe<Program>;
   role: ProgramUserRole;
+  /** Flag indicating whether the user's proposal is part of a thesis. */
+  thesis?: Maybe<Scalars['Boolean']['output']>;
   user?: Maybe<User>;
-  userId: Scalars['UserId']['output'];
+};
+
+/** Editable properties that define a program / user connection. */
+export type ProgramUserPropertiesInput = {
+  /** The user's educational status. */
+  educationalStatus?: InputMaybe<EducationalStatus>;
+  /** The user's partner. */
+  partnerLink?: InputMaybe<PartnerLinkInput>;
+  /** Is a thesis included in the proposal. */
+  thesis?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** The role a user a plays when assigned to a program. */
@@ -4503,8 +4563,19 @@ export type ProgramUserRole =
   | 'COI'
   /** Co-Investigator (read-only access) */
   | 'COI_RO'
+  /** Primary Investigator */
+  | 'PI'
   /** Staff/Partner Support */
   | 'SUPPORT';
+
+/** The matching program user results, limited to a maximum of 1000 entries. */
+export type ProgramUserSelectResult = {
+  __typename?: 'ProgramUserSelectResult';
+  /** `true` when there were additional matches that were not returned. */
+  hasMore: Scalars['Boolean']['output'];
+  /** Matching program users up to the return size limit of 1000 */
+  matches: Array<ProgramUser>;
+};
 
 /** The type of support role. */
 export type ProgramUserSupportRoleType =
@@ -4731,6 +4802,11 @@ export type Query = {
    * set, nothing will match.
    */
   program?: Maybe<Program>;
+  /**
+   * Selects the first `LIMIT` matching program users based on the provided `WHERE`
+   * parameter, if any.
+   */
+  programUsers: ProgramUserSelectResult;
   /** Selects the first `LIMIT` matching programs based on the provided `WHERE` parameter, if any. */
   programs: ProgramSelectResult;
   /** Metadata for `enum ProposalAttachmentType` */
@@ -4818,6 +4894,13 @@ export type QueryProgramArgs = {
   programId?: InputMaybe<Scalars['ProgramId']['input']>;
   programReference?: InputMaybe<Scalars['ProgramReferenceLabel']['input']>;
   proposalReference?: InputMaybe<Scalars['ProposalReferenceLabel']['input']>;
+};
+
+export type QueryProgramUsersArgs = {
+  LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
+  OFFSET?: InputMaybe<Scalars['UserId']['input']>;
+  WHERE?: InputMaybe<WhereProgramUser>;
+  includeDeleted?: Scalars['Boolean']['input'];
 };
 
 export type QueryProgramsArgs = {
@@ -6597,6 +6680,51 @@ export type UpdateObservationsResult = {
   observations: Array<Observation>;
 };
 
+/** Observation selection and times update description.  Use `SET` to specify the changes, `WHERE` to select the observations to update, and `LIMIT` to control the size of the return value. */
+export type UpdateObservationsTimesInput = {
+  /** Caps the number of results returned to the given value (if additional observations match the WHERE clause they will be updated but not returned). */
+  LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
+  /** Describes the observation time values to modify. */
+  SET: ObservationTimesInput;
+  /** Filters the observations to be updated according to those that match the given constraints. */
+  WHERE?: InputMaybe<WhereObservation>;
+  /** Set to `true` to include deleted observations. */
+  includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/**
+ * Parameters for the 'updateProgramUsers' mutation.  Use 'SET' to specify the
+ * changes, 'WHERE' to select the program users to update, and 'LIMIT' to control
+ * the size of the return value.
+ */
+export type UpdateProgramUsersInput = {
+  /**
+   * Caps the number of results returned to the given value (if additional program
+   * users match the 'WHERE' clause they will be updated not returned).
+   */
+  LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
+  /** Defines the program user properties to modify. */
+  SET: ProgramUserPropertiesInput;
+  /** Filters the program users according to those that match the given constraints. */
+  WHERE?: InputMaybe<WhereProgramUser>;
+};
+
+/**
+ * The result of calling 'updateProgramUsers', up to 'LIMIT' or the maximum of
+ * 1000.  If 'hasMore' is true, additional program users were modified but not
+ * included in the result.
+ */
+export type UpdateProgramUsersResult = {
+  __typename?: 'UpdateProgramUsersResult';
+  /** Whether there were additional updated program users that were not returned. */
+  hasMore: Scalars['Boolean']['output'];
+  /**
+   * The first program users that were updated (up to the LIMIT specified in the
+   * mutation).
+   */
+  programUsers: Array<ProgramUser>;
+};
+
 /** Program selection and update description.  Use `SET` to specify the changes, `WHERE` to select the programs to update, and `LIMIT` to control the size of the return value. */
 export type UpdateProgramsInput = {
   /** Caps the number of results returned to the given value (if additional programs match the WHERE clause they will be updated but not returned). */
@@ -7007,6 +7135,21 @@ export type WhereEqPartner = {
 };
 
 /**
+ * Filters on equality (or not) of the partner link type. All supplied criteria
+ * must match, but usually only one is selected.
+ */
+export type WhereEqPartnerLinkType = {
+  /** Matches if the partner link type is exactly the supplied value. */
+  EQ?: InputMaybe<PartnerLinkType>;
+  /** Matches if the partner link type is any of the supplied options. */
+  IN?: InputMaybe<Array<PartnerLinkType>>;
+  /** Matches if the partner link type is not the supplied value. */
+  NEQ?: InputMaybe<PartnerLinkType>;
+  /** Matches if the partner link type is none of the supplied values. */
+  NIN?: InputMaybe<Array<PartnerLinkType>>;
+};
+
+/**
  * Filters on equality (or not) of the program type and the supplied criteria.
  * All supplied criteria must match, but usually only one is selected.  E.g.
  * 'EQ = "CALIBRATION"' will match when the type is "CALIBRATION".
@@ -7020,6 +7163,21 @@ export type WhereEqProgramType = {
   NEQ?: InputMaybe<ProgramType>;
   /** Matches if the program type is none of the supplied values. */
   NIN?: InputMaybe<Array<ProgramType>>;
+};
+
+/**
+ * Filters on equality (or not) of the program user role type and the supplied
+ * criteria. All supplied criteria must match, but usually only one is selected.
+ */
+export type WhereEqProgramUserRole = {
+  /** Matches if the role is exactly the supplied value. */
+  EQ?: InputMaybe<ProgramUserRole>;
+  /** Matches if the role is any of the supplied options. */
+  IN?: InputMaybe<Array<ProgramUserRole>>;
+  /** Matches if the role is not the supplied value. */
+  NEQ?: InputMaybe<ProgramUserRole>;
+  /** Matches if the role is none of the supplied values. */
+  NIN?: InputMaybe<Array<ProgramUserRole>>;
 };
 
 /**
@@ -7099,6 +7257,21 @@ export type WhereEqToOActivation = {
   NEQ?: InputMaybe<ToOActivation>;
   /** Matches if the property value is none of the supplied values. */
   NIN?: InputMaybe<Array<ToOActivation>>;
+};
+
+/**
+ * Filters on equality (or not) of the user type value and the supplied criteria.
+ * All supplied criteria must match, but usually only one is selected.
+ */
+export type WhereEqUserType = {
+  /** Matches if the user type is exactly the supplied value. */
+  EQ?: InputMaybe<UserType>;
+  /** Matches if the user type is any of the supplied options. */
+  IN?: InputMaybe<Array<UserType>>;
+  /** Matches if the user type is not the supplied value. */
+  NEQ?: InputMaybe<UserType>;
+  /** Matches if the user type is none of the supplied values. */
+  NIN?: InputMaybe<Array<UserType>>;
 };
 
 /**
@@ -7242,6 +7415,13 @@ export type WhereObservationReference = {
   program?: InputMaybe<WhereProgramReference>;
 };
 
+export type WhereOptionBoolean = {
+  /** Matches if the boolean is the provided value. */
+  EQ?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Matches if the value is not defined. */
+  IS_NULL?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 /**
  * Filters on equality (or not) of the property value and the supplied criteria.
  * All supplied criteria must match, but usually only one is selected.  E.g.
@@ -7259,6 +7439,43 @@ export type WhereOptionEqCalibrationRole = {
   NEQ?: InputMaybe<CalibrationRole>;
   /** Matches if the property value is none of the supplied values. */
   NIN?: InputMaybe<Array<CalibrationRole>>;
+};
+
+/**
+ * Filters on equality (or not) of the user educational status and the supplied
+ * criteria. All supplied criteria must match, but usually only one is selected.
+ */
+export type WhereOptionEqEducationalStatus = {
+  /** Matches if the property is exactly the supplied value. */
+  EQ?: InputMaybe<EducationalStatus>;
+  /** Matches if the property value is any of the supplied options. */
+  IN?: InputMaybe<Array<EducationalStatus>>;
+  /** When `true`, matches if the QaState is not defined. When `false` matches if the QaState is defined. */
+  IS_NULL?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Matches if the property is not the supplied value. */
+  NEQ?: InputMaybe<EducationalStatus>;
+  /** Matches if the property value is none of the supplied values. */
+  NIN?: InputMaybe<Array<EducationalStatus>>;
+};
+
+/**
+ * Filters on equality (or not) of the (optional) partner. All supplied criteria
+ * must match, but usually only one is selected.
+ */
+export type WhereOptionEqPartner = {
+  /** Matches if the partrner is exactly the supplied value. */
+  EQ?: InputMaybe<Partner>;
+  /** Matches if the partner is any of the supplied options. */
+  IN?: InputMaybe<Array<Partner>>;
+  /**
+   * When `true`, matches if the partner is not defined. When `false` matches if
+   * the partner is defined.
+   */
+  IS_NULL?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Matches if the partner is not the supplied value. */
+  NEQ?: InputMaybe<Partner>;
+  /** Matches if the partner is none of the supplied values. */
+  NIN?: InputMaybe<Array<Partner>>;
 };
 
 /**
@@ -7903,6 +8120,36 @@ export type WhereOrderTimestamp = {
   NIN?: InputMaybe<Array<Scalars['Timestamp']['input']>>;
 };
 
+export type WhereOrderUserId = {
+  /** Matches if the user id is exactly the supplied value. */
+  EQ?: InputMaybe<Scalars['UserId']['input']>;
+  /** Matches if the user id is ordered after (>) the supplied value. */
+  GT?: InputMaybe<Scalars['UserId']['input']>;
+  /** Matches if the user id is ordered after or equal (>=) the supplied value. */
+  GTE?: InputMaybe<Scalars['UserId']['input']>;
+  /** Matches if the user id is any of the supplied options. */
+  IN?: InputMaybe<Array<Scalars['UserId']['input']>>;
+  /** Matches if the user id is ordered before (<) the supplied value. */
+  LT?: InputMaybe<Scalars['UserId']['input']>;
+  /** Matches if the user id is ordered before or equal (<=) the supplied value. */
+  LTE?: InputMaybe<Scalars['UserId']['input']>;
+  /** Matches if the user id is not the supplied value. */
+  NEQ?: InputMaybe<Scalars['UserId']['input']>;
+  /** Matches if the user id is none of the supplied values. */
+  NIN?: InputMaybe<Array<Scalars['UserId']['input']>>;
+};
+
+/** Partner link filter options.  All specified items much match. */
+export type WherePartnerLink = {
+  /** Matches on equality of the link type. */
+  linkType?: InputMaybe<WhereEqPartnerLinkType>;
+  /**
+   * Matches on the partner itself, if applicable.  Only `HAS_PARTNER` link types
+   * will have a partner.  For other link types it will be `null`.
+   */
+  partner?: InputMaybe<WhereOptionEqPartner>;
+};
+
 /** Program filter options.  All specified items must match. */
 export type WhereProgram = {
   /** A list of nested program filters that all must match in order for the AND group as a whole to match. */
@@ -7917,6 +8164,8 @@ export type WhereProgram = {
   id?: InputMaybe<WhereOrderProgramId>;
   /** Matches the program name. */
   name?: InputMaybe<WhereOptionString>;
+  /** Matches the PI. */
+  pi?: InputMaybe<WhereProgramUser>;
   /** Matches the proposal. */
   proposal?: InputMaybe<WhereProposal>;
   /** Matches the proposalStatus. */
@@ -7942,6 +8191,28 @@ export type WhereProgramReference = {
   semester?: InputMaybe<WhereOrderSemester>;
   /** Matches the index in the program reference, if any. */
   semesterIndex?: InputMaybe<WhereOrderPosInt>;
+};
+
+/** Program user options.  All specified items must match. */
+export type WhereProgramUser = {
+  /** A list of nested program user filters that all must match in order for the AND group as a whole to match. */
+  AND?: InputMaybe<Array<WhereProgramUser>>;
+  /** A nested program user filter that must not match in order for the NOT itself to match. */
+  NOT?: InputMaybe<WhereProgramUser>;
+  /** A list of nested program user filters where any one match causes the entire OR group as a whole to match. */
+  OR?: InputMaybe<Array<WhereProgramUser>>;
+  /** Matches the educational status. */
+  educationalStatus?: InputMaybe<WhereOptionEqEducationalStatus>;
+  /** Matches the partner. */
+  partnerLink?: InputMaybe<WherePartnerLink>;
+  /** Matches the program. */
+  program?: InputMaybe<WhereProgram>;
+  /** Matches the role. */
+  role?: InputMaybe<WhereEqProgramUserRole>;
+  /** Matches the thesis flag. */
+  thesis?: InputMaybe<WhereOptionBoolean>;
+  /** Matches the user. */
+  user?: InputMaybe<WhereUser>;
 };
 
 /** Proposal filter options.  All specified items must match. */
@@ -8062,6 +8333,31 @@ export type WhereTarget = {
   program?: InputMaybe<WhereProgram>;
 };
 
+/** User filter options.  All specified items must match. */
+export type WhereUser = {
+  /**
+   * A list of nested user filters that all must match in order for the AND group
+   * as a whole to match.
+   */
+  AND?: InputMaybe<Array<WhereUser>>;
+  /** A nested user filter that must not match in order for the NOT itself to match. */
+  NOT?: InputMaybe<WhereUser>;
+  /**
+   * A list of nested user filters that all must match in order for the OR group
+   * as a whole to match.
+   */
+  OR?: InputMaybe<Array<WhereUser>>;
+  /** Matches the user Id. */
+  id?: InputMaybe<WhereOrderUserId>;
+  orcidCreditName?: InputMaybe<WhereOptionString>;
+  orcidEmail?: InputMaybe<WhereOptionString>;
+  orcidFamilyName?: InputMaybe<WhereOptionString>;
+  orcidGivenName?: InputMaybe<WhereOptionString>;
+  orcidId?: InputMaybe<WhereOptionString>;
+  /** Matches the user type. */
+  type?: InputMaybe<WhereEqUserType>;
+};
+
 export type WhereWavelength = {
   AND?: InputMaybe<Array<WhereWavelength>>;
   NOT?: InputMaybe<WhereWavelength>;
@@ -8098,7 +8394,10 @@ export type GetObservationsQuery = {
         existence: Existence;
         name?: string | null;
         proposal?: { __typename?: 'Proposal'; title?: string | null } | null;
-        pi?: { __typename?: 'User'; orcidGivenName?: string | null; orcidFamilyName?: string | null } | null;
+        pi?: {
+          __typename?: 'ProgramUser';
+          user?: { __typename?: 'User'; orcidGivenName?: string | null; orcidFamilyName?: string | null } | null;
+        } | null;
         users: Array<{
           __typename?: 'ProgramUser';
           user?: { __typename?: 'User'; serviceName?: string | null } | null;
@@ -8222,8 +8521,17 @@ export const GetObservationsDocument = {
                               selectionSet: {
                                 kind: 'SelectionSet',
                                 selections: [
-                                  { kind: 'Field', name: { kind: 'Name', value: 'orcidGivenName' } },
-                                  { kind: 'Field', name: { kind: 'Name', value: 'orcidFamilyName' } },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'user' },
+                                    selectionSet: {
+                                      kind: 'SelectionSet',
+                                      selections: [
+                                        { kind: 'Field', name: { kind: 'Name', value: 'orcidGivenName' } },
+                                        { kind: 'Field', name: { kind: 'Name', value: 'orcidFamilyName' } },
+                                      ],
+                                    },
+                                  },
                                 ],
                               },
                             },
