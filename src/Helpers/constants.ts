@@ -3,4 +3,5 @@ export const BTN_CLASSES = {
   ACTIVE: 'p-button-warning',
   DONE: 'p-button-success',
   ERROR: 'p-button-danger',
+  INACTIVE: 'p-button-secondary',
 };

@@ -2,19 +2,20 @@ import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 import { Slider } from 'primereact/slider';
-import { McsPark } from '@gql/server/Buttons';
+import { CrcsPark, McsPark, OiwfsPark } from '@gql/server/Buttons';
 import { useState } from 'react';
 import { MechanismType } from '@/types';
 import { useMechanism, useUpdateMechanism } from '@gql/configs/Mechanism';
 import { BTN_CLASSES } from '@/Helpers/constants';
 import { UpdateMechanismMutationVariables } from '@gql/configs/gen/graphql';
+import { clsx } from 'clsx';
 
 export function TopSubsystems({ canEdit }: { canEdit: boolean }) {
   return (
     <div className="top-left">
       <McsPark disabled={!canEdit} style={{ gridArea: 'g11' }} label="Park" />
       <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g12' }} label="Unwrap" />
-      <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g31' }} label="Park" />
+      <CrcsPark disabled={!canEdit} style={{ gridArea: 'g31' }} label="Park" />
       <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g32' }} label="Unwrap" />
       <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g41' }} label="Park" />
       <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g42' }} label="Unwrap" />
@@ -47,7 +48,7 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
   const [WVGate, setWVGate] = useState<any>(50);
   const [EVGate, setEVGate] = useState<any>(50);
 
-  const { data } = useMechanism({
+  const { data, loading } = useMechanism({
     onCompleted(data) {
       if (data.mechanism) {
         setDomeMode(data.mechanism.domeMode);
@@ -72,11 +73,35 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
   }
 
   return (
-    <div className="bottom under-construction">
-      <Button disabled={!canEdit} style={{ gridArea: 'g11' }} label="Park" className={BTN_CLASSES[state.oiwfsPark]} />
-      <Button disabled={!canEdit} style={{ gridArea: 'g21' }} label="Park" className={BTN_CLASSES[state.odgwPark]} />
-      <Button disabled={!canEdit} style={{ gridArea: 'g31' }} label="Park" className={BTN_CLASSES[state.aowfsPark]} />
-      <Button disabled={!canEdit} style={{ gridArea: 'g41' }} label="Park" className={BTN_CLASSES[state.domePark]} />
+    <div className="bottom">
+      <OiwfsPark disabled={!canEdit} loading={loading} style={{ gridArea: 'g11' }} label="Park" />
+      {/* <Button
+        disabled={!canEdit}
+        loading={loading}
+        style={{ gridArea: 'g11' }}
+        label="Park"
+        className={clsx(BTN_CLASSES[state.oiwfsPark], 'under-construction')}
+      /> */}
+      <Button
+        disabled={!canEdit}
+        loading={loading}
+        style={{ gridArea: 'g21' }}
+        label="Park"
+        className={clsx(BTN_CLASSES[state.odgwPark], 'under-construction')}
+      />
+      <Button
+        disabled={!canEdit}
+        style={{ gridArea: 'g31' }}
+        label="Park"
+        className={clsx(BTN_CLASSES[state.aowfsPark], 'under-construction')}
+      />
+      <Button
+        disabled={!canEdit}
+        loading={loading}
+        style={{ gridArea: 'g41' }}
+        label="Park"
+        className={clsx(BTN_CLASSES[state.domePark], 'under-construction')}
+      />
       <span
         style={{
           textAlign: 'center',
@@ -93,18 +118,20 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         options={DOME_MODE}
         onChange={(e) => setDomeMode(e.value)}
         placeholder="Select a Dome Mode"
+        className="under-construction"
       />
       <Button
         disabled={!canEdit}
         style={{ gridArea: 'g46' }}
         label="Set"
         onClick={() => modifyMechanism({ domeMode: domeMode })}
+        className="under-construction"
       />
       <Button
         disabled={!canEdit}
         style={{ gridArea: 'g51' }}
         label="Park"
-        className={BTN_CLASSES[state.shuttersPark]}
+        className={clsx(BTN_CLASSES[state.shuttersPark], 'under-construction')}
       />
       <span
         style={{
@@ -122,6 +149,7 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         options={SHUTTER_MODE}
         onChange={(e) => setShutterMode(e.value)}
         placeholder="Select a Shutter Mode"
+        className="under-construction"
       />
       <span
         style={{
@@ -138,6 +166,7 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         value={aperture}
         onValueChange={(e) => setAperture(e.value ? e.value : 0)}
         mode="decimal"
+        className="under-construction"
       />
       <Button
         disabled={!canEdit}
@@ -149,12 +178,13 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
             shutterAperture: aperture,
           })
         }
+        className="under-construction"
       />
       <Button
         disabled={!canEdit}
         style={{ gridArea: 'g61' }}
         label="Close"
-        className={BTN_CLASSES[state.wVGateClose]}
+        className={clsx(BTN_CLASSES[state.wVGateClose], 'under-construction')}
       />
       <InputNumber
         disabled={!canEdit}
@@ -162,24 +192,27 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         value={WVGate}
         onValueChange={(e) => setWVGate(e.value ? e.value : 0)}
         mode="decimal"
+        className="under-construction"
       />
       <Slider
         disabled={!canEdit || true} // under construction!
         style={{ gridArea: 'g63', marginTop: '10px' }}
         value={WVGate}
         onChange={(e) => setWVGate(e.value)}
+        className="under-construction"
       />
       <Button
         disabled={!canEdit}
         style={{ gridArea: 'g66' }}
         label="Move"
         onClick={() => modifyMechanism({ wVGateValue: WVGate })}
+        className="under-construction"
       />
       <Button
         disabled={!canEdit}
         style={{ gridArea: 'g71' }}
         label="Close"
-        className={BTN_CLASSES[state.eVGateClose]}
+        className={clsx(BTN_CLASSES[state.eVGateClose], 'under-construction')}
       />
       <InputNumber
         disabled={!canEdit}
@@ -187,18 +220,21 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         value={EVGate}
         onValueChange={(e) => setEVGate(e.value ? e.value : 0)}
         mode="decimal"
+        className="under-construction"
       />
       <Slider
         disabled={!canEdit || true} // under construction!
         style={{ gridArea: 'g73', marginTop: '10px' }}
         value={EVGate}
         onChange={(e) => setEVGate(e.value)}
+        className="under-construction"
       />
       <Button
         disabled={!canEdit}
         style={{ gridArea: 'g76' }}
         label="Move"
         onClick={() => modifyMechanism({ eVGateValue: EVGate })}
+        className="under-construction"
       />
     </div>
   );

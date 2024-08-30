@@ -103,7 +103,7 @@ const GET_GUIDE_TARGETS = graphql(`
 
 export function useGetGuideTargets() {
   const odbToken = useOdbTokenValue();
-  const [queryFunction] = useLazyQuery(GET_GUIDE_TARGETS, {
+  return useLazyQuery(GET_GUIDE_TARGETS, {
     context: {
       clientName: 'odb',
       headers: {
@@ -111,6 +111,4 @@ export function useGetGuideTargets() {
       },
     },
   });
-
-  return queryFunction;
 }

@@ -10,7 +10,7 @@ import { useConfiguration } from '@gql/configs/Configuration';
 export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
   const configuration = useConfiguration().data?.configuration;
   const setLoadingGuideTarget = useSetLoadingGuideTarget();
-  const getGuideTargets = useGetGuideTargets();
+  const [getGuideTargets] = useGetGuideTargets();
   const removeAndCreateWfsTargets = useRemoveAndCreateWfsTargets();
   const toast = useRef<Toast>(null);
 
@@ -22,12 +22,12 @@ export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
         observationId: configuration!.obsId!,
         observationTime: crtTime,
       },
-      onCompleted(data) {
+      async onCompleted(data) {
         const OiwfsTargets: TargetInput[] = [];
         const Pwfs1Targets: TargetInput[] = [];
         const Pwfs2Targets: TargetInput[] = [];
-        data.observation?.targetEnvironment.guideEnvironments.map((env) => {
-          env.guideTargets.map((t) => {
+        data.observation?.targetEnvironment.guideEnvironments.forEach((env) => {
+          env.guideTargets.forEach((t) => {
             const auxTarget: TargetInput = {
               name: t.name,
               id: undefined,
@@ -46,28 +46,30 @@ export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
           });
         });
 
-        removeAndCreateWfsTargets({
-          variables: {
-            wfs: 'OIWFS',
-            targets: OiwfsTargets,
-          },
-        });
-        removeAndCreateWfsTargets({
-          variables: {
-            wfs: 'PWFS1',
-            targets: Pwfs1Targets,
-          },
-        });
-        removeAndCreateWfsTargets({
-          variables: {
-            wfs: 'PWFS2',
-            targets: Pwfs2Targets,
-          },
-        });
+        await Promise.all([
+          removeAndCreateWfsTargets({
+            variables: {
+              wfs: 'OIWFS',
+              targets: OiwfsTargets,
+            },
+          }),
+          removeAndCreateWfsTargets({
+            variables: {
+              wfs: 'PWFS1',
+              targets: Pwfs1Targets,
+            },
+          }),
+          removeAndCreateWfsTargets({
+            variables: {
+              wfs: 'PWFS2',
+              targets: Pwfs2Targets,
+            },
+          }),
+        ]);
 
         setLoadingGuideTarget(false);
       },
-      onError(err) {
+      async onError(err) {
         setLoadingGuideTarget(false);
         toast.current?.show({
           severity: 'error',
@@ -77,24 +79,27 @@ export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
           life: 5000,
         });
         console.log(err);
-        removeAndCreateWfsTargets({
-          variables: {
-            wfs: 'OIWFS',
-            targets: [],
-          },
-        });
-        removeAndCreateWfsTargets({
-          variables: {
-            wfs: 'PWFS1',
-            targets: [],
-          },
-        });
-        removeAndCreateWfsTargets({
-          variables: {
-            wfs: 'PWFS2',
-            targets: [],
-          },
-        });
+
+        await Promise.all([
+          removeAndCreateWfsTargets({
+            variables: {
+              wfs: 'OIWFS',
+              targets: [],
+            },
+          }),
+          removeAndCreateWfsTargets({
+            variables: {
+              wfs: 'PWFS1',
+              targets: [],
+            },
+          }),
+          removeAndCreateWfsTargets({
+            variables: {
+              wfs: 'PWFS2',
+              targets: [],
+            },
+          }),
+        ]);
       },
     });
   }

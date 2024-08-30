@@ -48,8 +48,6 @@ export type {
 
 export type PanelType = 'Telescope' | 'WavefrontSensors' | 'Guider';
 
-export type ButtonStateType = 'PENDING' | 'ACTIVE' | 'DONE';
-
 export interface ParamsInterface {
   loading: boolean;
   observations_list: OdbObservationType[] | undefined;
