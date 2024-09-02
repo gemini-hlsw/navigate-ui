@@ -7,7 +7,7 @@ import { useOdbTokenValue } from '@/components/atoms/odb';
 import { useIsLoggedIn, useSignout, useUser } from '@/components/atoms/auth';
 import { useConfiguration } from '@gql/configs/Configuration';
 import { useAlarmValue } from '@/components/atoms/alarm';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 
 export default function Navbar() {
   const configuration = useConfiguration().data?.configuration;
