@@ -1,4 +1,5 @@
 import { createRoot } from 'react-dom/client';
+import { getEnvironment } from './Helpers/environment';
 
 // Styles
 import './styles/main.scss';
@@ -10,8 +11,10 @@ import { StrictMode } from 'react';
 
 const root = createRoot(document.getElementById('root')!);
 
+const environment = getEnvironment();
+
 root.render(
   <StrictMode>
-    <App />
+    <App environment={environment} />
   </StrictMode>,
 );
