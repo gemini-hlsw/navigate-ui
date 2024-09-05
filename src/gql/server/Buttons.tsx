@@ -216,33 +216,6 @@ export function Slew(props: ButtonProps) {
   );
 }
 
-// TODO: is this needed anywhere? I'm not sure what it is
-// export function Oiwfs({ state, className, ...props }: { state: MechSystemState | undefined } & ButtonProps) {
-//   const { oiTargets } = useTargets().data;
-//   const configuration = useConfiguration().data?.configuration;
-//   const selectedTarget = oiTargets.find((t) => t.pk === configuration?.selectedOiTarget);
-
-//   const classes = clsx(className, classNameForState(state, true));
-//   return selectedTarget ? (
-//     <MutationButton
-//       mutation={OIWFS_MUTATION}
-//       variables={{
-//         id: selectedTarget.id!,
-//         name: selectedTarget.name,
-//         ra: selectedTarget.ra?.hms,
-//         dec: selectedTarget.dec?.dms,
-//         epoch: selectedTarget.epoch,
-//         wavelength: 400,
-//       }}
-//       {...props}
-//       className={classes}
-//       disabled={props.disabled ?? !selectedTarget.name}
-//     />
-//   ) : (
-//     <Button {...props} className={classes} />
-//   );
-// }
-
 /**
  *
  * @param state State of the subsystem
