@@ -1,16 +1,12 @@
 import { TargetType } from '@/types';
-import { OperationVariables, QueryHookOptions } from '@apollo/client';
-import { TypedDocumentNode } from '@graphql-typed-document-node/core';
+import { DocumentNode, OperationVariables, QueryHookOptions } from '@apollo/client';
+import { ResultOf, VariablesOf } from '@graphql-typed-document-node/core';
 
 /**
  * Options for useQuery hook.
  */
-export type OptionsOf<T> =
-  T extends TypedDocumentNode<infer TData, infer TVariables>
-    ? TVariables extends OperationVariables
-      ? Omit<QueryHookOptions<TData, TVariables>, 'context'>
-      : never
-    : never;
+export type OptionsOf<T extends DocumentNode> =
+  VariablesOf<T> extends OperationVariables ? Omit<QueryHookOptions<ResultOf<T>, VariablesOf<T>>, 'context'> : never;
 
 export function isBaseTarget(target: Pick<TargetType, 'type'>) {
   return ['SCIENCE', 'BLINDOFFSET', 'FIXED'].includes(target.type);
