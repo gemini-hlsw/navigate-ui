@@ -68,7 +68,7 @@ jobs:
 
       # Run sbt publish first before making the local repo dirty with pnpm publish
       - run: |
-          sbt publish
+          sbt tlCiRelease
           pnpm version from-git --git-tag-version=false
           pnpm publish --access public --no-git-checks --provenance
         env:
