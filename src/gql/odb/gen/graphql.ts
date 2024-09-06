@@ -2058,6 +2058,17 @@ export type GcalShutter =
   /** GcalShutter Open */
   | 'OPEN';
 
+/** Gender Male/Female/Other/NotSpecified */
+export type Gender =
+  /** Gender Female */
+  | 'FEMALE'
+  /** Gender Male */
+  | 'MALE'
+  /** Gender Not Specified */
+  | 'NOT_SPECIFIED'
+  /** Gender Other */
+  | 'OTHER';
+
 /** GMOS amp count */
 export type GmosAmpCount =
   /** GmosAmpCount Six */
@@ -3398,8 +3409,8 @@ export type Itc = {
 /** A single ITC call result. */
 export type ItcResult = {
   __typename?: 'ItcResult';
+  exposureCount: Scalars['NonNegInt']['output'];
   exposureTime: TimeSpan;
-  exposures: Scalars['NonNegInt']['output'];
   signalToNoise: Scalars['SignalToNoise']['output'];
   targetId: Scalars['TargetId']['output'];
 };
@@ -3627,6 +3638,8 @@ export type Mutation = {
   revokeUserInvitation: RevokeUserInvitationResult;
   /** Set the allocations for a program. */
   setAllocations: SetAllocationsResult;
+  /** Set the name of the guide target for an observation. */
+  setGuideTargetName: SetGuideTargetNameResult;
   /** Set the program reference. */
   setProgramReference: SetProgramReferenceResult;
   /** Set the proposal status. */
@@ -3770,6 +3783,10 @@ export type MutationRevokeUserInvitationArgs = {
 
 export type MutationSetAllocationsArgs = {
   input: SetAllocationsInput;
+};
+
+export type MutationSetGuideTargetNameArgs = {
+  input: SetGuideTargetNameInput;
 };
 
 export type MutationSetProgramReferenceArgs = {
@@ -3946,7 +3963,15 @@ export type Observation = {
   itc: Itc;
   /** attachments */
   obsAttachments: Array<ObsAttachment>;
-  /** Reference time used for execution and visualization and time-dependent calculations (e.g., average parallactic angle) */
+  /**
+   * Used in conjunction with observationTime for time-dependentent calulations. If not
+   * set, the remaining observation execution time will be used.
+   */
+  observationDuration?: Maybe<TimeSpan>;
+  /**
+   * Reference time used for execution and visualization and time-dependent calculations
+   * (e.g., average parallactic angle and guide star selection)
+   */
   observationTime?: Maybe<Scalars['Timestamp']['output']>;
   /** Notes for the observer */
   observerNotes?: Maybe<Scalars['NonEmptyString']['output']>;
@@ -4060,7 +4085,9 @@ export type ObservationSelectResult = {
 
 /** Observation times properties */
 export type ObservationTimesInput = {
-  /** Expected execution time used for time-dependent calculations such as average parallactic angle */
+  /** Expected observation duration used in conjunction with observationTime. If not set, remaining observation time is used. */
+  observationDuration?: InputMaybe<TimeSpanInput>;
+  /** Expected execution time used for time-dependent calculations such as average parallactic angle and guide star selection. */
   observationTime?: InputMaybe<Scalars['Timestamp']['input']>;
 };
 
@@ -4539,6 +4566,8 @@ export type ProgramUser = {
   __typename?: 'ProgramUser';
   /** User educational status. PHD/Undergrad/Grad/Other */
   educationalStatus?: Maybe<EducationalStatus>;
+  /** Users' reported gender. */
+  gender?: Maybe<Gender>;
   partnerLink: PartnerLink;
   program?: Maybe<Program>;
   role: ProgramUserRole;
@@ -4551,6 +4580,8 @@ export type ProgramUser = {
 export type ProgramUserPropertiesInput = {
   /** The user's educational status. */
   educationalStatus?: InputMaybe<EducationalStatus>;
+  /** The user's reported gender. */
+  gender?: InputMaybe<Gender>;
   /** The user's partner. */
   partnerLink?: InputMaybe<PartnerLinkInput>;
   /** Is a thesis included in the proposal. */
@@ -5286,6 +5317,28 @@ export type SetAllocationsInput = {
 export type SetAllocationsResult = {
   __typename?: 'SetAllocationsResult';
   allocations: Array<Allocation>;
+};
+
+/**
+ * Input parameters for setting the guide star name for an observation.
+ * Identify the observation to clone by specifying either its id or reference.  If
+ * both are specified, they must refer to the same observation.  If neither is
+ * specified, an error will be returned.
+ */
+export type SetGuideTargetNameInput = {
+  observationId?: InputMaybe<Scalars['ObservationId']['input']>;
+  observationReference?: InputMaybe<Scalars['ObservationReferenceLabel']['input']>;
+  /**
+   * The name of the guide star. This must satisfy the regular expression "^Gaia DR3 (-?\d+)$" where the
+   * numeric part is the Gaia source_id. Omit or set to null to delete.
+   */
+  targetName?: InputMaybe<Scalars['NonEmptyString']['input']>;
+};
+
+/** The result of setting the guide target name for an observation. */
+export type SetGuideTargetNameResult = {
+  __typename?: 'SetGuideTargetNameResult';
+  observation?: Maybe<Observation>;
 };
 
 /**
@@ -6106,6 +6159,8 @@ export type TargetEnvironment = {
    */
   guideAvailability: Array<GuideAvailabilityPeriod>;
   /** The guide star(s) and related information */
+  guideEnvironment?: Maybe<GuideEnvironment>;
+  /** The guide star(s) and related information */
   guideEnvironments: Array<GuideEnvironment>;
 };
 
@@ -6120,6 +6175,10 @@ export type TargetEnvironmentFirstScienceTargetArgs = {
 export type TargetEnvironmentGuideAvailabilityArgs = {
   end: Scalars['Timestamp']['input'];
   start: Scalars['Timestamp']['input'];
+};
+
+export type TargetEnvironmentGuideEnvironmentArgs = {
+  lookupIfUndefined?: Scalars['Boolean']['input'];
 };
 
 export type TargetEnvironmentGuideEnvironmentsArgs = {
@@ -7459,6 +7518,23 @@ export type WhereOptionEqEducationalStatus = {
 };
 
 /**
+ * Filters on equality (or not) of the user reported geender and the supplied
+ * criteria. All supplied criteria must match, but usually only one is selected.
+ */
+export type WhereOptionEqGender = {
+  /** Matches if the property is exactly the supplied value. */
+  EQ?: InputMaybe<Gender>;
+  /** Matches if the property value is any of the supplied options. */
+  IN?: InputMaybe<Array<Gender>>;
+  /** When `true`, matches if the QaState is not defined. When `false` matches if the QaState is defined. */
+  IS_NULL?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Matches if the property is not the supplied value. */
+  NEQ?: InputMaybe<Gender>;
+  /** Matches if the property value is none of the supplied values. */
+  NIN?: InputMaybe<Array<Gender>>;
+};
+
+/**
  * Filters on equality (or not) of the (optional) partner. All supplied criteria
  * must match, but usually only one is selected.
  */
@@ -8203,6 +8279,8 @@ export type WhereProgramUser = {
   OR?: InputMaybe<Array<WhereProgramUser>>;
   /** Matches the educational status. */
   educationalStatus?: InputMaybe<WhereOptionEqEducationalStatus>;
+  /** Matches the gender status. */
+  gender?: InputMaybe<WhereOptionEqGender>;
   /** Matches the partner. */
   partnerLink?: InputMaybe<WherePartnerLink>;
   /** Matches the program. */
