@@ -67,10 +67,11 @@ jobs:
         run: echo $PGP_SECRET | base64 -d -i - | gpg --import
 
       # Run sbt publish first before making the local repo dirty with pnpm publish
-      - run: |
-          sbt tlCiRelease
+      - name: Publish artifacts
+        run: |
+          sbt '+publish; sonatypeBundleRelease'
           pnpm version from-git --git-tag-version=false
-          pnpm publish --access public --no-git-checks --provenance
+          pnpm publish --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_REPO_TOKEN }}
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
