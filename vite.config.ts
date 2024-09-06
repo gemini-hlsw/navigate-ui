@@ -36,6 +36,7 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
+    outDir: 'dist/navigate-ui',
     rollupOptions: {
       output: {
         manualChunks(id) {
