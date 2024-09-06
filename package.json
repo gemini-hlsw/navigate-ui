@@ -15,7 +15,7 @@
     "lint:prettier": "prettier --check .",
     "lint:eslint": "eslint .",
     "codegen": "graphql-codegen --config tasks/codegen.ts",
-    "prepare": "husky"
+    "prepare": "node .husky/install.js"
   },
   "files": [
     "dist"

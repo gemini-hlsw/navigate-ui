@@ -43,7 +43,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['*.js', '*.config.{js,ts}'],
+    files: ['*.js', '*.config.{js,ts}', '.husky/**/*.{js,ts}'],
     ...tseslint.configs.disableTypeChecked,
   },
   {
