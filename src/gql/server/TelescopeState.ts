@@ -1,6 +1,5 @@
-import { useSubscription, useQuery } from '@apollo/client';
 import { graphql } from './gen';
-import { useDebugValue } from 'react';
+import { useQueryAndSubscription } from '../use-query-and-subscription';
 
 const GET_TELESCOPE_STATE = graphql(`
   query getTelescopeState {
@@ -65,15 +64,5 @@ const TELESCOPE_STATE_SUBSCRIPTION = graphql(`
 `);
 
 export function useTelescopeState() {
-  const query = useQuery(GET_TELESCOPE_STATE);
-  const subscription = useSubscription(TELESCOPE_STATE_SUBSCRIPTION);
-
-  const isSubscription = subscription.data !== undefined;
-
-  useDebugValue(isSubscription ? 'Subscription data' : 'Query data');
-  return {
-    data: subscription.data?.telescopeState ?? query.data?.telescopeState,
-    loading: isSubscription ? subscription.loading : query.loading,
-    error: subscription.error ?? query.error,
-  };
+  return useQueryAndSubscription(GET_TELESCOPE_STATE, TELESCOPE_STATE_SUBSCRIPTION, 'telescopeState');
 }

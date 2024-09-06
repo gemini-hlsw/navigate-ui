@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
-import { useMutation, OperationVariables } from '@apollo/client';
-import { VariablesOf, TypedDocumentNode } from '@graphql-typed-document-node/core';
+import { useMutation, OperationVariables, DocumentNode } from '@apollo/client';
+import { VariablesOf } from '@graphql-typed-document-node/core';
 
 import { useEffect, useRef } from 'react';
 import { Button, ButtonProps } from 'primereact/button';
@@ -19,13 +19,12 @@ import { MOUNT_FOLLOW_MUTATION, OIWFS_FOLLOW_MUTATION, ROTATOR_FOLLOW_MUTATION, 
 import { ROTATOR_PARK_MUTATION, MOUNT_PARK_MUTATION, OIWFS_PARK_MUTATION } from './park';
 
 // Generic mutation button
-function MutationButton<T>({
+function MutationButton<T extends DocumentNode>({
   mutation,
   variables,
   ...props
 }: {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  mutation: T extends TypedDocumentNode<infer _TData, infer _TVariables> ? T : never;
+  mutation: T;
   variables: VariablesOf<T> extends OperationVariables ? VariablesOf<T> : never;
 } & ButtonProps) {
   const TOAST_LIFE = 5000;
