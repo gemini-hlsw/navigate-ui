@@ -19,7 +19,7 @@
     "hostName": "navigate.cl.gemini.edu",
     "environment": "Gemini South",
     "navigateServerURI": "/navigate/graphql",
-    "navigateServerWsURI": "/nagiate/ws",
+    "navigateServerWsURI": "/navigate/ws",
     "navigateConfigsURI": "/db",
     "odbURI": "https://lucuma-postgres-odb-production.herokuapp.com/odb"
   }
