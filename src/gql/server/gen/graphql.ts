@@ -202,11 +202,13 @@ export type Mutation = {
   oiwfsProbeTracking: OperationOutcome;
   oiwfsStopObserve: OperationOutcome;
   oiwfsTarget: OperationOutcome;
+  restoreTarget: OperationOutcome;
   rotatorConfig: OperationOutcome;
   rotatorFollow: OperationOutcome;
   rotatorPark: OperationOutcome;
   scsFollow: OperationOutcome;
   slew: OperationOutcome;
+  swapTarget: OperationOutcome;
   tcsConfig: OperationOutcome;
 };
 
@@ -238,6 +240,10 @@ export type MutationOiwfsTargetArgs = {
   target: TargetPropertiesInput;
 };
 
+export type MutationRestoreTargetArgs = {
+  config: TcsConfigInput;
+};
+
 export type MutationRotatorConfigArgs = {
   config: RotatorTrackingInput;
 };
@@ -255,8 +261,17 @@ export type MutationSlewArgs = {
   slewOptions: SlewOptionsInput;
 };
 
+export type MutationSwapTargetArgs = {
+  swapConfig: SwapConfigInput;
+};
+
 export type MutationTcsConfigArgs = {
   config: TcsConfigInput;
+};
+
+export type NavigateState = {
+  __typename?: 'NavigateState';
+  onSwappedTarget: Scalars['Boolean']['output'];
 };
 
 export type Nonsidereal = {
@@ -347,6 +362,7 @@ export type ProperMotionRa = {
 export type Query = {
   __typename?: 'Query';
   guideState: GuideConfigurationState;
+  navigateState: NavigateState;
   telescopeState: TelescopeState;
 };
 
@@ -433,7 +449,14 @@ export type Subscription = {
   guideState: GuideConfigurationState;
   guidersQualityValues: GuidersQualityValues;
   logMessage: LogMessage;
+  navigateState: NavigateState;
   telescopeState: TelescopeState;
+};
+
+export type SwapConfigInput = {
+  acParams: InstrumentSpecificsInput;
+  guideTarget: TargetPropertiesInput;
+  rotator: RotatorTrackingInput;
 };
 
 export type Target = {
