@@ -19,7 +19,7 @@
     "hostName": "navigate-test.cl.gemini.edu",
     "environment": "Gemini South TST",
     "navigateServerURI": "/navigate/graphql",
-    "navigateServerWsURI": "/nagiate/ws",
+    "navigateServerWsURI": "/navigate/ws",
     "navigateConfigsURI": "/db",
     "odbURI": "https://lucuma-postgres-odb-staging.herokuapp.com/odb"
   },
@@ -29,7 +29,7 @@
     "navigateServerURI": "/navigate/graphql",
     "navigateServerWsURI": "/navigate/ws",
     "navigateConfigsURI": "/db",
-    "odbURI": "https://lucuma-postgres-odb-production.herokuapp.com/odb"
+    "odbURI": "https://lucuma-postgres-odb-staging.herokuapp.com/odb"
   },
   {
     "hostName": "navigate.cl.gemini.edu",
@@ -37,6 +37,6 @@
     "navigateServerURI": "/navigate/graphql",
     "navigateServerWsURI": "/navigate/ws",
     "navigateConfigsURI": "/db",
-    "odbURI": "https://lucuma-postgres-odb-production.herokuapp.com/odb"
+    "odbURI": "https://lucuma-postgres-odb-staging.herokuapp.com/odb"
   }
 ]
