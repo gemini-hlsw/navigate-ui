@@ -8,14 +8,24 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import { Kind, OperationTypeNode } from 'graphql/language';
 import { Environment } from '@/Helpers/environment';
 
+/**
+ * Converts a relative URI to an absolute URI based on the current window origin.
+ */
+const withAbsoluteUri = (uri: string, isWs = false) => {
+  if (!uri.startsWith('/')) return uri;
+
+  const newUri = window.location.origin + uri;
+  return isWs ? newUri.replace(/^http/, 'ws') : newUri;
+};
+
 export function createClient(env: Environment) {
-  const navigateCommandServer = new HttpLink({ uri: env.navigateServerURI });
+  const navigateCommandServer = new HttpLink({ uri: withAbsoluteUri(env.navigateServerURI) });
 
-  const navigateConfigs = new HttpLink({ uri: env.navigateConfigsURI });
+  const navigateConfigs = new HttpLink({ uri: withAbsoluteUri(env.navigateConfigsURI) });
 
-  const odbLink = new HttpLink({ uri: env.odbURI });
+  const odbLink = new HttpLink({ uri: withAbsoluteUri(env.odbURI) });
 
-  const wsLink = new WebSocketLink(new SubscriptionClient(env.navigateServerWsURI));
+  const wsLink = new WebSocketLink(new SubscriptionClient(withAbsoluteUri(env.navigateServerWsURI, true)));
 
   return new ApolloClient({
     name: 'navigate-ui',
