@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "type": "module",
   "packageManager": "pnpm@9.10.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gemini-hlsw/navigate-ui.git"
+  },
   "scripts": {
     "dev": "vite",
     "tsc:watch": "tsc -w",
