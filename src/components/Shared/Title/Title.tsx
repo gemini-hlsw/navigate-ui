@@ -1,10 +1,10 @@
 import { OverlayPanel } from 'primereact/overlaypanel';
-import { ReactNode, useRef } from 'react';
+import { MouseEventHandler, ReactNode, useRef } from 'react';
 
 interface ParamsInterface {
   title: string;
-  prevPanel?: any;
-  nextPanel?: any;
+  prevPanel?: MouseEventHandler<HTMLButtonElement>;
+  nextPanel?: MouseEventHandler<HTMLButtonElement>;
   children?: ReactNode;
   className?: string;
 }
@@ -13,18 +13,20 @@ export function Title({ title, prevPanel, nextPanel, children, className = '' }:
   let prevPanelDisplay = null;
   if (prevPanel) {
     prevPanelDisplay = (
-      <div className="p-panel" onClick={prevPanel}>
+      <button className="p-panel" onClick={prevPanel}>
         <i className="pi pi-angle-left"></i>
-      </div>
+        <span className="sr-only">Previous panel</span>
+      </button>
     );
   }
 
   let nextPanelDisplay = null;
   if (nextPanel) {
     nextPanelDisplay = (
-      <div className="n-panel" onClick={nextPanel}>
+      <button className="n-panel" onClick={nextPanel}>
         <i className="pi pi-angle-right"></i>
-      </div>
+        <span className="sr-only">Next panel</span>
+      </button>
     );
   }
   return (

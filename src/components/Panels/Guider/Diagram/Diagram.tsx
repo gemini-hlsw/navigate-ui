@@ -166,7 +166,7 @@ function Flow() {
     // Tip/Tilt
     let tiptiltState;
     if (state.m2TipTiltEnable) {
-      if (sourceEdges.filter((n) => n.target === 'tiptilt').length > 0) {
+      if (sourceEdges.filter((n) => n.target === 'tiptilt').length) {
         tiptiltState = 'active';
       } else {
         tiptiltState = 'idle';
@@ -193,7 +193,7 @@ function Flow() {
     // Focus
     let focusState;
     if (state.m2FocusEnable) {
-      if (sourceEdges.filter((n) => n.target === 'focus').length > 0) {
+      if (sourceEdges.filter((n) => n.target === 'focus').length) {
         focusState = 'active';
       } else {
         focusState = 'idle';
@@ -206,7 +206,7 @@ function Flow() {
     // Coma
     let comaState;
     if (state.m2ComaEnable) {
-      if (sourceEdges.filter((n) => n.target === 'coma').length > 0) {
+      if (sourceEdges.filter((n) => n.target === 'coma').length) {
         comaState = 'active';
       } else {
         comaState = 'idle';
@@ -219,7 +219,7 @@ function Flow() {
     // High-O
     let highoState;
     if (state.m1CorrectionsEnable) {
-      if (sourceEdges.filter((n) => n.target === 'higho').length > 0) {
+      if (sourceEdges.filter((n) => n.target === 'higho').length) {
         highoState = 'active';
       } else {
         highoState = 'idle';

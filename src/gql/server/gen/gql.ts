@@ -24,6 +24,14 @@ const documents = {
   '\n  mutation guideDisable {\n    guideDisable {\n      result\n      msg\n    }\n  }\n': types.GuideDisableDocument,
   '\n  subscription logMessage {\n    logMessage {\n      timestamp\n      level\n      thread\n      message\n    }\n  }\n':
     types.LogMessageDocument,
+  '\n  query getNavigateState {\n    navigateState {\n      onSwappedTarget\n    }\n  }\n':
+    types.GetNavigateStateDocument,
+  '\n  subscription navigateStates {\n    navigateState {\n      onSwappedTarget\n    }\n  }\n':
+    types.NavigateStatesDocument,
+  '\n  mutation swapTarget($swapConfig: SwapConfigInput!) {\n    swapTarget(swapConfig: $swapConfig) {\n      result\n      msg\n    }\n  }\n':
+    types.SwapTargetDocument,
+  '\n  mutation restoreTarget($config: TcsConfigInput!) {\n    restoreTarget(config: $config) {\n      result\n      msg\n    }\n  }\n':
+    types.RestoreTargetDocument,
   '\n  query getTelescopeState {\n    telescopeState {\n      mount {\n        parked\n        follow\n      }\n      scs {\n        parked\n        follow\n      }\n      crcs {\n        parked\n        follow\n      }\n      pwfs1 {\n        parked\n        follow\n      }\n      pwfs2 {\n        parked\n        follow\n      }\n      oiwfs {\n        parked\n        follow\n      }\n    }\n  }\n':
     types.GetTelescopeStateDocument,
   '\n  subscription telescopeStates {\n    telescopeState {\n      mount {\n        parked\n        follow\n      }\n      scs {\n        parked\n        follow\n      }\n      crcs {\n        parked\n        follow\n      }\n      pwfs1 {\n        parked\n        follow\n      }\n      pwfs2 {\n        parked\n        follow\n      }\n      oiwfs {\n        parked\n        follow\n      }\n    }\n  }\n':
@@ -95,6 +103,30 @@ export function graphql(
 export function graphql(
   source: '\n  subscription logMessage {\n    logMessage {\n      timestamp\n      level\n      thread\n      message\n    }\n  }\n',
 ): (typeof documents)['\n  subscription logMessage {\n    logMessage {\n      timestamp\n      level\n      thread\n      message\n    }\n  }\n'];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query getNavigateState {\n    navigateState {\n      onSwappedTarget\n    }\n  }\n',
+): (typeof documents)['\n  query getNavigateState {\n    navigateState {\n      onSwappedTarget\n    }\n  }\n'];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  subscription navigateStates {\n    navigateState {\n      onSwappedTarget\n    }\n  }\n',
+): (typeof documents)['\n  subscription navigateStates {\n    navigateState {\n      onSwappedTarget\n    }\n  }\n'];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation swapTarget($swapConfig: SwapConfigInput!) {\n    swapTarget(swapConfig: $swapConfig) {\n      result\n      msg\n    }\n  }\n',
+): (typeof documents)['\n  mutation swapTarget($swapConfig: SwapConfigInput!) {\n    swapTarget(swapConfig: $swapConfig) {\n      result\n      msg\n    }\n  }\n'];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation restoreTarget($config: TcsConfigInput!) {\n    restoreTarget(config: $config) {\n      result\n      msg\n    }\n  }\n',
+): (typeof documents)['\n  mutation restoreTarget($config: TcsConfigInput!) {\n    restoreTarget(config: $config) {\n      result\n      msg\n    }\n  }\n'];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

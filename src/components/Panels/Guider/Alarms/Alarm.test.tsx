@@ -1,4 +1,5 @@
-import { fireEvent, render, RenderResult, screen } from '@testing-library/react';
+import { render, RenderResult } from 'vitest-browser-react';
+import { Locator, page, userEvent } from '@vitest/browser/context';
 import { ComponentProps } from 'react';
 import { Alarm } from './Alarm';
 import { MockedFunction } from 'vitest';
@@ -19,12 +20,12 @@ describe(Alarm.name, () => {
     );
   });
 
-  it('should render', () => {
-    expect(screen.getByLabelText('Counts').textContent).toEqual('1000');
-    expect(screen.getByLabelText('Subaperture').textContent).toEqual('OK');
+  it('should render', async () => {
+    await expect.element(page.getByLabelText('Counts')).toHaveTextContent('1000');
+    await expect.element(page.getByLabelText('Subaperture')).toHaveTextContent('OK');
   });
 
-  it('should show NOK for no centroid', () => {
+  it('should show NOK for no centroid', async () => {
     sut.rerender(
       <Alarm
         wfs="PWFS1"
@@ -34,28 +35,28 @@ describe(Alarm.name, () => {
         onUpdateAlarm={onUpdateAlarm}
       />,
     );
-    expect(screen.getByLabelText('Subaperture').textContent).toEqual('NOK');
+    await expect.element(page.getByLabelText('Subaperture')).toHaveTextContent('NOK');
   });
 
-  it('should call onUpdateAlarm when enabled changes', () => {
+  it('should call onUpdateAlarm when enabled changes', async () => {
     const checkbox = sut.getByRole('checkbox');
 
-    switchEnabled(checkbox);
+    await switchEnabled(checkbox);
     expect(onUpdateAlarm).toHaveBeenCalledWith({ wfs: 'PWFS1', enabled: false });
   });
 
-  it('should call onUpdateAlarm when limit changes', () => {
-    const inputNumber = screen.getByLabelText('Limit');
+  it('should call onUpdateAlarm when limit changes', async () => {
+    const inputNumber = page.getByLabelText('Limit');
 
-    setLimit(inputNumber, 100);
+    await setLimit(inputNumber, 100);
     expect(onUpdateAlarm).toHaveBeenCalledWith({ wfs: 'PWFS1', limit: 100 });
   });
 
-  it('should not set has-alarm if flux is above limit', () => {
-    expect(sut.container.querySelector('.has-alarm')).toBeNull();
+  it('should not set has-alarm if flux is above limit', async () => {
+    await expect.element(page.getByTestId('no-alarm')).toBeInTheDocument();
   });
 
-  it('should set has-alarm if flux is below limit', () => {
+  it('should set has-alarm if flux is below limit', async () => {
     sut.rerender(
       <Alarm
         wfs="PWFS1"
@@ -65,10 +66,10 @@ describe(Alarm.name, () => {
         onUpdateAlarm={onUpdateAlarm}
       />,
     );
-    expect(sut.container.querySelector('.has-alarm')).not.toBeNull();
+    await expect.element(page.getByTestId('has-alarm')).toBeInTheDocument();
   });
 
-  it('should set has-alarm if centroidDetected is false', () => {
+  it('should set has-alarm if centroidDetected is false', async () => {
     sut.rerender(
       <Alarm
         wfs="PWFS1"
@@ -78,10 +79,11 @@ describe(Alarm.name, () => {
         onUpdateAlarm={onUpdateAlarm}
       />,
     );
-    expect(sut.container.querySelector('.has-alarm')).not.toBeNull();
+
+    await expect.element(page.getByTestId('has-alarm')).toBeInTheDocument();
   });
 
-  it('should not set has-alarm if disabled', () => {
+  it('should not set has-alarm if disabled', async () => {
     sut.rerender(
       <Alarm
         wfs="PWFS1"
@@ -91,15 +93,15 @@ describe(Alarm.name, () => {
         onUpdateAlarm={onUpdateAlarm}
       />,
     );
-    expect(sut.container.querySelector('.has-alarm')).toBeNull();
+    await expect.element(page.getByTestId('no-alarm')).toBeInTheDocument();
   });
 });
 
-function setLimit(el: HTMLElement, value: number) {
-  fireEvent.change(el, { target: { value } });
-  fireEvent.blur(el);
+async function setLimit(el: Locator, value: number) {
+  await userEvent.fill(el, value.toString());
+  await userEvent.tab();
 }
 
-function switchEnabled(el: HTMLElement) {
-  fireEvent.click(el);
+async function switchEnabled(el: Locator) {
+  await userEvent.click(el);
 }

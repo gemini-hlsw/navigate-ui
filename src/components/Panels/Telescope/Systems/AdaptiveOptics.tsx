@@ -20,7 +20,7 @@ export function GeMS({ canEdit }: { canEdit: boolean }) {
     value: NonNullable<UpdateGemsInstrumentMutationVariables[T]>,
   ) {
     if (state.pk)
-      updateGemsInstrument({
+      void updateGemsInstrument({
         variables: {
           pk: state.pk,
           [name]: value,
@@ -45,7 +45,7 @@ export function GeMS({ canEdit }: { canEdit: boolean }) {
           disabled={!canEdit}
           value={state.beamsplitter}
           options={['400 nm', '550 nm', '700nm', '850 nm', '1000 nm']}
-          onChange={(e) => modifyGemsInstrument('beamsplitter', e.target.value)}
+          onChange={(e) => modifyGemsInstrument('beamsplitter', e.target.value as string)}
           placeholder="Select a beamsplitter"
         />
         <span className="label">Astrometric mode</span>
@@ -53,7 +53,7 @@ export function GeMS({ canEdit }: { canEdit: boolean }) {
           disabled={!canEdit}
           value={state.astrometricMode}
           options={['Best', 'Average']}
-          onChange={(e) => modifyGemsInstrument('astrometricMode', e.target.value)}
+          onChange={(e) => modifyGemsInstrument('astrometricMode', e.target.value as string)}
           placeholder="Select a mode"
         />
       </div>
@@ -70,7 +70,7 @@ export function Altair({ canEdit }: { canEdit: boolean }) {
     value: UpdateAltairInstrumentMutationVariables[T],
   ) {
     if (isNotNullish(value) && state.pk)
-      updateAltairInstrument({
+      void updateAltairInstrument({
         variables: {
           pk: state.pk,
           [name]: value,
@@ -93,7 +93,7 @@ export function Altair({ canEdit }: { canEdit: boolean }) {
           disabled={!canEdit}
           value={state.beamsplitter}
           options={['400 nm', '550 nm', '700nm', '850 nm', '1000 nm']}
-          onChange={(e) => modifyAltairInstrument('beamsplitter', e.target.value)}
+          onChange={(e) => modifyAltairInstrument('beamsplitter', e.target.value as string)}
           placeholder="Select a tracking"
         />
         <span className="label">ND filter</span>

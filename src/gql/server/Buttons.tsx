@@ -2,10 +2,9 @@
 import { useMutation, OperationVariables, DocumentNode } from '@apollo/client';
 import { VariablesOf } from '@graphql-typed-document-node/core';
 
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { Button, ButtonProps } from 'primereact/button';
 import { SlewFlagsType } from '@/types';
-import { Toast } from 'primereact/toast';
 import { BTN_CLASSES } from '@/Helpers/constants';
 import { graphql } from './gen';
 import { Instrument, MechSystemState } from './gen/graphql';
@@ -17,6 +16,7 @@ import { useInstrument } from '@gql/configs/Instrument';
 import { clsx } from 'clsx';
 import { MOUNT_FOLLOW_MUTATION, OIWFS_FOLLOW_MUTATION, ROTATOR_FOLLOW_MUTATION, SCS_FOLLOW_MUTATION } from './follow';
 import { ROTATOR_PARK_MUTATION, MOUNT_PARK_MUTATION, OIWFS_PARK_MUTATION } from './park';
+import { useToast } from '@/Helpers/toast';
 
 // Generic mutation button
 function MutationButton<T extends DocumentNode>({
@@ -28,28 +28,23 @@ function MutationButton<T extends DocumentNode>({
   variables: VariablesOf<T> extends OperationVariables ? VariablesOf<T> : never;
 } & ButtonProps) {
   const TOAST_LIFE = 5000;
-  const toast = useRef<Toast>(null);
+  const toast = useToast();
   const [mutationFunction, { loading, error }] = useMutation<T>(mutation, {
     variables: variables,
   });
 
   useEffect(() => {
     if (error) {
-      toast.current?.show({
+      toast?.show({
         severity: 'error',
-        summary: 'Error',
+        summary: error.name,
         detail: error.message,
         life: TOAST_LIFE,
       });
     }
   }, [error]);
 
-  return (
-    <>
-      <Toast ref={toast} />
-      <Button {...props} onClick={() => void mutationFunction({ variables })} loading={props.loading || loading} />
-    </>
-  );
+  return <Button {...props} onClick={() => void mutationFunction({ variables })} loading={props.loading || loading} />;
 }
 
 // BUTTONS

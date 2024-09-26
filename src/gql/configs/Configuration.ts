@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { graphql } from './gen';
 
-const GET_CONFIGURATION = graphql(`
+export const GET_CONFIGURATION = graphql(`
   query getConfiguration {
     configuration {
       pk

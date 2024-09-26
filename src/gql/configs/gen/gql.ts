@@ -47,7 +47,7 @@ const documents = {
     types.GetDistinctPortsDocument,
   '\n  query getInstruments($name: String!, $issPort: Int!) {\n    instruments(name: $name, issPort: $issPort) {\n      pk\n      name\n      iaa\n      issPort\n      focusOffset\n      wfs\n      originX\n      originY\n      ao\n      extraParams\n    }\n  }\n':
     types.GetInstrumentsDocument,
-  '\n  query getInstrument($name: String!, $issPort: Int!, $wfs: WfsType) {\n    instrument(name: $name, issPort: $issPort, wfs: $wfs) {\n      pk\n      name\n      iaa\n      issPort\n      focusOffset\n      wfs\n      originX\n      originY\n      ao\n      extraParams\n    }\n  }\n':
+  '\n  query getInstrument($name: String, $issPort: Int, $wfs: WfsType) {\n    instrument(name: $name, issPort: $issPort, wfs: $wfs) {\n      pk\n      name\n      iaa\n      issPort\n      focusOffset\n      wfs\n      originX\n      originY\n      ao\n      extraParams\n    }\n  }\n':
     types.GetInstrumentDocument,
   '\n  query getMechanism {\n    mechanism {\n      pk\n      mcs\n      mcsPark\n      mcsUnwrap\n      scs\n      crcs\n      crcsPark\n      crcsUnwrap\n      pwfs1\n      pwfs1Park\n      pwfs1Unwrap\n      pwfs2\n      pwfs2Park\n      pwfs2Unwrap\n      oiwfs\n      oiwfsPark\n      odgw\n      odgwPark\n      aowfs\n      aowfsPark\n      dome\n      domePark\n      domeMode\n      shutters\n      shuttersPark\n      shutterMode\n      shutterAperture\n      wVGate\n      wVGateClose\n      wVGateValue\n      eVGate\n      eVGateClose\n      eVGateValue\n      agScienceFoldPark\n      agAoFoldPark\n      agAcPickoffPark\n      agParkAll\n    }\n  }\n':
     types.GetMechanismDocument,
@@ -193,8 +193,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query getInstrument($name: String!, $issPort: Int!, $wfs: WfsType) {\n    instrument(name: $name, issPort: $issPort, wfs: $wfs) {\n      pk\n      name\n      iaa\n      issPort\n      focusOffset\n      wfs\n      originX\n      originY\n      ao\n      extraParams\n    }\n  }\n',
-): (typeof documents)['\n  query getInstrument($name: String!, $issPort: Int!, $wfs: WfsType) {\n    instrument(name: $name, issPort: $issPort, wfs: $wfs) {\n      pk\n      name\n      iaa\n      issPort\n      focusOffset\n      wfs\n      originX\n      originY\n      ao\n      extraParams\n    }\n  }\n'];
+  source: '\n  query getInstrument($name: String, $issPort: Int, $wfs: WfsType) {\n    instrument(name: $name, issPort: $issPort, wfs: $wfs) {\n      pk\n      name\n      iaa\n      issPort\n      focusOffset\n      wfs\n      originX\n      originY\n      ao\n      extraParams\n    }\n  }\n',
+): (typeof documents)['\n  query getInstrument($name: String, $issPort: Int, $wfs: WfsType) {\n    instrument(name: $name, issPort: $issPort, wfs: $wfs) {\n      pk\n      name\n      iaa\n      issPort\n      focusOffset\n      wfs\n      originX\n      originY\n      ao\n      extraParams\n    }\n  }\n'];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

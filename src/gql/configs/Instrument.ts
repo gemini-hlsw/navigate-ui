@@ -34,7 +34,7 @@ export function useGetDistinctPorts() {
   return queryFunction;
 }
 
-const GET_INSTRUMENTS = graphql(`
+export const GET_INSTRUMENTS = graphql(`
   query getInstruments($name: String!, $issPort: Int!) {
     instruments(name: $name, issPort: $issPort) {
       pk
@@ -59,8 +59,8 @@ export function useGetInstruments() {
   return queryFunction;
 }
 
-const GET_INSTRUMENT = graphql(`
-  query getInstrument($name: String!, $issPort: Int!, $wfs: WfsType) {
+export const GET_INSTRUMENT = graphql(`
+  query getInstrument($name: String, $issPort: Int, $wfs: WfsType) {
     instrument(name: $name, issPort: $issPort, wfs: $wfs) {
       pk
       name

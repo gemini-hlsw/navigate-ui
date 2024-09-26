@@ -907,8 +907,8 @@ export type GetInstrumentsQuery = {
 };
 
 export type GetInstrumentQueryVariables = Exact<{
-  name: Scalars['String']['input'];
-  issPort: Scalars['Int']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  issPort?: InputMaybe<Scalars['Int']['input']>;
   wfs?: InputMaybe<WfsType>;
 }>;
 
@@ -2510,12 +2510,12 @@ export const GetInstrumentDocument = {
         {
           kind: 'VariableDefinition',
           variable: { kind: 'Variable', name: { kind: 'Name', value: 'name' } },
-          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
         },
         {
           kind: 'VariableDefinition',
           variable: { kind: 'Variable', name: { kind: 'Name', value: 'issPort' } },
-          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
         },
         {
           kind: 'VariableDefinition',

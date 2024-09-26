@@ -11,7 +11,7 @@ export function Target({
   targetIndex = undefined,
 }: {
   target: TargetType;
-  updateSelectedTarget(target: number): void;
+  updateSelectedTarget(this: void, target: number): void | Promise<void>;
   selectedTarget?: number | null;
   targetIndex?: number | undefined;
 }) {
@@ -38,7 +38,7 @@ export function Target({
     switch (e.detail) {
       case 1:
         clickRef.current = setTimeout(() => {
-          updateSelectedTarget(target.pk);
+          void updateSelectedTarget(target.pk);
         }, 300);
         break;
       case 2:

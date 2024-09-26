@@ -80,6 +80,9 @@
         width: 50px;
         color: var(--primary-color-text);
         top: 2px;
+        background: none;
+        color: inherit;
+        border: none;
         cursor: pointer;
       }
 

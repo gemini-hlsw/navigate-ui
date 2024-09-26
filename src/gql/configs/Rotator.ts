@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { graphql } from './gen';
 
-const GET_ROTATOR = graphql(`
+export const GET_ROTATOR = graphql(`
   query getRotator {
     rotator {
       pk

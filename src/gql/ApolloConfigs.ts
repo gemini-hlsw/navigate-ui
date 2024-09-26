@@ -1,5 +1,6 @@
 // Apollo
 import { ApolloClient, InMemoryCache, ApolloLink, HttpLink, defaultDataIdFromObject } from '@apollo/client';
+import { onError } from '@apollo/client/link/error';
 
 // Subscription channel
 import { WebSocketLink } from '@apollo/client/link/ws';
@@ -18,6 +19,19 @@ const withAbsoluteUri = (uri: string, isWs = false) => {
   return isWs ? newUri.replace(/^http/, 'ws') : newUri;
 };
 
+// Log errors to the console
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors)
+    graphQLErrors.forEach(({ message, locations, path }) =>
+      console.warn(
+        `[GraphQL error]: ${message.trim()}
+        Path: ${(path ?? [])?.join(', ')} ${(locations ?? [])?.map((l) => `[${l.line}:${l.column}]`).join(', ')}`,
+      ),
+    );
+
+  if (networkError) console.error(`[Network error]`, networkError);
+});
+
 export function createClient(env: Environment) {
   const navigateCommandServer = new HttpLink({ uri: withAbsoluteUri(env.navigateServerURI) });
 
@@ -29,24 +43,27 @@ export function createClient(env: Environment) {
 
   return new ApolloClient({
     name: 'navigate-ui',
-    link: ApolloLink.split(
-      (operation) => operation.getContext().clientName === 'odb',
-      odbLink,
+    link: ApolloLink.from([
+      errorLink,
       ApolloLink.split(
-        (operation) => operation.getContext().clientName === 'navigateConfigs',
-        navigateConfigs,
+        (operation) => operation.getContext().clientName === 'odb',
+        odbLink,
         ApolloLink.split(
-          ({ query }) => {
-            const definition = getMainDefinition(query);
-            return (
-              definition.kind === Kind.OPERATION_DEFINITION && definition.operation === OperationTypeNode.SUBSCRIPTION
-            );
-          },
-          wsLink,
-          navigateCommandServer,
+          (operation) => operation.getContext().clientName === 'navigateConfigs',
+          navigateConfigs,
+          ApolloLink.split(
+            ({ query }) => {
+              const definition = getMainDefinition(query);
+              return (
+                definition.kind === Kind.OPERATION_DEFINITION && definition.operation === OperationTypeNode.SUBSCRIPTION
+              );
+            },
+            wsLink,
+            navigateCommandServer,
+          ),
         ),
       ),
-    ),
+    ]),
     cache: new InMemoryCache({
       dataIdFromObject(responseObject) {
         // Configure primary-key fields for cache normalization to use 'pk' field

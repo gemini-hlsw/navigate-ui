@@ -35,7 +35,7 @@ export function Target() {
   }, [targetEdit]);
 
   function updateObservation() {
-    updateTarget({
+    void updateTarget({
       variables: {
         ...auxTarget,
         coord1: auxTarget.ra ? auxTarget.ra.degrees : auxTarget.az?.degrees,
@@ -142,7 +142,7 @@ export function Target() {
             }
             setc1String(stringC1);
             setc2String(stringC2);
-            setCoordsType(e.target.value);
+            setCoordsType(e.target.value as string);
           }}
           placeholder="Select coordinates type"
         />

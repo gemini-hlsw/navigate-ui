@@ -34,7 +34,7 @@ export function Configuration() {
     value: UpdateGuideLoopMutationVariables[T],
   ) {
     if (state.pk)
-      updateGuideLoop({
+      void updateGuideLoop({
         variables: {
           pk: state.pk,
           [name]: value,
@@ -196,7 +196,7 @@ export function Configuration() {
             value={state.m2ComaM1CorrectionsSource}
             // options={["PWFS1", "PWFS2", "PWFS1 & PWFS2", "OIWFS", "GAOS"]}
             options={['OIWFS']}
-            onChange={(e) => modifyGuideLoop('m2ComaM1CorrectionsSource', e.target.value)}
+            onChange={(e) => modifyGuideLoop('m2ComaM1CorrectionsSource', e.target.value as string)}
             placeholder="Select a source"
           />
           <label htmlFor="m1CorrectionsEnable" className="label" style={{ gridArea: 'l4' }}>
@@ -239,7 +239,7 @@ export function Configuration() {
             loading={loading}
             value={state.probeTracking}
             options={['OI➡OI', 'OI➡P1', 'OI➡P2', 'P1➡P1', 'P2➡P2', 'NONE']}
-            onChange={(e) => modifyGuideLoop('probeTracking', e.target.value)}
+            onChange={(e) => modifyGuideLoop('probeTracking', e.target.value as string)}
             placeholder="Select a tracking"
           />
         </div>

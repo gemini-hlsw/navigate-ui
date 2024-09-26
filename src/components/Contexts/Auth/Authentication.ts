@@ -37,7 +37,7 @@ export const Authentication = {
       });
 
       if (res.status === 200) {
-        const data: User = await res.json();
+        const data = (await res.json()) as User;
         localStorage.setItem('user', JSON.stringify(data));
         return [data, null];
       } else {

@@ -2,13 +2,14 @@ import { Dropdown } from 'primereact/dropdown';
 import { ProgressBar } from 'primereact/progressbar';
 import { Title } from '@Shared/Title/Title';
 import { TargetList } from './TargetList';
-import { Button } from 'primereact/button';
 import { UpdateGuideTargets } from './UpdateGuideTargets';
 
 import { useLoadingGuideTargetValue } from '@/components/atoms/guideTarget';
 import { useCanEdit } from '@/components/atoms/auth';
 import { useConfiguration } from '@gql/configs/Configuration';
 import { useTargets } from '@gql/configs/Target';
+import { TargetSwapButton } from './TargetSwapButton';
+import { Target } from '@gql/configs/gen/graphql';
 
 function GuiderFooter({ disabled }: { disabled: boolean }) {
   return (
@@ -24,12 +25,14 @@ function GuiderFooter({ disabled }: { disabled: boolean }) {
 
 export function GuiderTargets() {
   const canEdit = useCanEdit();
-  const { oiTargets, p1Targets, p2Targets } = useTargets().data;
+  const { oiTargets, p1Targets, p2Targets, allTargets } = useTargets().data;
   const configuration = useConfiguration().data?.configuration;
   const loadingGuideTarget = useLoadingGuideTargetValue();
 
+  const selectedTarget: Target | undefined = allTargets.find((t) => t.pk === configuration?.selectedTarget);
+
   const displayProbes: JSX.Element[] = [];
-  if (oiTargets.length > 0) {
+  if (oiTargets.length) {
     const oiSelected = oiTargets.find((t) => t.pk === configuration?.selectedOiTarget);
     displayProbes.push(
       <div key={'OIWFS'} className="guide-probe">
@@ -40,7 +43,7 @@ export function GuiderTargets() {
     );
   }
 
-  if (p1Targets.length > 0) {
+  if (p1Targets.length) {
     const p1Selected = p1Targets.find((t) => t.pk === configuration?.selectedP1Target);
     displayProbes.push(
       <div key={'PWFS1'} className="guide-probe">
@@ -51,7 +54,7 @@ export function GuiderTargets() {
     );
   }
 
-  if (p2Targets.length > 0) {
+  if (p2Targets.length) {
     const p2Selected = p2Targets.find((t) => t.pk === configuration?.selectedP2Target);
     displayProbes.push(
       <div key={'PWFS2'} className="guide-probe">
@@ -83,12 +86,7 @@ export function GuiderTargets() {
           displayProbes
         )}
       </div>
-      <Button
-        disabled={!canEdit} // check is a valid target || !Boolean(selectedGuideTarget?.id)
-        className="footer w-100"
-        label="Point to guide target"
-        onClick={() => console.log('Point to guide target')}
-      />
+      <TargetSwapButton selectedTarget={selectedTarget} />
     </div>
   );
 }

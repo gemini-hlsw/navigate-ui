@@ -17,7 +17,7 @@ export function Altair() {
     value: NonNullable<UpdateAltairGuideLoopMutationVariables[T]>,
   ) {
     if (state)
-      updateAltairGuideLoop({
+      void updateAltairGuideLoop({
         variables: {
           pk: state.pk,
           [name]: value,
@@ -125,7 +125,7 @@ export function GeMS() {
     value: NonNullable<UpdateGemsGuideLoopMutationVariables[T]>,
   ) {
     if (state)
-      updateGemsGuideLoop({
+      void updateGemsGuideLoop({
         variables: {
           pk: state.pk,
           [name]: value,

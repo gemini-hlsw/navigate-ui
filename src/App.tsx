@@ -11,6 +11,7 @@ import Home from './components/Layout/Home/Home';
 import Layout from './components/Layout/Layout';
 import Login from './components/Login/Login';
 import Token from './components/Token/Token';
+import { ToastProvider } from './Helpers/toast';
 
 const router = createBrowserRouter([
   { path: '/', element: <Layout />, children: [{ index: true, element: <Home /> }] },
@@ -29,8 +30,10 @@ export function App({ environment }: { environment: Environment }) {
 
   return (
     <ApolloProvider client={client}>
-      <Modals />
-      <RouterProvider router={router} />
+      <ToastProvider>
+        <Modals />
+        <RouterProvider router={router} />
+      </ToastProvider>
     </ApolloProvider>
   );
 }
