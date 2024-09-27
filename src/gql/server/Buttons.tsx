@@ -148,7 +148,6 @@ export function Slew(props: ButtonProps) {
   const slewFlags = data?.slewFlags ?? ({} as SlewFlagsType);
   const rotator = useRotator().data?.rotator;
   const configuration = useConfiguration().data?.configuration;
-  console.log(configuration);
   const instrument = useInstrument({
     variables: {
       name: configuration?.obsInstrument ?? '',
