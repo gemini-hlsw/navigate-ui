@@ -144,14 +144,20 @@ const SLEW_MUTATION = graphql(`
 
 export function Slew(props: ButtonProps) {
   const { oiTargets, baseTargets } = useTargets().data;
-  const instrument = useInstrument().data?.instrument;
   const { data, loading } = useSlewFlags();
   const slewFlags = data?.slewFlags ?? ({} as SlewFlagsType);
   const rotator = useRotator().data?.rotator;
   const configuration = useConfiguration().data?.configuration;
+  console.log(configuration);
+  const instrument = useInstrument({
+    variables: {
+      name: configuration?.obsInstrument ?? '',
+      issPort: 3,
+      wfs: 'NONE',
+    },
+  }).data?.instrument;
 
   const selectedTarget = baseTargets.find((t) => t.pk === configuration?.selectedTarget);
-
   const selectedOiTarget = oiTargets.find((t) => t.pk === configuration?.selectedOiTarget);
 
   if (!selectedTarget || !instrument || !rotator) {
