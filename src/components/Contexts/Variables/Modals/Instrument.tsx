@@ -10,7 +10,7 @@ export function Instrument() {
   const [importInstrument, setImportInstrument] = useImportInstrument();
   const getNames = useGetDistinctInstruments();
   const getPorts = useGetDistinctPorts();
-  const getInstuments = useGetInstruments();
+  const getInstruments = useGetInstruments();
   const [nameOptions, setNameOptions] = useState<string[]>([]);
   const [name, setName] = useState('');
   const [portOptions, setPortOptions] = useState<number[]>([]);
@@ -20,7 +20,7 @@ export function Instrument() {
 
   useEffect(() => {
     if (importInstrument)
-      getNames({
+      void getNames({
         onCompleted: (data) => {
           setNameOptions(data.distinctInstruments.map((e) => e.name));
         },
@@ -28,9 +28,9 @@ export function Instrument() {
   }, [importInstrument]);
 
   useEffect(() => {
-    if (name !== '') {
+    if (name) {
       setPort(0);
-      getPorts({
+      void getPorts({
         variables: { name: name },
         onCompleted: (data) => {
           setPortOptions(data.distinctPorts.map((e) => e.issPort));
@@ -40,8 +40,8 @@ export function Instrument() {
   }, [name]);
 
   useEffect(() => {
-    if (port > 0 && name !== '') {
-      getInstuments({
+    if (port && name) {
+      void getInstruments({
         variables: { name: name, issPort: port },
         onCompleted: (data) => {
           setInstrumentOptions(data.instruments);
@@ -76,7 +76,7 @@ export function Instrument() {
   });
 
   let table: JSX.Element | null = null;
-  if (port > 0 && name !== '') {
+  if (port && name) {
     table = (
       <table className="table">
         <thead>
@@ -109,7 +109,7 @@ export function Instrument() {
           <Dropdown
             value={name}
             options={nameOptions}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => setName(e.target.value as string)}
             placeholder="Select instrument"
           />
           <span>issPort</span>
@@ -117,7 +117,7 @@ export function Instrument() {
             disabled={portOptions.length <= 0}
             value={port}
             options={portOptions}
-            onChange={(e) => setPort(e.target.value)}
+            onChange={(e) => setPort(e.target.value as number)}
             placeholder="Select port"
           />
         </div>
@@ -133,7 +133,7 @@ function InstrumentDetails({
   selectedPk,
 }: {
   instrument: InstrumentType;
-  setInstrument(_: InstrumentType): void;
+  setInstrument(this: void, _: InstrumentType): void;
   selectedPk: number;
 }) {
   return (

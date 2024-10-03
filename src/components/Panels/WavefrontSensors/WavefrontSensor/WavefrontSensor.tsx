@@ -98,7 +98,7 @@ export default function WavefrontSensor({
             { label: '100', value: 100.0 },
             { label: '200', value: 200.0 },
           ]}
-          onChange={(e) => setFreq(e.value)}
+          onChange={(e) => setFreq(e.value as number)}
         />
         {observeButton}
         <span style={{ alignSelf: 'center', gridArea: 'g21' }}>Save</span>

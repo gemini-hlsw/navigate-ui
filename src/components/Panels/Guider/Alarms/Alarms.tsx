@@ -32,7 +32,7 @@ export function Alarms() {
   }, [alarms, guideQualities]);
 
   function onUpdateAlarm(variables: UpdateGuideAlarmMutationVariables) {
-    updateAlarm({
+    void updateAlarm({
       variables,
     });
   }

@@ -6158,10 +6158,22 @@ export type TargetEnvironment = {
    * range. In this case, the `end` of one period will be the same as the `start` of the next period.
    */
   guideAvailability: Array<GuideAvailabilityPeriod>;
-  /** The guide star(s) and related information */
-  guideEnvironment?: Maybe<GuideEnvironment>;
+  /**
+   * The guide target(s) and related information.
+   * If a guide target has been set via `guideTargetName`, that target will be
+   * returned. If it not found or not usable, an error will be returned.
+   * If no guide target has been set, or it has been invalidated by observation/target
+   * changes, Gaia will be searched for the best guide target available.
+   */
+  guideEnvironment: GuideEnvironment;
   /** The guide star(s) and related information */
   guideEnvironments: Array<GuideEnvironment>;
+  /**
+   * The name of the guide target, if any, set by `setGuideTargetName`.
+   * If the name is no longer valid or a sequence cannot be generated, null will
+   * be returned.
+   */
+  guideTargetName?: Maybe<Scalars['NonEmptyString']['output']>;
 };
 
 export type TargetEnvironmentAsterismArgs = {
@@ -6175,10 +6187,6 @@ export type TargetEnvironmentFirstScienceTargetArgs = {
 export type TargetEnvironmentGuideAvailabilityArgs = {
   end: Scalars['Timestamp']['input'];
   start: Scalars['Timestamp']['input'];
-};
-
-export type TargetEnvironmentGuideEnvironmentArgs = {
-  lookupIfUndefined?: Scalars['Boolean']['input'];
 };
 
 export type TargetEnvironmentGuideEnvironmentsArgs = {

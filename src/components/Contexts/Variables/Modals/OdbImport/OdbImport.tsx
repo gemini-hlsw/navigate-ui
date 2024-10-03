@@ -23,7 +23,7 @@ export function OdbImport() {
   const rotator = useRotator().data?.rotator;
 
   function updateObs() {
-    updateConfiguration({
+    void updateConfiguration({
       variables: {
         ...(configuration as ConfigurationType),
         obsId: selectedObservation.id,
@@ -31,9 +31,9 @@ export function OdbImport() {
         obsSubtitle: selectedObservation.subtitle,
         obsInstrument: selectedObservation.instrument,
       },
-      onCompleted() {
+      async onCompleted() {
         setOdbVisible(false);
-        removeAndCreateBaseTargets({
+        await removeAndCreateBaseTargets({
           variables: {
             targets: [
               {
@@ -46,8 +46,8 @@ export function OdbImport() {
               },
             ],
           },
-          onCompleted(t) {
-            updateConfiguration({
+          async onCompleted(t) {
+            await updateConfiguration({
               variables: {
                 pk: configuration?.pk ?? 1,
                 selectedTarget: t.removeAndCreateBaseTargets[0].pk,
@@ -56,7 +56,7 @@ export function OdbImport() {
           },
         });
         if (rotator) {
-          updateRotator({
+          await updateRotator({
             variables: {
               pk: rotator?.pk,
               angle: selectedObservation.posAngleConstraint.angle.degrees,
@@ -73,7 +73,7 @@ export function OdbImport() {
       <div className="right">
         <Button
           disabled={
-            !(canEdit && selectedObservation.targetEnvironment?.firstScienceTarget?.name !== '') ||
+            !(canEdit && selectedObservation.targetEnvironment?.firstScienceTarget?.name) ||
             !selectedObservation.targetEnvironment?.firstScienceTarget?.name
           }
           className=""
@@ -87,7 +87,7 @@ export function OdbImport() {
 
   useEffect(() => {
     if (odbVisible)
-      getObservations({
+      void getObservations({
         fetchPolicy: 'no-cache',
       });
   }, [odbVisible]);

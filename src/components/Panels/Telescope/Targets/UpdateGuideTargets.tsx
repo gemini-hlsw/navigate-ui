@@ -1,23 +1,22 @@
-import { useGetGuideTargets } from '@gql/odb/Observation';
-import { TargetInput } from '@/types';
-import { useRef } from 'react';
-import { Button } from 'primereact/button';
-import { Toast } from 'primereact/toast';
-import { useRemoveAndCreateWfsTargets } from '@gql/configs/Target';
 import { useSetLoadingGuideTarget } from '@/components/atoms/guideTarget';
+import { useToast } from '@/Helpers/toast';
+import { TargetInput } from '@/types';
 import { useConfiguration } from '@gql/configs/Configuration';
+import { useRemoveAndCreateWfsTargets } from '@gql/configs/Target';
+import { useGetGuideTargets } from '@gql/odb/Observation';
+import { Button } from 'primereact/button';
 
 export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
   const configuration = useConfiguration().data?.configuration;
   const setLoadingGuideTarget = useSetLoadingGuideTarget();
   const [getGuideTargets] = useGetGuideTargets();
   const removeAndCreateWfsTargets = useRemoveAndCreateWfsTargets();
-  const toast = useRef<Toast>(null);
+  const toast = useToast();
 
   function calculateGuideTargets() {
     setLoadingGuideTarget(true);
     const crtTime = new Date().toISOString();
-    getGuideTargets({
+    void getGuideTargets({
       variables: {
         observationId: configuration!.obsId!,
         observationTime: crtTime,
@@ -71,11 +70,10 @@ export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
       },
       async onError(err) {
         setLoadingGuideTarget(false);
-        toast.current?.show({
+        toast?.show({
           severity: 'error',
-          summary: 'Error',
-          // eslint-disable-next-line @typescript-eslint/no-base-to-string
-          detail: err.toString(),
+          summary: err.name,
+          detail: err.message,
           life: 5000,
         });
         console.log(err);
@@ -105,18 +103,15 @@ export function UpdateGuideTargets({ canEdit }: { canEdit: boolean }) {
   }
 
   return (
-    <>
-      <Toast ref={toast} />
-      <Button
-        disabled={!canEdit}
-        className="absolute-right-btn"
-        tooltip="Get current guide targets"
-        tooltipOptions={{ position: 'bottom' }}
-        icon="pi pi-refresh"
-        iconPos="right"
-        label=""
-        onClick={calculateGuideTargets}
-      />
-    </>
+    <Button
+      disabled={!canEdit || !configuration?.obsId}
+      className="absolute-right-btn"
+      tooltip="Get current guide targets"
+      tooltipOptions={{ position: 'bottom' }}
+      icon="pi pi-refresh"
+      iconPos="right"
+      label=""
+      onClick={calculateGuideTargets}
+    />
   );
 }

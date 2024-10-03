@@ -1,6 +1,8 @@
-import { beforeEach, describe, expect } from 'vitest';
-import { render, fireEvent, screen } from '@testing-library/react';
+import { beforeEach, describe, expect, Mock } from 'vitest';
 import { Title } from './Title';
+import { render } from 'vitest-browser-react';
+import { page } from '@vitest/browser/context';
+import { userEvent } from '@vitest/browser/context';
 
 describe('Title test with args', () => {
   const title = 'My title';
@@ -15,78 +17,85 @@ describe('Title test with args', () => {
   const nextPanelFunction = vi.spyOn(nextPanelObject, 'nextPanel');
   const prevPanelFunction = vi.spyOn(prevPanelObject, 'prevPanel');
 
-  let container: HTMLElement = null!;
-  beforeEach(() => {
-    ({ container } = render(
+  beforeEach(async () => {
+    render(
       <Title title={title} prevPanel={prevPanelObject.prevPanel} nextPanel={nextPanelObject.nextPanel}>
         <h3>Hola</h3>
       </Title>,
-    ));
+    );
+    await expect.element(page.getByText(title)).toBeInTheDocument();
   });
 
-  it('should show title', () => {
-    expect(screen.getByText(title)).toBeDefined();
+  it('should show title', async () => {
+    await expect.element(page.getByText(title)).toBeInTheDocument();
   });
 
-  it('should have prev and next panel buttons', () => {
-    expect(container.getElementsByClassName('p-panel').length).toBe(1);
-    expect(container.getElementsByClassName('n-panel').length).toBe(1);
+  it('should have prev and next panel buttons', async () => {
+    await expect.element(page.getByText('Previous panel')).toBeInTheDocument();
+    await expect.element(page.getByText('Next panel')).toBeInTheDocument();
   });
 
-  it('should show children', () => {
-    expect(screen.getByText('Hola')).toBeDefined();
+  it('should show children', async () => {
+    await expect.element(page.getByText('Hola')).toBeInTheDocument();
   });
 
-  it('functions should be called', () => {
-    fireEvent(container.getElementsByClassName('n-panel')[0], new MouseEvent('click', { bubbles: true }));
+  it('functions should be called', async () => {
+    await userEvent.click(page.getByText('Next panel'));
+    await userEvent.click(page.getByText('Previous panel'));
 
-    fireEvent(container.getElementsByClassName('p-panel')[0], new MouseEvent('click', { bubbles: true }));
-    expect(nextPanelFunction).toHaveBeenCalledTimes(1);
-    expect(prevPanelFunction).toHaveBeenCalledTimes(1);
+    expect(nextPanelFunction).toHaveBeenCalledOnce();
+    expect(prevPanelFunction).toHaveBeenCalledOnce();
   });
 });
 
 describe('Title test with args', () => {
   const title = 'My title';
 
-  const nextPanel = () => undefined;
-  const prevPanel = () => undefined;
+  let nextPanelMock: Mock;
+  let prevPanelMock: Mock;
 
-  const nextPanelMock = vi.fn().mockImplementation(nextPanel);
-  const prevPanelMock = vi.fn().mockImplementation(prevPanel);
+  beforeEach(() => {
+    nextPanelMock = vi.fn();
+    prevPanelMock = vi.fn();
+  });
 
-  it('functions should be called', () => {
-    const { container } = render(
+  it('functions should be called', async () => {
+    render(
       <Title title={title} prevPanel={prevPanelMock} nextPanel={nextPanelMock}>
         <h3>Hola</h3>
       </Title>,
     );
-    fireEvent(container.getElementsByClassName('n-panel')[0], new MouseEvent('click', { bubbles: true }));
+    await expect.element(page.getByText(title)).toBeInTheDocument();
+    await userEvent.click(page.getByText('Next panel'));
 
-    fireEvent(container.getElementsByClassName('p-panel')[0], new MouseEvent('click', { bubbles: true }));
-    expect(nextPanelMock).toHaveBeenCalledTimes(1);
-    expect(prevPanelMock).toHaveBeenCalledTimes(1);
+    await userEvent.click(page.getByText('Previous panel'));
+
+    expect(nextPanelMock).toHaveBeenCalledOnce();
+    expect(prevPanelMock).toHaveBeenCalledOnce();
   });
 });
 
 describe('Title test without args', () => {
   const title = 'My title';
 
-  it('should show title', () => {
+  it('should show title', async () => {
     render(<Title title={title}></Title>);
 
-    expect(screen.getByText(title)).toBeDefined();
+    await expect.element(page.getByText(title)).toBeInTheDocument();
   });
 
-  it('should not have prev and next panel button if no functions are defined', () => {
+  it('should not have prev and next panel button if no functions are defined', async () => {
     const { container } = render(<Title title={title}></Title>);
-    expect(container.getElementsByClassName('p-panel').length).toBe(0);
-    expect(container.getElementsByClassName('n-panel').length).toBe(0);
+    await expect.element(page.getByText(title)).toBeInTheDocument();
+
+    expect(container.getElementsByClassName('p-panel')).toHaveLength(0);
+    expect(container.getElementsByClassName('n-panel')).toHaveLength(0);
   });
 
-  it('should not show children neither buttons if not defined', () => {
+  it('should not show children neither buttons if not defined', async () => {
     const { container } = render(<Title title={title}></Title>);
-    expect(container.firstChild?.childNodes.length).toBe(1);
+    await expect.element(page.getByText(title)).toBeInTheDocument();
+    expect(container.firstChild?.childNodes).toHaveLength(1);
   });
 });
 
@@ -99,8 +108,10 @@ describe('Title with children', () => {
     children.push(<span key={i}>node {i}</span>);
   }
 
-  it('should render title plus children created', () => {
+  it('should render title plus children created', async () => {
     const instance = render(<Title title={title}>{children}</Title>);
-    expect(instance.container.firstChild?.childNodes.length).toBe(CHILDREN + 1);
+    await expect.element(page.getByText(title)).toBeInTheDocument();
+
+    expect(instance.container.firstChild?.childNodes).toHaveLength(CHILDREN + 1);
   });
 });

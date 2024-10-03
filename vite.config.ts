@@ -7,8 +7,9 @@ import mkcert from 'vite-plugin-mkcert';
 function fixCssRoot() {
   return {
     postcssPlugin: 'postcss-fix-nested-root',
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Once(root: any) {
-      root.walkRules((rule: any) => {
+      root.walkRules((rule: { selector: string }) => {
         if (rule.selector.includes(' :root')) {
           rule.selector = rule.selector.replace(' :root', '');
         }
@@ -95,7 +96,11 @@ export default defineConfig(({ mode }) => ({
   ],
   test: {
     globals: true,
-    environment: 'happy-dom',
+    browser: {
+      enabled: true,
+      name: 'chromium',
+      provider: 'playwright',
+    },
   },
   base: '/',
 }));

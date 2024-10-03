@@ -45,8 +45,8 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
   const [domeMode, setDomeMode] = useState('MinVibration');
   const [shutterMode, setShutterMode] = useState('Tracking');
   const [aperture, setAperture] = useState(90);
-  const [WVGate, setWVGate] = useState<any>(50);
-  const [EVGate, setEVGate] = useState<any>(50);
+  const [WVGate, setWVGate] = useState(50);
+  const [EVGate, setEVGate] = useState(50);
 
   const { data, loading } = useMechanism({
     onCompleted(data) {
@@ -64,7 +64,7 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
   const updateMechanism = useUpdateMechanism();
 
   function modifyMechanism(vars: Omit<UpdateMechanismMutationVariables, 'pk'>) {
-    updateMechanism({
+    void updateMechanism({
       variables: {
         pk: state.pk,
         ...vars,
@@ -116,7 +116,7 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         style={{ gridArea: 'g43' }}
         value={domeMode}
         options={DOME_MODE}
-        onChange={(e) => setDomeMode(e.value)}
+        onChange={(e) => setDomeMode(e.value as string)}
         placeholder="Select a Dome Mode"
         className="under-construction"
       />
@@ -147,7 +147,7 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         style={{ gridArea: 'g53' }}
         value={shutterMode}
         options={SHUTTER_MODE}
-        onChange={(e) => setShutterMode(e.value)}
+        onChange={(e) => setShutterMode(e.value as string)}
         placeholder="Select a Shutter Mode"
         className="under-construction"
       />
@@ -198,7 +198,7 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         disabled={!canEdit || true} // under construction!
         style={{ gridArea: 'g63', marginTop: '10px' }}
         value={WVGate}
-        onChange={(e) => setWVGate(e.value)}
+        onChange={(e) => setWVGate(e.value as number)}
         className="under-construction"
       />
       <Button
@@ -226,7 +226,7 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         disabled={!canEdit || true} // under construction!
         style={{ gridArea: 'g73', marginTop: '10px' }}
         value={EVGate}
-        onChange={(e) => setEVGate(e.value)}
+        onChange={(e) => setEVGate(e.value as number)}
         className="under-construction"
       />
       <Button

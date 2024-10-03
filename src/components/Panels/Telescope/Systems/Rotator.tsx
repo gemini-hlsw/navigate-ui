@@ -2,6 +2,7 @@ import { Title } from '@Shared/Title/Title';
 import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 import { useRotator, useUpdateRotator } from '@gql/configs/Rotator';
+import { TrackingType } from '@/types';
 
 export function Rotator({ canEdit }: { canEdit: boolean }) {
   const rotator = useRotator().data?.rotator;
@@ -18,8 +19,8 @@ export function Rotator({ canEdit }: { canEdit: boolean }) {
           options={['TRACKING', 'FIXED']}
           onChange={(e) => {
             if (rotator)
-              updateRotator({
-                variables: { pk: rotator.pk, tracking: e.target.value },
+              void updateRotator({
+                variables: { pk: rotator.pk, tracking: e.target.value as TrackingType },
               });
           }}
           placeholder="Select a tracking"
@@ -32,7 +33,7 @@ export function Rotator({ canEdit }: { canEdit: boolean }) {
           maxFractionDigits={7}
           onValueChange={(e) => {
             if (rotator)
-              updateRotator({
+              void updateRotator({
                 variables: { pk: rotator.pk, angle: e.target.value },
               });
           }}

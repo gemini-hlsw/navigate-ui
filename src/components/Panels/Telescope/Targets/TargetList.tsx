@@ -26,22 +26,22 @@ export function TargetList({ targets, type }: { targets: TargetType[]; type?: Ty
       break;
   }
 
-  function updateSelectedTarget(targetPk: number) {
+  async function updateSelectedTarget(targetPk: number) {
     switch (type) {
       case 'OIWFS':
-        updateConfiguration({
+        await updateConfiguration({
           variables: { pk: configuration!.pk, selectedOiTarget: targetPk },
         });
         break;
 
       case 'PWFS1':
-        updateConfiguration({
+        await updateConfiguration({
           variables: { pk: configuration!.pk, selectedP1Target: targetPk },
         });
         break;
 
       case 'PWFS2':
-        updateConfiguration({
+        await updateConfiguration({
           variables: { pk: configuration!.pk, selectedP2Target: targetPk },
         });
         break;
@@ -50,7 +50,7 @@ export function TargetList({ targets, type }: { targets: TargetType[]; type?: Ty
       case 'SCIENCE':
       case 'BLINDOFFSET':
       case 'FIXED':
-        updateConfiguration({
+        await updateConfiguration({
           variables: { pk: configuration!.pk, selectedTarget: targetPk },
         });
         break;
@@ -70,7 +70,12 @@ export function TargetList({ targets, type }: { targets: TargetType[]; type?: Ty
   if (displayTargets.length === 0) {
     // Return an empty target as placeholder
     displayTargets.push(
-      <Target key={`obsTarget-0`} target={{} as TargetType} updateSelectedTarget={() => ({})} selectedTarget={0} />,
+      <Target
+        key={`obsTarget-0`}
+        target={{} as TargetType}
+        updateSelectedTarget={() => undefined}
+        selectedTarget={0}
+      />,
     );
   }
   return (

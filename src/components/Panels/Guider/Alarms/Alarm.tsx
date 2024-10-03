@@ -38,7 +38,10 @@ export function Alarm({
   const hasAlarm = evaluateAlarm(alarm, guideQuality);
 
   return (
-    <div className={clsx('alarm', hasAlarm && 'has-alarm animate-error-bg')}>
+    <div
+      data-testid={hasAlarm ? 'has-alarm' : 'no-alarm'}
+      className={clsx('alarm', hasAlarm && 'has-alarm animate-error-bg')}
+    >
       <div className="title-bar">
         <Title title={wfs} />
       </div>

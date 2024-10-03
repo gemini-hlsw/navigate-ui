@@ -4,11 +4,11 @@ import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 
 export default function MainControls({ canEdit }: { canEdit: boolean }) {
-  const [slider, setSlider] = useState<any>(10);
-  const upKey = useRef<any>(null);
-  const downKey = useRef<any>(null);
-  const leftKey = useRef<any>(null);
-  const rightKey = useRef<any>(null);
+  const [slider, setSlider] = useState(10);
+  const upKey = useRef(null);
+  const downKey = useRef(null);
+  const leftKey = useRef(null);
+  const rightKey = useRef(null);
 
   // useEffect(() => {
   //   document.addEventListener("keydown", keyPressed)

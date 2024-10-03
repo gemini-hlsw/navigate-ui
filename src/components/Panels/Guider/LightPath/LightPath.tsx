@@ -18,7 +18,7 @@ export function LightPath() {
     value: UpdateGuideLoopMutationVariables[T],
   ) {
     if (state.pk)
-      updateGuideLoop({
+      void updateGuideLoop({
         variables: {
           pk: state.pk,
           [name]: value,

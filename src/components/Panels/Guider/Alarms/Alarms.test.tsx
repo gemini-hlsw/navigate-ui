@@ -2,9 +2,9 @@ import { MockedResponse } from '@apollo/client/testing';
 import { GET_GUIDE_ALARMS, UPDATE_GUIDE_ALARM } from '@gql/configs/GuideAlarm';
 import { renderWithContext } from '@gql/render';
 import { GUIDE_QUALITY_SUBSCRIPTION } from '@gql/server/GuideQuality';
-import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { Alarms, evaluateAlarm } from './Alarms';
 import { guideAlarmAtom } from '@/components/atoms/alarm';
+import { page, userEvent } from '@vitest/browser/context';
 
 describe(Alarms.name, () => {
   let store: ReturnType<typeof renderWithContext>['store'];
@@ -12,24 +12,21 @@ describe(Alarms.name, () => {
     store = renderWithContext(<Alarms />, { mocks }).store;
 
     // Wait for the alarms to be loaded
-    await waitFor(async () => !(await screen.findAllByLabelText<HTMLInputElement>('Limit'))[0].disabled);
+    await expect.element(page.getByText('PWFS1')).toBeEnabled();
   });
 
-  it('should render 3 alarms', () => {
-    expect(screen.queryByText('PWFS1')).not.toBeNull();
-    expect(screen.queryByText('PWFS2')).not.toBeNull();
-    expect(screen.queryByText('OIWFS')).not.toBeNull();
+  it('should render 3 alarms', async () => {
+    await expect.element(page.getByText('PWFS1')).toBeInTheDocument();
+    await expect.element(page.getByText('PWFS2')).toBeInTheDocument();
+    await expect.element(page.getByText('OIWFS')).toBeInTheDocument();
   });
 
   it('calls updateAlarm when limit is changed', async () => {
-    const limitInput = screen.getAllByLabelText('Limit')[0];
+    const limitInput = page.getByLabelText('Limit').elements()[0];
 
-    fireEvent.change(limitInput, { target: { value: '900' } });
-    fireEvent.blur(limitInput);
+    await userEvent.fill(limitInput, '900');
 
-    await waitFor(async () =>
-      expect((await screen.findAllByLabelText<HTMLInputElement>('Limit'))[0].value).equals('900'),
-    );
+    await expect.element(page.getByLabelText('Limit').elements()[0]).toHaveValue('900');
     expect(store.get(guideAlarmAtom)).true;
   });
 });

@@ -2,6 +2,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { graphql } from './gen';
 import { isBaseTarget, isOiTarget, isP1Target, isP2Target } from '@gql/util';
 import { useMemo } from 'react';
+import { Target } from './gen/graphql';
 
 const GET_TARGETS = graphql(`
   query getTargets {
@@ -38,12 +39,13 @@ export function useTargets() {
   });
 
   const filteredData = useMemo(() => {
-    const targets = result.data?.targets ?? [];
+    const targets: Target[] = result.data?.targets ?? [];
     return {
       baseTargets: targets.filter(isBaseTarget),
       oiTargets: targets.filter(isOiTarget),
       p1Targets: targets.filter(isP1Target),
       p2Targets: targets.filter(isP2Target),
+      allTargets: targets,
     };
   }, [result.data]);
 

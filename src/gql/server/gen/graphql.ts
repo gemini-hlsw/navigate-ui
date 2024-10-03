@@ -574,6 +574,38 @@ export type LogMessageSubscription = {
   logMessage: { __typename?: 'LogMessage'; timestamp: string; level: LogLevel; thread: string; message: string };
 };
 
+export type GetNavigateStateQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetNavigateStateQuery = {
+  __typename?: 'Query';
+  navigateState: { __typename?: 'NavigateState'; onSwappedTarget: boolean };
+};
+
+export type NavigateStatesSubscriptionVariables = Exact<{ [key: string]: never }>;
+
+export type NavigateStatesSubscription = {
+  __typename?: 'Subscription';
+  navigateState: { __typename?: 'NavigateState'; onSwappedTarget: boolean };
+};
+
+export type SwapTargetMutationVariables = Exact<{
+  swapConfig: SwapConfigInput;
+}>;
+
+export type SwapTargetMutation = {
+  __typename?: 'Mutation';
+  swapTarget: { __typename?: 'OperationOutcome'; result: OperationResult; msg?: string | null };
+};
+
+export type RestoreTargetMutationVariables = Exact<{
+  config: TcsConfigInput;
+}>;
+
+export type RestoreTargetMutation = {
+  __typename?: 'Mutation';
+  restoreTarget: { __typename?: 'OperationOutcome'; result: OperationResult; msg?: string | null };
+};
+
 export type GetTelescopeStateQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetTelescopeStateQuery = {
@@ -906,6 +938,132 @@ export const LogMessageDocument = {
     },
   ],
 } as unknown as DocumentNode<LogMessageSubscription, LogMessageSubscriptionVariables>;
+export const GetNavigateStateDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'getNavigateState' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'navigateState' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [{ kind: 'Field', name: { kind: 'Name', value: 'onSwappedTarget' } }],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetNavigateStateQuery, GetNavigateStateQueryVariables>;
+export const NavigateStatesDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'subscription',
+      name: { kind: 'Name', value: 'navigateStates' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'navigateState' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [{ kind: 'Field', name: { kind: 'Name', value: 'onSwappedTarget' } }],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<NavigateStatesSubscription, NavigateStatesSubscriptionVariables>;
+export const SwapTargetDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'swapTarget' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'swapConfig' } },
+          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'SwapConfigInput' } } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'swapTarget' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'swapConfig' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'swapConfig' } },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'result' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'msg' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<SwapTargetMutation, SwapTargetMutationVariables>;
+export const RestoreTargetDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'restoreTarget' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'config' } },
+          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'TcsConfigInput' } } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'restoreTarget' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'config' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'config' } },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'result' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'msg' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<RestoreTargetMutation, RestoreTargetMutationVariables>;
 export const GetTelescopeStateDocument = {
   kind: 'Document',
   definitions: [

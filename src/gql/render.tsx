@@ -1,8 +1,8 @@
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
-import { render, RenderOptions } from '@testing-library/react';
 import { createStore, Provider, WritableAtom } from 'jotai';
 import { useHydrateAtoms } from 'jotai/utils';
 import { PropsWithChildren, ReactElement } from 'react';
+import { ComponentRenderOptions, render } from 'vitest-browser-react';
 import { GET_SLEW_FLAGS } from './configs/SlewFlags';
 
 interface CreateOptions<T> {
@@ -24,7 +24,7 @@ function HydrateAtoms<T extends AtomTuples>({
 export function renderWithContext<T extends AtomTuples>(
   ui: ReactElement,
   createOptions: CreateOptions<T> = {},
-  options?: RenderOptions,
+  options?: ComponentRenderOptions,
 ) {
   const store = createStore();
   const renderResult = render(

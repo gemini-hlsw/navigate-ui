@@ -1,11 +1,11 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
-import { Toast } from 'primereact/toast';
 import './Login.scss';
 import { useSignIn } from '../atoms/auth';
+import { useToast } from '@/Helpers/toast';
 
 interface LocationInterface {
   from: {
@@ -20,30 +20,29 @@ export default function Login() {
   const [password, setPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const signin = useSignIn();
-  const toast = useRef<Toast>(null);
+  const toast = useToast();
 
   const from = (location.state as LocationInterface)?.from?.pathname ?? '/';
 
-  function handleSubmit() {
+  async function handleSubmit() {
     setLoading(true);
-    signin(username, password).then((isLogged) => {
-      if (isLogged) {
-        // Send them back to the page they tried to visit when they were
-        // redirected to the login page. Use { replace: true } so we don't create
-        // another entry in the history stack for the login page.  This means that
-        // when they get to the protected page and click the back button, they
-        // won't end up back on the login page, which is also really nice for the
-        // user experience.)
-        navigate(from, { replace: true });
-      } else {
-        toast.current?.show({
-          severity: 'error',
-          summary: 'Login Error',
-          detail: 'Wrong credentials',
-        });
-      }
-      setLoading(false);
-    });
+    const isLogged = await signin(username, password);
+    if (isLogged) {
+      // Send them back to the page they tried to visit when they were
+      // redirected to the login page. Use { replace: true } so we don't create
+      // another entry in the history stack for the login page.  This means that
+      // when they get to the protected page and click the back button, they
+      // won't end up back on the login page, which is also really nice for the
+      // user experience.)
+      navigate(from, { replace: true });
+    } else {
+      toast?.show({
+        severity: 'error',
+        summary: 'Login Error',
+        detail: 'Wrong credentials',
+      });
+    }
+    setLoading(false);
   }
 
   function goHome() {
@@ -52,7 +51,6 @@ export default function Login() {
 
   return (
     <div className="login">
-      <Toast ref={toast} className="p-button-danger" />
       <div className="box">
         <div className="title">
           <div className="text">Navigate</div>
@@ -71,7 +69,13 @@ export default function Login() {
         </div>
         <div className="login-buttons">
           <div className="text-right w-100">
-            <Button label="Submit" icon="pi pi-check" iconPos="right" onClick={handleSubmit} loading={loading} />
+            <Button
+              label="Submit"
+              icon="pi pi-check"
+              iconPos="right"
+              onClick={() => void handleSubmit()}
+              loading={loading}
+            />
           </div>
           <div className="text-left w-100">
             <Button label="Cancel" icon="pi pi-times" iconPos="right" className=" p-button-danger" onClick={goHome} />
