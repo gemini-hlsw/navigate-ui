@@ -67,7 +67,7 @@ export function TargetList({ targets, type }: { targets: TargetType[]; type?: Ty
     />
   ));
 
-  if (displayTargets.length === 0) {
+  if (!displayTargets.length) {
     // Return an empty target as placeholder
     displayTargets.push(
       <Target

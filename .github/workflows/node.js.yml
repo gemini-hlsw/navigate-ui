@@ -23,7 +23,7 @@ jobs:
           node-version: 22.x
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
-      - run: pnpx playwright install chromium --with-deps
+      - run: pnpm exec playwright install chromium --with-deps
       - run: pnpm build
       - run: pnpm lint
       - run: pnpm test

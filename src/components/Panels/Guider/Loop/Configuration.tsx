@@ -14,8 +14,8 @@ import { ReactNode } from 'react';
 
 export function Configuration() {
   const canEdit = useCanEdit();
-  const { data: confData, loading: getConfLoading } = useConfiguration();
-  const { data, loading: getLoading } = useGetGuideLoop();
+  const { data: confData, loading: confLoading } = useConfiguration();
+  const { data, loading: guideLoopLoading } = useGetGuideLoop();
 
   const configuration = confData?.configuration;
   const state =
@@ -94,7 +94,7 @@ export function Configuration() {
   }
 
   const disabled = !canEdit;
-  const loading = getLoading || getConfLoading || updateLoading;
+  const loading = guideLoopLoading || confLoading || updateLoading;
 
   return (
     <>
