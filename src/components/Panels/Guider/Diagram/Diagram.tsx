@@ -59,7 +59,7 @@ function Flow() {
     const sourceNodes: Node[] = [];
     const sourceEdges: Edge[] = [];
     if (state.m2TipTiltEnable && state.m2TipTiltSource) {
-      state.m2TipTiltSource.split(',').map((source: string) => {
+      state.m2TipTiltSource.split(',').forEach((source: string) => {
         sourceNodes.push({
           id: source,
           data: { label: source },
@@ -78,7 +78,7 @@ function Flow() {
     }
 
     if (state.m2TipTiltFocusLink) {
-      sourceNodes.map((n) => {
+      sourceNodes.forEach((n) => {
         sourceEdges.push({
           id: `${n.id}-focus`,
           source: n.id,
@@ -89,8 +89,8 @@ function Flow() {
       });
     } else {
       if (state.m2FocusEnable && state.m2FocusSource) {
-        state.m2FocusSource.split(',').map((s) => {
-          if (sourceNodes.filter((n) => n.id === s).length === 0) {
+        state.m2FocusSource.split(',').forEach((s) => {
+          if (!sourceNodes.find((n) => n.id === s)) {
             sourceNodes.push({
               id: s,
               data: { label: s },
@@ -111,7 +111,7 @@ function Flow() {
     }
 
     if (state.m2ComaEnable) {
-      const pos = sourceNodes.map((n) => n.id).indexOf(state.m2ComaM1CorrectionsSource!);
+      const pos = sourceNodes.findIndex((n) => n.id === state.m2ComaM1CorrectionsSource);
       if (pos === -1) {
         sourceNodes.push({
           id: state.m2ComaM1CorrectionsSource ?? '',
@@ -135,7 +135,7 @@ function Flow() {
     }
 
     if (state.m1CorrectionsEnable) {
-      const pos = sourceNodes.map((n) => n.id).indexOf(state.m2ComaM1CorrectionsSource!);
+      const pos = sourceNodes.findIndex((n) => n.id === state.m2ComaM1CorrectionsSource);
       if (pos === -1) {
         sourceNodes.push({
           id: state.m2ComaM1CorrectionsSource ?? '',
@@ -166,7 +166,7 @@ function Flow() {
     // Tip/Tilt
     let tiptiltState;
     if (state.m2TipTiltEnable) {
-      if (sourceEdges.filter((n) => n.target === 'tiptilt').length) {
+      if (sourceEdges.find((n) => n.target === 'tiptilt')) {
         tiptiltState = 'active';
       } else {
         tiptiltState = 'idle';
@@ -193,7 +193,7 @@ function Flow() {
     // Focus
     let focusState;
     if (state.m2FocusEnable) {
-      if (sourceEdges.filter((n) => n.target === 'focus').length) {
+      if (sourceEdges.find((n) => n.target === 'focus')) {
         focusState = 'active';
       } else {
         focusState = 'idle';
@@ -206,7 +206,7 @@ function Flow() {
     // Coma
     let comaState;
     if (state.m2ComaEnable) {
-      if (sourceEdges.filter((n) => n.target === 'coma').length) {
+      if (sourceEdges.find((n) => n.target === 'coma')) {
         comaState = 'active';
       } else {
         comaState = 'idle';
@@ -219,7 +219,7 @@ function Flow() {
     // High-O
     let highoState;
     if (state.m1CorrectionsEnable) {
-      if (sourceEdges.filter((n) => n.target === 'higho').length) {
+      if (sourceEdges.find((n) => n.target === 'higho')) {
         highoState = 'active';
       } else {
         highoState = 'idle';
@@ -233,7 +233,7 @@ function Flow() {
 
     const sourceN = sourceNodes.length;
     if (sourceN) {
-      sourceNodes.map((n, i) => (n.position.x = i * 100));
+      sourceNodes.forEach((n, i) => (n.position.x = i * 100));
     }
 
     setNodes([...sourceNodes, ...initialNodes]);

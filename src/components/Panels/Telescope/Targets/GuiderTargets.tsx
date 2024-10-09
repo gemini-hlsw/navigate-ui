@@ -65,7 +65,7 @@ export function GuiderTargets() {
     );
   }
 
-  if (displayProbes.length === 0) {
+  if (!displayProbes.length) {
     displayProbes.push(
       <div key={`guideProbe-0`} className="guide-probe">
         <Title title={`OIWFS`} />

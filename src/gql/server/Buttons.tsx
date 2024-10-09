@@ -50,38 +50,40 @@ function MutationButton<T extends DocumentNode>({
 // BUTTONS
 
 export function MCS({ className, state, ...props }: ButtonProps & { state: MechSystemState | undefined }) {
-  const classes = classNameForState(state, true);
+  const { classes, title } = classNameForState(state, true);
 
   return (
     <MutationButton
       mutation={MOUNT_FOLLOW_MUTATION}
       variables={{ enable: state?.follow === 'NOT_FOLLOWING' }}
       {...props}
+      title={title}
       className={clsx(className, classes)}
     />
   );
 }
 
 export function SCS({ className, state, ...props }: ButtonProps & { state: MechSystemState | undefined }) {
-  // TODO: Implement SCS mutation
-  const classes = classNameForState(state, true);
+  const { classes, title } = classNameForState(state, true);
   return (
     <MutationButton
       mutation={SCS_FOLLOW_MUTATION}
       variables={{ enable: state?.follow === 'NOT_FOLLOWING' }}
       {...props}
+      title={title}
       className={clsx(className, classes)}
     />
   );
 }
 
 export function CRCS({ className, state, ...props }: ButtonProps & { state: MechSystemState | undefined }) {
-  const classes = classNameForState(state, true);
+  const { classes, title } = classNameForState(state, true);
   return (
     <MutationButton
       mutation={ROTATOR_FOLLOW_MUTATION}
       variables={{ enable: state?.follow === 'NOT_FOLLOWING' }}
       {...props}
+      title={title}
       className={clsx(className, classes)}
     />
   );
@@ -89,14 +91,14 @@ export function CRCS({ className, state, ...props }: ButtonProps & { state: Mech
 
 export function PWFS1({ className, state, ...props }: ButtonProps & { state: MechSystemState | undefined }) {
   // TODO: Implement PWFS1 mutation
-  const classes = classNameForState(state, false);
-  return <Button {...props} className={clsx(className, classes)} />;
+  const { classes, title } = classNameForState(state, true);
+  return <Button {...props} title={title} className={clsx(className, classes)} />;
 }
 
 export function PWFS2({ className, state, ...props }: ButtonProps & { state: MechSystemState | undefined }) {
   // TODO: Implement PWFS2 mutation
-  const classes = classNameForState(state, false);
-  return <Button {...props} className={clsx(className, classes)} />;
+  const { classes, title } = classNameForState(state, true);
+  return <Button {...props} title={title} className={clsx(className, classes)} />;
 }
 
 export function AOWFS({ className, ...props }: ButtonProps) {
@@ -105,12 +107,13 @@ export function AOWFS({ className, ...props }: ButtonProps) {
 }
 
 export function OIWFS({ className, state, ...props }: ButtonProps & { state: MechSystemState | undefined }) {
-  const classes = classNameForState(state, true);
+  const { classes, title } = classNameForState(state, true);
   return (
     <MutationButton
       mutation={OIWFS_FOLLOW_MUTATION}
       variables={{ enable: state?.follow === 'NOT_FOLLOWING' }}
       {...props}
+      title={title}
       className={clsx(className, classes)}
     />
   );
@@ -154,8 +157,9 @@ export function Slew(props: ButtonProps) {
   const selectedTarget = baseTargets.find((t) => t.pk === configuration?.selectedTarget);
   const selectedOiTarget = oiTargets.find((t) => t.pk === configuration?.selectedOiTarget);
 
-  if (!selectedTarget || !instrument || !rotator) {
-    return <Button {...props} disabled={true} />;
+  if (!selectedTarget?.id || !instrument || !rotator) {
+    const missing = !selectedTarget?.id ? 'target' : !instrument ? 'instrument' : 'rotator';
+    return <Button {...props} label={`${props.label} (No ${missing})`} disabled={true} />;
   }
 
   const variables: VariablesOf<typeof SLEW_MUTATION> = {
@@ -172,7 +176,7 @@ export function Slew(props: ButtonProps) {
         },
       },
       sourceATarget: {
-        id: selectedTarget.id!,
+        id: selectedTarget.id,
         name: selectedTarget.name,
         sidereal: {
           ra: { hms: selectedTarget?.ra?.hms },
@@ -210,7 +214,7 @@ export function Slew(props: ButtonProps) {
       variables={variables}
       {...props}
       loading={props.loading || loading}
-      disabled={props.disabled || !selectedTarget.id}
+      disabled={props.disabled}
     />
   );
 }
@@ -220,14 +224,24 @@ export function Slew(props: ButtonProps) {
  * @param state State of the subsystem
  * @param usedSubsystem If the subsystem is being used. Everything is always used, except the guiders (PWFS1, PWFS2, OIWFS, AOWFS), which are optional. Which one is used is given by the guide environment. But right now, we can use only OIWFS
  */
-function classNameForState(state: MechSystemState | undefined, usedSubsystem: boolean) {
-  if (!state) return '';
+function classNameForState(
+  state: MechSystemState | undefined,
+  usedSubsystem: boolean,
+): { classes: string; title: string } {
+  const title =
+    (state?.follow === 'FOLLOWING' ? 'Following' : 'Not following') +
+    ', ' +
+    (state?.parked === 'PARKED' ? 'Parked' : 'Not parked') +
+    ', ' +
+    (usedSubsystem ? 'Used subsystem' : 'Not used subsystem');
+
+  if (!state) return { classes: '', title };
 
   if (!usedSubsystem) {
-    return 'p-button-secondary';
+    return { classes: 'p-button-secondary', title };
   } else if (state.follow === 'FOLLOWING' && state.parked === 'NOT_PARKED') {
-    return '';
+    return { classes: '', title };
   } else {
-    return BTN_CLASSES.ACTIVE;
+    return { classes: BTN_CLASSES.ACTIVE, title };
   }
 }
