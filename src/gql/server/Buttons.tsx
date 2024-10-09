@@ -141,25 +141,41 @@ const SLEW_MUTATION = graphql(`
 `);
 
 export function Slew(props: ButtonProps) {
-  const { oiTargets, baseTargets } = useTargets().data;
-  const { data, loading } = useSlewFlags();
+  const { data: targetsData, loading: targetsLoading } = useTargets();
+  const { oiTargets, baseTargets } = targetsData;
+
+  const { data, loading: slewLoading } = useSlewFlags();
   const slewFlags = data?.slewFlags ?? ({} as SlewFlagsType);
-  const rotator = useRotator().data?.rotator;
-  const configuration = useConfiguration().data?.configuration;
-  const instrument = useInstrument({
+
+  const { data: rotatorData, loading: rotatorLoading } = useRotator();
+  const rotator = rotatorData?.rotator;
+  const { data: configData, loading: configLoading } = useConfiguration();
+  const configuration = configData?.configuration;
+
+  const { data: instrumentData, loading: instrumentLoading } = useInstrument({
     variables: {
       name: configuration?.obsInstrument ?? '',
       issPort: 3,
       wfs: 'NONE',
     },
-  }).data?.instrument;
+  });
+  const instrument = instrumentData?.instrument;
+
+  const loading = targetsLoading || slewLoading || rotatorLoading || configLoading || instrumentLoading;
 
   const selectedTarget = baseTargets.find((t) => t.pk === configuration?.selectedTarget);
   const selectedOiTarget = oiTargets.find((t) => t.pk === configuration?.selectedOiTarget);
 
   if (!selectedTarget?.id || !instrument || !rotator) {
-    const missing = !selectedTarget?.id ? 'target' : !instrument ? 'instrument' : 'rotator';
-    return <Button {...props} label={`${props.label} (No ${missing})`} disabled={true} />;
+    const missing = !selectedTarget?.id ? 'target' : !instrument ? 'instrument' : !rotator ? 'rotator' : '';
+    return (
+      <Button
+        {...props}
+        label={missing ? `${props.label} (No ${missing})` : props.label}
+        loading={loading}
+        disabled={true}
+      />
+    );
   }
 
   const variables: VariablesOf<typeof SLEW_MUTATION> = {
