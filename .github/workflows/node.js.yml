@@ -58,6 +58,7 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
           cache: 'sbt'
+      - uses: sbt/setup-sbt@v1
       - run: pnpm install --frozen-lockfile
 
       - run: pnpm build
