@@ -82,8 +82,8 @@ importers:
         specifier: 18.3.11
         version: 18.3.11
       '@types/react-dom':
-        specifier: 18.3.0
-        version: 18.3.0
+        specifier: 18.3.1
+        version: 18.3.1
       '@types/uuid':
         specifier: 10.0.0
         version: 10.0.0
@@ -143,7 +143,7 @@ importers:
         version: 2.1.2(@types/node@22.7.4)(@vitest/browser@2.1.2)(@vitest/ui@2.1.2)(msw@2.4.9(typescript@5.6.2))(sass@1.79.4)
       vitest-browser-react:
         specifier: 0.0.1
-        version: 0.0.1(@types/react-dom@18.3.0)(@types/react@18.3.11)(@vitest/browser@2.1.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@2.1.2)
+        version: 0.0.1(@types/react-dom@18.3.1)(@types/react@18.3.11)(@vitest/browser@2.1.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@2.1.2)
 
 packages:
 
@@ -1413,8 +1413,8 @@ packages:
   '@types/prop-types@15.7.13':
     resolution: {integrity: sha512-hCZTSvwbzWGvhqxp/RqVqwU999pBf2vp7hzIjiYOsl8wqOmUxkQ6ddw1cV3l8811+kdUFus/q4d1Y3E3SyEifA==}
 
-  '@types/react-dom@18.3.0':
-    resolution: {integrity: sha512-EhwApuTmMBmXuFOikhQLIBUn6uFg81SwLMOAUgodJF14SOBOCMdU04gDoYi0WOJJHD144TL32z4yDqCW3dnkQg==}
+  '@types/react-dom@18.3.1':
+    resolution: {integrity: sha512-qW1Mfv8taImTthu4KoXgDfLuk4bydU6Q/TkADnDWWHwi4NX4BR+LWfTp2sVmTqRrsHvyDDTelgelxJ+SsejKKQ==}
 
   '@types/react-transition-group@4.4.11':
     resolution: {integrity: sha512-RM05tAniPZ5DZPzzNFP+DmrcOdD0efDUxMy3145oljWSl3x9ZV5vhme98gTxFrj2lhXvmGNnUiuDyJgY9IKkNA==}
@@ -5521,7 +5521,7 @@ snapshots:
 
   '@types/prop-types@15.7.13': {}
 
-  '@types/react-dom@18.3.0':
+  '@types/react-dom@18.3.1':
     dependencies:
       '@types/react': 18.3.11
 
@@ -8172,7 +8172,7 @@ snapshots:
       fsevents: 2.3.3
       sass: 1.79.4
 
-  vitest-browser-react@0.0.1(@types/react-dom@18.3.0)(@types/react@18.3.11)(@vitest/browser@2.1.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@2.1.2):
+  vitest-browser-react@0.0.1(@types/react-dom@18.3.1)(@types/react@18.3.11)(@vitest/browser@2.1.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@2.1.2):
     dependencies:
       '@vitest/browser': 2.1.2(@vitest/spy@2.1.2)(playwright@1.47.2)(typescript@5.6.2)(vite@5.4.8(@types/node@22.7.4)(sass@1.79.4))(vitest@2.1.2)
       react: 18.3.1
@@ -8180,7 +8180,7 @@ snapshots:
       vitest: 2.1.2(@types/node@22.7.4)(@vitest/browser@2.1.2)(@vitest/ui@2.1.2)(msw@2.4.9(typescript@5.6.2))(sass@1.79.4)
     optionalDependencies:
       '@types/react': 18.3.11
-      '@types/react-dom': 18.3.0
+      '@types/react-dom': 18.3.1
 
   vitest@2.1.2(@types/node@22.7.4)(@vitest/browser@2.1.2)(@vitest/ui@2.1.2)(msw@2.4.9(typescript@5.6.2))(sass@1.79.4):
     dependencies:
