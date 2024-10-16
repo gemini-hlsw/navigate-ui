@@ -21,6 +21,7 @@ export type Scalars = {
   /** Defines a unique ID for each Call for Proposals. */
   CallForProposalsId: { input: string; output: string };
   ChronicleId: { input: string; output: string };
+  ConfigurationRequestId: { input: any; output: any };
   /** Dataset filename in standard format. */
   DatasetFilename: { input: string; output: string };
   /** DatasetId id formatted as `d-[1-9a-f][0-9a-f]*` */
@@ -1014,6 +1015,57 @@ export type ConfigChangeEstimate = {
   name: Scalars['String']['output'];
 };
 
+export type Configuration = {
+  __typename?: 'Configuration';
+  conditions: ConfigurationConditions;
+  observingMode?: Maybe<ConfigurationObservingMode>;
+  referenceCoordinates?: Maybe<Coordinates>;
+};
+
+export type ConfigurationConditions = {
+  __typename?: 'ConfigurationConditions';
+  cloudExtinction: CloudExtinction;
+  imageQuality: ImageQuality;
+  skyBackground: SkyBackground;
+  waterVapor: WaterVapor;
+};
+
+export type ConfigurationGmosNorthLongSlit = {
+  __typename?: 'ConfigurationGmosNorthLongSlit';
+  grating: GmosNorthGrating;
+};
+
+export type ConfigurationGmosSouthLongSlit = {
+  __typename?: 'ConfigurationGmosSouthLongSlit';
+  grating: GmosSouthGrating;
+};
+
+export type ConfigurationObservingMode = {
+  __typename?: 'ConfigurationObservingMode';
+  gmosNorthLongSlit?: Maybe<ConfigurationGmosNorthLongSlit>;
+  gmosSouthLongSlit?: Maybe<ConfigurationGmosSouthLongSlit>;
+  instrument: Instrument;
+  mode: ObservingModeType;
+};
+
+export type ConfigurationRequest = {
+  __typename?: 'ConfigurationRequest';
+  configuration: Configuration;
+  id: Scalars['ConfigurationRequestId']['output'];
+  status: ConfigurationRequestStatus;
+};
+
+/** The matching configuration requests, limited to a maximum of 1000 entries. */
+export type ConfigurationRequestSelectResult = {
+  __typename?: 'ConfigurationRequestSelectResult';
+  /** `true` when there were additional matches that were not returned. */
+  hasMore: Scalars['Boolean']['output'];
+  /** Matching configuration requests up to the return size limit of 1000 */
+  matches: Array<ConfigurationRequest>;
+};
+
+export type ConfigurationRequestStatus = 'APPROVED' | 'DENIED' | 'REQUESTED';
+
 export type ConstraintSet = {
   __typename?: 'ConstraintSet';
   /** Cloud extinction */
@@ -1155,6 +1207,10 @@ export type CreateCallForProposalsInput = {
 export type CreateCallForProposalsResult = {
   __typename?: 'CreateCallForProposalsResult';
   callForProposals: CallForProposals;
+};
+
+export type CreateConfigurationRequestInput = {
+  observationId?: InputMaybe<Scalars['ObservationId']['input']>;
 };
 
 /**
@@ -3601,6 +3657,8 @@ export type Mutation = {
   cloneTarget: CloneTargetResult;
   /** Creates a Call for Proposals.  Requires staff access. */
   createCallForProposals: CreateCallForProposalsResult;
+  /** Create a configuration request. */
+  createConfigurationRequest: ConfigurationRequest;
   /** Creates a new observation according to provided parameters. */
   createGroup: CreateGroupResult;
   /** Creates a new observation according to provided parameters */
@@ -3715,6 +3773,10 @@ export type MutationCloneTargetArgs = {
 
 export type MutationCreateCallForProposalsArgs = {
   input: CreateCallForProposalsInput;
+};
+
+export type MutationCreateConfigurationRequestArgs = {
+  input: CreateConfigurationRequestInput;
 };
 
 export type MutationCreateGroupArgs = {
@@ -3940,12 +4002,21 @@ export type Observation = {
   activeStatus: ObsActiveStatus;
   /** The Calibration role of this observation */
   calibrationRole?: Maybe<CalibrationRole>;
+  /** Parameters relevant to approved configurations. */
+  configuration: Configuration;
+  /** Program configuration requests applicable to this observation. */
+  configurationRequests: Array<ConfigurationRequest>;
   /** The constraint set for the observation */
   constraintSet: ConstraintSet;
   /** Execution sequence and runtime artifacts */
   execution: Execution;
   /** DELETED or PRESENT */
   existence: Existence;
+  /**
+   * This flag is set to true prior to Phase II, and must be reset to false by the PI prior to observation. The
+   * intent is to prompt PIs to review their accepted observations.
+   */
+  forReview: Scalars['Boolean']['output'];
   /** Enclosing group, if any. */
   groupId?: Maybe<Scalars['GroupId']['output']>;
   /** Index in enclosing group or at the top level if ungrouped. If left unspecified on creation, observation will be added last in its enclosing group or at the top level. Cannot be set to null. */
@@ -4031,6 +4102,8 @@ export type ObservationPropertiesInput = {
   constraintSet?: InputMaybe<ConstraintSetInput>;
   /** Whether the observation is considered deleted (defaults to PRESENT) but may be edited */
   existence?: InputMaybe<Existence>;
+  /** Sets the "for review" bit. */
+  forReview?: InputMaybe<Scalars['Boolean']['input']>;
   /** Enclosing group, if any. */
   groupId?: InputMaybe<Scalars['GroupId']['input']>;
   /** Index in enclosing group or at the top level if ungrouped. If left unspecified on creation, observation will be added last in its enclosing group or at the top level. Cannot be set to null. */
@@ -4403,6 +4476,8 @@ export type Program = {
   allocations: Array<Allocation>;
   /** Calibration role of the program */
   calibrationRole?: Maybe<CalibrationRole>;
+  /** All configuration requests associated with the program. */
+  configurationRequests: ConfigurationRequestSelectResult;
   /** DELETED or PRESENT */
   existence: Existence;
   /** Top-level group elements (observations and sub-groups) in the program. */
@@ -4445,6 +4520,11 @@ export type Program = {
 
 export type ProgramAllGroupElementsArgs = {
   includeDeleted?: Scalars['Boolean']['input'];
+};
+
+export type ProgramConfigurationRequestsArgs = {
+  LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
+  OFFSET?: InputMaybe<Scalars['ConfigurationRequestId']['input']>;
 };
 
 export type ProgramGroupElementsArgs = {
@@ -4596,8 +4676,10 @@ export type ProgramUserRole =
   | 'COI_RO'
   /** Primary Investigator */
   | 'PI'
-  /** Staff/Partner Support */
-  | 'SUPPORT';
+  /** Staff/Partner Primary Support */
+  | 'SUPPORT_PRIMARY'
+  /** Staff/Partner Secondary Support */
+  | 'SUPPORT_SECONDARY';
 
 /** The matching program user results, limited to a maximum of 1000 entries. */
 export type ProgramUserSelectResult = {
@@ -6148,6 +6230,8 @@ export type TargetEnvironment = {
   __typename?: 'TargetEnvironment';
   /** All the observation's science targets, if any */
   asterism: Array<Target>;
+  /** Explicit (if defined) or computed base position at the specified time, if known. */
+  basePosition?: Maybe<Coordinates>;
   /** When set, overrides the default base position of the target group */
   explicitBase?: Maybe<Coordinates>;
   /** First, perhaps only, science target in the asterism */
@@ -6178,6 +6262,10 @@ export type TargetEnvironment = {
 
 export type TargetEnvironmentAsterismArgs = {
   includeDeleted?: Scalars['Boolean']['input'];
+};
+
+export type TargetEnvironmentBasePositionArgs = {
+  observationTime: Scalars['Timestamp']['input'];
 };
 
 export type TargetEnvironmentFirstScienceTargetArgs = {
@@ -7457,6 +7545,8 @@ export type WhereObservation = {
   OR?: InputMaybe<Array<WhereObservation>>;
   /** Matches the observation active status. */
   activeStatus?: InputMaybe<WhereOrderObsActiveStatus>;
+  /** Matches the "for review" bit. */
+  forReview?: InputMaybe<WhereBoolean>;
   /** Matches the observation id. */
   id?: InputMaybe<WhereOrderObservationId>;
   /** Matches the associated program. */

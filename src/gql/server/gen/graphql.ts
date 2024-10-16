@@ -191,6 +191,8 @@ export type MechSystemState = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  acObserve: OperationOutcome;
+  acStopObserve: OperationOutcome;
   guideDisable: OperationOutcome;
   guideEnable: OperationOutcome;
   instrumentSpecifics: OperationOutcome;
@@ -210,6 +212,10 @@ export type Mutation = {
   slew: OperationOutcome;
   swapTarget: OperationOutcome;
   tcsConfig: OperationOutcome;
+};
+
+export type MutationAcObserveArgs = {
+  period: TimeSpanInput;
 };
 
 export type MutationGuideEnableArgs = {
