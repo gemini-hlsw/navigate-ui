@@ -9,21 +9,21 @@ export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> =
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string };
-  String: { input: string; output: string };
-  Boolean: { input: boolean; output: boolean };
-  Int: { input: number; output: number };
-  Float: { input: number; output: number };
-  BigDecimal: { input: number; output: number };
-  DmsString: { input: string; output: string };
-  EpochString: { input: string; output: string };
-  HmsString: { input: string; output: string };
-  Long: { input: number; output: number };
-  NonEmptyString: { input: string; output: string };
-  PosBigDecimal: { input: number; output: number };
-  PosInt: { input: number; output: number };
-  TargetId: { input: string; output: string };
-  Timestamp: { input: string; output: string };
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+  BigDecimal: { input: number; output: number; }
+  DmsString: { input: string; output: string; }
+  EpochString: { input: string; output: string; }
+  HmsString: { input: string; output: string; }
+  Long: { input: number; output: number; }
+  NonEmptyString: { input: string; output: string; }
+  PosBigDecimal: { input: number; output: number; }
+  PosInt: { input: number; output: number; }
+  TargetId: { input: string; output: string; }
+  Timestamp: { input: string; output: string; }
 };
 
 export type AngleInput = {
@@ -54,7 +54,10 @@ export type CatalogInfoInput = {
   objectType?: InputMaybe<Scalars['NonEmptyString']['input']>;
 };
 
-export type CatalogName = 'GAIA' | 'IMPORT' | 'SIMBAD';
+export type CatalogName =
+  | 'GAIA'
+  | 'IMPORT'
+  | 'SIMBAD';
 
 export type Declination = {
   __typename?: 'Declination';
@@ -80,9 +83,16 @@ export type DistanceInput = {
   millimeters?: InputMaybe<Scalars['BigDecimal']['input']>;
 };
 
-export type EphemerisKeyType = 'ASTEROID_NEW' | 'ASTEROID_OLD' | 'COMET' | 'MAJOR_BODY' | 'USER_SUPPLIED';
+export type EphemerisKeyType =
+  | 'ASTEROID_NEW'
+  | 'ASTEROID_OLD'
+  | 'COMET'
+  | 'MAJOR_BODY'
+  | 'USER_SUPPLIED';
 
-export type FollowStatus = 'FOLLOWING' | 'NOT_FOLLOWING';
+export type FollowStatus =
+  | 'FOLLOWING'
+  | 'NOT_FOLLOWING';
 
 export type GuideConfigurationInput = {
   /** Flag for day time tests. It sets all gains to 0 */
@@ -117,7 +127,10 @@ export type GuideConfigurationState = {
   p2Integrating: Scalars['Boolean']['output'];
 };
 
-export type GuideProbe = 'GMOS_OIWFS' | 'PWFS_1' | 'PWFS_2';
+export type GuideProbe =
+  | 'GMOS_OIWFS'
+  | 'PWFS_1'
+  | 'PWFS_2';
 
 export type GuideQuality = {
   __typename?: 'GuideQuality';
@@ -171,7 +184,12 @@ export type InstrumentSpecificsInput = {
   origin: PointOriginInput;
 };
 
-export type LogLevel = 'DEBUG' | 'ERROR' | 'INFO' | 'TRACE' | 'WARN';
+export type LogLevel =
+  | 'DEBUG'
+  | 'ERROR'
+  | 'INFO'
+  | 'TRACE'
+  | 'WARN';
 
 export type LogMessage = {
   __typename?: 'LogMessage';
@@ -181,7 +199,8 @@ export type LogMessage = {
   timestamp: Scalars['Timestamp']['output'];
 };
 
-export type M1CorrectionSource = 'OIWFS';
+export type M1CorrectionSource =
+  | 'OIWFS';
 
 export type MechSystemState = {
   __typename?: 'MechSystemState';
@@ -214,62 +233,77 @@ export type Mutation = {
   tcsConfig: OperationOutcome;
 };
 
+
 export type MutationAcObserveArgs = {
   period: TimeSpanInput;
 };
+
 
 export type MutationGuideEnableArgs = {
   config: GuideConfigurationInput;
 };
 
+
 export type MutationInstrumentSpecificsArgs = {
   instrumentSpecificsParams: InstrumentSpecificsInput;
 };
+
 
 export type MutationMountFollowArgs = {
   enable: Scalars['Boolean']['input'];
 };
 
+
 export type MutationOiwfsFollowArgs = {
   enable: Scalars['Boolean']['input'];
 };
+
 
 export type MutationOiwfsObserveArgs = {
   period: TimeSpanInput;
 };
 
+
 export type MutationOiwfsProbeTrackingArgs = {
   config: ProbeTrackingInput;
 };
+
 
 export type MutationOiwfsTargetArgs = {
   target: TargetPropertiesInput;
 };
 
+
 export type MutationRestoreTargetArgs = {
   config: TcsConfigInput;
 };
+
 
 export type MutationRotatorConfigArgs = {
   config: RotatorTrackingInput;
 };
 
+
 export type MutationRotatorFollowArgs = {
   enable: Scalars['Boolean']['input'];
 };
 
+
 export type MutationScsFollowArgs = {
   enable: Scalars['Boolean']['input'];
 };
+
 
 export type MutationSlewArgs = {
   config: TcsConfigInput;
   slewOptions: SlewOptionsInput;
 };
 
+
 export type MutationSwapTargetArgs = {
   swapConfig: SwapConfigInput;
 };
+
 
 export type MutationTcsConfigArgs = {
   config: TcsConfigInput;
@@ -299,7 +333,9 @@ export type OperationOutcome = {
   result: OperationResult;
 };
 
-export type OperationResult = 'FAILURE' | 'SUCCESS';
+export type OperationResult =
+  | 'FAILURE'
+  | 'SUCCESS';
 
 export type Parallax = {
   __typename?: 'Parallax';
@@ -312,7 +348,9 @@ export type ParallaxInput = {
   milliarcseconds?: InputMaybe<Scalars['BigDecimal']['input']>;
 };
 
-export type ParkStatus = 'NOT_PARKED' | 'PARKED';
+export type ParkStatus =
+  | 'NOT_PARKED'
+  | 'PARKED';
 
 export type PointOrigin = {
   __typename?: 'PointOrigin';
@@ -407,7 +445,9 @@ export type RotatorTrackingInput = {
   mode: RotatorTrackingMode;
 };
 
-export type RotatorTrackingMode = 'FIXED' | 'TRACKING';
+export type RotatorTrackingMode =
+  | 'FIXED'
+  | 'TRACKING';
 
 export type Sidereal = {
   __typename?: 'Sidereal';
@@ -513,7 +553,8 @@ export type TimeSpanInput = {
   seconds?: InputMaybe<Scalars['BigDecimal']['input']>;
 };
 
-export type TipTiltSource = 'OIWFS';
+export type TipTiltSource =
+  | 'OIWFS';
 
 export type WavelengthInput = {
   angstroms?: InputMaybe<Scalars['PosBigDecimal']['input']>;
@@ -527,1030 +568,144 @@ export type RunSlewMutationVariables = Exact<{
   config: TcsConfigInput;
 }>;
 
-export type RunSlewMutation = {
-  __typename?: 'Mutation';
-  slew: { __typename?: 'OperationOutcome'; result: OperationResult };
-};
 
-export type GuidersQualityValuesSubscriptionVariables = Exact<{ [key: string]: never }>;
+export type RunSlewMutation = { __typename?: 'Mutation', slew: { __typename?: 'OperationOutcome', result: OperationResult } };
 
-export type GuidersQualityValuesSubscription = {
-  __typename?: 'Subscription';
-  guidersQualityValues: {
-    __typename?: 'GuidersQualityValues';
-    pwfs1: { __typename?: 'GuideQuality'; flux: number; centroidDetected: boolean };
-    pwfs2: { __typename?: 'GuideQuality'; flux: number; centroidDetected: boolean };
-    oiwfs: { __typename?: 'GuideQuality'; flux: number; centroidDetected: boolean };
-  };
-};
+export type GuidersQualityValuesSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
-export type GuideStateSubscriptionVariables = Exact<{ [key: string]: never }>;
 
-export type GuideStateSubscription = {
-  __typename?: 'Subscription';
-  guideState: {
-    __typename?: 'GuideConfigurationState';
-    m2Inputs?: Array<TipTiltSource> | null;
-    m2Coma?: boolean | null;
-    m1Input?: M1CorrectionSource | null;
-    mountOffload: boolean;
-  };
-};
+export type GuidersQualityValuesSubscription = { __typename?: 'Subscription', guidersQualityValues: { __typename?: 'GuidersQualityValues', pwfs1: { __typename?: 'GuideQuality', flux: number, centroidDetected: boolean }, pwfs2: { __typename?: 'GuideQuality', flux: number, centroidDetected: boolean }, oiwfs: { __typename?: 'GuideQuality', flux: number, centroidDetected: boolean } } };
+
+export type GuideStateSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GuideStateSubscription = { __typename?: 'Subscription', guideState: { __typename?: 'GuideConfigurationState', m2Inputs?: Array<TipTiltSource> | null, m2Coma?: boolean | null, m1Input?: M1CorrectionSource | null, mountOffload: boolean } };
 
 export type GuideEnableMutationVariables = Exact<{
   config: GuideConfigurationInput;
 }>;
 
-export type GuideEnableMutation = {
-  __typename?: 'Mutation';
-  guideEnable: { __typename?: 'OperationOutcome'; result: OperationResult; msg?: string | null };
-};
 
-export type GuideDisableMutationVariables = Exact<{ [key: string]: never }>;
+export type GuideEnableMutation = { __typename?: 'Mutation', guideEnable: { __typename?: 'OperationOutcome', result: OperationResult, msg?: string | null } };
 
-export type GuideDisableMutation = {
-  __typename?: 'Mutation';
-  guideDisable: { __typename?: 'OperationOutcome'; result: OperationResult; msg?: string | null };
-};
+export type GuideDisableMutationVariables = Exact<{ [key: string]: never; }>;
 
-export type LogMessageSubscriptionVariables = Exact<{ [key: string]: never }>;
 
-export type LogMessageSubscription = {
-  __typename?: 'Subscription';
-  logMessage: { __typename?: 'LogMessage'; timestamp: string; level: LogLevel; thread: string; message: string };
-};
+export type GuideDisableMutation = { __typename?: 'Mutation', guideDisable: { __typename?: 'OperationOutcome', result: OperationResult, msg?: string | null } };
 
-export type GetNavigateStateQueryVariables = Exact<{ [key: string]: never }>;
+export type LogMessageSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
-export type GetNavigateStateQuery = {
-  __typename?: 'Query';
-  navigateState: { __typename?: 'NavigateState'; onSwappedTarget: boolean };
-};
 
-export type NavigateStatesSubscriptionVariables = Exact<{ [key: string]: never }>;
+export type LogMessageSubscription = { __typename?: 'Subscription', logMessage: { __typename?: 'LogMessage', timestamp: string, level: LogLevel, thread: string, message: string } };
 
-export type NavigateStatesSubscription = {
-  __typename?: 'Subscription';
-  navigateState: { __typename?: 'NavigateState'; onSwappedTarget: boolean };
-};
+export type GetNavigateStateQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetNavigateStateQuery = { __typename?: 'Query', navigateState: { __typename?: 'NavigateState', onSwappedTarget: boolean } };
+
+export type NavigateStatesSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type NavigateStatesSubscription = { __typename?: 'Subscription', navigateState: { __typename?: 'NavigateState', onSwappedTarget: boolean } };
 
 export type SwapTargetMutationVariables = Exact<{
   swapConfig: SwapConfigInput;
 }>;
 
-export type SwapTargetMutation = {
-  __typename?: 'Mutation';
-  swapTarget: { __typename?: 'OperationOutcome'; result: OperationResult; msg?: string | null };
-};
+
+export type SwapTargetMutation = { __typename?: 'Mutation', swapTarget: { __typename?: 'OperationOutcome', result: OperationResult, msg?: string | null } };
 
 export type RestoreTargetMutationVariables = Exact<{
   config: TcsConfigInput;
 }>;
 
-export type RestoreTargetMutation = {
-  __typename?: 'Mutation';
-  restoreTarget: { __typename?: 'OperationOutcome'; result: OperationResult; msg?: string | null };
-};
 
-export type GetTelescopeStateQueryVariables = Exact<{ [key: string]: never }>;
+export type RestoreTargetMutation = { __typename?: 'Mutation', restoreTarget: { __typename?: 'OperationOutcome', result: OperationResult, msg?: string | null } };
 
-export type GetTelescopeStateQuery = {
-  __typename?: 'Query';
-  telescopeState: {
-    __typename?: 'TelescopeState';
-    mount: { __typename?: 'MechSystemState'; parked: ParkStatus; follow: FollowStatus };
-    scs: { __typename?: 'MechSystemState'; parked: ParkStatus; follow: FollowStatus };
-    crcs: { __typename?: 'MechSystemState'; parked: ParkStatus; follow: FollowStatus };
-    pwfs1: { __typename?: 'MechSystemState'; parked: ParkStatus; follow: FollowStatus };
-    pwfs2: { __typename?: 'MechSystemState'; parked: ParkStatus; follow: FollowStatus };
-    oiwfs: { __typename?: 'MechSystemState'; parked: ParkStatus; follow: FollowStatus };
-  };
-};
+export type GetTelescopeStateQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type TelescopeStatesSubscriptionVariables = Exact<{ [key: string]: never }>;
 
-export type TelescopeStatesSubscription = {
-  __typename?: 'Subscription';
-  telescopeState: {
-    __typename?: 'TelescopeState';
-    mount: { __typename?: 'MechSystemState'; parked: ParkStatus; follow: FollowStatus };
-    scs: { __typename?: 'MechSystemState'; parked: ParkStatus; follow: FollowStatus };
-    crcs: { __typename?: 'MechSystemState'; parked: ParkStatus; follow: FollowStatus };
-    pwfs1: { __typename?: 'MechSystemState'; parked: ParkStatus; follow: FollowStatus };
-    pwfs2: { __typename?: 'MechSystemState'; parked: ParkStatus; follow: FollowStatus };
-    oiwfs: { __typename?: 'MechSystemState'; parked: ParkStatus; follow: FollowStatus };
-  };
-};
+export type GetTelescopeStateQuery = { __typename?: 'Query', telescopeState: { __typename?: 'TelescopeState', mount: { __typename?: 'MechSystemState', parked: ParkStatus, follow: FollowStatus }, scs: { __typename?: 'MechSystemState', parked: ParkStatus, follow: FollowStatus }, crcs: { __typename?: 'MechSystemState', parked: ParkStatus, follow: FollowStatus }, pwfs1: { __typename?: 'MechSystemState', parked: ParkStatus, follow: FollowStatus }, pwfs2: { __typename?: 'MechSystemState', parked: ParkStatus, follow: FollowStatus }, oiwfs: { __typename?: 'MechSystemState', parked: ParkStatus, follow: FollowStatus } } };
+
+export type TelescopeStatesSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type TelescopeStatesSubscription = { __typename?: 'Subscription', telescopeState: { __typename?: 'TelescopeState', mount: { __typename?: 'MechSystemState', parked: ParkStatus, follow: FollowStatus }, scs: { __typename?: 'MechSystemState', parked: ParkStatus, follow: FollowStatus }, crcs: { __typename?: 'MechSystemState', parked: ParkStatus, follow: FollowStatus }, pwfs1: { __typename?: 'MechSystemState', parked: ParkStatus, follow: FollowStatus }, pwfs2: { __typename?: 'MechSystemState', parked: ParkStatus, follow: FollowStatus }, oiwfs: { __typename?: 'MechSystemState', parked: ParkStatus, follow: FollowStatus } } };
 
 export type OiwfsObserveMutationVariables = Exact<{
   period: TimeSpanInput;
 }>;
 
-export type OiwfsObserveMutation = {
-  __typename?: 'Mutation';
-  oiwfsObserve: { __typename?: 'OperationOutcome'; result: OperationResult; msg?: string | null };
-};
 
-export type OiwfsStopObserveMutationVariables = Exact<{ [key: string]: never }>;
+export type OiwfsObserveMutation = { __typename?: 'Mutation', oiwfsObserve: { __typename?: 'OperationOutcome', result: OperationResult, msg?: string | null } };
 
-export type OiwfsStopObserveMutation = {
-  __typename?: 'Mutation';
-  oiwfsStopObserve: { __typename?: 'OperationOutcome'; result: OperationResult; msg?: string | null };
-};
+export type OiwfsStopObserveMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OiwfsStopObserveMutation = { __typename?: 'Mutation', oiwfsStopObserve: { __typename?: 'OperationOutcome', result: OperationResult, msg?: string | null } };
 
 export type ChangeMountStateMutationVariables = Exact<{
   enable: Scalars['Boolean']['input'];
 }>;
 
-export type ChangeMountStateMutation = {
-  __typename?: 'Mutation';
-  mountFollow: { __typename?: 'OperationOutcome'; result: OperationResult; msg?: string | null };
-};
+
+export type ChangeMountStateMutation = { __typename?: 'Mutation', mountFollow: { __typename?: 'OperationOutcome', result: OperationResult, msg?: string | null } };
 
 export type ChangeRotatorStateMutationVariables = Exact<{
   enable: Scalars['Boolean']['input'];
 }>;
 
-export type ChangeRotatorStateMutation = {
-  __typename?: 'Mutation';
-  rotatorFollow: { __typename?: 'OperationOutcome'; result: OperationResult; msg?: string | null };
-};
+
+export type ChangeRotatorStateMutation = { __typename?: 'Mutation', rotatorFollow: { __typename?: 'OperationOutcome', result: OperationResult, msg?: string | null } };
 
 export type ChangeScsStateMutationVariables = Exact<{
   enable: Scalars['Boolean']['input'];
 }>;
 
-export type ChangeScsStateMutation = {
-  __typename?: 'Mutation';
-  scsFollow: { __typename?: 'OperationOutcome'; result: OperationResult; msg?: string | null };
-};
+
+export type ChangeScsStateMutation = { __typename?: 'Mutation', scsFollow: { __typename?: 'OperationOutcome', result: OperationResult, msg?: string | null } };
 
 export type ChangeOiwfsStateMutationVariables = Exact<{
   enable: Scalars['Boolean']['input'];
 }>;
 
-export type ChangeOiwfsStateMutation = {
-  __typename?: 'Mutation';
-  oiwfsFollow: { __typename?: 'OperationOutcome'; result: OperationResult; msg?: string | null };
-};
 
-export type MountParkMutationVariables = Exact<{ [key: string]: never }>;
+export type ChangeOiwfsStateMutation = { __typename?: 'Mutation', oiwfsFollow: { __typename?: 'OperationOutcome', result: OperationResult, msg?: string | null } };
 
-export type MountParkMutation = {
-  __typename?: 'Mutation';
-  mountPark: { __typename?: 'OperationOutcome'; result: OperationResult; msg?: string | null };
-};
+export type MountParkMutationVariables = Exact<{ [key: string]: never; }>;
 
-export type RotatorParkMutationVariables = Exact<{ [key: string]: never }>;
 
-export type RotatorParkMutation = {
-  __typename?: 'Mutation';
-  rotatorPark: { __typename?: 'OperationOutcome'; result: OperationResult; msg?: string | null };
-};
+export type MountParkMutation = { __typename?: 'Mutation', mountPark: { __typename?: 'OperationOutcome', result: OperationResult, msg?: string | null } };
 
-export type OiwfsParkMutationVariables = Exact<{ [key: string]: never }>;
+export type RotatorParkMutationVariables = Exact<{ [key: string]: never; }>;
 
-export type OiwfsParkMutation = {
-  __typename?: 'Mutation';
-  oiwfsPark: { __typename?: 'OperationOutcome'; result: OperationResult; msg?: string | null };
-};
 
-export const RunSlewDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'runSlew' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'slewOptions' } },
-          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'SlewOptionsInput' } } },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'config' } },
-          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'TcsConfigInput' } } },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'slew' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'slewOptions' },
-                value: { kind: 'Variable', name: { kind: 'Name', value: 'slewOptions' } },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'config' },
-                value: { kind: 'Variable', name: { kind: 'Name', value: 'config' } },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [{ kind: 'Field', name: { kind: 'Name', value: 'result' } }],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<RunSlewMutation, RunSlewMutationVariables>;
-export const GuidersQualityValuesDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'subscription',
-      name: { kind: 'Name', value: 'guidersQualityValues' },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'guidersQualityValues' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'pwfs1' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'flux' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'centroidDetected' } },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'pwfs2' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'flux' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'centroidDetected' } },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'oiwfs' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'flux' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'centroidDetected' } },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GuidersQualityValuesSubscription, GuidersQualityValuesSubscriptionVariables>;
-export const GuideStateDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'subscription',
-      name: { kind: 'Name', value: 'guideState' },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'guideState' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'm2Inputs' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'm2Coma' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'm1Input' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'mountOffload' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GuideStateSubscription, GuideStateSubscriptionVariables>;
-export const GuideEnableDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'guideEnable' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'config' } },
-          type: {
-            kind: 'NonNullType',
-            type: { kind: 'NamedType', name: { kind: 'Name', value: 'GuideConfigurationInput' } },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'guideEnable' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'config' },
-                value: { kind: 'Variable', name: { kind: 'Name', value: 'config' } },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'result' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'msg' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GuideEnableMutation, GuideEnableMutationVariables>;
-export const GuideDisableDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'guideDisable' },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'guideDisable' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'result' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'msg' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GuideDisableMutation, GuideDisableMutationVariables>;
-export const LogMessageDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'subscription',
-      name: { kind: 'Name', value: 'logMessage' },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'logMessage' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'timestamp' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'level' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'thread' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'message' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<LogMessageSubscription, LogMessageSubscriptionVariables>;
-export const GetNavigateStateDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'getNavigateState' },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'navigateState' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [{ kind: 'Field', name: { kind: 'Name', value: 'onSwappedTarget' } }],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GetNavigateStateQuery, GetNavigateStateQueryVariables>;
-export const NavigateStatesDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'subscription',
-      name: { kind: 'Name', value: 'navigateStates' },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'navigateState' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [{ kind: 'Field', name: { kind: 'Name', value: 'onSwappedTarget' } }],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<NavigateStatesSubscription, NavigateStatesSubscriptionVariables>;
-export const SwapTargetDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'swapTarget' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'swapConfig' } },
-          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'SwapConfigInput' } } },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'swapTarget' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'swapConfig' },
-                value: { kind: 'Variable', name: { kind: 'Name', value: 'swapConfig' } },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'result' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'msg' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<SwapTargetMutation, SwapTargetMutationVariables>;
-export const RestoreTargetDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'restoreTarget' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'config' } },
-          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'TcsConfigInput' } } },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'restoreTarget' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'config' },
-                value: { kind: 'Variable', name: { kind: 'Name', value: 'config' } },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'result' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'msg' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<RestoreTargetMutation, RestoreTargetMutationVariables>;
-export const GetTelescopeStateDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'getTelescopeState' },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'telescopeState' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'mount' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'parked' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'follow' } },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'scs' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'parked' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'follow' } },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'crcs' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'parked' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'follow' } },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'pwfs1' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'parked' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'follow' } },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'pwfs2' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'parked' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'follow' } },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'oiwfs' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'parked' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'follow' } },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GetTelescopeStateQuery, GetTelescopeStateQueryVariables>;
-export const TelescopeStatesDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'subscription',
-      name: { kind: 'Name', value: 'telescopeStates' },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'telescopeState' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'mount' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'parked' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'follow' } },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'scs' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'parked' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'follow' } },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'crcs' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'parked' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'follow' } },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'pwfs1' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'parked' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'follow' } },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'pwfs2' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'parked' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'follow' } },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'oiwfs' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'parked' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'follow' } },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<TelescopeStatesSubscription, TelescopeStatesSubscriptionVariables>;
-export const OiwfsObserveDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'oiwfsObserve' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'period' } },
-          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'TimeSpanInput' } } },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'oiwfsObserve' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'period' },
-                value: { kind: 'Variable', name: { kind: 'Name', value: 'period' } },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'result' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'msg' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<OiwfsObserveMutation, OiwfsObserveMutationVariables>;
-export const OiwfsStopObserveDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'oiwfsStopObserve' },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'oiwfsStopObserve' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'result' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'msg' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<OiwfsStopObserveMutation, OiwfsStopObserveMutationVariables>;
-export const ChangeMountStateDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'changeMountState' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'enable' } },
-          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'Boolean' } } },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'mountFollow' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'enable' },
-                value: { kind: 'Variable', name: { kind: 'Name', value: 'enable' } },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'result' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'msg' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<ChangeMountStateMutation, ChangeMountStateMutationVariables>;
-export const ChangeRotatorStateDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'changeRotatorState' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'enable' } },
-          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'Boolean' } } },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'rotatorFollow' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'enable' },
-                value: { kind: 'Variable', name: { kind: 'Name', value: 'enable' } },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'result' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'msg' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<ChangeRotatorStateMutation, ChangeRotatorStateMutationVariables>;
-export const ChangeScsStateDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'changeScsState' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'enable' } },
-          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'Boolean' } } },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'scsFollow' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'enable' },
-                value: { kind: 'Variable', name: { kind: 'Name', value: 'enable' } },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'result' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'msg' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<ChangeScsStateMutation, ChangeScsStateMutationVariables>;
-export const ChangeOiwfsStateDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'changeOiwfsState' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'enable' } },
-          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'Boolean' } } },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'oiwfsFollow' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'enable' },
-                value: { kind: 'Variable', name: { kind: 'Name', value: 'enable' } },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'result' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'msg' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<ChangeOiwfsStateMutation, ChangeOiwfsStateMutationVariables>;
-export const MountParkDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'mountPark' },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'mountPark' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'result' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'msg' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<MountParkMutation, MountParkMutationVariables>;
-export const RotatorParkDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'rotatorPark' },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'rotatorPark' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'result' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'msg' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<RotatorParkMutation, RotatorParkMutationVariables>;
-export const OiwfsParkDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'oiwfsPark' },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'oiwfsPark' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'result' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'msg' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<OiwfsParkMutation, OiwfsParkMutationVariables>;
+export type RotatorParkMutation = { __typename?: 'Mutation', rotatorPark: { __typename?: 'OperationOutcome', result: OperationResult, msg?: string | null } };
+
+export type OiwfsParkMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OiwfsParkMutation = { __typename?: 'Mutation', oiwfsPark: { __typename?: 'OperationOutcome', result: OperationResult, msg?: string | null } };
+
+
+export const RunSlewDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"runSlew"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"slewOptions"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SlewOptionsInput"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"config"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"TcsConfigInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"slew"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"slewOptions"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slewOptions"}}},{"kind":"Argument","name":{"kind":"Name","value":"config"},"value":{"kind":"Variable","name":{"kind":"Name","value":"config"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}}]}}]}}]} as unknown as DocumentNode<RunSlewMutation, RunSlewMutationVariables>;
+export const GuidersQualityValuesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"guidersQualityValues"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guidersQualityValues"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pwfs1"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"flux"}},{"kind":"Field","name":{"kind":"Name","value":"centroidDetected"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pwfs2"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"flux"}},{"kind":"Field","name":{"kind":"Name","value":"centroidDetected"}}]}},{"kind":"Field","name":{"kind":"Name","value":"oiwfs"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"flux"}},{"kind":"Field","name":{"kind":"Name","value":"centroidDetected"}}]}}]}}]}}]} as unknown as DocumentNode<GuidersQualityValuesSubscription, GuidersQualityValuesSubscriptionVariables>;
+export const GuideStateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"guideState"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guideState"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"m2Inputs"}},{"kind":"Field","name":{"kind":"Name","value":"m2Coma"}},{"kind":"Field","name":{"kind":"Name","value":"m1Input"}},{"kind":"Field","name":{"kind":"Name","value":"mountOffload"}}]}}]}}]} as unknown as DocumentNode<GuideStateSubscription, GuideStateSubscriptionVariables>;
+export const GuideEnableDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"guideEnable"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"config"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"GuideConfigurationInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guideEnable"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"config"},"value":{"kind":"Variable","name":{"kind":"Name","value":"config"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}},{"kind":"Field","name":{"kind":"Name","value":"msg"}}]}}]}}]} as unknown as DocumentNode<GuideEnableMutation, GuideEnableMutationVariables>;
+export const GuideDisableDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"guideDisable"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guideDisable"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}},{"kind":"Field","name":{"kind":"Name","value":"msg"}}]}}]}}]} as unknown as DocumentNode<GuideDisableMutation, GuideDisableMutationVariables>;
+export const LogMessageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"logMessage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"logMessage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"timestamp"}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"thread"}},{"kind":"Field","name":{"kind":"Name","value":"message"}}]}}]}}]} as unknown as DocumentNode<LogMessageSubscription, LogMessageSubscriptionVariables>;
+export const GetNavigateStateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getNavigateState"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"navigateState"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onSwappedTarget"}}]}}]}}]} as unknown as DocumentNode<GetNavigateStateQuery, GetNavigateStateQueryVariables>;
+export const NavigateStatesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"navigateStates"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"navigateState"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onSwappedTarget"}}]}}]}}]} as unknown as DocumentNode<NavigateStatesSubscription, NavigateStatesSubscriptionVariables>;
+export const SwapTargetDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"swapTarget"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"swapConfig"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SwapConfigInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"swapTarget"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"swapConfig"},"value":{"kind":"Variable","name":{"kind":"Name","value":"swapConfig"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}},{"kind":"Field","name":{"kind":"Name","value":"msg"}}]}}]}}]} as unknown as DocumentNode<SwapTargetMutation, SwapTargetMutationVariables>;
+export const RestoreTargetDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"restoreTarget"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"config"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"TcsConfigInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"restoreTarget"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"config"},"value":{"kind":"Variable","name":{"kind":"Name","value":"config"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}},{"kind":"Field","name":{"kind":"Name","value":"msg"}}]}}]}}]} as unknown as DocumentNode<RestoreTargetMutation, RestoreTargetMutationVariables>;
+export const GetTelescopeStateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getTelescopeState"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"telescopeState"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"parked"}},{"kind":"Field","name":{"kind":"Name","value":"follow"}}]}},{"kind":"Field","name":{"kind":"Name","value":"scs"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"parked"}},{"kind":"Field","name":{"kind":"Name","value":"follow"}}]}},{"kind":"Field","name":{"kind":"Name","value":"crcs"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"parked"}},{"kind":"Field","name":{"kind":"Name","value":"follow"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pwfs1"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"parked"}},{"kind":"Field","name":{"kind":"Name","value":"follow"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pwfs2"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"parked"}},{"kind":"Field","name":{"kind":"Name","value":"follow"}}]}},{"kind":"Field","name":{"kind":"Name","value":"oiwfs"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"parked"}},{"kind":"Field","name":{"kind":"Name","value":"follow"}}]}}]}}]}}]} as unknown as DocumentNode<GetTelescopeStateQuery, GetTelescopeStateQueryVariables>;
+export const TelescopeStatesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"telescopeStates"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"telescopeState"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"parked"}},{"kind":"Field","name":{"kind":"Name","value":"follow"}}]}},{"kind":"Field","name":{"kind":"Name","value":"scs"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"parked"}},{"kind":"Field","name":{"kind":"Name","value":"follow"}}]}},{"kind":"Field","name":{"kind":"Name","value":"crcs"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"parked"}},{"kind":"Field","name":{"kind":"Name","value":"follow"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pwfs1"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"parked"}},{"kind":"Field","name":{"kind":"Name","value":"follow"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pwfs2"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"parked"}},{"kind":"Field","name":{"kind":"Name","value":"follow"}}]}},{"kind":"Field","name":{"kind":"Name","value":"oiwfs"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"parked"}},{"kind":"Field","name":{"kind":"Name","value":"follow"}}]}}]}}]}}]} as unknown as DocumentNode<TelescopeStatesSubscription, TelescopeStatesSubscriptionVariables>;
+export const OiwfsObserveDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"oiwfsObserve"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"period"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"TimeSpanInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"oiwfsObserve"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"period"},"value":{"kind":"Variable","name":{"kind":"Name","value":"period"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}},{"kind":"Field","name":{"kind":"Name","value":"msg"}}]}}]}}]} as unknown as DocumentNode<OiwfsObserveMutation, OiwfsObserveMutationVariables>;
+export const OiwfsStopObserveDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"oiwfsStopObserve"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"oiwfsStopObserve"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}},{"kind":"Field","name":{"kind":"Name","value":"msg"}}]}}]}}]} as unknown as DocumentNode<OiwfsStopObserveMutation, OiwfsStopObserveMutationVariables>;
+export const ChangeMountStateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"changeMountState"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"enable"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mountFollow"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"enable"},"value":{"kind":"Variable","name":{"kind":"Name","value":"enable"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}},{"kind":"Field","name":{"kind":"Name","value":"msg"}}]}}]}}]} as unknown as DocumentNode<ChangeMountStateMutation, ChangeMountStateMutationVariables>;
+export const ChangeRotatorStateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"changeRotatorState"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"enable"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"rotatorFollow"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"enable"},"value":{"kind":"Variable","name":{"kind":"Name","value":"enable"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}},{"kind":"Field","name":{"kind":"Name","value":"msg"}}]}}]}}]} as unknown as DocumentNode<ChangeRotatorStateMutation, ChangeRotatorStateMutationVariables>;
+export const ChangeScsStateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"changeScsState"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"enable"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"scsFollow"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"enable"},"value":{"kind":"Variable","name":{"kind":"Name","value":"enable"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}},{"kind":"Field","name":{"kind":"Name","value":"msg"}}]}}]}}]} as unknown as DocumentNode<ChangeScsStateMutation, ChangeScsStateMutationVariables>;
+export const ChangeOiwfsStateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"changeOiwfsState"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"enable"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"oiwfsFollow"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"enable"},"value":{"kind":"Variable","name":{"kind":"Name","value":"enable"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}},{"kind":"Field","name":{"kind":"Name","value":"msg"}}]}}]}}]} as unknown as DocumentNode<ChangeOiwfsStateMutation, ChangeOiwfsStateMutationVariables>;
+export const MountParkDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"mountPark"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mountPark"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}},{"kind":"Field","name":{"kind":"Name","value":"msg"}}]}}]}}]} as unknown as DocumentNode<MountParkMutation, MountParkMutationVariables>;
+export const RotatorParkDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"rotatorPark"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"rotatorPark"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}},{"kind":"Field","name":{"kind":"Name","value":"msg"}}]}}]}}]} as unknown as DocumentNode<RotatorParkMutation, RotatorParkMutationVariables>;
+export const OiwfsParkDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"oiwfsPark"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"oiwfsPark"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}},{"kind":"Field","name":{"kind":"Name","value":"msg"}}]}}]}}]} as unknown as DocumentNode<OiwfsParkMutation, OiwfsParkMutationVariables>;

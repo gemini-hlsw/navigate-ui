@@ -54,6 +54,21 @@ const sharedConfig = {
   enumsAsTypes: true,
 };
 
+const fetchedConfig: CodegenConfig['generates'] = {
+  './src/gql/server/gen/': {
+    schema: 'http://localhost:9070/navigate/graphql',
+    documents: './src/gql/server/*.{ts,tsx}',
+    config: sharedConfig,
+    preset: 'client',
+  },
+  './src/gql/configs/gen/': {
+    schema: 'http://localhost:4000',
+    documents: './src/gql/configs/*.{ts,tsx}',
+    config: sharedConfig,
+    preset: 'client',
+  },
+};
+
 const config: CodegenConfig = {
   generates: {
     './src/gql/odb/gen/': {
@@ -62,20 +77,10 @@ const config: CodegenConfig = {
       documents: './src/gql/odb/*.{ts,tsx}',
       preset: 'client',
     },
-    './src/gql/server/gen/': {
-      schema: 'http://localhost:9070/navigate/graphql',
-      documents: './src/gql/server/*.{ts,tsx}',
-      config: sharedConfig,
-      preset: 'client',
-    },
-    './src/gql/configs/gen/': {
-      schema: 'http://localhost:4000',
-      documents: './src/gql/configs/*.{ts,tsx}',
-      config: sharedConfig,
-      preset: 'client',
-    },
+    // Don't fetch config in CI as there's no server running
+    // This way we can still run `codegen --check` in CI
+    ...(process.env.CI ? {} : fetchedConfig),
   },
-  hooks: { afterAllFileWrite: ['prettier --write'] },
 };
 
 export default config;

@@ -6,3 +6,4 @@ reports/
 .metals
 .bloop
 target
+src/gql/*/gen

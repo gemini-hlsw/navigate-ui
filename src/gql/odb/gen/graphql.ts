@@ -9,109 +9,109 @@ export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> =
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string };
-  String: { input: string; output: string };
-  Boolean: { input: boolean; output: boolean };
-  Int: { input: number; output: number };
-  Float: { input: number; output: number };
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
   /** AtomId id formatted as `a-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}` */
-  AtomId: { input: string; output: string };
+  AtomId: { input: string; output: string; }
   /** The `BigDecimal` scalar type represents signed fractional values with arbitrary precision. */
-  BigDecimal: { input: number; output: number };
+  BigDecimal: { input: number; output: number; }
   /** Defines a unique ID for each Call for Proposals. */
-  CallForProposalsId: { input: string; output: string };
-  ChronicleId: { input: string; output: string };
-  ConfigurationRequestId: { input: any; output: any };
+  CallForProposalsId: { input: string; output: string; }
+  ChronicleId: { input: string; output: string; }
+  ConfigurationRequestId: { input: any; output: any; }
   /** Dataset filename in standard format. */
-  DatasetFilename: { input: string; output: string };
+  DatasetFilename: { input: string; output: string; }
   /** DatasetId id formatted as `d-[1-9a-f][0-9a-f]*` */
-  DatasetId: { input: string; output: string };
+  DatasetId: { input: string; output: string; }
   /**
    * Dataset reference, formatted according to the observation, suffixed with
    * the step and exposure indices. For example, G-2024B-1234-Q-0001-0002-0003 where
    * G-2024B-1234-Q-0001 is the observation reference label, 2 is the step index and
    * 3 is the exposure index.
    */
-  DatasetReferenceLabel: { input: string; output: string };
+  DatasetReferenceLabel: { input: string; output: string; }
   /** Date in ISO-8601 representation in format YYYY-MM-DD (e.g., '2024-07-31'). */
-  Date: { input: string; output: string };
+  Date: { input: string; output: string; }
   /** Target declination coordinate in format '[+/-]DD:MM:SS.sss' */
-  DmsString: { input: string; output: string };
+  DmsString: { input: string; output: string; }
   /** Email address, matching ^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$ */
-  EmailAddress: { input: string; output: string };
+  EmailAddress: { input: string; output: string; }
   /** Reference observation epoch in format '[JB]YYYY.YYY' */
-  EpochString: { input: string; output: string };
+  EpochString: { input: string; output: string; }
   /** ExecutionEventId id formatted as `e-[1-9a-f][0-9a-f]*` */
-  ExecutionEventId: { input: string; output: string };
+  ExecutionEventId: { input: string; output: string; }
   /** Non-negative floating-point value. */
-  Extinction: { input: number; output: number };
-  GroupId: { input: string; output: string };
+  Extinction: { input: number; output: number; }
+  GroupId: { input: string; output: string; }
   /** Target right ascension coordinate in format 'HH:MM:SS.sss' */
-  HmsString: { input: string; output: string };
+  HmsString: { input: string; output: string; }
   /** An 'Int` in the range 0 to 100 */
-  IntPercent: { input: number; output: number };
+  IntPercent: { input: number; output: number; }
   /** The `Long` scalar type represents non-fractional signed whole numeric values. Long can represent values between -(2^63) and 2^63 - 1. */
-  Long: { input: number; output: number };
+  Long: { input: number; output: number; }
   /** A String value that cannot be empty */
-  NonEmptyString: { input: string; output: string };
+  NonEmptyString: { input: string; output: string; }
   /** A `BigDecimal` greater than or equal to 0 */
-  NonNegBigDecimal: { input: number; output: number };
+  NonNegBigDecimal: { input: number; output: number; }
   /** An `Int` in the range from 0 to 2147483647 */
-  NonNegInt: { input: number; output: number };
+  NonNegInt: { input: number; output: number; }
   /** An `Long` in the range from 0 to 9223372036854775807 */
-  NonNegLong: { input: number; output: number };
+  NonNegLong: { input: number; output: number; }
   /** A `Short` in the range from 0 to 32767 */
-  NonNegShort: { input: number; output: number };
+  NonNegShort: { input: number; output: number; }
   /** ObsAttachmentId id formatted as `a-[1-9a-f][0-9a-f]*` */
-  ObsAttachmentId: { input: string; output: string };
+  ObsAttachmentId: { input: string; output: string; }
   /** ObservationId id formatted as `o-[1-9a-f][0-9a-f]*` */
-  ObservationId: { input: string; output: string };
+  ObservationId: { input: string; output: string; }
   /**
    * Observation reference, formatted according to the program type, suffixed with
    * observation index. For example, G-2024B-1234-Q-0001 where G-2024B-1234-Q is
    * the program reference label and the observation index is 1.
    */
-  ObservationReferenceLabel: { input: string; output: string };
+  ObservationReferenceLabel: { input: string; output: string; }
   /** A `BigDecimal` greater than 0 */
-  PosBigDecimal: { input: number; output: number };
+  PosBigDecimal: { input: number; output: number; }
   /** An `Int` in the range from 1 to 2147483647 */
-  PosInt: { input: number; output: number };
+  PosInt: { input: number; output: number; }
   /** An `Long` in the range from 1 to 9223372036854775807 */
-  PosLong: { input: number; output: number };
+  PosLong: { input: number; output: number; }
   /** A `Short` in the range from 1 to 32767 */
-  PosShort: { input: number; output: number };
+  PosShort: { input: number; output: number; }
   /** ProgramId id formatted as `p-[1-9a-f][0-9a-f]*` */
-  ProgramId: { input: number; output: number };
+  ProgramId: { input: number; output: number; }
   /**
    * Program reference, formatted according to the type.  For example, a Science
    * Program has format G-YYYY[AB]-NNNN+-[CDLFSV]. For example, G-2024B-1234-Q
    * where 2024B refers to the associated semester.
    */
-  ProgramReferenceLabel: { input: string; output: string };
+  ProgramReferenceLabel: { input: string; output: string; }
   /**
    * Proposal reference for science programs, formatted as G-YYYY[AB]-NNNN+. For
    * example, G-2024B-1234 where 2024B refers to the associated semester.
    */
-  ProposalReferenceLabel: { input: string; output: string };
+  ProposalReferenceLabel: { input: string; output: string; }
   /**
    * Semester string (from 2000A) in the format YYYY[AB].  An abbreviated format,
    * which assumes the millennium 2000, is also permitted.  For example, 24A is read
    * as 2024A.
    */
-  Semester: { input: string; output: string };
-  SignalToNoise: { input: number; output: number };
+  Semester: { input: string; output: string; }
+  SignalToNoise: { input: number; output: number; }
   /** StepId id formatted as `s-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}` */
-  StepId: { input: string; output: string };
+  StepId: { input: string; output: string; }
   /** TargetId id formatted as `t-[1-9a-f][0-9a-f]*` */
-  TargetId: { input: string; output: string };
+  TargetId: { input: string; output: string; }
   /** Timestamp of time in ISO-8601 representation in format '2011-12-03T10:15:30Z' */
-  Timestamp: { input: string; output: string };
-  TransactionId: { input: string; output: string };
-  UserId: { input: string; output: string };
-  UserInvitationId: { input: string; output: string };
-  UserInvitationKey: { input: string; output: string };
+  Timestamp: { input: string; output: string; }
+  TransactionId: { input: string; output: string; }
+  UserId: { input: string; output: string; }
+  UserInvitationId: { input: string; output: string; }
+  UserInvitationKey: { input: string; output: string; }
   /** VisitId id formatted as `v-[1-9a-f][0-9a-f]*` */
-  VisitId: { input: string; output: string };
+  VisitId: { input: string; output: string; }
 };
 
 /** AtomEvent creation parameters. */
@@ -339,6 +339,7 @@ export type AsterismGroup = {
   program: Program;
 };
 
+
 export type AsterismGroupObservationsArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
   OFFSET?: InputMaybe<Scalars['ObservationId']['input']>;
@@ -411,6 +412,7 @@ export type AtomRecord = {
   visit: Visit;
 };
 
+
 /** An atom as recorded by Observe. */
 export type AtomRecordStepsArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
@@ -427,7 +429,9 @@ export type AtomRecordSelectResult = {
 };
 
 /** Execution stage or phase of an individual atom */
-export type AtomStage = 'END_ATOM' | 'START_ATOM';
+export type AtomStage =
+  | 'END_ATOM'
+  | 'START_ATOM';
 
 /** Brightness bands */
 export type Band =
@@ -997,7 +1001,7 @@ export type ConditionsMeasurementInput = {
 
 export type ConditionsMeasurementSource =
   /** Observer */
-  'OBSERVER';
+  | 'OBSERVER';
 
 /**
  * An individual configuration change before a step is executed.  Multiple
@@ -1064,7 +1068,10 @@ export type ConfigurationRequestSelectResult = {
   matches: Array<ConfigurationRequest>;
 };
 
-export type ConfigurationRequestStatus = 'APPROVED' | 'DENIED' | 'REQUESTED';
+export type ConfigurationRequestStatus =
+  | 'APPROVED'
+  | 'DENIED'
+  | 'REQUESTED';
 
 export type ConstraintSet = {
   __typename?: 'ConstraintSet';
@@ -1089,6 +1096,7 @@ export type ConstraintSetGroup = {
   /** Link back to program. */
   program: Program;
 };
+
 
 export type ConstraintSetGroupObservationsArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
@@ -1347,6 +1355,7 @@ export type Dataset = {
   /** Visit associated with this dataset. */
   visit: Visit;
 };
+
 
 export type DatasetEventsArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
@@ -1755,24 +1764,29 @@ export type Execution = {
   visits: VisitSelectResult;
 };
 
+
 export type ExecutionAtomRecordsArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
   OFFSET?: InputMaybe<Scalars['Timestamp']['input']>;
 };
 
+
 export type ExecutionConfigArgs = {
   futureLimit?: InputMaybe<Scalars['NonNegInt']['input']>;
 };
+
 
 export type ExecutionDatasetsArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
   OFFSET?: InputMaybe<Scalars['DatasetId']['input']>;
 };
 
+
 export type ExecutionEventsArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
   OFFSET?: InputMaybe<Scalars['ExecutionEventId']['input']>;
 };
+
 
 export type ExecutionVisitsArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
@@ -2336,7 +2350,9 @@ export type GmosNorthBuiltinFpu =
   | 'NS5';
 
 /** GmosNorth Detector type */
-export type GmosNorthDetector = 'E2_V' | 'HAMAMATSU';
+export type GmosNorthDetector =
+  | 'E2_V'
+  | 'HAMAMATSU';
 
 /** GMOS North dynamic step configuration */
 export type GmosNorthDynamic = {
@@ -2792,7 +2808,9 @@ export type GmosSouthBuiltinFpu =
   | 'NS5';
 
 /** GmosSouth Detector type */
-export type GmosSouthDetector = 'E2_V' | 'HAMAMATSU';
+export type GmosSouthDetector =
+  | 'E2_V'
+  | 'HAMAMATSU';
 
 /** GMOS South dynamic step configuration */
 export type GmosSouthDynamic = {
@@ -3224,6 +3242,7 @@ export type Group = {
   timeEstimateRange?: Maybe<CategorizedTimeRange>;
 };
 
+
 /** A group of observations and other groups. */
 export type GroupElementsArgs = {
   includeDeleted?: Scalars['Boolean']['input'];
@@ -3310,7 +3329,10 @@ export type GuideEnvironment = {
 };
 
 /** Enumeration for Guide Probes */
-export type GuideProbe = 'GMOS_OIWFS' | 'PWFS_1' | 'PWFS_2';
+export type GuideProbe =
+  | 'GMOS_OIWFS'
+  | 'PWFS_1'
+  | 'PWFS_2';
 
 /** Whether guiding is enabled for a particular science step. */
 export type GuideState =
@@ -3369,7 +3391,7 @@ export type HasUnspecifiedPartner = PartnerLink & {
 /** HII Region spectrum */
 export type HiiRegionSpectrum =
   /** HiiRegionSpectrum OrionNebula */
-  'ORION_NEBULA';
+  | 'ORION_NEBULA';
 
 export type HourAngleRange = {
   __typename?: 'HourAngleRange';
@@ -3390,7 +3412,8 @@ export type HourAngleRangeInput = {
  * there is no useful data to include.  This enumeration provides a placeholder
  * value for an ignored field to satisfy the specification.
  */
-export type Ignore = 'IGNORE';
+export type Ignore =
+  | 'IGNORE';
 
 /** Image quality */
 export type ImageQuality =
@@ -3731,177 +3754,221 @@ export type Mutation = {
   updateTargets: UpdateTargetsResult;
 };
 
+
 export type MutationAddAtomEventArgs = {
   input: AddAtomEventInput;
 };
+
 
 export type MutationAddConditionsEntryArgs = {
   input?: InputMaybe<ConditionsEntryInput>;
 };
 
+
 export type MutationAddDatasetEventArgs = {
   input: AddDatasetEventInput;
 };
+
 
 export type MutationAddSequenceEventArgs = {
   input: AddSequenceEventInput;
 };
 
+
 export type MutationAddSlewEventArgs = {
   input: AddSlewEventInput;
 };
+
 
 export type MutationAddStepEventArgs = {
   input: AddStepEventInput;
 };
 
+
 export type MutationAddTimeChargeCorrectionArgs = {
   input: AddTimeChargeCorrectionInput;
 };
+
 
 export type MutationCloneGroupArgs = {
   input: CloneGroupInput;
 };
 
+
 export type MutationCloneObservationArgs = {
   input: CloneObservationInput;
 };
+
 
 export type MutationCloneTargetArgs = {
   input: CloneTargetInput;
 };
 
+
 export type MutationCreateCallForProposalsArgs = {
   input: CreateCallForProposalsInput;
 };
+
 
 export type MutationCreateConfigurationRequestArgs = {
   input: CreateConfigurationRequestInput;
 };
 
+
 export type MutationCreateGroupArgs = {
   input: CreateGroupInput;
 };
+
 
 export type MutationCreateObservationArgs = {
   input: CreateObservationInput;
 };
 
+
 export type MutationCreateProgramArgs = {
   input: CreateProgramInput;
 };
+
 
 export type MutationCreateProposalArgs = {
   input: CreateProposalInput;
 };
 
+
 export type MutationCreateTargetArgs = {
   input: CreateTargetInput;
 };
+
 
 export type MutationCreateUserInvitationArgs = {
   input: CreateUserInvitationInput;
 };
 
+
 export type MutationDeleteProposalArgs = {
   input: DeleteProposalInput;
 };
+
 
 export type MutationLinkUserArgs = {
   input: LinkUserInput;
 };
 
+
 export type MutationRecordAtomArgs = {
   input: RecordAtomInput;
 };
+
 
 export type MutationRecordDatasetArgs = {
   input: RecordDatasetInput;
 };
 
+
 export type MutationRecordGmosNorthStepArgs = {
   input: RecordGmosNorthStepInput;
 };
+
 
 export type MutationRecordGmosNorthVisitArgs = {
   input: RecordGmosNorthVisitInput;
 };
 
+
 export type MutationRecordGmosSouthStepArgs = {
   input: RecordGmosSouthStepInput;
 };
+
 
 export type MutationRecordGmosSouthVisitArgs = {
   input: RecordGmosSouthVisitInput;
 };
 
+
 export type MutationRedeemUserInvitationArgs = {
   input: RedeemUserInvitationInput;
 };
+
 
 export type MutationRevokeUserInvitationArgs = {
   input: RevokeUserInvitationInput;
 };
 
+
 export type MutationSetAllocationsArgs = {
   input: SetAllocationsInput;
 };
+
 
 export type MutationSetGuideTargetNameArgs = {
   input: SetGuideTargetNameInput;
 };
 
+
 export type MutationSetProgramReferenceArgs = {
   input: SetProgramReferenceInput;
 };
+
 
 export type MutationSetProposalStatusArgs = {
   input: SetProposalStatusInput;
 };
 
+
 export type MutationUnlinkUserArgs = {
   input: UnlinkUserInput;
 };
+
 
 export type MutationUpdateAsterismsArgs = {
   input: UpdateAsterismsInput;
 };
 
+
 export type MutationUpdateCallsForProposalsArgs = {
   input: UpdateCallsForProposalsInput;
 };
+
 
 export type MutationUpdateDatasetsArgs = {
   input: UpdateDatasetsInput;
 };
 
+
 export type MutationUpdateGroupsArgs = {
   input: UpdateGroupsInput;
 };
+
 
 export type MutationUpdateObsAttachmentsArgs = {
   input: UpdateObsAttachmentsInput;
 };
 
+
 export type MutationUpdateObservationsArgs = {
   input: UpdateObservationsInput;
 };
+
 
 export type MutationUpdateObservationsTimesArgs = {
   input: UpdateObservationsTimesInput;
 };
 
+
 export type MutationUpdateProgramUsersArgs = {
   input: UpdateProgramUsersInput;
 };
+
 
 export type MutationUpdateProgramsArgs = {
   input: UpdateProgramsInput;
 };
 
+
 export type MutationUpdateProposalArgs = {
   input: UpdateProposalInput;
 };
+
 
 export type MutationUpdateTargetsArgs = {
   input: UpdateTargetsInput;
@@ -4223,6 +4290,7 @@ export type ObservingModeGroup = {
   observingMode?: Maybe<ObservingMode>;
 };
 
+
 export type ObservingModeGroupObservationsArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
   OFFSET?: InputMaybe<Scalars['ObservationId']['input']>;
@@ -4360,7 +4428,10 @@ export type PartnerLinkInput = {
  * (i.e., `HAS_PARTNER`), (b) the user is explicitly associated with no partner
  * (i.e., `HAS_NON_PARTNER`), or (c) the link is simply not set.
  */
-export type PartnerLinkType = 'HAS_NON_PARTNER' | 'HAS_PARTNER' | 'HAS_UNSPECIFIED_PARTNER';
+export type PartnerLinkType =
+  | 'HAS_NON_PARTNER'
+  | 'HAS_PARTNER'
+  | 'HAS_UNSPECIFIED_PARTNER';
 
 /**
  * Partner splits detail how requested time for a Queue or Classical proposal
@@ -4518,18 +4589,22 @@ export type Program = {
   users: Array<ProgramUser>;
 };
 
+
 export type ProgramAllGroupElementsArgs = {
   includeDeleted?: Scalars['Boolean']['input'];
 };
+
 
 export type ProgramConfigurationRequestsArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
   OFFSET?: InputMaybe<Scalars['ConfigurationRequestId']['input']>;
 };
 
+
 export type ProgramGroupElementsArgs = {
   includeDeleted?: Scalars['Boolean']['input'];
 };
+
 
 export type ProgramObservationsArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
@@ -4639,7 +4714,13 @@ export type ProgramSelectResult = {
   matches: Array<Program>;
 };
 
-export type ProgramType = 'CALIBRATION' | 'ENGINEERING' | 'EXAMPLE' | 'LIBRARY' | 'SCIENCE' | 'SYSTEM';
+export type ProgramType =
+  | 'CALIBRATION'
+  | 'ENGINEERING'
+  | 'EXAMPLE'
+  | 'LIBRARY'
+  | 'SCIENCE'
+  | 'SYSTEM';
 
 /** An assignment of a user to a program. */
 export type ProgramUser = {
@@ -4941,6 +5022,7 @@ export type Query = {
   targets: TargetSelectResult;
 };
 
+
 export type QueryAsterismGroupArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
   WHERE?: InputMaybe<WhereObservation>;
@@ -4950,9 +5032,11 @@ export type QueryAsterismGroupArgs = {
   proposalReference?: InputMaybe<Scalars['ProposalReferenceLabel']['input']>;
 };
 
+
 export type QueryCallForProposalsArgs = {
   callForProposalsId: Scalars['CallForProposalsId']['input'];
 };
+
 
 export type QueryCallsForProposalsArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
@@ -4960,6 +5044,7 @@ export type QueryCallsForProposalsArgs = {
   WHERE?: InputMaybe<WhereCallForProposals>;
   includeDeleted?: Scalars['Boolean']['input'];
 };
+
 
 export type QueryConstraintSetGroupArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
@@ -4970,10 +5055,12 @@ export type QueryConstraintSetGroupArgs = {
   proposalReference?: InputMaybe<Scalars['ProposalReferenceLabel']['input']>;
 };
 
+
 export type QueryDatasetArgs = {
   datasetId?: InputMaybe<Scalars['DatasetId']['input']>;
   datasetReference?: InputMaybe<Scalars['DatasetReferenceLabel']['input']>;
 };
+
 
 export type QueryDatasetsArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
@@ -4981,20 +5068,24 @@ export type QueryDatasetsArgs = {
   WHERE?: InputMaybe<WhereDataset>;
 };
 
+
 export type QueryEventsArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
   OFFSET?: InputMaybe<Scalars['ExecutionEventId']['input']>;
   WHERE?: InputMaybe<WhereExecutionEvent>;
 };
 
+
 export type QueryGroupArgs = {
   groupId: Scalars['GroupId']['input'];
 };
+
 
 export type QueryObservationArgs = {
   observationId?: InputMaybe<Scalars['ObservationId']['input']>;
   observationReference?: InputMaybe<Scalars['ObservationReferenceLabel']['input']>;
 };
+
 
 export type QueryObservationsArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
@@ -5003,11 +5094,13 @@ export type QueryObservationsArgs = {
   includeDeleted?: Scalars['Boolean']['input'];
 };
 
+
 export type QueryProgramArgs = {
   programId?: InputMaybe<Scalars['ProgramId']['input']>;
   programReference?: InputMaybe<Scalars['ProgramReferenceLabel']['input']>;
   proposalReference?: InputMaybe<Scalars['ProposalReferenceLabel']['input']>;
 };
+
 
 export type QueryProgramUsersArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
@@ -5016,6 +5109,7 @@ export type QueryProgramUsersArgs = {
   includeDeleted?: Scalars['Boolean']['input'];
 };
 
+
 export type QueryProgramsArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
   OFFSET?: InputMaybe<Scalars['ProgramId']['input']>;
@@ -5023,13 +5117,16 @@ export type QueryProgramsArgs = {
   includeDeleted?: Scalars['Boolean']['input'];
 };
 
+
 export type QuerySpectroscopyConfigOptionsArgs = {
   WHERE?: InputMaybe<WhereSpectroscopyConfigOption>;
 };
 
+
 export type QueryTargetArgs = {
   targetId: Scalars['TargetId']['input'];
 };
+
 
 export type QueryTargetGroupArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
@@ -5039,6 +5136,7 @@ export type QueryTargetGroupArgs = {
   programReference?: InputMaybe<Scalars['ProgramReferenceLabel']['input']>;
   proposalReference?: InputMaybe<Scalars['ProposalReferenceLabel']['input']>;
 };
+
 
 export type QueryTargetsArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
@@ -5252,7 +5350,11 @@ export type Science = StepConfig & {
 };
 
 /** Science observation priorities. */
-export type ScienceBand = 'BAND1' | 'BAND2' | 'BAND3' | 'BAND4';
+export type ScienceBand =
+  | 'BAND1'
+  | 'BAND2'
+  | 'BAND3'
+  | 'BAND4';
 
 /** Mode Spectroscopy/Imaging */
 export type ScienceMode =
@@ -5287,6 +5389,7 @@ export type ScienceRequirementsGroup = {
   /** Commonly held value across the observations */
   scienceRequirements: ScienceRequirements;
 };
+
 
 export type ScienceRequirementsGroupObservationsArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
@@ -5573,7 +5676,9 @@ export type SlewEvent = ExecutionEvent & {
 };
 
 /** Slew stage */
-export type SlewStage = 'END_SLEW' | 'START_SLEW';
+export type SlewStage =
+  | 'END_SLEW'
+  | 'START_SLEW';
 
 /** SmartGcal step configuration. */
 export type SmartGcal = StepConfig & {
@@ -5584,7 +5689,11 @@ export type SmartGcal = StepConfig & {
 };
 
 /** Which kind of smart gcal configuration is requested in a smart gcal step. */
-export type SmartGcalType = 'ARC' | 'DAY_BASELINE' | 'FLAT' | 'NIGHT_BASELINE';
+export type SmartGcalType =
+  | 'ARC'
+  | 'DAY_BASELINE'
+  | 'FLAT'
+  | 'NIGHT_BASELINE';
 
 /** Source profile, exactly one of the fields will be defined */
 export type SourceProfile = {
@@ -5998,6 +6107,7 @@ export type StepRecord = {
   stepConfig: StepConfig;
 };
 
+
 /**
  * A step as recorded by Observe.  There will be one instrument configuration per
  * instrument, all but one of which will be null.
@@ -6006,6 +6116,7 @@ export type StepRecordDatasetsArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
   OFFSET?: InputMaybe<Scalars['DatasetId']['input']>;
 };
+
 
 /**
  * A step as recorded by Observe.  There will be one instrument configuration per
@@ -6085,17 +6196,21 @@ export type Subscription = {
   targetEdit: TargetEdit;
 };
 
+
 export type SubscriptionGroupEditArgs = {
   input?: InputMaybe<GroupEditInput>;
 };
+
 
 export type SubscriptionObservationEditArgs = {
   input?: InputMaybe<ObservationEditInput>;
 };
 
+
 export type SubscriptionProgramEditArgs = {
   input?: InputMaybe<ProgramEditInput>;
 };
+
 
 export type SubscriptionTargetEditArgs = {
   input?: InputMaybe<TargetEditInput>;
@@ -6203,6 +6318,7 @@ export type Target = {
   sourceProfile: SourceProfile;
 };
 
+
 /** Target description */
 export type TargetProgramArgs = {
   includeDeleted?: Scalars['Boolean']['input'];
@@ -6260,22 +6376,27 @@ export type TargetEnvironment = {
   guideTargetName?: Maybe<Scalars['NonEmptyString']['output']>;
 };
 
+
 export type TargetEnvironmentAsterismArgs = {
   includeDeleted?: Scalars['Boolean']['input'];
 };
+
 
 export type TargetEnvironmentBasePositionArgs = {
   observationTime: Scalars['Timestamp']['input'];
 };
 
+
 export type TargetEnvironmentFirstScienceTargetArgs = {
   includeDeleted?: Scalars['Boolean']['input'];
 };
+
 
 export type TargetEnvironmentGuideAvailabilityArgs = {
   end: Scalars['Timestamp']['input'];
   start: Scalars['Timestamp']['input'];
 };
+
 
 export type TargetEnvironmentGuideEnvironmentsArgs = {
   observationTime: Scalars['Timestamp']['input'];
@@ -6290,6 +6411,7 @@ export type TargetEnvironmentGroup = {
   /** Commonly held value across the observations */
   targetEnvironment: TargetEnvironment;
 };
+
 
 export type TargetEnvironmentGroupObservationsArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
@@ -6322,6 +6444,7 @@ export type TargetGroup = {
   /** Commonly held value across the observations */
   target: Target;
 };
+
 
 export type TargetGroupObservationsArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
@@ -6428,7 +6551,9 @@ export type TimeChargeCorrectionInput = {
 };
 
 /** Time accounting correction operations. */
-export type TimeChargeCorrectionOp = 'ADD' | 'SUBTRACT';
+export type TimeChargeCorrectionOp =
+  | 'ADD'
+  | 'SUBTRACT';
 
 /**
  * A time charge discount that is applied when part of the observation is executed
@@ -6987,7 +7112,10 @@ export type UserInvitationStatus =
   /** This invitation was revoked, and can no longer be redeemed. */
   | 'REVOKED';
 
-export type UserType = 'GUEST' | 'SERVICE' | 'STANDARD';
+export type UserType =
+  | 'GUEST'
+  | 'SERVICE'
+  | 'STANDARD';
 
 /**
  * A visit is recorded whenever any part of an observation is attempted.  There
@@ -7032,6 +7160,7 @@ export type Visit = {
   timeChargeInvoice: TimeChargeInvoice;
 };
 
+
 /**
  * A visit is recorded whenever any part of an observation is attempted.  There
  * is a specific static configuration for each instrument, only one of which is
@@ -7042,6 +7171,7 @@ export type VisitAtomRecordsArgs = {
   OFFSET?: InputMaybe<Scalars['Timestamp']['input']>;
 };
 
+
 /**
  * A visit is recorded whenever any part of an observation is attempted.  There
  * is a specific static configuration for each instrument, only one of which is
@@ -7051,6 +7181,7 @@ export type VisitDatasetsArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
   OFFSET?: InputMaybe<Scalars['DatasetId']['input']>;
 };
+
 
 /**
  * A visit is recorded whenever any part of an observation is attempted.  There
@@ -8544,365 +8675,19 @@ export type WhereWavelength = {
   picometers?: InputMaybe<WhereOrderPosInt>;
 };
 
-export type GetObservationsQueryVariables = Exact<{ [key: string]: never }>;
+export type GetObservationsQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type GetObservationsQuery = {
-  __typename?: 'Query';
-  observations: {
-    __typename?: 'ObservationSelectResult';
-    matches: Array<{
-      __typename?: 'Observation';
-      id: string;
-      existence: Existence;
-      title: string;
-      subtitle?: string | null;
-      status: ObsStatus;
-      activeStatus: ObsActiveStatus;
-      instrument?: Instrument | null;
-      posAngleConstraint: {
-        __typename?: 'PosAngleConstraint';
-        mode: PosAngleConstraintMode;
-        angle: { __typename?: 'Angle'; degrees: number };
-      };
-      program: {
-        __typename?: 'Program';
-        id: number;
-        existence: Existence;
-        name?: string | null;
-        proposal?: { __typename?: 'Proposal'; title?: string | null } | null;
-        pi?: {
-          __typename?: 'ProgramUser';
-          user?: { __typename?: 'User'; orcidGivenName?: string | null; orcidFamilyName?: string | null } | null;
-        } | null;
-        users: Array<{
-          __typename?: 'ProgramUser';
-          user?: { __typename?: 'User'; serviceName?: string | null } | null;
-        }>;
-      };
-      targetEnvironment: {
-        __typename?: 'TargetEnvironment';
-        firstScienceTarget?: {
-          __typename?: 'Target';
-          id: string;
-          existence: Existence;
-          name: string;
-          sidereal?: {
-            __typename?: 'Sidereal';
-            epoch: string;
-            ra: { __typename?: 'RightAscension'; hms: string; degrees: number };
-            dec: { __typename?: 'Declination'; dms: string; degrees: number };
-          } | null;
-        } | null;
-      };
-    }>;
-  };
-};
+
+export type GetObservationsQuery = { __typename?: 'Query', observations: { __typename?: 'ObservationSelectResult', matches: Array<{ __typename?: 'Observation', id: string, existence: Existence, title: string, subtitle?: string | null, status: ObsStatus, activeStatus: ObsActiveStatus, instrument?: Instrument | null, posAngleConstraint: { __typename?: 'PosAngleConstraint', mode: PosAngleConstraintMode, angle: { __typename?: 'Angle', degrees: number } }, program: { __typename?: 'Program', id: number, existence: Existence, name?: string | null, proposal?: { __typename?: 'Proposal', title?: string | null } | null, pi?: { __typename?: 'ProgramUser', user?: { __typename?: 'User', orcidGivenName?: string | null, orcidFamilyName?: string | null } | null } | null, users: Array<{ __typename?: 'ProgramUser', user?: { __typename?: 'User', serviceName?: string | null } | null }> }, targetEnvironment: { __typename?: 'TargetEnvironment', firstScienceTarget?: { __typename?: 'Target', id: string, existence: Existence, name: string, sidereal?: { __typename?: 'Sidereal', epoch: string, ra: { __typename?: 'RightAscension', hms: string, degrees: number }, dec: { __typename?: 'Declination', dms: string, degrees: number } } | null } | null } }> } };
 
 export type GetGuideTargetsQueryVariables = Exact<{
   observationId: Scalars['ObservationId']['input'];
   observationTime: Scalars['Timestamp']['input'];
 }>;
 
-export type GetGuideTargetsQuery = {
-  __typename?: 'Query';
-  observation?: {
-    __typename?: 'Observation';
-    targetEnvironment: {
-      __typename?: 'TargetEnvironment';
-      guideEnvironments: Array<{
-        __typename?: 'GuideEnvironment';
-        guideTargets: Array<{
-          __typename?: 'GuideTarget';
-          probe: GuideProbe;
-          name: string;
-          sidereal?: {
-            __typename?: 'Sidereal';
-            epoch: string;
-            ra: { __typename?: 'RightAscension'; hms: string; degrees: number };
-            dec: { __typename?: 'Declination'; dms: string; degrees: number };
-          } | null;
-        }>;
-      }>;
-    };
-  } | null;
-};
 
-export const GetObservationsDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'getObservations' },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'observations' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'matches' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'existence' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'subtitle' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'activeStatus' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'instrument' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'posAngleConstraint' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            { kind: 'Field', name: { kind: 'Name', value: 'mode' } },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'angle' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [{ kind: 'Field', name: { kind: 'Name', value: 'degrees' } }],
-                              },
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'program' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                            { kind: 'Field', name: { kind: 'Name', value: 'existence' } },
-                            { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'proposal' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [{ kind: 'Field', name: { kind: 'Name', value: 'title' } }],
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'pi' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'user' },
-                                    selectionSet: {
-                                      kind: 'SelectionSet',
-                                      selections: [
-                                        { kind: 'Field', name: { kind: 'Name', value: 'orcidGivenName' } },
-                                        { kind: 'Field', name: { kind: 'Name', value: 'orcidFamilyName' } },
-                                      ],
-                                    },
-                                  },
-                                ],
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'users' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'user' },
-                                    selectionSet: {
-                                      kind: 'SelectionSet',
-                                      selections: [{ kind: 'Field', name: { kind: 'Name', value: 'serviceName' } }],
-                                    },
-                                  },
-                                ],
-                              },
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'targetEnvironment' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'firstScienceTarget' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                  { kind: 'Field', name: { kind: 'Name', value: 'existence' } },
-                                  { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'sidereal' },
-                                    selectionSet: {
-                                      kind: 'SelectionSet',
-                                      selections: [
-                                        { kind: 'Field', name: { kind: 'Name', value: 'epoch' } },
-                                        {
-                                          kind: 'Field',
-                                          name: { kind: 'Name', value: 'ra' },
-                                          selectionSet: {
-                                            kind: 'SelectionSet',
-                                            selections: [
-                                              { kind: 'Field', name: { kind: 'Name', value: 'hms' } },
-                                              { kind: 'Field', name: { kind: 'Name', value: 'degrees' } },
-                                            ],
-                                          },
-                                        },
-                                        {
-                                          kind: 'Field',
-                                          name: { kind: 'Name', value: 'dec' },
-                                          selectionSet: {
-                                            kind: 'SelectionSet',
-                                            selections: [
-                                              { kind: 'Field', name: { kind: 'Name', value: 'dms' } },
-                                              { kind: 'Field', name: { kind: 'Name', value: 'degrees' } },
-                                            ],
-                                          },
-                                        },
-                                      ],
-                                    },
-                                  },
-                                ],
-                              },
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GetObservationsQuery, GetObservationsQueryVariables>;
-export const GetGuideTargetsDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'getGuideTargets' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'observationId' } },
-          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'ObservationId' } } },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'observationTime' } },
-          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'Timestamp' } } },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'observation' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'observationId' },
-                value: { kind: 'Variable', name: { kind: 'Name', value: 'observationId' } },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'targetEnvironment' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'guideEnvironments' },
-                        arguments: [
-                          {
-                            kind: 'Argument',
-                            name: { kind: 'Name', value: 'observationTime' },
-                            value: { kind: 'Variable', name: { kind: 'Name', value: 'observationTime' } },
-                          },
-                        ],
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'guideTargets' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  { kind: 'Field', name: { kind: 'Name', value: 'probe' } },
-                                  { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'sidereal' },
-                                    selectionSet: {
-                                      kind: 'SelectionSet',
-                                      selections: [
-                                        { kind: 'Field', name: { kind: 'Name', value: 'epoch' } },
-                                        {
-                                          kind: 'Field',
-                                          name: { kind: 'Name', value: 'ra' },
-                                          selectionSet: {
-                                            kind: 'SelectionSet',
-                                            selections: [
-                                              { kind: 'Field', name: { kind: 'Name', value: 'hms' } },
-                                              { kind: 'Field', name: { kind: 'Name', value: 'degrees' } },
-                                            ],
-                                          },
-                                        },
-                                        {
-                                          kind: 'Field',
-                                          name: { kind: 'Name', value: 'dec' },
-                                          selectionSet: {
-                                            kind: 'SelectionSet',
-                                            selections: [
-                                              { kind: 'Field', name: { kind: 'Name', value: 'dms' } },
-                                              { kind: 'Field', name: { kind: 'Name', value: 'degrees' } },
-                                            ],
-                                          },
-                                        },
-                                      ],
-                                    },
-                                  },
-                                ],
-                              },
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GetGuideTargetsQuery, GetGuideTargetsQueryVariables>;
+export type GetGuideTargetsQuery = { __typename?: 'Query', observation?: { __typename?: 'Observation', targetEnvironment: { __typename?: 'TargetEnvironment', guideEnvironments: Array<{ __typename?: 'GuideEnvironment', guideTargets: Array<{ __typename?: 'GuideTarget', probe: GuideProbe, name: string, sidereal?: { __typename?: 'Sidereal', epoch: string, ra: { __typename?: 'RightAscension', hms: string, degrees: number }, dec: { __typename?: 'Declination', dms: string, degrees: number } } | null }> }> } } | null };
+
+
+export const GetObservationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getObservations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"observations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"matches"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"existence"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"subtitle"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"activeStatus"}},{"kind":"Field","name":{"kind":"Name","value":"instrument"}},{"kind":"Field","name":{"kind":"Name","value":"posAngleConstraint"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mode"}},{"kind":"Field","name":{"kind":"Name","value":"angle"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"program"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"existence"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"proposal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pi"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"orcidGivenName"}},{"kind":"Field","name":{"kind":"Name","value":"orcidFamilyName"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"serviceName"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"targetEnvironment"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"firstScienceTarget"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"existence"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"sidereal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"epoch"}},{"kind":"Field","name":{"kind":"Name","value":"ra"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}},{"kind":"Field","name":{"kind":"Name","value":"dec"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"dms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetObservationsQuery, GetObservationsQueryVariables>;
+export const GetGuideTargetsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getGuideTargets"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"observationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ObservationId"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"observationTime"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Timestamp"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"observation"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"observationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"observationId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"targetEnvironment"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guideEnvironments"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"observationTime"},"value":{"kind":"Variable","name":{"kind":"Name","value":"observationTime"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guideTargets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"probe"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"sidereal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"epoch"}},{"kind":"Field","name":{"kind":"Name","value":"ra"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}},{"kind":"Field","name":{"kind":"Name","value":"dec"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"dms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetGuideTargetsQuery, GetGuideTargetsQueryVariables>;
