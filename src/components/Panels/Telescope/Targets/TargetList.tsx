@@ -4,7 +4,7 @@ import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configura
 
 export function TargetList({ targets, type }: { targets: TargetType[]; type?: TypeOfTarget }) {
   const configuration = useConfiguration().data?.configuration;
-  const updateConfiguration = useUpdateConfiguration();
+  const [updateConfiguration] = useUpdateConfiguration();
 
   let selectedTarget: number | null | undefined = null;
   switch (type) {
