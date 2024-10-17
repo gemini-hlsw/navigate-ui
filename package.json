@@ -63,7 +63,7 @@
     "globals": "15.11.0",
     "husky": "9.1.6",
     "lint-staged": "15.2.10",
-    "lucuma-schemas": "0.102.0",
+    "lucuma-schemas": "0.104.0",
     "playwright": "1.48.0",
     "prettier": "3.3.3",
     "sass": "1.79.5",
