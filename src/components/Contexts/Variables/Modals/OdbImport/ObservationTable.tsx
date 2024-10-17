@@ -12,19 +12,19 @@ export function ObservationTable({
   setSelectedObservation,
 }: ParamsInterface) {
   const [filters, setFilters] = useState({
-    id: { value: '', matchMode: FilterMatchMode.STARTS_WITH },
-    title: { value: '', matchMode: FilterMatchMode.STARTS_WITH },
+    id: { value: '', matchMode: FilterMatchMode.CONTAINS },
+    title: { value: '', matchMode: FilterMatchMode.CONTAINS },
     'program.pi.user.orcidGivenName': {
       value: '',
-      matchMode: FilterMatchMode.STARTS_WITH,
+      matchMode: FilterMatchMode.CONTAINS,
     },
     'program.pi.user.orcidFamilyName': {
       value: '',
-      matchMode: FilterMatchMode.STARTS_WITH,
+      matchMode: FilterMatchMode.CONTAINS,
     },
     'targetEnvironment.firstScienceTarget.name': {
       value: '',
-      matchMode: FilterMatchMode.STARTS_WITH,
+      matchMode: FilterMatchMode.CONTAINS,
     },
     global: { value: '', matchMode: FilterMatchMode.CONTAINS },
   });
