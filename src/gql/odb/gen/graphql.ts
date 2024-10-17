@@ -404,8 +404,6 @@ export type AtomRecord = {
   interval?: Maybe<TimestampInterval>;
   /** Sequence type. */
   sequenceType: SequenceType;
-  /** Number of valid steps required to complete this atom. */
-  stepCount: Scalars['NonNegShort']['output'];
   /** Recorded steps associated with this atom. */
   steps: StepRecordSelectResult;
   /** Visit in which this atom was executed. */
@@ -558,6 +556,19 @@ export type BandNormalizedSurfaceInput = {
   sed?: InputMaybe<UnnormalizedSedInput>;
 };
 
+/**
+ * CategorizedTime grouped with a ScienceBand.  A program may contain multiple
+ * observations in distinct bands.  Time accounting at the program level must
+ * distinguish time spent in observations of each of these bands.
+ */
+export type BandedTime = {
+  __typename?: 'BandedTime';
+  /** ScienceBand associated with the time, if any. */
+  band?: Maybe<ScienceBand>;
+  /** Time distributed across the program, partner, and non-charged categories. */
+  time: CategorizedTime;
+};
+
 /** Bias calibration step */
 export type Bias = StepConfig & {
   __typename?: 'Bias';
@@ -651,6 +662,8 @@ export type CallForProposals = {
   nonPartnerDeadline?: Maybe<Scalars['Timestamp']['output']>;
   /** Partners that may participate in this Call. */
   partners: Array<CallForProposalsPartner>;
+  /** Default proprietary period to use for propograms linked to this Call. */
+  proprietaryMonths: Scalars['NonNegInt']['output'];
   /**
    * The semester associated with the Call.  Some types may have multiple Calls
    * per semester.
@@ -733,6 +746,11 @@ export type CallForProposalsPropertiesInput = {
    * all partners.
    */
   partners?: InputMaybe<Array<CallForProposalsPartnerInput>>;
+  /**
+   * The default proprietary period for proposals linked to this call.  If not
+   * specified, the default period for the call type will be used.
+   */
+  proprietaryMonths?: InputMaybe<Scalars['NonNegInt']['input']>;
   /** Semester associated with the call. Required on create. */
   semester?: InputMaybe<Scalars['Semester']['input']>;
   /**
@@ -3207,6 +3225,50 @@ export type GmosYBinning =
   /** GmosYBinning Two */
   | 'TWO';
 
+/** Gemini Observatory Archive properties for a particular program. */
+export type GoaProperties = {
+  __typename?: 'GoaProperties';
+  /**
+   * Whether the header (as well as the data itself) should remain private.  This
+   * property is applicable to science programs and defaults to false.
+   */
+  privateHeader: Scalars['Boolean']['output'];
+  /**
+   * How many months to withhold public access to the data.  This property is
+   * applicable to science programs, defaults to the proprietary period associated
+   * with the Call for Proposals if any; 0 months otherwise.
+   */
+  proprietaryMonths: Scalars['NonNegInt']['output'];
+  /**
+   * Whether the PI wishes to be notified when new data are received. This property
+   * is applicable to science programs and defaults to true.
+   */
+  shouldNotify: Scalars['Boolean']['output'];
+};
+
+/**
+ * Gemini Observatory Archive properties creation and editing input for a
+ * particular program.
+ */
+export type GoaPropertiesInput = {
+  /**
+   * Whether the header (as well as the data itself) should remain private.  This
+   * property is applicable to science programs and defaults to false.
+   */
+  privateHeader?: InputMaybe<Scalars['Boolean']['input']>;
+  /**
+   * How many months to withhold public access to the data.  This property is
+   * applicable to science programs, defaults to the proprietary period associated
+   * with the Call for Proposals if any; 0 months otherwise.
+   */
+  proprietaryMonths?: InputMaybe<Scalars['NonNegInt']['input']>;
+  /**
+   * Whether the PI wishes to be notified when new data are received. This property
+   * is applicable to science programs and defaults to true.
+   */
+  shouldNotify?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 /** A group of observations and other groups. */
 export type Group = {
   __typename?: 'Group';
@@ -4551,6 +4613,8 @@ export type Program = {
   configurationRequests: ConfigurationRequestSelectResult;
   /** DELETED or PRESENT */
   existence: Existence;
+  /** Observatory archive properties related to this program. */
+  goa: GoaProperties;
   /** Top-level group elements (observations and sub-groups) in the program. */
   groupElements: Array<GroupElement>;
   /** Program ID */
@@ -4572,7 +4636,7 @@ export type Program = {
   /** Program reference, if any. */
   reference?: Maybe<ProgramReference>;
   /** Program-wide time charge, summing all corrected observation time charges. */
-  timeCharge: CategorizedTime;
+  timeCharge: Array<BandedTime>;
   /**
    * Remaining execution time estimate range, assuming it can be calculated.  In
    * order for an observation to have an estimate, it must be fully defined such
@@ -4631,6 +4695,11 @@ export type ProgramEditInput = {
 export type ProgramPropertiesInput = {
   /** Whether the program is considered deleted (defaults to PRESENT) but may be edited */
   existence?: InputMaybe<Existence>;
+  /**
+   * Sets the GOA properties for this program.  If not specified on create,
+   * default values are used.
+   */
+  goa?: InputMaybe<GoaPropertiesInput>;
   /** The program name, which is both optional and nullable */
   name?: InputMaybe<Scalars['NonEmptyString']['input']>;
 };
@@ -5200,12 +5269,15 @@ export type RadialVelocityInput = {
   metersPerSecond?: InputMaybe<Scalars['BigDecimal']['input']>;
 };
 
-/** Input parameters for creating a new atom record */
+/**
+ * Input parameters for creating a new atom record.
+ * (stepCount is deprecated and will be ignored)
+ */
 export type RecordAtomInput = {
   generatedId?: InputMaybe<Scalars['AtomId']['input']>;
   instrument: Instrument;
   sequenceType: SequenceType;
-  stepCount: Scalars['NonNegShort']['input'];
+  stepCount?: InputMaybe<Scalars['NonNegShort']['input']>;
   visitId: Scalars['VisitId']['input'];
 };
 
