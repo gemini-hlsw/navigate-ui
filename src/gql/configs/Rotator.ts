@@ -28,9 +28,7 @@ const UPDATE_ROTATOR = graphql(`
 `);
 
 export function useUpdateRotator() {
-  const [mutationFunction] = useMutation(UPDATE_ROTATOR, {
+  return useMutation(UPDATE_ROTATOR, {
     context: { clientName: 'navigateConfigs' },
   });
-
-  return mutationFunction;
 }

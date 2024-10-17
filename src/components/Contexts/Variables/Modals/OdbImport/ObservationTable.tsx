@@ -39,30 +39,23 @@ export function ObservationTable({
     setGlobalFilterValue(value);
   }
 
-  const renderHeader = () => {
-    return (
-      <div className="header-table">
-        <span>{`Selected Observation: ${selectedObservation.title}`}</span>
-        <span className="p-input-icon-left">
-          <i className="pi pi-search" />
-          <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Keyword Search" />
-        </span>
-      </div>
-    );
-  };
-
-  const header = renderHeader();
-
-  if (!observations_list) {
-    return null;
-  }
+  const header = (
+    <div className="header-table">
+      <span>{selectedObservation.title && `Selected Observation: ${selectedObservation.title}`}</span>
+      <span className="p-input-icon-left">
+        <i className="pi pi-search" />
+        <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Keyword Search" />
+      </span>
+    </div>
+  );
 
   return (
     <div className="target-table">
       <DataTable
-        value={observations_list.filter((el) => el.activeStatus === 'ACTIVE')}
+        value={(observations_list ?? []).filter((el) => el.activeStatus === 'ACTIVE')}
         paginator
         selectionMode="single"
+        selection={selectedObservation}
         onSelectionChange={(e) => setSelectedObservation(e.value)}
         className="p-datatable-customers"
         rows={10}
@@ -70,7 +63,6 @@ export function ObservationTable({
         filters={filters}
         filterDisplay="row"
         loading={loading}
-        responsiveLayout="scroll"
         globalFilterFields={[
           'id',
           'title',

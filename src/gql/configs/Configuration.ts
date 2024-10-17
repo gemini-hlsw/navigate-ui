@@ -76,9 +76,7 @@ const UPDATE_CONFIGURATION = graphql(`
 `);
 
 export function useUpdateConfiguration() {
-  const [mutationFunction] = useMutation(UPDATE_CONFIGURATION, {
+  return useMutation(UPDATE_CONFIGURATION, {
     context: { clientName: 'navigateConfigs' },
   });
-
-  return mutationFunction;
 }

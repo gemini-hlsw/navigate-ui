@@ -5,8 +5,11 @@ import { useRotator, useUpdateRotator } from '@gql/configs/Rotator';
 import { TrackingType } from '@/types';
 
 export function Rotator({ canEdit }: { canEdit: boolean }) {
-  const rotator = useRotator().data?.rotator;
-  const updateRotator = useUpdateRotator();
+  const { data: rotatorData, loading: rotatorLoading } = useRotator();
+  const rotator = rotatorData?.rotator;
+  const [updateRotator, { loading: updateLoading }] = useUpdateRotator();
+
+  const loading = rotatorLoading || updateLoading;
 
   return (
     <div className="rotator">
@@ -17,6 +20,7 @@ export function Rotator({ canEdit }: { canEdit: boolean }) {
           disabled={!canEdit}
           value={rotator?.tracking}
           options={['TRACKING', 'FIXED']}
+          loading={loading}
           onChange={(e) => {
             if (rotator)
               void updateRotator({
@@ -27,7 +31,7 @@ export function Rotator({ canEdit }: { canEdit: boolean }) {
         />
         <span className="label">Position Angle</span>
         <InputNumber
-          disabled={!canEdit}
+          disabled={!canEdit || loading}
           value={rotator?.angle}
           minFractionDigits={2}
           maxFractionDigits={7}

@@ -13,12 +13,6 @@ const GET_OBSERVATIONS = graphql(`
         status
         activeStatus
         instrument
-        posAngleConstraint {
-          mode
-          angle {
-            degrees
-          }
-        }
         program {
           id
           existence
@@ -63,7 +57,7 @@ const GET_OBSERVATIONS = graphql(`
 
 export function useGetObservations() {
   const odbToken = useOdbTokenValue();
-  const [getObservations, { loading, error, data }] = useLazyQuery(GET_OBSERVATIONS, {
+  return useLazyQuery(GET_OBSERVATIONS, {
     context: {
       clientName: 'odb',
       headers: {
@@ -71,8 +65,6 @@ export function useGetObservations() {
       },
     },
   });
-
-  return { getObservations, loading, data, error };
 }
 
 const GET_GUIDE_TARGETS = graphql(`
@@ -104,6 +96,33 @@ const GET_GUIDE_TARGETS = graphql(`
 export function useGetGuideTargets() {
   const odbToken = useOdbTokenValue();
   return useLazyQuery(GET_GUIDE_TARGETS, {
+    context: {
+      clientName: 'odb',
+      headers: {
+        Authorization: `Bearer ${odbToken}`,
+      },
+    },
+  });
+}
+
+const GET_GUIDE_ENVIRONMENT = graphql(`
+  query getGuideEnvironment($obsId: ObservationId!) {
+    observation(observationId: $obsId) {
+      targetEnvironment {
+        guideEnvironment {
+          posAngle {
+            hms
+            degrees
+          }
+        }
+      }
+    }
+  }
+`);
+
+export function useGetGuideEnvironment() {
+  const odbToken = useOdbTokenValue();
+  return useLazyQuery(GET_GUIDE_ENVIRONMENT, {
     context: {
       clientName: 'odb',
       headers: {

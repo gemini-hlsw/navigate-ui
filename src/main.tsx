@@ -1,5 +1,6 @@
 import { createRoot } from 'react-dom/client';
 import { getEnvironment } from './Helpers/environment';
+import { createClient } from '@gql/ApolloConfigs';
 
 // Styles
 import './styles/main.scss';
@@ -11,10 +12,10 @@ import { StrictMode } from 'react';
 
 const root = createRoot(document.getElementById('root')!);
 
-const environment = getEnvironment();
+const client = createClient(getEnvironment());
 
 root.render(
   <StrictMode>
-    <App environment={environment} />
+    <App client={client} />
   </StrictMode>,
 );

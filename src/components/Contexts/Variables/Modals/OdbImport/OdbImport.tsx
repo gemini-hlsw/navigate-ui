@@ -2,25 +2,30 @@ import { useEffect, useState } from 'react';
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
 import { ObservationTable } from './ObservationTable';
-import { useGetObservations } from '@gql/odb/Observation';
+import { useGetGuideEnvironment, useGetObservations } from '@gql/odb/Observation';
 import { ConfigurationType, OdbObservationType } from '@/types';
 import { useRemoveAndCreateBaseTargets } from '@gql/configs/Target';
 import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
 import { useOdbVisible } from '@/components/atoms/odb';
 import { useCanEdit } from '@/components/atoms/auth';
 import { useRotator, useUpdateRotator } from '@gql/configs/Rotator';
+import { useToast } from '@/Helpers/toast';
 
 export function OdbImport() {
   const canEdit = useCanEdit();
   const configuration = useConfiguration().data?.configuration;
-
+  const toast = useToast();
   const [odbVisible, setOdbVisible] = useOdbVisible();
   const [selectedObservation, setSelectedObservation] = useState<OdbObservationType>({} as OdbObservationType);
-  const { getObservations, loading, data } = useGetObservations();
-  const removeAndCreateBaseTargets = useRemoveAndCreateBaseTargets();
-  const updateConfiguration = useUpdateConfiguration();
-  const updateRotator = useUpdateRotator();
+  const [getObservations, { loading, data }] = useGetObservations();
+  const [getGuideEnvironment, { loading: getGuideEnvironmentLoading }] = useGetGuideEnvironment();
+  const [removeAndCreateBaseTargets, { loading: removeCreateLoading }] = useRemoveAndCreateBaseTargets();
+  const [updateConfiguration, { loading: updateConfigLoading }] = useUpdateConfiguration();
+  const [updateRotator, { loading: updateRotatorLoading }] = useUpdateRotator();
   const rotator = useRotator().data?.rotator;
+
+  const updateLoading =
+    updateConfigLoading || removeCreateLoading || updateRotatorLoading || getGuideEnvironmentLoading;
 
   function updateObs() {
     void updateConfiguration({
@@ -56,11 +61,20 @@ export function OdbImport() {
           },
         });
         if (rotator) {
+          // Get the guide environment separately to avoid large query times for _all_ observations
+          const guideEnv = await getGuideEnvironment({ variables: { obsId: selectedObservation.id } });
+          if (guideEnv.error?.message) {
+            toast?.show({
+              severity: 'warn',
+              summary: `No guide environment for ${selectedObservation.id}`,
+              detail: guideEnv.error.message,
+            });
+          }
           await updateRotator({
             variables: {
               pk: rotator?.pk,
-              angle: selectedObservation.posAngleConstraint.angle.degrees,
-              tracking: selectedObservation.posAngleConstraint.mode === 'FIXED' ? 'FIXED' : 'TRACKING',
+              angle: guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees ?? 0,
+              tracking: 'TRACKING',
             },
           });
         }
@@ -78,6 +92,7 @@ export function OdbImport() {
           }
           className=""
           label="Import to Navigate"
+          loading={updateLoading}
           onClick={updateObs}
         />
         <Button disabled={!canEdit} className="p-button-danger" label="Cancel" onClick={() => setOdbVisible(false)} />
@@ -94,16 +109,14 @@ export function OdbImport() {
 
   return (
     <Dialog header="Import from ODB" footer={footer} visible={odbVisible} modal onHide={() => setOdbVisible(false)}>
-      {loading ? (
-        <p>Loading observations...</p>
-      ) : (
+      {
         <ObservationTable
-          loading={!data}
+          loading={loading}
           observations_list={data?.observations?.matches}
           selectedObservation={selectedObservation}
           setSelectedObservation={setSelectedObservation}
         />
-      )}
+      }
     </Dialog>
   );
 }

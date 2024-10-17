@@ -174,12 +174,10 @@ const REMOVE_AND_CREATE_BASE_TARGETS = graphql(`
 `);
 
 export function useRemoveAndCreateBaseTargets() {
-  const [mutationFunction] = useMutation(REMOVE_AND_CREATE_BASE_TARGETS, {
+  return useMutation(REMOVE_AND_CREATE_BASE_TARGETS, {
     context: { clientName: 'navigateConfigs' },
     refetchQueries: [GET_TARGETS],
   });
-
-  return mutationFunction;
 }
 
 const REMOVE_AND_CREATE_WFS_TARGETS = graphql(`
