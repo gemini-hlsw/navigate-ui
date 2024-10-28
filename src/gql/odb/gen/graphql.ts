@@ -1074,7 +1074,29 @@ export type ConfigurationRequest = {
   __typename?: 'ConfigurationRequest';
   configuration: Configuration;
   id: Scalars['ConfigurationRequestId']['output'];
+  program: Program;
   status: ConfigurationRequestStatus;
+};
+
+/** Event sent when a configuration request is created or updated */
+export type ConfigurationRequestEdit = {
+  __typename?: 'ConfigurationRequestEdit';
+  /** Edited configuration request, can be null if the value was deleted */
+  configurationRequest?: Maybe<ConfigurationRequest>;
+  /** The id of the edited configuration request */
+  configurationRequestId: Scalars['ConfigurationRequestId']['output'];
+  /** Type of edit */
+  editType: EditType;
+};
+
+export type ConfigurationRequestEditInput = {
+  /** Program ID */
+  programId?: InputMaybe<Scalars['ProgramId']['input']>;
+};
+
+/** Configuration request properties. */
+export type ConfigurationRequestProperties = {
+  status?: InputMaybe<ConfigurationRequestStatus>;
 };
 
 /** The matching configuration requests, limited to a maximum of 1000 entries. */
@@ -1089,7 +1111,8 @@ export type ConfigurationRequestSelectResult = {
 export type ConfigurationRequestStatus =
   | 'APPROVED'
   | 'DENIED'
-  | 'REQUESTED';
+  | 'REQUESTED'
+  | 'WITHDRAWN';
 
 export type ConstraintSet = {
   __typename?: 'ConstraintSet';
@@ -1776,6 +1799,8 @@ export type Execution = {
   digest?: Maybe<ExecutionDigest>;
   /** Events associated with the observation, across all visits. */
   events: ExecutionEventSelectResult;
+  /** Determines the execution state as a whole of this observation. */
+  state: ObservationExecutionState;
   /** Time accounting calculation for this observation. */
   timeCharge: CategorizedTime;
   /** Visits associated with the observation. */
@@ -3799,6 +3824,8 @@ export type Mutation = {
   updateAsterisms: UpdateAsterismsResult;
   /** Update existing calls for proposals. */
   updateCallsForProposals: UpdateCallsForProposalsResult;
+  /** Update existing configuration requests. */
+  updateConfigurationRequests: UpdateConfigurationRequestsResult;
   updateDatasets: UpdateDatasetsResult;
   updateGroups: UpdateGroupsResult;
   updateObsAttachments: UpdateObsAttachmentsResult;
@@ -3989,6 +4016,11 @@ export type MutationUpdateAsterismsArgs = {
 
 export type MutationUpdateCallsForProposalsArgs = {
   input: UpdateCallsForProposalsInput;
+};
+
+
+export type MutationUpdateConfigurationRequestsArgs = {
+  input: UpdateConfigurationRequestsInput;
 };
 
 
@@ -4205,6 +4237,7 @@ export type Observation = {
   title: Scalars['NonEmptyString']['output'];
   /** A list of observation validation problems */
   validations: Array<ObservationValidation>;
+  workflow: ObservationWorkflow;
 };
 
 /** Event sent when a new object is created or updated */
@@ -4222,6 +4255,19 @@ export type ObservationEditInput = {
   observationId?: InputMaybe<Scalars['ObservationId']['input']>;
   programId?: InputMaybe<Scalars['ProgramId']['input']>;
 };
+
+export type ObservationExecutionState =
+  /** No more science data is expected for this observation. */
+  | 'COMPLETED'
+  /**
+   * The observation isn't sufficiently defined, or there is a problem that
+   * must first be resolved.
+   */
+  | 'NOT_DEFINED'
+  /** No execution visit has been recorded for this observation. */
+  | 'NOT_STARTED'
+  /** At least one visit was made for this observation, but it is not yet complete. */
+  | 'ONGOING';
 
 /** Observation properties */
 export type ObservationPropertiesInput = {
@@ -4308,8 +4354,28 @@ export type ObservationValidationCode =
   | 'CFP_ERROR'
   /** The observation is not configured correctly and cannot be executed */
   | 'CONFIGURATION_ERROR'
+  | 'CONFIG_REQUEST_DENIED'
+  | 'CONFIG_REQUEST_NOT_REQUESTED'
+  | 'CONFIG_REQUEST_PENDING'
+  | 'CONFIG_REQUEST_UNAVAILABLE'
   /** The observation does not have valid ITC results. */
   | 'ITC_ERROR';
+
+export type ObservationWorkflow = {
+  __typename?: 'ObservationWorkflow';
+  state: ObservationWorkflowState;
+  validTransitions: Array<ObservationWorkflowState>;
+  validationErrors: Array<ObservationValidation>;
+};
+
+export type ObservationWorkflowState =
+  | 'COMPLETED'
+  | 'DEFINED'
+  | 'INACTIVE'
+  | 'ONGOING'
+  | 'READY'
+  | 'UNAPPROVED'
+  | 'UNDEFINED';
 
 /**
  * Each step in a sequence is tagged with an observe class which identifies its
@@ -6236,6 +6302,7 @@ export type StepType =
 
 export type Subscription = {
   __typename?: 'Subscription';
+  configurationRequestEdit: ConfigurationRequestEdit;
   /**
    * Subscribes to an event that is generated whenever a group is
    * created or updated.  If a group id is provided, the event is only
@@ -6266,6 +6333,11 @@ export type Subscription = {
    * that program.
    */
   targetEdit: TargetEdit;
+};
+
+
+export type SubscriptionConfigurationRequestEditArgs = {
+  input?: InputMaybe<ConfigurationRequestEditInput>;
 };
 
 
@@ -6955,6 +7027,25 @@ export type UpdateCallsForProposalsResult = {
   hasMore: Scalars['Boolean']['output'];
 };
 
+/** ConfigurationRequest selection and update description.  Use `SET` to specify the changes, `WHERE` to select the requests to update, and `LIMIT` to control the size of the return value. */
+export type UpdateConfigurationRequestsInput = {
+  /** Caps the number of results returned to the given value (if additional observations match the WHERE clause they will be updated but not returned). */
+  LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
+  /** Describes the observation values to modify. */
+  SET: ConfigurationRequestProperties;
+  /** Filters the observations to be updated according to those that match the given constraints. */
+  WHERE?: InputMaybe<WhereConfigurationRequest>;
+};
+
+/** The result of updating the selected observations, up to `LIMIT` or the maximum of (1000).  If `hasMore` is true, additional observations were modified and not included here. */
+export type UpdateConfigurationRequestsResult = {
+  __typename?: 'UpdateConfigurationRequestsResult';
+  /** `true` when there were additional edits that were not returned. */
+  hasMore: Scalars['Boolean']['output'];
+  /** The edited observations, up to the specified LIMIT or the default maximum of 1000. */
+  requests: Array<ConfigurationRequest>;
+};
+
 /** Dataset selection and update description. Use `SET` to specify the changes, `WHERE` to select the datasets to update, and `LIMIT` to control the size of the return value. */
 export type UpdateDatasetsInput = {
   /** Caps the number of results returned to the given value (if additional datasets match the WHERE clause they will be updated but not returned). */
@@ -7381,6 +7472,22 @@ export type WhereCallForProposals = {
   semester?: InputMaybe<WhereOrderSemester>;
   /** Matches the call for proposals type. */
   type?: InputMaybe<WhereEqCallForProposalsType>;
+};
+
+/** Configuration request filter options.  All specified items must match. */
+export type WhereConfigurationRequest = {
+  /** A list of nested filters that all must match in order for the AND group as a whole to match. */
+  AND?: InputMaybe<Array<WhereConfigurationRequest>>;
+  /** A nested filter that must not match in order for the NOT itself to match. */
+  NOT?: InputMaybe<WhereConfigurationRequest>;
+  /** A list of nested filters where any one match causes the entire OR group as a whole to match. */
+  OR?: InputMaybe<Array<WhereConfigurationRequest>>;
+  /** Matches the configuration request id. */
+  id?: InputMaybe<WhereOrderConfigurationRequestId>;
+  /** Matches the associated program. */
+  program?: InputMaybe<WhereProgram>;
+  /** Matches the configuration request status. */
+  status?: InputMaybe<WhereOrderConfigurationRequestStatus>;
 };
 
 /** Dataset filter options.  All specified items must match. */
@@ -8001,6 +8108,54 @@ export type WhereOrderCallForProposalsId = {
   NEQ?: InputMaybe<Scalars['CallForProposalsId']['input']>;
   /** Matches if the id is none of the supplied options. */
   NIN?: InputMaybe<Array<Scalars['CallForProposalsId']['input']>>;
+};
+
+/**
+ * Filters on equality or order comparisons of the property.  All supplied
+ * criteria must match, but usually only one is selected.  E.g., 'GT = 2'
+ * for an integer property will match when the value is 3 or more.
+ */
+export type WhereOrderConfigurationRequestId = {
+  /** Matches if the property is exactly the supplied value. */
+  EQ?: InputMaybe<Scalars['ConfigurationRequestId']['input']>;
+  /** Matches if the property is ordered after (>) the supplied value. */
+  GT?: InputMaybe<Scalars['ConfigurationRequestId']['input']>;
+  /** Matches if the property is ordered after or equal (>=) the supplied value. */
+  GTE?: InputMaybe<Scalars['ConfigurationRequestId']['input']>;
+  /** Matches if the property value is any of the supplied options. */
+  IN?: InputMaybe<Array<Scalars['ConfigurationRequestId']['input']>>;
+  /** Matches if the property is ordered before (<) the supplied value. */
+  LT?: InputMaybe<Scalars['ConfigurationRequestId']['input']>;
+  /** Matches if the property is ordered before or equal (<=) the supplied value. */
+  LTE?: InputMaybe<Scalars['ConfigurationRequestId']['input']>;
+  /** Matches if the property is not the supplied value. */
+  NEQ?: InputMaybe<Scalars['ConfigurationRequestId']['input']>;
+  /** Matches if the property value is none of the supplied values. */
+  NIN?: InputMaybe<Array<Scalars['ConfigurationRequestId']['input']>>;
+};
+
+/**
+ * Filters on equality or order comparisons of the property.  All supplied
+ * criteria must match, but usually only one is selected.  E.g., 'GT = 2'
+ * for an integer property will match when the value is 3 or more.
+ */
+export type WhereOrderConfigurationRequestStatus = {
+  /** Matches if the property is exactly the supplied value. */
+  EQ?: InputMaybe<ConfigurationRequestStatus>;
+  /** Matches if the property is ordered after (>) the supplied value. */
+  GT?: InputMaybe<ConfigurationRequestStatus>;
+  /** Matches if the property is ordered after or equal (>=) the supplied value. */
+  GTE?: InputMaybe<ConfigurationRequestStatus>;
+  /** Matches if the property value is any of the supplied options. */
+  IN?: InputMaybe<Array<ConfigurationRequestStatus>>;
+  /** Matches if the property is ordered before (<) the supplied value. */
+  LT?: InputMaybe<ConfigurationRequestStatus>;
+  /** Matches if the property is ordered before or equal (<=) the supplied value. */
+  LTE?: InputMaybe<ConfigurationRequestStatus>;
+  /** Matches if the property is not the supplied value. */
+  NEQ?: InputMaybe<ConfigurationRequestStatus>;
+  /** Matches if the property value is none of the supplied values. */
+  NIN?: InputMaybe<Array<ConfigurationRequestStatus>>;
 };
 
 /**
