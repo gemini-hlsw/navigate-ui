@@ -2774,6 +2774,8 @@ export type GmosNorthStep = {
   observeClass: ObserveClass;
   /** The sequence step itself */
   stepConfig: StepConfig;
+  /** The telescope configuration at this step. */
+  telescopeConfig: TelescopeConfig;
 };
 
 /** GMOS Region Of Interest */
@@ -3230,6 +3232,8 @@ export type GmosSouthStep = {
   observeClass: ObserveClass;
   /** The sequence step itself */
   stepConfig: StepConfig;
+  /** The telescope configuration at this step. */
+  telescopeConfig: TelescopeConfig;
 };
 
 /** GMOS X Binning */
@@ -5380,6 +5384,7 @@ export type RecordGmosNorthStepInput = {
   gmosNorth: GmosNorthDynamicInput;
   observeClass: ObserveClass;
   stepConfig: StepConfigInput;
+  telescopeConfig?: InputMaybe<TelescopeConfigInput>;
 };
 
 /** The result of recording a GmosNorth step. */
@@ -5409,6 +5414,7 @@ export type RecordGmosSouthStepInput = {
   gmosSouth: GmosSouthDynamicInput;
   observeClass: ObserveClass;
   stepConfig: StepConfigInput;
+  telescopeConfig?: InputMaybe<TelescopeConfigInput>;
 };
 
 /** The result of recording a GmosSouth step. */
@@ -5479,10 +5485,6 @@ export type RightAscensionInput = {
 /** Science step */
 export type Science = StepConfig & {
   __typename?: 'Science';
-  /** Guide State (whether guiding is enabled for this step) */
-  guiding: GuideState;
-  /** Offset */
-  offset: Offset;
   /** Step type is always SCIENCE. */
   stepType: StepType;
 };
@@ -6106,17 +6108,9 @@ export type StepConfigInput = {
   /** GCAL step creation option */
   gcal?: InputMaybe<StepConfigGcalInput>;
   /** Science step creation option */
-  science?: InputMaybe<StepConfigScienceInput>;
+  science?: InputMaybe<Scalars['Boolean']['input']>;
   /** Smart gcal creation option */
   smartGcal?: InputMaybe<StepConfigSmartGcalInput>;
-};
-
-/** Science step creation input */
-export type StepConfigScienceInput = {
-  /** Whether guiding is enabled for this step (defaults to 'ENABLED'). */
-  guiding?: InputMaybe<GuideState>;
-  /** offset position */
-  offset: OffsetInput;
 };
 
 /** SmartGcal step creation input */
@@ -6243,6 +6237,8 @@ export type StepRecord = {
    * instrument-specific 'StepRecord' implementation.
    */
   stepConfig: StepConfig;
+  /** The telescope configuration for this step. */
+  telescopeConfig: TelescopeConfig;
 };
 
 
@@ -6621,6 +6617,22 @@ export type TargetSelectResult = {
   hasMore: Scalars['Boolean']['output'];
   /** Matching targets up to the return size limit of 1000 */
   matches: Array<Target>;
+};
+
+export type TelescopeConfig = {
+  __typename?: 'TelescopeConfig';
+  /** Guide State (whether guiding is enabled for this step) */
+  guiding: GuideState;
+  /** Offset */
+  offset: Offset;
+};
+
+/** Science step creation input */
+export type TelescopeConfigInput = {
+  /** Whether guiding is enabled for this step (defaults to 'ENABLED'). */
+  guiding?: InputMaybe<GuideState>;
+  /** Offset position, which defaults to (0, 0) arcsec. */
+  offset?: InputMaybe<OffsetInput>;
 };
 
 /**

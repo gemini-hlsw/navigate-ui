@@ -215,6 +215,13 @@ export type Mutation = {
   guideDisable: OperationOutcome;
   guideEnable: OperationOutcome;
   instrumentSpecifics: OperationOutcome;
+  m1LoadAoFigure: OperationOutcome;
+  m1LoadNonAoFigure: OperationOutcome;
+  m1OpenLoopOff: OperationOutcome;
+  m1OpenLoopOn: OperationOutcome;
+  m1Park: OperationOutcome;
+  m1Unpark: OperationOutcome;
+  m1ZeroFigure: OperationOutcome;
   mountFollow: OperationOutcome;
   mountPark: OperationOutcome;
   oiwfsFollow: OperationOutcome;
