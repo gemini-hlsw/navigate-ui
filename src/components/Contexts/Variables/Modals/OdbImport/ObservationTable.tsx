@@ -52,7 +52,7 @@ export function ObservationTable({
   return (
     <div className="target-table">
       <DataTable
-        value={(observations_list ?? []).filter((el) => el.activeStatus === 'ACTIVE')}
+        value={(observations_list ?? []).filter((el) => ['ONGOING', 'NOT_STARTED'].includes(el.execution.state))}
         paginator
         selectionMode="single"
         selection={selectedObservation}
