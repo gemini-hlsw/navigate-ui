@@ -4163,8 +4163,6 @@ export type ObsStatus =
 
 export type Observation = {
   __typename?: 'Observation';
-  /** Observation operational status */
-  activeStatus: ObsActiveStatus;
   /** The Calibration role of this observation */
   calibrationRole?: Maybe<CalibrationRole>;
   /** Parameters relevant to approved configurations. */
@@ -4177,11 +4175,6 @@ export type Observation = {
   execution: Execution;
   /** DELETED or PRESENT */
   existence: Existence;
-  /**
-   * This flag is set to true prior to Phase II, and must be reset to false by the PI prior to observation. The
-   * intent is to prompt PIs to review their accepted observations.
-   */
-  forReview: Scalars['Boolean']['output'];
   /** Enclosing group, if any. */
   groupId?: Maybe<Scalars['GroupId']['output']>;
   /** Index in enclosing group or at the top level if ungrouped. If left unspecified on creation, observation will be added last in its enclosing group or at the top level. Cannot be set to null. */
@@ -4229,8 +4222,6 @@ export type Observation = {
   scienceBand?: Maybe<ScienceBand>;
   /** The top level science requirements */
   scienceRequirements: ScienceRequirements;
-  /** Observation status */
-  status: ObsStatus;
   /** User-supplied observation-identifying detail information */
   subtitle?: Maybe<Scalars['NonEmptyString']['output']>;
   /** The observation's target(s) */
@@ -4239,8 +4230,6 @@ export type Observation = {
   timingWindows: Array<TimingWindow>;
   /** Observation title generated from id and targets */
   title: Scalars['NonEmptyString']['output'];
-  /** A list of observation validation problems */
-  validations: Array<ObservationValidation>;
   workflow: ObservationWorkflow;
 };
 
@@ -4275,14 +4264,10 @@ export type ObservationExecutionState =
 
 /** Observation properties */
 export type ObservationPropertiesInput = {
-  /** The observation active status will default to Active if not specified when an observation is created and may be edited but not deleted */
-  activeStatus?: InputMaybe<ObsActiveStatus>;
   /** The constraintSet defaults to standard values if not specified on creation, and may be edited but not deleted */
   constraintSet?: InputMaybe<ConstraintSetInput>;
   /** Whether the observation is considered deleted (defaults to PRESENT) but may be edited */
   existence?: InputMaybe<Existence>;
-  /** Sets the "for review" bit. */
-  forReview?: InputMaybe<Scalars['Boolean']['input']>;
   /** Enclosing group, if any. */
   groupId?: InputMaybe<Scalars['GroupId']['input']>;
   /** Index in enclosing group or at the top level if ungrouped. If left unspecified on creation, observation will be added last in its enclosing group or at the top level. Cannot be set to null. */
@@ -4302,8 +4287,6 @@ export type ObservationPropertiesInput = {
   scienceBand?: InputMaybe<ScienceBand>;
   /** The scienceRequirements defaults to spectroscopy if not specified on creation, and may be edited but not deleted */
   scienceRequirements?: InputMaybe<ScienceRequirementsInput>;
-  /** The observation status will default to New if not specified when an observation is created and may be edited but not deleted */
-  status?: InputMaybe<ObsStatus>;
   /** Subtitle adds additional detail to the target-based observation title, and is both optional and nullable */
   subtitle?: InputMaybe<Scalars['NonEmptyString']['input']>;
   /** The targetEnvironment defaults to empty if not specified on creation, and may be edited but not deleted */
@@ -6469,10 +6452,9 @@ export type TargetEdit = {
   __typename?: 'TargetEdit';
   /** Type of edit */
   editType: EditType;
-  /** @deprecated id is no longer computed; a constant value is returned */
-  id: Scalars['Long']['output'];
+  targetId: Scalars['TargetId']['output'];
   /** Edited object */
-  value: Target;
+  value?: Maybe<Target>;
 };
 
 export type TargetEditInput = {
@@ -7865,10 +7847,6 @@ export type WhereObservation = {
   NOT?: InputMaybe<WhereObservation>;
   /** A list of nested observation filters where any one match causes the entire OR group as a whole to match. */
   OR?: InputMaybe<Array<WhereObservation>>;
-  /** Matches the observation active status. */
-  activeStatus?: InputMaybe<WhereOrderObsActiveStatus>;
-  /** Matches the "for review" bit. */
-  forReview?: InputMaybe<WhereBoolean>;
   /** Matches the observation id. */
   id?: InputMaybe<WhereOrderObservationId>;
   /** Matches the associated program. */
@@ -7877,8 +7855,6 @@ export type WhereObservation = {
   reference?: InputMaybe<WhereObservationReference>;
   /** Matches the observation science band. */
   scienceBand?: InputMaybe<WhereOptionOrderScienceBand>;
-  /** Matches the observation status. */
-  status?: InputMaybe<WhereOrderObsStatus>;
   /** Matches the subtitle of the observation. */
   subtitle?: InputMaybe<WhereOptionString>;
 };
@@ -8336,30 +8312,6 @@ export type WhereOrderLong = {
  * criteria must match, but usually only one is selected.  E.g., 'GT = 2'
  * for an integer property will match when the value is 3 or more.
  */
-export type WhereOrderObsActiveStatus = {
-  /** Matches if the property is exactly the supplied value. */
-  EQ?: InputMaybe<ObsActiveStatus>;
-  /** Matches if the property is ordered after (>) the supplied value. */
-  GT?: InputMaybe<ObsActiveStatus>;
-  /** Matches if the property is ordered after or equal (>=) the supplied value. */
-  GTE?: InputMaybe<ObsActiveStatus>;
-  /** Matches if the property value is any of the supplied options. */
-  IN?: InputMaybe<Array<ObsActiveStatus>>;
-  /** Matches if the property is ordered before (<) the supplied value. */
-  LT?: InputMaybe<ObsActiveStatus>;
-  /** Matches if the property is ordered before or equal (<=) the supplied value. */
-  LTE?: InputMaybe<ObsActiveStatus>;
-  /** Matches if the property is not the supplied value. */
-  NEQ?: InputMaybe<ObsActiveStatus>;
-  /** Matches if the property value is none of the supplied values. */
-  NIN?: InputMaybe<Array<ObsActiveStatus>>;
-};
-
-/**
- * Filters on equality or order comparisons of the property.  All supplied
- * criteria must match, but usually only one is selected.  E.g., 'GT = 2'
- * for an integer property will match when the value is 3 or more.
- */
 export type WhereOrderObsAttachmentId = {
   /** Matches if the property is exactly the supplied value. */
   EQ?: InputMaybe<Scalars['ObsAttachmentId']['input']>;
@@ -8377,30 +8329,6 @@ export type WhereOrderObsAttachmentId = {
   NEQ?: InputMaybe<Scalars['ObsAttachmentId']['input']>;
   /** Matches if the property value is none of the supplied values. */
   NIN?: InputMaybe<Array<Scalars['ObsAttachmentId']['input']>>;
-};
-
-/**
- * Filters on equality or order comparisons of the property.  All supplied
- * criteria must match, but usually only one is selected.  E.g., 'GT = 2'
- * for an integer property will match when the value is 3 or more.
- */
-export type WhereOrderObsStatus = {
-  /** Matches if the property is exactly the supplied value. */
-  EQ?: InputMaybe<ObsStatus>;
-  /** Matches if the property is ordered after (>) the supplied value. */
-  GT?: InputMaybe<ObsStatus>;
-  /** Matches if the property is ordered after or equal (>=) the supplied value. */
-  GTE?: InputMaybe<ObsStatus>;
-  /** Matches if the property value is any of the supplied options. */
-  IN?: InputMaybe<Array<ObsStatus>>;
-  /** Matches if the property is ordered before (<) the supplied value. */
-  LT?: InputMaybe<ObsStatus>;
-  /** Matches if the property is ordered before or equal (<=) the supplied value. */
-  LTE?: InputMaybe<ObsStatus>;
-  /** Matches if the property is not the supplied value. */
-  NEQ?: InputMaybe<ObsStatus>;
-  /** Matches if the property value is none of the supplied values. */
-  NIN?: InputMaybe<Array<ObsStatus>>;
 };
 
 /**
@@ -8917,7 +8845,7 @@ export type WhereWavelength = {
 export type GetObservationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetObservationsQuery = { __typename?: 'Query', observations: { __typename?: 'ObservationSelectResult', matches: Array<{ __typename?: 'Observation', id: string, existence: Existence, title: string, subtitle?: string | null, status: ObsStatus, activeStatus: ObsActiveStatus, instrument?: Instrument | null, program: { __typename?: 'Program', id: number, existence: Existence, name?: string | null, proposal?: { __typename?: 'Proposal', title?: string | null } | null, pi?: { __typename?: 'ProgramUser', user?: { __typename?: 'User', orcidGivenName?: string | null, orcidFamilyName?: string | null } | null } | null, users: Array<{ __typename?: 'ProgramUser', user?: { __typename?: 'User', serviceName?: string | null } | null }> }, targetEnvironment: { __typename?: 'TargetEnvironment', firstScienceTarget?: { __typename?: 'Target', id: string, existence: Existence, name: string, sidereal?: { __typename?: 'Sidereal', epoch: string, ra: { __typename?: 'RightAscension', hms: string, degrees: number }, dec: { __typename?: 'Declination', dms: string, degrees: number } } | null } | null } }> } };
+export type GetObservationsQuery = { __typename?: 'Query', observations: { __typename?: 'ObservationSelectResult', matches: Array<{ __typename?: 'Observation', id: string, existence: Existence, title: string, subtitle?: string | null, instrument?: Instrument | null, execution: { __typename?: 'Execution', state: ObservationExecutionState }, program: { __typename?: 'Program', id: number, existence: Existence, name?: string | null, proposal?: { __typename?: 'Proposal', title?: string | null } | null, pi?: { __typename?: 'ProgramUser', user?: { __typename?: 'User', orcidGivenName?: string | null, orcidFamilyName?: string | null } | null } | null, users: Array<{ __typename?: 'ProgramUser', user?: { __typename?: 'User', serviceName?: string | null } | null }> }, targetEnvironment: { __typename?: 'TargetEnvironment', firstScienceTarget?: { __typename?: 'Target', id: string, existence: Existence, name: string, sidereal?: { __typename?: 'Sidereal', epoch: string, ra: { __typename?: 'RightAscension', hms: string, degrees: number }, dec: { __typename?: 'Declination', dms: string, degrees: number } } | null } | null } }> } };
 
 export type GetGuideTargetsQueryVariables = Exact<{
   observationId: Scalars['ObservationId']['input'];
@@ -8935,6 +8863,6 @@ export type GetGuideEnvironmentQueryVariables = Exact<{
 export type GetGuideEnvironmentQuery = { __typename?: 'Query', observation?: { __typename?: 'Observation', targetEnvironment: { __typename?: 'TargetEnvironment', guideEnvironment: { __typename?: 'GuideEnvironment', posAngle: { __typename?: 'Angle', hms: string, degrees: number } } } } | null };
 
 
-export const GetObservationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getObservations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"observations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"matches"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"existence"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"subtitle"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"activeStatus"}},{"kind":"Field","name":{"kind":"Name","value":"instrument"}},{"kind":"Field","name":{"kind":"Name","value":"program"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"existence"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"proposal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pi"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"orcidGivenName"}},{"kind":"Field","name":{"kind":"Name","value":"orcidFamilyName"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"serviceName"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"targetEnvironment"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"firstScienceTarget"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"existence"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"sidereal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"epoch"}},{"kind":"Field","name":{"kind":"Name","value":"ra"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}},{"kind":"Field","name":{"kind":"Name","value":"dec"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"dms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetObservationsQuery, GetObservationsQueryVariables>;
+export const GetObservationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getObservations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"observations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"matches"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"existence"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"subtitle"}},{"kind":"Field","name":{"kind":"Name","value":"instrument"}},{"kind":"Field","name":{"kind":"Name","value":"execution"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"state"}}]}},{"kind":"Field","name":{"kind":"Name","value":"program"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"existence"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"proposal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pi"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"orcidGivenName"}},{"kind":"Field","name":{"kind":"Name","value":"orcidFamilyName"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"serviceName"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"targetEnvironment"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"firstScienceTarget"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"existence"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"sidereal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"epoch"}},{"kind":"Field","name":{"kind":"Name","value":"ra"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}},{"kind":"Field","name":{"kind":"Name","value":"dec"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"dms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetObservationsQuery, GetObservationsQueryVariables>;
 export const GetGuideTargetsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getGuideTargets"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"observationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ObservationId"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"observationTime"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Timestamp"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"observation"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"observationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"observationId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"targetEnvironment"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guideEnvironments"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"observationTime"},"value":{"kind":"Variable","name":{"kind":"Name","value":"observationTime"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guideTargets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"probe"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"sidereal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"epoch"}},{"kind":"Field","name":{"kind":"Name","value":"ra"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}},{"kind":"Field","name":{"kind":"Name","value":"dec"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"dms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetGuideTargetsQuery, GetGuideTargetsQueryVariables>;
 export const GetGuideEnvironmentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getGuideEnvironment"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"obsId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ObservationId"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"observation"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"observationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"obsId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"targetEnvironment"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guideEnvironment"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"posAngle"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetGuideEnvironmentQuery, GetGuideEnvironmentQueryVariables>;
