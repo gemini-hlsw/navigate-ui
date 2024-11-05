@@ -75,6 +75,7 @@ export default defineConfig(({ mode }) => ({
     preprocessorOptions: {
       scss: {
         charset: false,
+        api: 'modern-compiler',
       },
     },
     postcss: {
@@ -96,6 +97,7 @@ export default defineConfig(({ mode }) => ({
   ],
   test: {
     globals: true,
+    setupFiles: ['vitest-browser-react'],
     browser: {
       enabled: true,
       name: 'chromium',

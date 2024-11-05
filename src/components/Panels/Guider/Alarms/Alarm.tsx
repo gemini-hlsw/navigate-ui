@@ -61,6 +61,7 @@ export function Alarm({
           disabled={disabledOrNoData}
           value={limit}
           onValueChange={onLimitChange}
+          data-testid={`limit-${wfs}`}
         />
         <label htmlFor={`centroid-${id}`} className="label">
           Subaperture
