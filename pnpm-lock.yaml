@@ -66,12 +66,6 @@ importers:
       '@parcel/watcher':
         specifier: 2.4.1
         version: 2.4.1
-      '@swc-jotai/debug-label':
-        specifier: 0.1.1
-        version: 0.1.1
-      '@swc-jotai/react-refresh':
-        specifier: 0.2.0
-        version: 0.2.0
       '@types/eslint__js':
         specifier: 8.42.3
         version: 8.42.3
@@ -1218,12 +1212,6 @@ packages:
     resolution: {integrity: sha512-HGZgRFFYrMrP3TJlq58nR1xy8zHKId25vhmm5S9jETEfDf6xybPxsavFTJaufe2zgOGYJBskGlj49CwtEuFhWQ==}
     cpu: [x64]
     os: [win32]
-
-  '@swc-jotai/debug-label@0.1.1':
-    resolution: {integrity: sha512-QXn/fNksCLObDqc/g5v0KALpG/paFiWeeVmXG3Dzan2HPFzhGHU1JEq9ryzeLm5mDDJ2lcK9o68nLWA/5vVS7Q==}
-
-  '@swc-jotai/react-refresh@0.2.0':
-    resolution: {integrity: sha512-LDkIeVcaL8sop/MHLP3RsUHj73fQ0kU7eYhJj7SuU4eAbx7xE3eeEgCjhTyPB3aYimSHwOk8/c71buLMV9SvPA==}
 
   '@swc/core-darwin-arm64@1.8.0':
     resolution: {integrity: sha512-TIus1/SE/Ud4g84hCnchcagu+LfyndSDy5r5qf64nflojejDidPU9Fp1InzQhQpEgIpntnZID/KFCP5rQnvsIw==}
@@ -5335,10 +5323,6 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.24.3':
     optional: true
-
-  '@swc-jotai/debug-label@0.1.1': {}
-
-  '@swc-jotai/react-refresh@0.2.0': {}
 
   '@swc/core-darwin-arm64@1.8.0':
     optional: true

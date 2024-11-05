@@ -82,19 +82,7 @@ export default defineConfig(({ mode }) => ({
       plugins: [fixCssRoot()],
     },
   },
-  plugins: [
-    react({
-      plugins:
-        mode !== 'production'
-          ? [
-              // https://jotai.org/docs/tools/swc
-              ['@swc-jotai/react-refresh', {}],
-              ['@swc-jotai/debug-label', {}],
-            ]
-          : [],
-    }),
-    mkcert({ hosts: ['localhost', 'local.lucuma.xyz', 'navigate.lucuma.xyz'] }),
-  ],
+  plugins: [react({}), mkcert({ hosts: ['localhost', 'local.lucuma.xyz', 'navigate.lucuma.xyz'] })],
   test: {
     globals: true,
     setupFiles: ['vitest-browser-react'],
