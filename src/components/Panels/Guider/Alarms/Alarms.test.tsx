@@ -22,11 +22,11 @@ describe(Alarms.name, () => {
   });
 
   it('calls updateAlarm when limit is changed', async () => {
-    const limitInput = page.getByLabelText('Limit').elements()[0];
+    const limitInput = page.getByTestId('limit-PWFS1');
 
     await userEvent.fill(limitInput, '900');
 
-    await expect.element(page.getByLabelText('Limit').elements()[0]).toHaveValue('900');
+    await expect.element(page.getByTestId('limit-PWFS1')).toHaveValue('900');
     expect(store.get(guideAlarmAtom)).true;
   });
 });
