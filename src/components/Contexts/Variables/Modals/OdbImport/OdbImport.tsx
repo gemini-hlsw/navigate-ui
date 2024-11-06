@@ -3,13 +3,14 @@ import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
 import { ObservationTable } from './ObservationTable';
 import { useGetGuideEnvironment, useGetObservations } from '@gql/odb/Observation';
-import { ConfigurationType, OdbObservationType } from '@/types';
-import { useRemoveAndCreateBaseTargets } from '@gql/configs/Target';
+import { ConfigurationType, OdbObservationType, TargetInput } from '@/types';
+import { useRemoveAndCreateBaseTargets, useRemoveAndCreateWfsTargets } from '@gql/configs/Target';
 import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
 import { useOdbVisible } from '@/components/atoms/odb';
 import { useCanEdit } from '@/components/atoms/auth';
 import { useRotator, useUpdateRotator } from '@gql/configs/Rotator';
 import { useToast } from '@/Helpers/toast';
+import { GetGuideEnvironmentQuery } from '@gql/odb/gen/graphql';
 
 export function OdbImport() {
   const canEdit = useCanEdit();
@@ -22,10 +23,16 @@ export function OdbImport() {
   const [removeAndCreateBaseTargets, { loading: removeCreateLoading }] = useRemoveAndCreateBaseTargets();
   const [updateConfiguration, { loading: updateConfigLoading }] = useUpdateConfiguration();
   const [updateRotator, { loading: updateRotatorLoading }] = useUpdateRotator();
+  const [removeAndCreateWfsTargets, { loading: wfsTargetsLoading }] = useRemoveAndCreateWfsTargets();
+
   const rotator = useRotator().data?.rotator;
 
   const updateLoading =
-    updateConfigLoading || removeCreateLoading || updateRotatorLoading || getGuideEnvironmentLoading;
+    updateConfigLoading ||
+    removeCreateLoading ||
+    updateRotatorLoading ||
+    getGuideEnvironmentLoading ||
+    wfsTargetsLoading;
 
   function updateObs() {
     void updateConfiguration({
@@ -70,13 +77,35 @@ export function OdbImport() {
               detail: guideEnv.error.message,
             });
           }
-          await updateRotator({
-            variables: {
-              pk: rotator?.pk,
-              angle: guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees ?? 0,
-              tracking: 'TRACKING',
-            },
-          });
+          const { oiwfs, pwfs1, pwfs2 } = extractGuideTargets(guideEnv.data);
+
+          await Promise.all([
+            removeAndCreateWfsTargets({
+              variables: {
+                wfs: 'OIWFS',
+                targets: oiwfs,
+              },
+            }),
+            removeAndCreateWfsTargets({
+              variables: {
+                wfs: 'PWFS1',
+                targets: pwfs1,
+              },
+            }),
+            removeAndCreateWfsTargets({
+              variables: {
+                wfs: 'PWFS2',
+                targets: pwfs2,
+              },
+            }),
+            updateRotator({
+              variables: {
+                pk: rotator?.pk,
+                angle: guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees ?? 0,
+                tracking: 'TRACKING',
+              },
+            }),
+          ]);
         }
       },
     });
@@ -118,5 +147,31 @@ export function OdbImport() {
         />
       }
     </Dialog>
+  );
+}
+
+function extractGuideTargets(data: GetGuideEnvironmentQuery | undefined) {
+  return (data?.observation?.targetEnvironment.guideEnvironment.guideTargets ?? []).reduce<
+    Record<'oiwfs' | 'pwfs1' | 'pwfs2', TargetInput[]>
+  >(
+    (acc, t) => {
+      const auxTarget: TargetInput = {
+        name: t.name,
+        id: undefined,
+        type: 'OIWFS',
+        epoch: t.sidereal?.epoch,
+        coord1: t.sidereal?.ra.degrees,
+        coord2: t.sidereal?.dec.degrees,
+      };
+      if (t.probe.includes('OIWFS')) {
+        acc.oiwfs.push({ ...auxTarget, type: 'OIWFS' });
+      } else if (t.probe.includes('PWFS1')) {
+        acc.pwfs1.push({ ...auxTarget, type: 'PWFS1' });
+      } else if (t.probe.includes('PWFS2')) {
+        acc.pwfs2.push({ ...auxTarget, type: 'PWFS2' });
+      }
+      return acc;
+    },
+    { oiwfs: [], pwfs1: [], pwfs2: [] },
   );
 }

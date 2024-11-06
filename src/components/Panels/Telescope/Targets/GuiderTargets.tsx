@@ -1,10 +1,7 @@
 import { Dropdown } from 'primereact/dropdown';
-import { ProgressBar } from 'primereact/progressbar';
 import { Title } from '@Shared/Title/Title';
 import { TargetList } from './TargetList';
-import { UpdateGuideTargets } from './UpdateGuideTargets';
 
-import { useLoadingGuideTargetValue } from '@/components/atoms/guideTarget';
 import { useCanEdit } from '@/components/atoms/auth';
 import { useConfiguration } from '@gql/configs/Configuration';
 import { useTargets } from '@gql/configs/Target';
@@ -27,7 +24,6 @@ export function GuiderTargets() {
   const canEdit = useCanEdit();
   const { oiTargets, p1Targets, p2Targets, allTargets } = useTargets().data;
   const configuration = useConfiguration().data?.configuration;
-  const loadingGuideTarget = useLoadingGuideTargetValue();
 
   const selectedTarget: Target | undefined = allTargets.find((t) => t.pk === configuration?.selectedTarget);
 
@@ -76,16 +72,8 @@ export function GuiderTargets() {
   }
   return (
     <div className="guiders">
-      <Title title="Guiders">
-        <UpdateGuideTargets canEdit={canEdit} />
-      </Title>
-      <div className="body">
-        {loadingGuideTarget ? (
-          <ProgressBar mode="indeterminate" style={{ height: '6px' }}></ProgressBar>
-        ) : (
-          displayProbes
-        )}
-      </div>
+      <Title title="Guiders" />
+      <div className="body">{displayProbes}</div>
       <TargetSwapButton selectedTarget={selectedTarget} />
     </div>
   );

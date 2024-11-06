@@ -68,11 +68,15 @@ export function useGetObservations() {
   });
 }
 
-const GET_GUIDE_TARGETS = graphql(`
-  query getGuideTargets($observationId: ObservationId!, $observationTime: Timestamp!) {
-    observation(observationId: $observationId) {
+const GET_GUIDE_ENVIRONMENT = graphql(`
+  query getGuideEnvironment($obsId: ObservationId!) {
+    observation(observationId: $obsId) {
       targetEnvironment {
-        guideEnvironments(observationTime: $observationTime) {
+        guideEnvironment {
+          posAngle {
+            hms
+            degrees
+          }
           guideTargets {
             probe
             name
@@ -87,33 +91,6 @@ const GET_GUIDE_TARGETS = graphql(`
                 degrees
               }
             }
-          }
-        }
-      }
-    }
-  }
-`);
-
-export function useGetGuideTargets() {
-  const odbToken = useOdbTokenValue();
-  return useLazyQuery(GET_GUIDE_TARGETS, {
-    context: {
-      clientName: 'odb',
-      headers: {
-        Authorization: `Bearer ${odbToken}`,
-      },
-    },
-  });
-}
-
-const GET_GUIDE_ENVIRONMENT = graphql(`
-  query getGuideEnvironment($obsId: ObservationId!) {
-    observation(observationId: $obsId) {
-      targetEnvironment {
-        guideEnvironment {
-          posAngle {
-            hms
-            degrees
           }
         }
       }
