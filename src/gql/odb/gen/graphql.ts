@@ -3812,6 +3812,11 @@ export type Mutation = {
   setAllocations: SetAllocationsResult;
   /** Set the name of the guide target for an observation. */
   setGuideTargetName: SetGuideTargetNameResult;
+  /**
+   * Sets the workflow state for the specified observation. The transition must be valid
+   * according to the current workflow. Returns the updated workflow.
+   */
+  setObservationWorkflowState?: Maybe<ObservationWorkflow>;
   /** Set the program reference. */
   setProgramReference: SetProgramReferenceResult;
   /** Set the proposal status. */
@@ -3995,6 +4000,11 @@ export type MutationSetAllocationsArgs = {
 
 export type MutationSetGuideTargetNameArgs = {
   input: SetGuideTargetNameInput;
+};
+
+
+export type MutationSetObservationWorkflowStateArgs = {
+  input: SetObservationWorkflowStateInput;
 };
 
 
@@ -5647,6 +5657,11 @@ export type SetGuideTargetNameInput = {
 export type SetGuideTargetNameResult = {
   __typename?: 'SetGuideTargetNameResult';
   observation?: Maybe<Observation>;
+};
+
+export type SetObservationWorkflowStateInput = {
+  observationId: Scalars['ObservationId']['input'];
+  state: ObservationWorkflowState;
 };
 
 /**
