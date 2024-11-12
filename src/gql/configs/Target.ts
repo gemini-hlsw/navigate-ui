@@ -210,10 +210,8 @@ const REMOVE_AND_CREATE_WFS_TARGETS = graphql(`
 `);
 
 export function useRemoveAndCreateWfsTargets() {
-  const [mutationFunction] = useMutation(REMOVE_AND_CREATE_WFS_TARGETS, {
+  return useMutation(REMOVE_AND_CREATE_WFS_TARGETS, {
     context: { clientName: 'navigateConfigs' },
     refetchQueries: [GET_TARGETS],
   });
-
-  return mutationFunction;
 }
