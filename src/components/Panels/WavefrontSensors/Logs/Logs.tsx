@@ -32,6 +32,10 @@ export default function Logs() {
         stripedRows
         dataKey="id"
         emptyMessage="No logs yet"
+        // https://github.com/primefaces/primereact/issues/7321#issuecomment-2407955675
+        onMouseDownCapture={(e) => {
+          e.stopPropagation();
+        }}
       >
         <Column field="timestamp" header="Timestamp" className="text-small"></Column>
         <Column field="message" header="Message" className="text-small"></Column>
