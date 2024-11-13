@@ -55,7 +55,7 @@ export function Configuration() {
         m2Inputs.push('OIWFS');
       }
     }
-    const m1Input = state.m2ComaM1CorrectionsSource;
+    const m1Input = state.m1CorrectionsEnable ? state.m2ComaM1CorrectionsSource : undefined;
     if (state.probeTracking === 'NONE') {
       return {
         m2Inputs: m2Inputs,
