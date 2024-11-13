@@ -11,9 +11,7 @@ const OIWFS_OBSERVE = graphql(`
 `);
 
 export function useOiwfsObserve() {
-  const [mutationFunction] = useMutation(OIWFS_OBSERVE);
-
-  return mutationFunction;
+  return useMutation(OIWFS_OBSERVE);
 }
 
 const OIWFS_STOP_OBSERVE = graphql(`
@@ -26,7 +24,5 @@ const OIWFS_STOP_OBSERVE = graphql(`
 `);
 
 export function useOiwfsStopObserve() {
-  const [mutationFunction] = useMutation(OIWFS_STOP_OBSERVE);
-
-  return mutationFunction;
+  return useMutation(OIWFS_STOP_OBSERVE);
 }

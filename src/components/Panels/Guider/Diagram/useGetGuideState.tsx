@@ -20,17 +20,17 @@ export function useGetGuideState() {
     };
 
   return {
-    mountOffload: data.guideState.mountOffload,
+    mountOffload: data.mountOffload,
     daytimeMode: true,
     lightPath: 'Sky ➡ AO ➡ AC',
-    m1CorrectionsEnable: Boolean(data.guideState.m1Input),
-    m2ComaEnable: data.guideState.m2Coma,
-    m2ComaM1CorrectionsSource: data.guideState.m1Input,
+    m1CorrectionsEnable: Boolean(data.m1Input),
+    m2ComaEnable: data.m2Coma,
+    m2ComaM1CorrectionsSource: data.m1Input,
     m2FocusEnable: false,
     m2FocusSource: 'OIWFS',
-    m2TipTiltEnable: data.guideState.m2Inputs ? data.guideState.m2Inputs.length : false,
+    m2TipTiltEnable: data.m2Inputs ? data.m2Inputs.length : false,
     m2TipTiltFocusLink: true,
-    m2TipTiltSource: data.guideState.m2Inputs ? (data.guideState.m2Inputs as string[]).join(',') : 'NONE',
+    m2TipTiltSource: data.m2Inputs ? (data.m2Inputs as string[]).join(',') : 'NONE',
     probeTracking: 'OI➡OI',
   };
 }

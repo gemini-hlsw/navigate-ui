@@ -1,9 +1,11 @@
 import imgUrl from '@assets/underconstruction.png';
-import { Button } from 'primereact/button';
-import { Dropdown } from 'primereact/dropdown';
-import { Checkbox } from 'primereact/checkbox';
+import { useGuideState } from '@gql/server/GuideState';
 import { useOiwfsObserve, useOiwfsStopObserve } from '@gql/server/WavefrontSensors';
-import { useState } from 'react';
+import { clsx } from 'clsx';
+import { Button } from 'primereact/button';
+import { Checkbox } from 'primereact/checkbox';
+import { Dropdown } from 'primereact/dropdown';
+import { useCallback, useState } from 'react';
 
 export default function WavefrontSensor({
   canEdit,
@@ -15,72 +17,16 @@ export default function WavefrontSensor({
   className?: string;
 }) {
   const [freq, setFreq] = useState(100);
-  const [observeState, setObserveState] = useState(false);
-  let observeButton;
-  const startObserve = useOiwfsObserve();
-  const stopObserve = useOiwfsStopObserve();
+
+  let observeButton: JSX.Element | undefined;
   if (wfs === 'OIWFS') {
-    if (observeState) {
-      observeButton = (
-        <Button
-          disabled={!canEdit}
-          style={{ gridArea: 'g13' }}
-          icon="pi pi-stop"
-          className="p-button-danger"
-          aria-label="Stop"
-          tooltip="Stop"
-          onClick={() =>
-            void stopObserve({
-              onCompleted() {
-                setObserveState(false);
-              },
-            })
-          }
-        />
-      );
-    } else {
-      observeButton = (
-        <Button
-          disabled={!canEdit}
-          style={{ gridArea: 'g13' }}
-          icon="pi pi-play"
-          aria-label="Start"
-          tooltip="Start"
-          onClick={() =>
-            void startObserve({
-              variables: { period: { milliseconds: (1 / freq) * 1000 } },
-              onCompleted() {
-                setObserveState(true);
-              },
-            })
-          }
-        />
-      );
-    }
+    observeButton = <OiwfsObserveButton freq={freq} canEdit={canEdit} />;
   } else if (wfs === 'PWFS1') {
     /* Show placeholder */
-    observeButton = (
-      <Button
-        className="under-construction"
-        disabled={!canEdit}
-        icon="pi pi-play"
-        style={{ gridArea: 'g13' }}
-        aria-label="Start"
-        tooltip="Start"
-      />
-    );
+    observeButton = <Pwfs1ObserveButton canEdit={canEdit} />;
   } else if (wfs === 'PWFS2') {
     /* Show placeholder */
-    observeButton = (
-      <Button
-        className="under-construction"
-        disabled={!canEdit}
-        icon="pi pi-play"
-        style={{ gridArea: 'g13' }}
-        aria-label="Start"
-        tooltip="Start"
-      />
-    );
+    observeButton = <Pwfs2ObserveButton canEdit={canEdit} />;
   }
 
   return (
@@ -113,5 +59,62 @@ export default function WavefrontSensor({
         <Button disabled={!canEdit} style={{ gridArea: 'g3', width: '97%' }} label="Autoadjust" />
       </div>
     </div>
+  );
+}
+
+function OiwfsObserveButton({ freq, canEdit }: { freq: number; canEdit: boolean }) {
+  const [startObserve, { loading: startObserveLoading }] = useOiwfsObserve();
+  const [stopObserve, { loading: stopObserveLoading }] = useOiwfsStopObserve();
+
+  const { data: guideStateData, loading: guideStateLoading } = useGuideState();
+  const observeState = guideStateData?.oiIntegrating;
+
+  const onClick = useCallback(
+    () =>
+      observeState
+        ? void stopObserve({})
+        : void startObserve({
+            variables: { period: { milliseconds: (1 / freq) * 1000 } },
+          }),
+    [freq, observeState],
+  );
+
+  return (
+    <Button
+      loading={guideStateLoading || startObserveLoading || stopObserveLoading}
+      disabled={!canEdit}
+      style={{ gridArea: 'g13' }}
+      icon={clsx('pi', observeState ? 'pi-stop' : 'pi-play')}
+      className={clsx(observeState && 'p-button-danger')}
+      aria-label={observeState ? 'Stop' : 'Start'}
+      tooltip={observeState ? 'Stop' : 'Start'}
+      onClick={onClick}
+    />
+  );
+}
+
+function Pwfs1ObserveButton({ canEdit }: { canEdit: boolean }) {
+  return (
+    <Button
+      className="under-construction"
+      disabled={!canEdit}
+      icon="pi pi-play"
+      style={{ gridArea: 'g13' }}
+      aria-label="Start"
+      tooltip="Start"
+    />
+  );
+}
+
+function Pwfs2ObserveButton({ canEdit }: { canEdit: boolean }) {
+  return (
+    <Button
+      className="under-construction"
+      disabled={!canEdit}
+      icon="pi pi-play"
+      style={{ gridArea: 'g13' }}
+      aria-label="Start"
+      tooltip="Start"
+    />
   );
 }
