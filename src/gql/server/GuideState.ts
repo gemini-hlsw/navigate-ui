@@ -1,4 +1,5 @@
-import { useMutation, useSubscription } from '@apollo/client';
+import { useMutation } from '@apollo/client';
+import { useQueryAndSubscription } from '@gql/use-query-and-subscription';
 import { graphql } from './gen';
 
 const GUIDE_STATE_SUBSCRIPTION = graphql(`
@@ -8,14 +9,25 @@ const GUIDE_STATE_SUBSCRIPTION = graphql(`
       m2Coma
       m1Input
       mountOffload
+      oiIntegrating
+    }
+  }
+`);
+
+const GUIDE_STATE_QUERY = graphql(`
+  query getGuideState {
+    guideState {
+      m2Inputs
+      m2Coma
+      m1Input
+      mountOffload
+      oiIntegrating
     }
   }
 `);
 
 export function useGuideState() {
-  const { data, loading } = useSubscription(GUIDE_STATE_SUBSCRIPTION);
-
-  return { data, loading };
+  return useQueryAndSubscription(GUIDE_STATE_QUERY, GUIDE_STATE_SUBSCRIPTION, 'guideState');
 }
 
 const GUIDE_ENABLE = graphql(`

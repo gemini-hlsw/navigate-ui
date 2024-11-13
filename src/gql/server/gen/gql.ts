@@ -16,7 +16,8 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
     "\n  mutation runSlew($slewOptions: SlewOptionsInput!, $config: TcsConfigInput!) {\n    slew(slewOptions: $slewOptions, config: $config) {\n      result\n    }\n  }\n": types.RunSlewDocument,
     "\n  subscription guidersQualityValues {\n    guidersQualityValues {\n      pwfs1 {\n        flux\n        centroidDetected\n      }\n      pwfs2 {\n        flux\n        centroidDetected\n      }\n      oiwfs {\n        flux\n        centroidDetected\n      }\n    }\n  }\n": types.GuidersQualityValuesDocument,
-    "\n  subscription guideState {\n    guideState {\n      m2Inputs\n      m2Coma\n      m1Input\n      mountOffload\n    }\n  }\n": types.GuideStateDocument,
+    "\n  subscription guideState {\n    guideState {\n      m2Inputs\n      m2Coma\n      m1Input\n      mountOffload\n      oiIntegrating\n    }\n  }\n": types.GuideStateDocument,
+    "\n  query getGuideState {\n    guideState {\n      m2Inputs\n      m2Coma\n      m1Input\n      mountOffload\n      oiIntegrating\n    }\n  }\n": types.GetGuideStateDocument,
     "\n  mutation guideEnable($config: GuideConfigurationInput!) {\n    guideEnable(config: $config) {\n      result\n      msg\n    }\n  }\n": types.GuideEnableDocument,
     "\n  mutation guideDisable {\n    guideDisable {\n      result\n      msg\n    }\n  }\n": types.GuideDisableDocument,
     "\n  subscription logMessage {\n    logMessage {\n      timestamp\n      level\n      thread\n      message\n    }\n  }\n": types.LogMessageDocument,
@@ -62,7 +63,11 @@ export function graphql(source: "\n  subscription guidersQualityValues {\n    gu
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  subscription guideState {\n    guideState {\n      m2Inputs\n      m2Coma\n      m1Input\n      mountOffload\n    }\n  }\n"): (typeof documents)["\n  subscription guideState {\n    guideState {\n      m2Inputs\n      m2Coma\n      m1Input\n      mountOffload\n    }\n  }\n"];
+export function graphql(source: "\n  subscription guideState {\n    guideState {\n      m2Inputs\n      m2Coma\n      m1Input\n      mountOffload\n      oiIntegrating\n    }\n  }\n"): (typeof documents)["\n  subscription guideState {\n    guideState {\n      m2Inputs\n      m2Coma\n      m1Input\n      mountOffload\n      oiIntegrating\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query getGuideState {\n    guideState {\n      m2Inputs\n      m2Coma\n      m1Input\n      mountOffload\n      oiIntegrating\n    }\n  }\n"): (typeof documents)["\n  query getGuideState {\n    guideState {\n      m2Inputs\n      m2Coma\n      m1Input\n      mountOffload\n      oiIntegrating\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
