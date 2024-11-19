@@ -21,6 +21,7 @@ export type Scalars = {
   /** Defines a unique ID for each Call for Proposals. */
   CallForProposalsId: { input: string; output: string; }
   ChronicleId: { input: string; output: string; }
+  ConfigurationRequestId: { input: any; output: any; }
   /** Dataset filename in standard format. */
   DatasetFilename: { input: string; output: string; }
   /** DatasetId id formatted as `d-[1-9a-f][0-9a-f]*` */
@@ -403,8 +404,6 @@ export type AtomRecord = {
   interval?: Maybe<TimestampInterval>;
   /** Sequence type. */
   sequenceType: SequenceType;
-  /** Number of valid steps required to complete this atom. */
-  stepCount: Scalars['NonNegShort']['output'];
   /** Recorded steps associated with this atom. */
   steps: StepRecordSelectResult;
   /** Visit in which this atom was executed. */
@@ -557,6 +556,19 @@ export type BandNormalizedSurfaceInput = {
   sed?: InputMaybe<UnnormalizedSedInput>;
 };
 
+/**
+ * CategorizedTime grouped with a ScienceBand.  A program may contain multiple
+ * observations in distinct bands.  Time accounting at the program level must
+ * distinguish time spent in observations of each of these bands.
+ */
+export type BandedTime = {
+  __typename?: 'BandedTime';
+  /** ScienceBand associated with the time, if any. */
+  band?: Maybe<ScienceBand>;
+  /** Time distributed across the program, partner, and non-charged categories. */
+  time: CategorizedTime;
+};
+
 /** Bias calibration step */
 export type Bias = StepConfig & {
   __typename?: 'Bias';
@@ -650,6 +662,8 @@ export type CallForProposals = {
   nonPartnerDeadline?: Maybe<Scalars['Timestamp']['output']>;
   /** Partners that may participate in this Call. */
   partners: Array<CallForProposalsPartner>;
+  /** Default proprietary period to use for propograms linked to this Call. */
+  proprietaryMonths: Scalars['NonNegInt']['output'];
   /**
    * The semester associated with the Call.  Some types may have multiple Calls
    * per semester.
@@ -732,6 +746,11 @@ export type CallForProposalsPropertiesInput = {
    * all partners.
    */
   partners?: InputMaybe<Array<CallForProposalsPartnerInput>>;
+  /**
+   * The default proprietary period for proposals linked to this call.  If not
+   * specified, the default period for the call type will be used.
+   */
+  proprietaryMonths?: InputMaybe<Scalars['NonNegInt']['input']>;
   /** Semester associated with the call. Required on create. */
   semester?: InputMaybe<Scalars['Semester']['input']>;
   /**
@@ -1018,6 +1037,83 @@ export type ConfigChangeEstimate = {
   name: Scalars['String']['output'];
 };
 
+export type Configuration = {
+  __typename?: 'Configuration';
+  conditions: ConfigurationConditions;
+  observingMode?: Maybe<ConfigurationObservingMode>;
+  referenceCoordinates?: Maybe<Coordinates>;
+};
+
+export type ConfigurationConditions = {
+  __typename?: 'ConfigurationConditions';
+  cloudExtinction: CloudExtinction;
+  imageQuality: ImageQuality;
+  skyBackground: SkyBackground;
+  waterVapor: WaterVapor;
+};
+
+export type ConfigurationGmosNorthLongSlit = {
+  __typename?: 'ConfigurationGmosNorthLongSlit';
+  grating: GmosNorthGrating;
+};
+
+export type ConfigurationGmosSouthLongSlit = {
+  __typename?: 'ConfigurationGmosSouthLongSlit';
+  grating: GmosSouthGrating;
+};
+
+export type ConfigurationObservingMode = {
+  __typename?: 'ConfigurationObservingMode';
+  gmosNorthLongSlit?: Maybe<ConfigurationGmosNorthLongSlit>;
+  gmosSouthLongSlit?: Maybe<ConfigurationGmosSouthLongSlit>;
+  instrument: Instrument;
+  mode: ObservingModeType;
+};
+
+export type ConfigurationRequest = {
+  __typename?: 'ConfigurationRequest';
+  configuration: Configuration;
+  id: Scalars['ConfigurationRequestId']['output'];
+  program: Program;
+  status: ConfigurationRequestStatus;
+};
+
+/** Event sent when a configuration request is created or updated */
+export type ConfigurationRequestEdit = {
+  __typename?: 'ConfigurationRequestEdit';
+  /** Edited configuration request, can be null if the value was deleted */
+  configurationRequest?: Maybe<ConfigurationRequest>;
+  /** The id of the edited configuration request */
+  configurationRequestId: Scalars['ConfigurationRequestId']['output'];
+  /** Type of edit */
+  editType: EditType;
+};
+
+export type ConfigurationRequestEditInput = {
+  /** Program ID */
+  programId?: InputMaybe<Scalars['ProgramId']['input']>;
+};
+
+/** Configuration request properties. */
+export type ConfigurationRequestProperties = {
+  status?: InputMaybe<ConfigurationRequestStatus>;
+};
+
+/** The matching configuration requests, limited to a maximum of 1000 entries. */
+export type ConfigurationRequestSelectResult = {
+  __typename?: 'ConfigurationRequestSelectResult';
+  /** `true` when there were additional matches that were not returned. */
+  hasMore: Scalars['Boolean']['output'];
+  /** Matching configuration requests up to the return size limit of 1000 */
+  matches: Array<ConfigurationRequest>;
+};
+
+export type ConfigurationRequestStatus =
+  | 'APPROVED'
+  | 'DENIED'
+  | 'REQUESTED'
+  | 'WITHDRAWN';
+
 export type ConstraintSet = {
   __typename?: 'ConstraintSet';
   /** Cloud extinction */
@@ -1160,6 +1256,10 @@ export type CreateCallForProposalsInput = {
 export type CreateCallForProposalsResult = {
   __typename?: 'CreateCallForProposalsResult';
   callForProposals: CallForProposals;
+};
+
+export type CreateConfigurationRequestInput = {
+  observationId?: InputMaybe<Scalars['ObservationId']['input']>;
 };
 
 /**
@@ -1699,6 +1799,8 @@ export type Execution = {
   digest?: Maybe<ExecutionDigest>;
   /** Events associated with the observation, across all visits. */
   events: ExecutionEventSelectResult;
+  /** Determines the execution state as a whole of this observation. */
+  state: ObservationExecutionState;
   /** Time accounting calculation for this observation. */
   timeCharge: CategorizedTime;
   /** Visits associated with the observation. */
@@ -2672,6 +2774,8 @@ export type GmosNorthStep = {
   observeClass: ObserveClass;
   /** The sequence step itself */
   stepConfig: StepConfig;
+  /** The telescope configuration at this step. */
+  telescopeConfig: TelescopeConfig;
 };
 
 /** GMOS Region Of Interest */
@@ -3128,6 +3232,8 @@ export type GmosSouthStep = {
   observeClass: ObserveClass;
   /** The sequence step itself */
   stepConfig: StepConfig;
+  /** The telescope configuration at this step. */
+  telescopeConfig: TelescopeConfig;
 };
 
 /** GMOS X Binning */
@@ -3147,6 +3253,50 @@ export type GmosYBinning =
   | 'ONE'
   /** GmosYBinning Two */
   | 'TWO';
+
+/** Gemini Observatory Archive properties for a particular program. */
+export type GoaProperties = {
+  __typename?: 'GoaProperties';
+  /**
+   * Whether the header (as well as the data itself) should remain private.  This
+   * property is applicable to science programs and defaults to false.
+   */
+  privateHeader: Scalars['Boolean']['output'];
+  /**
+   * How many months to withhold public access to the data.  This property is
+   * applicable to science programs, defaults to the proprietary period associated
+   * with the Call for Proposals if any; 0 months otherwise.
+   */
+  proprietaryMonths: Scalars['NonNegInt']['output'];
+  /**
+   * Whether the PI wishes to be notified when new data are received. This property
+   * is applicable to science programs and defaults to true.
+   */
+  shouldNotify: Scalars['Boolean']['output'];
+};
+
+/**
+ * Gemini Observatory Archive properties creation and editing input for a
+ * particular program.
+ */
+export type GoaPropertiesInput = {
+  /**
+   * Whether the header (as well as the data itself) should remain private.  This
+   * property is applicable to science programs and defaults to false.
+   */
+  privateHeader?: InputMaybe<Scalars['Boolean']['input']>;
+  /**
+   * How many months to withhold public access to the data.  This property is
+   * applicable to science programs, defaults to the proprietary period associated
+   * with the Call for Proposals if any; 0 months otherwise.
+   */
+  proprietaryMonths?: InputMaybe<Scalars['NonNegInt']['input']>;
+  /**
+   * Whether the PI wishes to be notified when new data are received. This property
+   * is applicable to science programs and defaults to true.
+   */
+  shouldNotify?: InputMaybe<Scalars['Boolean']['input']>;
+};
 
 /** A group of observations and other groups. */
 export type Group = {
@@ -3621,6 +3771,8 @@ export type Mutation = {
   cloneTarget: CloneTargetResult;
   /** Creates a Call for Proposals.  Requires staff access. */
   createCallForProposals: CreateCallForProposalsResult;
+  /** Create a configuration request. */
+  createConfigurationRequest: ConfigurationRequest;
   /** Creates a new observation according to provided parameters. */
   createGroup: CreateGroupResult;
   /** Creates a new observation according to provided parameters */
@@ -3660,6 +3812,11 @@ export type Mutation = {
   setAllocations: SetAllocationsResult;
   /** Set the name of the guide target for an observation. */
   setGuideTargetName: SetGuideTargetNameResult;
+  /**
+   * Sets the workflow state for the specified observation. The transition must be valid
+   * according to the current workflow. Returns the updated workflow.
+   */
+  setObservationWorkflowState?: Maybe<ObservationWorkflow>;
   /** Set the program reference. */
   setProgramReference: SetProgramReferenceResult;
   /** Set the proposal status. */
@@ -3676,6 +3833,8 @@ export type Mutation = {
   updateAsterisms: UpdateAsterismsResult;
   /** Update existing calls for proposals. */
   updateCallsForProposals: UpdateCallsForProposalsResult;
+  /** Update existing configuration requests. */
+  updateConfigurationRequests: UpdateConfigurationRequestsResult;
   updateDatasets: UpdateDatasetsResult;
   updateGroups: UpdateGroupsResult;
   updateObsAttachments: UpdateObsAttachmentsResult;
@@ -3746,6 +3905,11 @@ export type MutationCloneTargetArgs = {
 
 export type MutationCreateCallForProposalsArgs = {
   input: CreateCallForProposalsInput;
+};
+
+
+export type MutationCreateConfigurationRequestArgs = {
+  input: CreateConfigurationRequestInput;
 };
 
 
@@ -3839,6 +4003,11 @@ export type MutationSetGuideTargetNameArgs = {
 };
 
 
+export type MutationSetObservationWorkflowStateArgs = {
+  input: SetObservationWorkflowStateInput;
+};
+
+
 export type MutationSetProgramReferenceArgs = {
   input: SetProgramReferenceInput;
 };
@@ -3861,6 +4030,11 @@ export type MutationUpdateAsterismsArgs = {
 
 export type MutationUpdateCallsForProposalsArgs = {
   input: UpdateCallsForProposalsInput;
+};
+
+
+export type MutationUpdateConfigurationRequestsArgs = {
+  input: UpdateConfigurationRequestsInput;
 };
 
 
@@ -3999,10 +4173,12 @@ export type ObsStatus =
 
 export type Observation = {
   __typename?: 'Observation';
-  /** Observation operational status */
-  activeStatus: ObsActiveStatus;
   /** The Calibration role of this observation */
   calibrationRole?: Maybe<CalibrationRole>;
+  /** Parameters relevant to approved configurations. */
+  configuration: Configuration;
+  /** Program configuration requests applicable to this observation. */
+  configurationRequests: Array<ConfigurationRequest>;
   /** The constraint set for the observation */
   constraintSet: ConstraintSet;
   /** Execution sequence and runtime artifacts */
@@ -4056,8 +4232,6 @@ export type Observation = {
   scienceBand?: Maybe<ScienceBand>;
   /** The top level science requirements */
   scienceRequirements: ScienceRequirements;
-  /** Observation status */
-  status: ObsStatus;
   /** User-supplied observation-identifying detail information */
   subtitle?: Maybe<Scalars['NonEmptyString']['output']>;
   /** The observation's target(s) */
@@ -4066,8 +4240,7 @@ export type Observation = {
   timingWindows: Array<TimingWindow>;
   /** Observation title generated from id and targets */
   title: Scalars['NonEmptyString']['output'];
-  /** A list of observation validation problems */
-  validations: Array<ObservationValidation>;
+  workflow: ObservationWorkflow;
 };
 
 /** Event sent when a new object is created or updated */
@@ -4086,10 +4259,21 @@ export type ObservationEditInput = {
   programId?: InputMaybe<Scalars['ProgramId']['input']>;
 };
 
+export type ObservationExecutionState =
+  /** No more science data is expected for this observation. */
+  | 'COMPLETED'
+  /**
+   * The observation isn't sufficiently defined, or there is a problem that
+   * must first be resolved.
+   */
+  | 'NOT_DEFINED'
+  /** No execution visit has been recorded for this observation. */
+  | 'NOT_STARTED'
+  /** At least one visit was made for this observation, but it is not yet complete. */
+  | 'ONGOING';
+
 /** Observation properties */
 export type ObservationPropertiesInput = {
-  /** The observation active status will default to Active if not specified when an observation is created and may be edited but not deleted */
-  activeStatus?: InputMaybe<ObsActiveStatus>;
   /** The constraintSet defaults to standard values if not specified on creation, and may be edited but not deleted */
   constraintSet?: InputMaybe<ConstraintSetInput>;
   /** Whether the observation is considered deleted (defaults to PRESENT) but may be edited */
@@ -4113,8 +4297,6 @@ export type ObservationPropertiesInput = {
   scienceBand?: InputMaybe<ScienceBand>;
   /** The scienceRequirements defaults to spectroscopy if not specified on creation, and may be edited but not deleted */
   scienceRequirements?: InputMaybe<ScienceRequirementsInput>;
-  /** The observation status will default to New if not specified when an observation is created and may be edited but not deleted */
-  status?: InputMaybe<ObsStatus>;
   /** Subtitle adds additional detail to the target-based observation title, and is both optional and nullable */
   subtitle?: InputMaybe<Scalars['NonEmptyString']['input']>;
   /** The targetEnvironment defaults to empty if not specified on creation, and may be edited but not deleted */
@@ -4169,8 +4351,28 @@ export type ObservationValidationCode =
   | 'CFP_ERROR'
   /** The observation is not configured correctly and cannot be executed */
   | 'CONFIGURATION_ERROR'
+  | 'CONFIG_REQUEST_DENIED'
+  | 'CONFIG_REQUEST_NOT_REQUESTED'
+  | 'CONFIG_REQUEST_PENDING'
+  | 'CONFIG_REQUEST_UNAVAILABLE'
   /** The observation does not have valid ITC results. */
   | 'ITC_ERROR';
+
+export type ObservationWorkflow = {
+  __typename?: 'ObservationWorkflow';
+  state: ObservationWorkflowState;
+  validTransitions: Array<ObservationWorkflowState>;
+  validationErrors: Array<ObservationValidation>;
+};
+
+export type ObservationWorkflowState =
+  | 'COMPLETED'
+  | 'DEFINED'
+  | 'INACTIVE'
+  | 'ONGOING'
+  | 'READY'
+  | 'UNAPPROVED'
+  | 'UNDEFINED';
 
 /**
  * Each step in a sequence is tagged with an observe class which identifies its
@@ -4470,8 +4672,12 @@ export type Program = {
   allocations: Array<Allocation>;
   /** Calibration role of the program */
   calibrationRole?: Maybe<CalibrationRole>;
+  /** All configuration requests associated with the program. */
+  configurationRequests: ConfigurationRequestSelectResult;
   /** DELETED or PRESENT */
   existence: Existence;
+  /** Observatory archive properties related to this program. */
+  goa: GoaProperties;
   /** Top-level group elements (observations and sub-groups) in the program. */
   groupElements: Array<GroupElement>;
   /** Program ID */
@@ -4493,7 +4699,7 @@ export type Program = {
   /** Program reference, if any. */
   reference?: Maybe<ProgramReference>;
   /** Program-wide time charge, summing all corrected observation time charges. */
-  timeCharge: CategorizedTime;
+  timeCharge: Array<BandedTime>;
   /**
    * Remaining execution time estimate range, assuming it can be calculated.  In
    * order for an observation to have an estimate, it must be fully defined such
@@ -4513,6 +4719,12 @@ export type Program = {
 
 export type ProgramAllGroupElementsArgs = {
   includeDeleted?: Scalars['Boolean']['input'];
+};
+
+
+export type ProgramConfigurationRequestsArgs = {
+  LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
+  OFFSET?: InputMaybe<Scalars['ConfigurationRequestId']['input']>;
 };
 
 
@@ -4546,6 +4758,11 @@ export type ProgramEditInput = {
 export type ProgramPropertiesInput = {
   /** Whether the program is considered deleted (defaults to PRESENT) but may be edited */
   existence?: InputMaybe<Existence>;
+  /**
+   * Sets the GOA properties for this program.  If not specified on create,
+   * default values are used.
+   */
+  goa?: InputMaybe<GoaPropertiesInput>;
   /** The program name, which is both optional and nullable */
   name?: InputMaybe<Scalars['NonEmptyString']['input']>;
 };
@@ -4672,8 +4889,10 @@ export type ProgramUserRole =
   | 'COI_RO'
   /** Primary Investigator */
   | 'PI'
-  /** Staff/Partner Support */
-  | 'SUPPORT';
+  /** Staff/Partner Primary Support */
+  | 'SUPPORT_PRIMARY'
+  /** Staff/Partner Secondary Support */
+  | 'SUPPORT_SECONDARY';
 
 /** The matching program user results, limited to a maximum of 1000 entries. */
 export type ProgramUserSelectResult = {
@@ -5113,12 +5332,15 @@ export type RadialVelocityInput = {
   metersPerSecond?: InputMaybe<Scalars['BigDecimal']['input']>;
 };
 
-/** Input parameters for creating a new atom record */
+/**
+ * Input parameters for creating a new atom record.
+ * (stepCount is deprecated and will be ignored)
+ */
 export type RecordAtomInput = {
   generatedId?: InputMaybe<Scalars['AtomId']['input']>;
   instrument: Instrument;
   sequenceType: SequenceType;
-  stepCount: Scalars['NonNegShort']['input'];
+  stepCount?: InputMaybe<Scalars['NonNegShort']['input']>;
   visitId: Scalars['VisitId']['input'];
 };
 
@@ -5155,6 +5377,7 @@ export type RecordGmosNorthStepInput = {
   gmosNorth: GmosNorthDynamicInput;
   observeClass: ObserveClass;
   stepConfig: StepConfigInput;
+  telescopeConfig?: InputMaybe<TelescopeConfigInput>;
 };
 
 /** The result of recording a GmosNorth step. */
@@ -5184,6 +5407,7 @@ export type RecordGmosSouthStepInput = {
   gmosSouth: GmosSouthDynamicInput;
   observeClass: ObserveClass;
   stepConfig: StepConfigInput;
+  telescopeConfig?: InputMaybe<TelescopeConfigInput>;
 };
 
 /** The result of recording a GmosSouth step. */
@@ -5254,10 +5478,6 @@ export type RightAscensionInput = {
 /** Science step */
 export type Science = StepConfig & {
   __typename?: 'Science';
-  /** Guide State (whether guiding is enabled for this step) */
-  guiding: GuideState;
-  /** Offset */
-  offset: Offset;
   /** Step type is always SCIENCE. */
   stepType: StepType;
 };
@@ -5437,6 +5657,11 @@ export type SetGuideTargetNameInput = {
 export type SetGuideTargetNameResult = {
   __typename?: 'SetGuideTargetNameResult';
   observation?: Maybe<Observation>;
+};
+
+export type SetObservationWorkflowStateInput = {
+  observationId: Scalars['ObservationId']['input'];
+  state: ObservationWorkflowState;
 };
 
 /**
@@ -5881,17 +6106,9 @@ export type StepConfigInput = {
   /** GCAL step creation option */
   gcal?: InputMaybe<StepConfigGcalInput>;
   /** Science step creation option */
-  science?: InputMaybe<StepConfigScienceInput>;
+  science?: InputMaybe<Scalars['Boolean']['input']>;
   /** Smart gcal creation option */
   smartGcal?: InputMaybe<StepConfigSmartGcalInput>;
-};
-
-/** Science step creation input */
-export type StepConfigScienceInput = {
-  /** Whether guiding is enabled for this step (defaults to 'ENABLED'). */
-  guiding?: InputMaybe<GuideState>;
-  /** offset position */
-  offset: OffsetInput;
 };
 
 /** SmartGcal step creation input */
@@ -6018,6 +6235,8 @@ export type StepRecord = {
    * instrument-specific 'StepRecord' implementation.
    */
   stepConfig: StepConfig;
+  /** The telescope configuration for this step. */
+  telescopeConfig: TelescopeConfig;
 };
 
 
@@ -6077,6 +6296,7 @@ export type StepType =
 
 export type Subscription = {
   __typename?: 'Subscription';
+  configurationRequestEdit: ConfigurationRequestEdit;
   /**
    * Subscribes to an event that is generated whenever a group is
    * created or updated.  If a group id is provided, the event is only
@@ -6107,6 +6327,11 @@ export type Subscription = {
    * that program.
    */
   targetEdit: TargetEdit;
+};
+
+
+export type SubscriptionConfigurationRequestEditArgs = {
+  input?: InputMaybe<ConfigurationRequestEditInput>;
 };
 
 
@@ -6242,10 +6467,9 @@ export type TargetEdit = {
   __typename?: 'TargetEdit';
   /** Type of edit */
   editType: EditType;
-  /** @deprecated id is no longer computed; a constant value is returned */
-  id: Scalars['Long']['output'];
+  targetId: Scalars['TargetId']['output'];
   /** Edited object */
-  value: Target;
+  value?: Maybe<Target>;
 };
 
 export type TargetEditInput = {
@@ -6259,6 +6483,8 @@ export type TargetEnvironment = {
   __typename?: 'TargetEnvironment';
   /** All the observation's science targets, if any */
   asterism: Array<Target>;
+  /** Explicit (if defined) or computed base position at the specified time, if known. */
+  basePosition?: Maybe<Coordinates>;
   /** When set, overrides the default base position of the target group */
   explicitBase?: Maybe<Coordinates>;
   /** First, perhaps only, science target in the asterism */
@@ -6290,6 +6516,11 @@ export type TargetEnvironment = {
 
 export type TargetEnvironmentAsterismArgs = {
   includeDeleted?: Scalars['Boolean']['input'];
+};
+
+
+export type TargetEnvironmentBasePositionArgs = {
+  observationTime: Scalars['Timestamp']['input'];
 };
 
 
@@ -6383,6 +6614,22 @@ export type TargetSelectResult = {
   hasMore: Scalars['Boolean']['output'];
   /** Matching targets up to the return size limit of 1000 */
   matches: Array<Target>;
+};
+
+export type TelescopeConfig = {
+  __typename?: 'TelescopeConfig';
+  /** Guide State (whether guiding is enabled for this step) */
+  guiding: GuideState;
+  /** Offset */
+  offset: Offset;
+};
+
+/** Science step creation input */
+export type TelescopeConfigInput = {
+  /** Whether guiding is enabled for this step (defaults to 'ENABLED'). */
+  guiding?: InputMaybe<GuideState>;
+  /** Offset position, which defaults to (0, 0) arcsec. */
+  offset?: InputMaybe<OffsetInput>;
 };
 
 /**
@@ -6787,6 +7034,25 @@ export type UpdateCallsForProposalsResult = {
   callsForProposals: Array<CallForProposals>;
   /** `true` when there were additional edits that were not returned. */
   hasMore: Scalars['Boolean']['output'];
+};
+
+/** ConfigurationRequest selection and update description.  Use `SET` to specify the changes, `WHERE` to select the requests to update, and `LIMIT` to control the size of the return value. */
+export type UpdateConfigurationRequestsInput = {
+  /** Caps the number of results returned to the given value (if additional observations match the WHERE clause they will be updated but not returned). */
+  LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
+  /** Describes the observation values to modify. */
+  SET: ConfigurationRequestProperties;
+  /** Filters the observations to be updated according to those that match the given constraints. */
+  WHERE?: InputMaybe<WhereConfigurationRequest>;
+};
+
+/** The result of updating the selected observations, up to `LIMIT` or the maximum of (1000).  If `hasMore` is true, additional observations were modified and not included here. */
+export type UpdateConfigurationRequestsResult = {
+  __typename?: 'UpdateConfigurationRequestsResult';
+  /** `true` when there were additional edits that were not returned. */
+  hasMore: Scalars['Boolean']['output'];
+  /** The edited observations, up to the specified LIMIT or the default maximum of 1000. */
+  requests: Array<ConfigurationRequest>;
 };
 
 /** Dataset selection and update description. Use `SET` to specify the changes, `WHERE` to select the datasets to update, and `LIMIT` to control the size of the return value. */
@@ -7217,6 +7483,22 @@ export type WhereCallForProposals = {
   type?: InputMaybe<WhereEqCallForProposalsType>;
 };
 
+/** Configuration request filter options.  All specified items must match. */
+export type WhereConfigurationRequest = {
+  /** A list of nested filters that all must match in order for the AND group as a whole to match. */
+  AND?: InputMaybe<Array<WhereConfigurationRequest>>;
+  /** A nested filter that must not match in order for the NOT itself to match. */
+  NOT?: InputMaybe<WhereConfigurationRequest>;
+  /** A list of nested filters where any one match causes the entire OR group as a whole to match. */
+  OR?: InputMaybe<Array<WhereConfigurationRequest>>;
+  /** Matches the configuration request id. */
+  id?: InputMaybe<WhereOrderConfigurationRequestId>;
+  /** Matches the associated program. */
+  program?: InputMaybe<WhereProgram>;
+  /** Matches the configuration request status. */
+  status?: InputMaybe<WhereOrderConfigurationRequestStatus>;
+};
+
 /** Dataset filter options.  All specified items must match. */
 export type WhereDataset = {
   /** A list of nested dataset filters that all must match in order for the AND group as a whole to match. */
@@ -7580,8 +7862,6 @@ export type WhereObservation = {
   NOT?: InputMaybe<WhereObservation>;
   /** A list of nested observation filters where any one match causes the entire OR group as a whole to match. */
   OR?: InputMaybe<Array<WhereObservation>>;
-  /** Matches the observation active status. */
-  activeStatus?: InputMaybe<WhereOrderObsActiveStatus>;
   /** Matches the observation id. */
   id?: InputMaybe<WhereOrderObservationId>;
   /** Matches the associated program. */
@@ -7590,8 +7870,6 @@ export type WhereObservation = {
   reference?: InputMaybe<WhereObservationReference>;
   /** Matches the observation science band. */
   scienceBand?: InputMaybe<WhereOptionOrderScienceBand>;
-  /** Matches the observation status. */
-  status?: InputMaybe<WhereOrderObsStatus>;
   /** Matches the subtitle of the observation. */
   subtitle?: InputMaybe<WhereOptionString>;
 };
@@ -7840,6 +8118,54 @@ export type WhereOrderCallForProposalsId = {
  * criteria must match, but usually only one is selected.  E.g., 'GT = 2'
  * for an integer property will match when the value is 3 or more.
  */
+export type WhereOrderConfigurationRequestId = {
+  /** Matches if the property is exactly the supplied value. */
+  EQ?: InputMaybe<Scalars['ConfigurationRequestId']['input']>;
+  /** Matches if the property is ordered after (>) the supplied value. */
+  GT?: InputMaybe<Scalars['ConfigurationRequestId']['input']>;
+  /** Matches if the property is ordered after or equal (>=) the supplied value. */
+  GTE?: InputMaybe<Scalars['ConfigurationRequestId']['input']>;
+  /** Matches if the property value is any of the supplied options. */
+  IN?: InputMaybe<Array<Scalars['ConfigurationRequestId']['input']>>;
+  /** Matches if the property is ordered before (<) the supplied value. */
+  LT?: InputMaybe<Scalars['ConfigurationRequestId']['input']>;
+  /** Matches if the property is ordered before or equal (<=) the supplied value. */
+  LTE?: InputMaybe<Scalars['ConfigurationRequestId']['input']>;
+  /** Matches if the property is not the supplied value. */
+  NEQ?: InputMaybe<Scalars['ConfigurationRequestId']['input']>;
+  /** Matches if the property value is none of the supplied values. */
+  NIN?: InputMaybe<Array<Scalars['ConfigurationRequestId']['input']>>;
+};
+
+/**
+ * Filters on equality or order comparisons of the property.  All supplied
+ * criteria must match, but usually only one is selected.  E.g., 'GT = 2'
+ * for an integer property will match when the value is 3 or more.
+ */
+export type WhereOrderConfigurationRequestStatus = {
+  /** Matches if the property is exactly the supplied value. */
+  EQ?: InputMaybe<ConfigurationRequestStatus>;
+  /** Matches if the property is ordered after (>) the supplied value. */
+  GT?: InputMaybe<ConfigurationRequestStatus>;
+  /** Matches if the property is ordered after or equal (>=) the supplied value. */
+  GTE?: InputMaybe<ConfigurationRequestStatus>;
+  /** Matches if the property value is any of the supplied options. */
+  IN?: InputMaybe<Array<ConfigurationRequestStatus>>;
+  /** Matches if the property is ordered before (<) the supplied value. */
+  LT?: InputMaybe<ConfigurationRequestStatus>;
+  /** Matches if the property is ordered before or equal (<=) the supplied value. */
+  LTE?: InputMaybe<ConfigurationRequestStatus>;
+  /** Matches if the property is not the supplied value. */
+  NEQ?: InputMaybe<ConfigurationRequestStatus>;
+  /** Matches if the property value is none of the supplied values. */
+  NIN?: InputMaybe<Array<ConfigurationRequestStatus>>;
+};
+
+/**
+ * Filters on equality or order comparisons of the property.  All supplied
+ * criteria must match, but usually only one is selected.  E.g., 'GT = 2'
+ * for an integer property will match when the value is 3 or more.
+ */
 export type WhereOrderDatasetId = {
   /** Matches if the property is exactly the supplied value. */
   EQ?: InputMaybe<Scalars['DatasetId']['input']>;
@@ -8001,30 +8327,6 @@ export type WhereOrderLong = {
  * criteria must match, but usually only one is selected.  E.g., 'GT = 2'
  * for an integer property will match when the value is 3 or more.
  */
-export type WhereOrderObsActiveStatus = {
-  /** Matches if the property is exactly the supplied value. */
-  EQ?: InputMaybe<ObsActiveStatus>;
-  /** Matches if the property is ordered after (>) the supplied value. */
-  GT?: InputMaybe<ObsActiveStatus>;
-  /** Matches if the property is ordered after or equal (>=) the supplied value. */
-  GTE?: InputMaybe<ObsActiveStatus>;
-  /** Matches if the property value is any of the supplied options. */
-  IN?: InputMaybe<Array<ObsActiveStatus>>;
-  /** Matches if the property is ordered before (<) the supplied value. */
-  LT?: InputMaybe<ObsActiveStatus>;
-  /** Matches if the property is ordered before or equal (<=) the supplied value. */
-  LTE?: InputMaybe<ObsActiveStatus>;
-  /** Matches if the property is not the supplied value. */
-  NEQ?: InputMaybe<ObsActiveStatus>;
-  /** Matches if the property value is none of the supplied values. */
-  NIN?: InputMaybe<Array<ObsActiveStatus>>;
-};
-
-/**
- * Filters on equality or order comparisons of the property.  All supplied
- * criteria must match, but usually only one is selected.  E.g., 'GT = 2'
- * for an integer property will match when the value is 3 or more.
- */
 export type WhereOrderObsAttachmentId = {
   /** Matches if the property is exactly the supplied value. */
   EQ?: InputMaybe<Scalars['ObsAttachmentId']['input']>;
@@ -8042,30 +8344,6 @@ export type WhereOrderObsAttachmentId = {
   NEQ?: InputMaybe<Scalars['ObsAttachmentId']['input']>;
   /** Matches if the property value is none of the supplied values. */
   NIN?: InputMaybe<Array<Scalars['ObsAttachmentId']['input']>>;
-};
-
-/**
- * Filters on equality or order comparisons of the property.  All supplied
- * criteria must match, but usually only one is selected.  E.g., 'GT = 2'
- * for an integer property will match when the value is 3 or more.
- */
-export type WhereOrderObsStatus = {
-  /** Matches if the property is exactly the supplied value. */
-  EQ?: InputMaybe<ObsStatus>;
-  /** Matches if the property is ordered after (>) the supplied value. */
-  GT?: InputMaybe<ObsStatus>;
-  /** Matches if the property is ordered after or equal (>=) the supplied value. */
-  GTE?: InputMaybe<ObsStatus>;
-  /** Matches if the property value is any of the supplied options. */
-  IN?: InputMaybe<Array<ObsStatus>>;
-  /** Matches if the property is ordered before (<) the supplied value. */
-  LT?: InputMaybe<ObsStatus>;
-  /** Matches if the property is ordered before or equal (<=) the supplied value. */
-  LTE?: InputMaybe<ObsStatus>;
-  /** Matches if the property is not the supplied value. */
-  NEQ?: InputMaybe<ObsStatus>;
-  /** Matches if the property value is none of the supplied values. */
-  NIN?: InputMaybe<Array<ObsStatus>>;
 };
 
 /**

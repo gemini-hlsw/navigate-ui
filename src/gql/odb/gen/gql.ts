@@ -11,6 +11,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * 3. It does not support dead code elimination, so it will add unused operations.
  *
  * Therefore it is highly recommended to use the babel or swc plugin for production.
+ * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 const documents = {
     "\n  query getObservations {\n    observations {\n      matches {\n        id\n        existence\n        title\n        subtitle\n        instrument\n        # execution {\n        #   state\n        # }\n        program {\n          id\n          existence\n          name\n          proposal {\n            title\n          }\n          pi {\n            user {\n              orcidGivenName\n              orcidFamilyName\n            }\n          }\n          users {\n            user {\n              serviceName\n            }\n          }\n        }\n        targetEnvironment {\n          firstScienceTarget {\n            id\n            existence\n            name\n            sidereal {\n              epoch\n              ra {\n                hms\n                degrees\n              }\n              dec {\n                dms\n                degrees\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n": types.GetObservationsDocument,
