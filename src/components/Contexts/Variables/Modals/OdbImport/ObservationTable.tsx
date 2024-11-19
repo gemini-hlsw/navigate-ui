@@ -52,7 +52,9 @@ export function ObservationTable({
   return (
     <div className="target-table">
       <DataTable
-        value={(observations_list ?? []).filter((el) => ['ONGOING', 'NOT_STARTED'].includes(el.execution.state))}
+        // Temporarily remove this filter, until odb is updated
+        // value={(observations_list ?? []).filter((el) => ['ONGOING', 'NOT_STARTED'].includes(el.execution.state))}
+        value={observations_list}
         paginator
         selectionMode="single"
         selection={selectedObservation}
