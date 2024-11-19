@@ -11,9 +11,9 @@ const GET_OBSERVATIONS = graphql(`
         title
         subtitle
         instrument
-        execution {
-          state
-        }
+        # execution {
+        #   state
+        # }
         program {
           id
           existence
