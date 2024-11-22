@@ -26,9 +26,9 @@ export default function Navbar() {
 
   function userSession() {
     if (isLoggedIn) {
-      void signout();
+      return signout();
     } else {
-      navigate('/login');
+      return navigate('/login');
     }
   }
 
