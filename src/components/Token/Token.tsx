@@ -29,7 +29,7 @@ export default function Token() {
           className=" p-button-success"
           onClick={() => {
             setOdbToken(auxOdbToken);
-            navigate('/');
+            void navigate('/');
           }}
         />
       </div>
