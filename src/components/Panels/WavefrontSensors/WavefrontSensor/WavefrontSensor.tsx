@@ -67,16 +67,16 @@ function OiwfsObserveButton({ freq, canEdit }: { freq: number; canEdit: boolean 
   const [stopObserve, { loading: stopObserveLoading }] = useOiwfsStopObserve();
 
   const { data: guideStateData, loading: guideStateLoading } = useGuideState();
-  const observeState = guideStateData?.oiIntegrating;
+  const integrating = guideStateData?.oiIntegrating;
 
   const onClick = useCallback(
     () =>
-      observeState
+      integrating
         ? void stopObserve({})
         : void startObserve({
             variables: { period: { milliseconds: (1 / freq) * 1000 } },
           }),
-    [freq, observeState],
+    [freq, integrating],
   );
 
   return (
@@ -84,10 +84,10 @@ function OiwfsObserveButton({ freq, canEdit }: { freq: number; canEdit: boolean 
       loading={guideStateLoading || startObserveLoading || stopObserveLoading}
       disabled={!canEdit}
       style={{ gridArea: 'g13' }}
-      icon={clsx('pi', observeState ? 'pi-stop' : 'pi-play')}
-      className={clsx(observeState && 'p-button-danger')}
-      aria-label={observeState ? 'Stop' : 'Start'}
-      tooltip={observeState ? 'Stop' : 'Start'}
+      icon={clsx('pi', integrating ? 'pi-stop' : 'pi-play')}
+      className={clsx(integrating && 'p-button-danger')}
+      aria-label={integrating ? 'Stop' : 'Start'}
+      tooltip={integrating ? 'Stop' : 'Start'}
       onClick={onClick}
     />
   );

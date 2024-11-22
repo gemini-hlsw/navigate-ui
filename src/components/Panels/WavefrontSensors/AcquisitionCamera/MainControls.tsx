@@ -52,7 +52,7 @@ export default function MainControls({ canEdit }: { canEdit: boolean }) {
   }
 
   return (
-    <div className="main-controls">
+    <div className="main-controls under-construction">
       <div className="top">
         <span style={{ alignSelf: 'center', gridArea: 'g11' }}>Handset</span>
         <Dropdown disabled={!canEdit} style={{ gridArea: 'g12' }} value={2} options={[{ label: 'a', value: 'a' }]} />
