@@ -204,10 +204,7 @@
         padding: 4px;
         display: flex;
         gap: 4px;
-        flex-direction: row;
-        > button {
-          width: 40px;
-        }
+        flex-direction: column;
       }
     }
 

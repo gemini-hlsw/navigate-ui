@@ -1,0 +1,15 @@
+import { useMutation } from '@apollo/client';
+import { graphql } from './gen';
+
+const LIGHTPATH_CONFIG_MUTATION = graphql(`
+  mutation lightpathConfig($from: LightSource!, $to: LightSink!) {
+    lightpathConfig(from: $from, to: $to) {
+      result
+      msg
+    }
+  }
+`);
+
+export function useLightpathConfig() {
+  return useMutation(LIGHTPATH_CONFIG_MUTATION);
+}
