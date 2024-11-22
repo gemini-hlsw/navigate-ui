@@ -10,6 +10,7 @@ const GUIDE_STATE_SUBSCRIPTION = graphql(`
       m1Input
       mountOffload
       oiIntegrating
+      acIntegrating
     }
   }
 `);
@@ -22,6 +23,7 @@ const GUIDE_STATE_QUERY = graphql(`
       m1Input
       mountOffload
       oiIntegrating
+      acIntegrating
     }
   }
 `);

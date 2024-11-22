@@ -111,6 +111,8 @@ export type GuideConfigurationInput = {
 
 export type GuideConfigurationState = {
   __typename?: 'GuideConfigurationState';
+  /** Is the AC/HRWFS integrating? */
+  acIntegrating: Scalars['Boolean']['output'];
   /** M1 correction source. If it is not defined it means no M1 correction */
   m1Input?: Maybe<M1CorrectionSource>;
   /** M2 coma correction enabled. Only valid if m2Inputs and m1Input are defined */
@@ -184,6 +186,29 @@ export type InstrumentSpecificsInput = {
   origin: PointOriginInput;
 };
 
+export type LightSink =
+  | 'AC'
+  | 'F2'
+  | 'GHOST'
+  | 'GMOS'
+  | 'GMOS_IFU'
+  | 'GNIRS'
+  | 'GPI'
+  | 'GSAOI'
+  | 'HR'
+  | 'IGRINS2'
+  | 'NIFS'
+  | 'NIRI_F6'
+  | 'NIRI_F14'
+  | 'NIRI_F32'
+  | 'PHOENIX'
+  | 'VISITOR';
+
+export type LightSource =
+  | 'AO'
+  | 'GCAL'
+  | 'SKY';
+
 export type LogLevel =
   | 'DEBUG'
   | 'ERROR'
@@ -215,6 +240,7 @@ export type Mutation = {
   guideDisable: OperationOutcome;
   guideEnable: OperationOutcome;
   instrumentSpecifics: OperationOutcome;
+  lightpathConfig: OperationOutcome;
   m1LoadAoFigure: OperationOutcome;
   m1LoadNonAoFigure: OperationOutcome;
   m1OpenLoopOff: OperationOutcome;
@@ -253,6 +279,12 @@ export type MutationGuideEnableArgs = {
 
 export type MutationInstrumentSpecificsArgs = {
   instrumentSpecificsParams: InstrumentSpecificsInput;
+};
+
+
+export type MutationLightpathConfigArgs = {
+  from?: InputMaybe<LightSource>;
+  to?: InputMaybe<LightSink>;
 };
 
 
@@ -570,6 +602,18 @@ export type WavelengthInput = {
   picometers?: InputMaybe<Scalars['PosInt']['input']>;
 };
 
+export type AcObserveMutationVariables = Exact<{
+  period: TimeSpanInput;
+}>;
+
+
+export type AcObserveMutation = { __typename?: 'Mutation', acObserve: { __typename?: 'OperationOutcome', result: OperationResult, msg?: string | null } };
+
+export type AcStopObserveMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AcStopObserveMutation = { __typename?: 'Mutation', acStopObserve: { __typename?: 'OperationOutcome', result: OperationResult, msg?: string | null } };
+
 export type RunSlewMutationVariables = Exact<{
   slewOptions: SlewOptionsInput;
   config: TcsConfigInput;
@@ -586,12 +630,12 @@ export type GuidersQualityValuesSubscription = { __typename?: 'Subscription', gu
 export type GuideStateSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GuideStateSubscription = { __typename?: 'Subscription', guideState: { __typename?: 'GuideConfigurationState', m2Inputs?: Array<TipTiltSource> | null, m2Coma?: boolean | null, m1Input?: M1CorrectionSource | null, mountOffload: boolean, oiIntegrating: boolean } };
+export type GuideStateSubscription = { __typename?: 'Subscription', guideState: { __typename?: 'GuideConfigurationState', m2Inputs?: Array<TipTiltSource> | null, m2Coma?: boolean | null, m1Input?: M1CorrectionSource | null, mountOffload: boolean, oiIntegrating: boolean, acIntegrating: boolean } };
 
 export type GetGuideStateQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetGuideStateQuery = { __typename?: 'Query', guideState: { __typename?: 'GuideConfigurationState', m2Inputs?: Array<TipTiltSource> | null, m2Coma?: boolean | null, m1Input?: M1CorrectionSource | null, mountOffload: boolean, oiIntegrating: boolean } };
+export type GetGuideStateQuery = { __typename?: 'Query', guideState: { __typename?: 'GuideConfigurationState', m2Inputs?: Array<TipTiltSource> | null, m2Coma?: boolean | null, m1Input?: M1CorrectionSource | null, mountOffload: boolean, oiIntegrating: boolean, acIntegrating: boolean } };
 
 export type GuideEnableMutationVariables = Exact<{
   config: GuideConfigurationInput;
@@ -700,10 +744,12 @@ export type OiwfsParkMutationVariables = Exact<{ [key: string]: never; }>;
 export type OiwfsParkMutation = { __typename?: 'Mutation', oiwfsPark: { __typename?: 'OperationOutcome', result: OperationResult, msg?: string | null } };
 
 
+export const AcObserveDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"acObserve"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"period"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"TimeSpanInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"acObserve"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"period"},"value":{"kind":"Variable","name":{"kind":"Name","value":"period"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}},{"kind":"Field","name":{"kind":"Name","value":"msg"}}]}}]}}]} as unknown as DocumentNode<AcObserveMutation, AcObserveMutationVariables>;
+export const AcStopObserveDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"acStopObserve"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"acStopObserve"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}},{"kind":"Field","name":{"kind":"Name","value":"msg"}}]}}]}}]} as unknown as DocumentNode<AcStopObserveMutation, AcStopObserveMutationVariables>;
 export const RunSlewDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"runSlew"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"slewOptions"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SlewOptionsInput"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"config"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"TcsConfigInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"slew"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"slewOptions"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slewOptions"}}},{"kind":"Argument","name":{"kind":"Name","value":"config"},"value":{"kind":"Variable","name":{"kind":"Name","value":"config"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}}]}}]}}]} as unknown as DocumentNode<RunSlewMutation, RunSlewMutationVariables>;
 export const GuidersQualityValuesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"guidersQualityValues"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guidersQualityValues"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pwfs1"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"flux"}},{"kind":"Field","name":{"kind":"Name","value":"centroidDetected"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pwfs2"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"flux"}},{"kind":"Field","name":{"kind":"Name","value":"centroidDetected"}}]}},{"kind":"Field","name":{"kind":"Name","value":"oiwfs"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"flux"}},{"kind":"Field","name":{"kind":"Name","value":"centroidDetected"}}]}}]}}]}}]} as unknown as DocumentNode<GuidersQualityValuesSubscription, GuidersQualityValuesSubscriptionVariables>;
-export const GuideStateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"guideState"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guideState"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"m2Inputs"}},{"kind":"Field","name":{"kind":"Name","value":"m2Coma"}},{"kind":"Field","name":{"kind":"Name","value":"m1Input"}},{"kind":"Field","name":{"kind":"Name","value":"mountOffload"}},{"kind":"Field","name":{"kind":"Name","value":"oiIntegrating"}}]}}]}}]} as unknown as DocumentNode<GuideStateSubscription, GuideStateSubscriptionVariables>;
-export const GetGuideStateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getGuideState"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guideState"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"m2Inputs"}},{"kind":"Field","name":{"kind":"Name","value":"m2Coma"}},{"kind":"Field","name":{"kind":"Name","value":"m1Input"}},{"kind":"Field","name":{"kind":"Name","value":"mountOffload"}},{"kind":"Field","name":{"kind":"Name","value":"oiIntegrating"}}]}}]}}]} as unknown as DocumentNode<GetGuideStateQuery, GetGuideStateQueryVariables>;
+export const GuideStateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"guideState"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guideState"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"m2Inputs"}},{"kind":"Field","name":{"kind":"Name","value":"m2Coma"}},{"kind":"Field","name":{"kind":"Name","value":"m1Input"}},{"kind":"Field","name":{"kind":"Name","value":"mountOffload"}},{"kind":"Field","name":{"kind":"Name","value":"oiIntegrating"}},{"kind":"Field","name":{"kind":"Name","value":"acIntegrating"}}]}}]}}]} as unknown as DocumentNode<GuideStateSubscription, GuideStateSubscriptionVariables>;
+export const GetGuideStateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getGuideState"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guideState"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"m2Inputs"}},{"kind":"Field","name":{"kind":"Name","value":"m2Coma"}},{"kind":"Field","name":{"kind":"Name","value":"m1Input"}},{"kind":"Field","name":{"kind":"Name","value":"mountOffload"}},{"kind":"Field","name":{"kind":"Name","value":"oiIntegrating"}},{"kind":"Field","name":{"kind":"Name","value":"acIntegrating"}}]}}]}}]} as unknown as DocumentNode<GetGuideStateQuery, GetGuideStateQueryVariables>;
 export const GuideEnableDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"guideEnable"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"config"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"GuideConfigurationInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guideEnable"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"config"},"value":{"kind":"Variable","name":{"kind":"Name","value":"config"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}},{"kind":"Field","name":{"kind":"Name","value":"msg"}}]}}]}}]} as unknown as DocumentNode<GuideEnableMutation, GuideEnableMutationVariables>;
 export const GuideDisableDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"guideDisable"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guideDisable"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}},{"kind":"Field","name":{"kind":"Name","value":"msg"}}]}}]}}]} as unknown as DocumentNode<GuideDisableMutation, GuideDisableMutationVariables>;
 export const LogMessageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"logMessage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"logMessage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"timestamp"}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"thread"}},{"kind":"Field","name":{"kind":"Name","value":"message"}}]}}]}}]} as unknown as DocumentNode<LogMessageSubscription, LogMessageSubscriptionVariables>;
