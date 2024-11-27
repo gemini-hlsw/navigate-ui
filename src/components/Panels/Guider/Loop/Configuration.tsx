@@ -1,16 +1,18 @@
+import { useConfiguration } from '@gql/configs/Configuration';
+import type { GuideLoop, UpdateGuideLoopMutationVariables } from '@gql/configs/gen/graphql';
+import { useGetGuideLoop, useUpdateGuideLoop } from '@gql/configs/GuideLoop';
+import type { GuideConfigurationInput } from '@gql/server/gen/graphql';
+import { useGuideDisable, useGuideEnable } from '@gql/server/GuideState';
+import { Button } from 'primereact/button';
+import { Checkbox } from 'primereact/checkbox';
 import { Dropdown } from 'primereact/dropdown';
 import { MultiSelect } from 'primereact/multiselect';
-import { Checkbox } from 'primereact/checkbox';
-import { BrokenChain, ConnectedChain } from './Chain';
-import { Button } from 'primereact/button';
-import { useGetGuideLoop, useUpdateGuideLoop } from '@gql/configs/GuideLoop';
-import { Altair, GeMS } from './AdaptiveOptics';
-import { useGuideDisable, useGuideEnable } from '@gql/server/GuideState';
-import { GuideConfigurationInput } from '@gql/server/gen/graphql';
-import { GuideLoop, UpdateGuideLoopMutationVariables } from '@gql/configs/gen/graphql';
+import type { ReactNode } from 'react';
+
 import { useCanEdit } from '@/components/atoms/auth';
-import { useConfiguration } from '@gql/configs/Configuration';
-import { ReactNode } from 'react';
+
+import { Altair, GeMS } from './AdaptiveOptics';
+import { BrokenChain, ConnectedChain } from './Chain';
 
 export function Configuration() {
   const canEdit = useCanEdit();

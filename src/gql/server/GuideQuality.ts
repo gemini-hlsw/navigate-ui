@@ -1,4 +1,5 @@
 import { useSubscription } from '@apollo/client';
+
 import { graphql } from './gen';
 
 export const GUIDE_QUALITY_SUBSCRIPTION = graphql(`

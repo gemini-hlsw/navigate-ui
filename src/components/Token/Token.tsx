@@ -1,8 +1,10 @@
-import { useState } from 'react';
-import { InputText } from 'primereact/inputtext';
 import './Login.scss';
+
 import { Button } from 'primereact/button';
+import { InputText } from 'primereact/inputtext';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import { useOdbToken } from '../atoms/odb';
 
 export default function Token() {

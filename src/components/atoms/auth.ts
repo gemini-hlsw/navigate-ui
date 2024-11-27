@@ -1,5 +1,6 @@
 import { Authentication } from '@Contexts/Auth/Authentication';
-import { atom, Getter, Setter, useAtomValue } from 'jotai';
+import type { Getter, Setter } from 'jotai';
+import { atom, useAtomValue } from 'jotai';
 import { useAtomCallback } from 'jotai/utils';
 
 export const canEditAtom = atom(Authentication.canEdit());

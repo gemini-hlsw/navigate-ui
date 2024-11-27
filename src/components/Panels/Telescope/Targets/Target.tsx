@@ -1,8 +1,9 @@
 import { useRef } from 'react';
-import { TargetType } from '@/types';
-import { useLongPress } from '@/Helpers/longPress';
-import { useSetTargetEdit } from '@/components/atoms/target';
+
 import { useCanEdit } from '@/components/atoms/auth';
+import { useSetTargetEdit } from '@/components/atoms/target';
+import { useLongPress } from '@/Helpers/longPress';
+import type { TargetType } from '@/types';
 
 export function Target({
   target,

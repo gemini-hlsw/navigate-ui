@@ -1,14 +1,15 @@
+import type { UpdateMechanismMutationVariables } from '@gql/configs/gen/graphql';
+import { useMechanism, useUpdateMechanism } from '@gql/configs/Mechanism';
+import { CrcsPark, McsPark, OiwfsPark } from '@gql/server/Buttons';
+import { clsx } from 'clsx';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 import { Slider } from 'primereact/slider';
-import { CrcsPark, McsPark, OiwfsPark } from '@gql/server/Buttons';
 import { useState } from 'react';
-import { MechanismType } from '@/types';
-import { useMechanism, useUpdateMechanism } from '@gql/configs/Mechanism';
+
 import { BTN_CLASSES } from '@/Helpers/constants';
-import { UpdateMechanismMutationVariables } from '@gql/configs/gen/graphql';
-import { clsx } from 'clsx';
+import type { MechanismType } from '@/types';
 
 export function TopSubsystems({ canEdit }: { canEdit: boolean }) {
   return (

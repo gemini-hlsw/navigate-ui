@@ -1,13 +1,13 @@
 // Apollo
-import { ApolloClient, InMemoryCache, ApolloLink, HttpLink, defaultDataIdFromObject } from '@apollo/client';
+import { ApolloClient, ApolloLink, defaultDataIdFromObject, HttpLink, InMemoryCache } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
-
 // Subscription channel
 import { WebSocketLink } from '@apollo/client/link/ws';
-import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { Kind, OperationTypeNode } from 'graphql/language';
-import { Environment } from '@/Helpers/environment';
+import { SubscriptionClient } from 'subscriptions-transport-ws';
+
+import type { Environment } from '@/Helpers/environment';
 
 /**
  * Converts a relative URI to an absolute URI based on the current window origin.

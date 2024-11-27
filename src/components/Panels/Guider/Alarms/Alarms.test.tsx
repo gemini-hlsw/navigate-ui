@@ -1,10 +1,12 @@
-import { MockedResponse } from '@apollo/client/testing';
+import type { MockedResponse } from '@apollo/client/testing';
 import { GET_GUIDE_ALARMS, UPDATE_GUIDE_ALARM } from '@gql/configs/GuideAlarm';
 import { renderWithContext } from '@gql/render';
 import { GUIDE_QUALITY_SUBSCRIPTION } from '@gql/server/GuideQuality';
-import { Alarms, evaluateAlarm } from './Alarms';
-import { guideAlarmAtom } from '@/components/atoms/alarm';
 import { page, userEvent } from '@vitest/browser/context';
+
+import { guideAlarmAtom } from '@/components/atoms/alarm';
+
+import { Alarms, evaluateAlarm } from './Alarms';
 
 describe(Alarms.name, () => {
   let store: ReturnType<typeof renderWithContext>['store'];

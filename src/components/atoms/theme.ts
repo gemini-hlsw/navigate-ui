@@ -1,5 +1,6 @@
-import { ThemeType } from '@/types';
 import { atom, useAtom, useAtomValue } from 'jotai';
+
+import type { ThemeType } from '@/types';
 
 const themeAtom = atom<ThemeType>('dark');
 export const useTheme = () => {

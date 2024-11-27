@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
+
 import { graphql } from './gen';
 
 export const GET_ROTATOR = graphql(`

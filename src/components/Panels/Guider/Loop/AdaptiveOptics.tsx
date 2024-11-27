@@ -1,9 +1,12 @@
-import { Checkbox } from 'primereact/checkbox';
-import { Title } from '@Shared/Title/Title';
 import { useAltairGuideLoop, useUpdateAltairGuideLoop } from '@gql/configs/AltairGuideLoop';
-
 import { useGetGemsGuideLoop, useUpdateGemsGuideLoop } from '@gql/configs/GemsGuideLoop';
-import { UpdateAltairGuideLoopMutationVariables, UpdateGemsGuideLoopMutationVariables } from '@gql/configs/gen/graphql';
+import type {
+  UpdateAltairGuideLoopMutationVariables,
+  UpdateGemsGuideLoopMutationVariables,
+} from '@gql/configs/gen/graphql';
+import { Title } from '@Shared/Title/Title';
+import { Checkbox } from 'primereact/checkbox';
+
 import { useCanEdit } from '@/components/atoms/auth';
 
 export function Altair() {

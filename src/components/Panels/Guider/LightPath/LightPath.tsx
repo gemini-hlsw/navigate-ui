@@ -1,12 +1,13 @@
-import { useCanEdit } from '@/components/atoms/auth';
-import { Title } from '@Shared/Title/Title';
+import type { GuideLoop, UpdateGuideLoopMutationVariables } from '@gql/configs/gen/graphql';
 import { useGetGuideLoop, useUpdateGuideLoop } from '@gql/configs/GuideLoop';
-import { GuideLoop, UpdateGuideLoopMutationVariables } from '@gql/configs/gen/graphql';
+import type { LightSink, LightSource } from '@gql/server/gen/graphql';
 import { useLightpathConfig } from '@gql/server/Lightpath';
-import { LightSink, LightSource } from '@gql/server/gen/graphql';
-import clsx from 'clsx';
+import { Title } from '@Shared/Title/Title';
+import { clsx } from 'clsx';
 import { Button } from 'primereact/button';
 import { useCallback } from 'react';
+
+import { useCanEdit } from '@/components/atoms/auth';
 
 export function LightPath() {
   const canEdit = useCanEdit();

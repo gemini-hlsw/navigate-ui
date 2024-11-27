@@ -1,12 +1,15 @@
-import { ReactNode, useState } from 'react';
-import { Rotator } from './Rotator';
-import { Altair, GeMS } from './AdaptiveOptics';
-import { Indicators } from './Indicators';
-import { AgMechanism } from './AgMechanism';
-import { BotSubsystems, TopSubsystems } from './Subsystems';
-import { Instrument } from './Instrument';
-import { useCanEdit } from '@/components/atoms/auth';
 import { useConfiguration } from '@gql/configs/Configuration';
+import type { ReactNode } from 'react';
+import { useState } from 'react';
+
+import { useCanEdit } from '@/components/atoms/auth';
+
+import { Altair, GeMS } from './AdaptiveOptics';
+import { AgMechanism } from './AgMechanism';
+import { Indicators } from './Indicators';
+import { Instrument } from './Instrument';
+import { Rotator } from './Rotator';
+import { BotSubsystems, TopSubsystems } from './Subsystems';
 
 export function Systems() {
   const canEdit = useCanEdit();

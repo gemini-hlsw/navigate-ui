@@ -1,6 +1,6 @@
-import { Button } from 'primereact/button';
-import { MCS, SCS, CRCS, PWFS1, PWFS2, AOWFS, OIWFS } from '@gql/server/Buttons';
+import { AOWFS, CRCS, MCS, OIWFS, PWFS1, PWFS2, SCS } from '@gql/server/Buttons';
 import { useTelescopeState } from '@gql/server/TelescopeState';
+import { Button } from 'primereact/button';
 
 export function Indicators({ canEdit }: { canEdit: boolean }) {
   const { data, loading } = useTelescopeState();

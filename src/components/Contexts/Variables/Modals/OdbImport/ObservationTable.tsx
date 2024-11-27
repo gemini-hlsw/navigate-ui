@@ -1,9 +1,10 @@
-import { useState } from 'react';
 import { FilterMatchMode } from 'primereact/api';
-import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import { DataTable } from 'primereact/datatable';
 import { InputText } from 'primereact/inputtext';
-import { ParamsInterface } from '@/types';
+import { useState } from 'react';
+
+import type { ParamsInterface } from '@/types';
 
 export function ObservationTable({
   loading,

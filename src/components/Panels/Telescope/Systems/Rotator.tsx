@@ -1,8 +1,9 @@
+import { useRotator, useUpdateRotator } from '@gql/configs/Rotator';
 import { Title } from '@Shared/Title/Title';
 import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
-import { useRotator, useUpdateRotator } from '@gql/configs/Rotator';
-import { TrackingType } from '@/types';
+
+import type { TrackingType } from '@/types';
 
 export function Rotator({ canEdit }: { canEdit: boolean }) {
   const { data: rotatorData, loading: rotatorLoading } = useRotator();

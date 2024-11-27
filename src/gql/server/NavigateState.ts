@@ -1,4 +1,5 @@
 import { useQueryAndSubscription } from '@gql/use-query-and-subscription';
+
 import { graphql } from './gen';
 
 export const NAVIGATE_STATE = graphql(`

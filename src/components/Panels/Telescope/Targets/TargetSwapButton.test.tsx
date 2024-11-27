@@ -1,13 +1,14 @@
-import { MockedResponse } from '@apollo/client/testing';
+import type { MockedResponse } from '@apollo/client/testing';
 import { GET_CONFIGURATION } from '@gql/configs/Configuration';
-import { Target } from '@gql/configs/gen/graphql';
+import type { Target } from '@gql/configs/gen/graphql';
 import { GET_INSTRUMENT } from '@gql/configs/Instrument';
 import { GET_ROTATOR } from '@gql/configs/Rotator';
 import { renderWithContext } from '@gql/render';
 import { NAVIGATE_STATE, NAVIGATE_STATE_SUBSCRIPTION } from '@gql/server/NavigateState';
 import { RESTORE_TARGET_MUTATION, SWAP_TARGET_MUTATION } from '@gql/server/TargetSwap';
-import { ResultOf, VariablesOf } from '@graphql-typed-document-node/core';
-import { RenderResult } from 'vitest-browser-react';
+import type { ResultOf, VariablesOf } from '@graphql-typed-document-node/core';
+import type { RenderResult } from 'vitest-browser-react';
+
 import { TargetSwapButton } from './TargetSwapButton';
 
 describe(TargetSwapButton.name, () => {

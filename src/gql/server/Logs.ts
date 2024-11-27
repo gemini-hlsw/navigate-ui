@@ -1,4 +1,5 @@
 import { useSubscription } from '@apollo/client';
+
 import { graphql } from './gen';
 
 const LOGS_SUBSCRIPTION = graphql(`

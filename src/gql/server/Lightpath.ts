@@ -1,4 +1,5 @@
 import { useMutation } from '@apollo/client';
+
 import { graphql } from './gen';
 
 const LIGHTPATH_CONFIG_MUTATION = graphql(`

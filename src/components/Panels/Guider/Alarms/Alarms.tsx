@@ -1,12 +1,14 @@
-import { GuideAlarm, UpdateGuideAlarmMutationVariables } from '@gql/configs/gen/graphql';
+import type { GuideAlarm, UpdateGuideAlarmMutationVariables } from '@gql/configs/gen/graphql';
 import { useGuideAlarms, useUpdateGuideAlarm } from '@gql/configs/GuideAlarm';
+import type { GuideQuality } from '@gql/server/gen/graphql';
 import { useGuideQualities } from '@gql/server/GuideQuality';
 import { Title } from '@Shared/Title/Title';
-import { Alarm } from './Alarm';
-import { useCanEdit } from '@/components/atoms/auth';
-import { GuideQuality } from '@gql/server/gen/graphql';
 import { useEffect } from 'react';
+
 import { useSetGuideAlarm } from '@/components/atoms/alarm';
+import { useCanEdit } from '@/components/atoms/auth';
+
+import { Alarm } from './Alarm';
 
 export function Alarms() {
   const canEdit = useCanEdit();

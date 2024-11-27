@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client';
+import type { OptionsOf } from '@gql/util';
+
 import { graphql } from './gen';
-import { OptionsOf } from '@gql/util';
 
 const GET_MECHANISM = graphql(`
   query getMechanism {

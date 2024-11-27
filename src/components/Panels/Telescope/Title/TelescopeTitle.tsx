@@ -1,8 +1,9 @@
 import { Title, TitleDropdown } from '@Shared/Title/Title';
 import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
-import { useSetOdbVisible } from '@/components/atoms/odb';
+
 import { useCanEdit } from '@/components/atoms/auth';
+import { useSetOdbVisible } from '@/components/atoms/odb';
 
 interface ParamsInterface {
   prevPanel: () => void;

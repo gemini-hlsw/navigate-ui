@@ -1,6 +1,7 @@
-import { TargetType } from '@/types';
-import { DocumentNode, OperationVariables, QueryHookOptions } from '@apollo/client';
-import { ResultOf, VariablesOf } from '@graphql-typed-document-node/core';
+import type { DocumentNode, OperationVariables, QueryHookOptions } from '@apollo/client';
+import type { ResultOf, VariablesOf } from '@graphql-typed-document-node/core';
+
+import type { TargetType } from '@/types';
 
 /**
  * Options for useQuery hook.

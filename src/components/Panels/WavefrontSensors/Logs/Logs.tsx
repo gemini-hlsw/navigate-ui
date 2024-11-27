@@ -1,9 +1,9 @@
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import { Title } from '@Shared/Title/Title';
+import type { LogMessage } from '@gql/server/gen/graphql';
 import { useLogMessages } from '@gql/server/Logs';
+import { Title } from '@Shared/Title/Title';
+import { Column } from 'primereact/column';
+import { DataTable } from 'primereact/datatable';
 import { useEffect, useState } from 'react';
-import { LogMessage } from '@gql/server/gen/graphql';
 import { v4 as uuid } from 'uuid';
 
 export default function Logs() {

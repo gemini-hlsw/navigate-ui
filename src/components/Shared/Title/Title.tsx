@@ -1,5 +1,6 @@
 import { OverlayPanel } from 'primereact/overlaypanel';
-import { MouseEventHandler, ReactNode, useRef } from 'react';
+import type { MouseEventHandler, ReactNode } from 'react';
+import { useRef } from 'react';
 
 interface ParamsInterface {
   title: string;

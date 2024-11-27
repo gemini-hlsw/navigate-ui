@@ -1,8 +1,9 @@
-import { Button } from 'primereact/button';
 import { Slew } from '@gql/server/Buttons';
 import { TitleDropdown } from '@Shared/Title/Title';
-import { useSetSlewVisible } from '@/components/atoms/slew';
+import { Button } from 'primereact/button';
+
 import { useCanEdit } from '@/components/atoms/auth';
+import { useSetSlewVisible } from '@/components/atoms/slew';
 
 export function Footer() {
   const canEdit = useCanEdit();

@@ -1,13 +1,15 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { SplitButton } from 'primereact/splitbutton';
-import { Button } from 'primereact/button';
-import { useTheme } from '@/components/atoms/theme';
 import './Navbar.scss';
-import { useOdbTokenValue } from '@/components/atoms/odb';
-import { useIsLoggedIn, useSignout, useUser } from '@/components/atoms/auth';
+
 import { useConfiguration } from '@gql/configs/Configuration';
-import { useAlarmValue } from '@/components/atoms/alarm';
 import { clsx } from 'clsx';
+import { Button } from 'primereact/button';
+import { SplitButton } from 'primereact/splitbutton';
+import { Link, useNavigate } from 'react-router-dom';
+
+import { useAlarmValue } from '@/components/atoms/alarm';
+import { useIsLoggedIn, useSignout, useUser } from '@/components/atoms/auth';
+import { useOdbTokenValue } from '@/components/atoms/odb';
+import { useTheme } from '@/components/atoms/theme';
 
 export default function Navbar() {
   const configuration = useConfiguration().data?.configuration;

@@ -1,7 +1,7 @@
-import { useState, useRef } from 'react';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
+import { useRef, useState } from 'react';
 
 export default function MainControls({ canEdit }: { canEdit: boolean }) {
   const [slider, setSlider] = useState(10);

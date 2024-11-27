@@ -1,11 +1,14 @@
-import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import './Login.scss';
+
+import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
-import { Button } from 'primereact/button';
-import './Login.scss';
-import { useSignIn } from '../atoms/auth';
+import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+
 import { useToast } from '@/Helpers/toast';
+
+import { useSignIn } from '../atoms/auth';
 
 interface LocationInterface {
   from: {

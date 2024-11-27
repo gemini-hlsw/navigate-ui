@@ -1,10 +1,8 @@
-import { useCanEdit } from '@/components/atoms/auth';
-import { useToast } from '@/Helpers/toast';
 import { useConfiguration } from '@gql/configs/Configuration';
-import { Target } from '@gql/configs/gen/graphql';
+import type { Target } from '@gql/configs/gen/graphql';
 import { useInstrument } from '@gql/configs/Instrument';
 import { useRotator } from '@gql/configs/Rotator';
-import {
+import type {
   Instrument as InstrumentName,
   InstrumentSpecificsInput,
   RotatorTrackingInput,
@@ -13,6 +11,9 @@ import {
 import { useNavigateState } from '@gql/server/NavigateState';
 import { useRestoreTarget, useSwapTarget } from '@gql/server/TargetSwap';
 import { Button } from 'primereact/button';
+
+import { useCanEdit } from '@/components/atoms/auth';
+import { useToast } from '@/Helpers/toast';
 
 export function TargetSwapButton({ selectedTarget }: { selectedTarget: Target | undefined }) {
   const canEdit = useCanEdit();

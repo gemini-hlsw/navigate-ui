@@ -1,4 +1,5 @@
 import { Navigate, useLocation } from 'react-router-dom';
+
 import { useIsLoggedIn } from '@/components/atoms/auth';
 
 export default function RequireAuth({ children }: { children: JSX.Element }) {

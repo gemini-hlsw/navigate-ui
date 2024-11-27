@@ -1,4 +1,4 @@
-import {
+import type {
   AltairGuideLoop as AltairGuideLoopType,
   AltairInstrument as AltairInstrumentType,
   Configuration as ConfigurationType,
@@ -12,13 +12,13 @@ import {
   SiteType,
   SlewFlags as SlewFlagsType,
   StatusType,
-  TargetInput,
   Target as TargetType,
+  TargetInput,
   TargetType as TypeOfTarget,
   User as UserType,
 } from '@gql/configs/gen/graphql';
-import { GetObservationsQuery } from '@gql/odb/gen/graphql';
-import { RotatorTrackingMode as TrackingType } from '@gql/server/gen/graphql';
+import type { GetObservationsQuery } from '@gql/odb/gen/graphql';
+import type { RotatorTrackingMode as TrackingType } from '@gql/server/gen/graphql';
 
 export type ThemeType = 'light' | 'dark';
 

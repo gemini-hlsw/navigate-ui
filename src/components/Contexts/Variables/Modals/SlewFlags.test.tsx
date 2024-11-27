@@ -1,7 +1,9 @@
-import { canEditAtom } from '@/components/atoms/auth';
-import { slewVisibleAtom } from '@/components/atoms/slew';
 import { renderWithContext } from '@gql/render';
 import { page } from '@vitest/browser/context';
+
+import { canEditAtom } from '@/components/atoms/auth';
+import { slewVisibleAtom } from '@/components/atoms/slew';
+
 import { SlewFlags } from './SlewFlags';
 
 describe(SlewFlags.name, () => {

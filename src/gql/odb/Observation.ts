@@ -1,6 +1,8 @@
 import { useLazyQuery } from '@apollo/client';
-import { graphql } from './gen';
+
 import { useOdbTokenValue } from '@/components/atoms/odb';
+
+import { graphql } from './gen';
 
 const GET_OBSERVATIONS = graphql(`
   query getObservations {

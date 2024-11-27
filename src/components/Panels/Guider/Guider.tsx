@@ -1,10 +1,12 @@
+import './Guider.scss';
+
 import { Title } from '@Shared/Title/Title';
-import { WavefrontSensors } from './WavefrontSensors/WavefrontSensors';
+
 import { Alarms } from './Alarms/Alarms';
 import Diagram from './Diagram/Diagram';
-import './Guider.scss';
 import { LightPath } from './LightPath/LightPath';
 import { Loop } from './Loop/Loop';
+import { WavefrontSensors } from './WavefrontSensors/WavefrontSensors';
 
 export function Guider({ prevPanel, nextPanel }: { prevPanel: () => void; nextPanel: () => void }) {
   return (
