@@ -75,7 +75,6 @@ export default defineConfig(({ mode }) => ({
     preprocessorOptions: {
       scss: {
         charset: false,
-        api: 'modern-compiler',
       },
     },
     postcss: {
