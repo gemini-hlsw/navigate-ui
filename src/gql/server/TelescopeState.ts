@@ -1,5 +1,5 @@
-import { graphql } from './gen';
 import { useQueryAndSubscription } from '../use-query-and-subscription';
+import { graphql } from './gen';
 
 const GET_TELESCOPE_STATE = graphql(`
   query getTelescopeState {

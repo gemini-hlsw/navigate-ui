@@ -1,5 +1,6 @@
-import { TargetEditType, TargetType } from '@/types';
 import { atom, useAtom, useSetAtom } from 'jotai';
+
+import type { TargetEditType, TargetType } from '@/types';
 
 const targetEditAtom = atom<TargetEditType>({
   isVisible: false,

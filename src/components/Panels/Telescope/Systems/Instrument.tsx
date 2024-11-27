@@ -1,11 +1,12 @@
+import { useConfiguration } from '@gql/configs/Configuration';
+import { useInstrument } from '@gql/configs/Instrument';
 import { Title, TitleDropdown } from '@Shared/Title/Title';
 import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
-import { useInstrument } from '@gql/configs/Instrument';
+
 import { useSetImportInstrument } from '@/components/atoms/instrument';
-import { useConfiguration } from '@gql/configs/Configuration';
 
 export function Instrument({ canEdit }: { canEdit: boolean }) {
   const configuration = useConfiguration().data?.configuration;

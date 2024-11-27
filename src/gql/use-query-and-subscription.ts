@@ -1,5 +1,6 @@
-import { ApolloError, DocumentNode, useQuery, useSubscription } from '@apollo/client';
-import { ResultOf } from '@graphql-typed-document-node/core';
+import type { ApolloError, DocumentNode } from '@apollo/client';
+import { useQuery, useSubscription } from '@apollo/client';
+import type { ResultOf } from '@graphql-typed-document-node/core';
 import { useDebugValue } from 'react';
 
 /**

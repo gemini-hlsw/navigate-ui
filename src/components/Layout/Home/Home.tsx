@@ -1,9 +1,11 @@
-import { useCallback, useState } from 'react';
+import './Home.scss';
+
+import { Guider } from '@Guider/Guider';
 import { Telescope } from '@Telescope/Telescope';
 import { WavefrontSensors } from '@WavefrontSensors/WavefrontSensors';
-import { Guider } from '@Guider/Guider';
-import { PanelType } from '@/types';
-import './Home.scss';
+import { useCallback, useState } from 'react';
+
+import type { PanelType } from '@/types';
 
 export default function Home() {
   const TOUCH_THRESHOLD = 50;

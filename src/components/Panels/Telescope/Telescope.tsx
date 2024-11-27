@@ -1,15 +1,18 @@
-import { Systems } from './Systems/Systems';
-import { TargetDetails } from './Details/TargetDetails';
-import { GuidersDetails } from './Details/GuidersDetails';
-import { Footer } from './Footer/Footer';
-import { TelescopeTitle } from './Title/TelescopeTitle';
-import { TargetList } from './Targets/TargetList';
-import { GuiderTargets } from './Targets/GuiderTargets';
 import './Telescope.scss';
-import { Title } from '@Shared/Title/Title';
-import { TargetType } from '@/types';
+
 import { useConfiguration } from '@gql/configs/Configuration';
 import { useTargets } from '@gql/configs/Target';
+import { Title } from '@Shared/Title/Title';
+
+import type { TargetType } from '@/types';
+
+import { GuidersDetails } from './Details/GuidersDetails';
+import { TargetDetails } from './Details/TargetDetails';
+import { Footer } from './Footer/Footer';
+import { Systems } from './Systems/Systems';
+import { GuiderTargets } from './Targets/GuiderTargets';
+import { TargetList } from './Targets/TargetList';
+import { TelescopeTitle } from './Title/TelescopeTitle';
 
 export function Telescope({ prevPanel, nextPanel }: { prevPanel: () => void; nextPanel: () => void }) {
   const { baseTargets } = useTargets().data;

@@ -1,11 +1,12 @@
-import { useCallback, useId } from 'react';
+import type { UpdateSlewFlagsMutationVariables } from '@gql/configs/gen/graphql';
+import { useSlewFlags, useUpdateSlewFlags } from '@gql/configs/SlewFlags';
 import { Dialog } from 'primereact/dialog';
 import { InputSwitch } from 'primereact/inputswitch';
-import { useSlewFlags, useUpdateSlewFlags } from '@gql/configs/SlewFlags';
-import { useSlewVisible } from '@/components/atoms/slew';
-import { UpdateSlewFlagsMutationVariables } from '@gql/configs/gen/graphql';
+import { useCallback, useId } from 'react';
+
 import { useCanEdit } from '@/components/atoms/auth';
-import { SlewFlagsType } from '@/types';
+import { useSlewVisible } from '@/components/atoms/slew';
+import type { SlewFlagsType } from '@/types';
 
 export function SlewFlags() {
   const [slewVisible, setSlewVisible] = useSlewVisible();

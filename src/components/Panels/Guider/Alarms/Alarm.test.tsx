@@ -1,10 +1,13 @@
-import { render, RenderResult } from 'vitest-browser-react';
-import { Locator, page, userEvent } from '@vitest/browser/context';
-import { ComponentProps } from 'react';
+import type { GuideAlarm } from '@gql/configs/gen/graphql';
+import type { GuideQuality } from '@gql/server/gen/graphql';
+import type { Locator } from '@vitest/browser/context';
+import { page, userEvent } from '@vitest/browser/context';
+import type { ComponentProps } from 'react';
+import type { MockedFunction } from 'vitest';
+import type { RenderResult } from 'vitest-browser-react';
+import { render } from 'vitest-browser-react';
+
 import { Alarm } from './Alarm';
-import { MockedFunction } from 'vitest';
-import { GuideAlarm } from '@gql/configs/gen/graphql';
-import { GuideQuality } from '@gql/server/gen/graphql';
 
 describe(Alarm.name, () => {
   let sut: RenderResult;

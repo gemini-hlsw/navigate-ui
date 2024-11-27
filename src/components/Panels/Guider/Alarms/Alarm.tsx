@@ -1,11 +1,15 @@
-import { isNotNullish } from '@/Helpers/functions';
-import { GuideAlarm, UpdateGuideAlarmMutationVariables, WfsType } from '@gql/configs/gen/graphql';
-import { GuideQuality } from '@gql/server/gen/graphql';
+import type { GuideAlarm, UpdateGuideAlarmMutationVariables, WfsType } from '@gql/configs/gen/graphql';
+import type { GuideQuality } from '@gql/server/gen/graphql';
 import { Title } from '@Shared/Title/Title';
 import { clsx } from 'clsx';
-import { Checkbox, CheckboxChangeEvent } from 'primereact/checkbox';
-import { InputNumber, InputNumberValueChangeEvent } from 'primereact/inputnumber';
+import type { CheckboxChangeEvent } from 'primereact/checkbox';
+import { Checkbox } from 'primereact/checkbox';
+import type { InputNumberValueChangeEvent } from 'primereact/inputnumber';
+import { InputNumber } from 'primereact/inputnumber';
 import { useId } from 'react';
+
+import { isNotNullish } from '@/Helpers/functions';
+
 import { evaluateAlarm } from './Alarms';
 
 export function Alarm({

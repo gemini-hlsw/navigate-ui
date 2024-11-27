@@ -1,6 +1,9 @@
-import { useEffect } from 'react';
-import { ReactFlow, Background, Controls, Edge, Node, ReactFlowProvider, useReactFlow } from 'reactflow';
 import 'reactflow/dist/style.css';
+
+import { useEffect } from 'react';
+import type { Edge, Node } from 'reactflow';
+import { Background, Controls, ReactFlow, ReactFlowProvider, useReactFlow } from 'reactflow';
+
 import { useGetGuideState } from './useGetGuideState';
 
 const initialNodes: Node[] = [

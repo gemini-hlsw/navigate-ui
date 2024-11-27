@@ -1,8 +1,12 @@
-import { MockedProvider, MockedResponse } from '@apollo/client/testing';
-import { createStore, Provider, WritableAtom } from 'jotai';
+import type { MockedResponse } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing';
+import type { WritableAtom } from 'jotai';
+import { createStore, Provider } from 'jotai';
 import { useHydrateAtoms } from 'jotai/utils';
-import { PropsWithChildren, ReactElement } from 'react';
-import { ComponentRenderOptions, render } from 'vitest-browser-react';
+import type { PropsWithChildren, ReactElement } from 'react';
+import type { ComponentRenderOptions } from 'vitest-browser-react';
+import { render } from 'vitest-browser-react';
+
 import { GET_SLEW_FLAGS } from './configs/SlewFlags';
 
 interface CreateOptions<T> {

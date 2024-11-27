@@ -1,14 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useUpdateTarget } from '@gql/configs/Target';
+import { isBaseTarget } from '@gql/util';
+import { deg2dms, deg2hms, dms2deg, hms2deg } from 'lucuma-core';
+import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
-import { TargetType } from '@/types';
 import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
-import { deg2dms, deg2hms, dms2deg, hms2deg } from 'lucuma-core';
-import { Button } from 'primereact/button';
-import { useUpdateTarget } from '@gql/configs/Target';
+import { useEffect, useState } from 'react';
+
 import { useTargetEdit } from '@/components/atoms/target';
-import { isBaseTarget } from '@gql/util';
+import type { TargetType } from '@/types';
 
 export function Target() {
   const [targetEdit, setTargetEdit] = useTargetEdit();

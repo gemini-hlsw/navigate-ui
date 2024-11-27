@@ -1,12 +1,13 @@
-import { Dropdown } from 'primereact/dropdown';
+import { useConfiguration } from '@gql/configs/Configuration';
+import type { Target } from '@gql/configs/gen/graphql';
+import { useTargets } from '@gql/configs/Target';
 import { Title } from '@Shared/Title/Title';
-import { TargetList } from './TargetList';
+import { Dropdown } from 'primereact/dropdown';
 
 import { useCanEdit } from '@/components/atoms/auth';
-import { useConfiguration } from '@gql/configs/Configuration';
-import { useTargets } from '@gql/configs/Target';
+
+import { TargetList } from './TargetList';
 import { TargetSwapButton } from './TargetSwapButton';
-import { Target } from '@gql/configs/gen/graphql';
 
 function GuiderFooter({ disabled }: { disabled: boolean }) {
   return (

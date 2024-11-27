@@ -1,10 +1,11 @@
+import { useGetDistinctInstruments, useGetDistinctPorts, useGetInstruments } from '@gql/configs/Instrument';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
-import { useEffect, useState } from 'react';
-import { useGetDistinctInstruments, useGetDistinctPorts, useGetInstruments } from '@gql/configs/Instrument';
 import { Dropdown } from 'primereact/dropdown';
-import { InstrumentType } from '@/types';
+import { useEffect, useState } from 'react';
+
 import { useImportInstrument } from '@/components/atoms/instrument';
+import type { InstrumentType } from '@/types';
 
 export function Instrument() {
   const [importInstrument, setImportInstrument] = useImportInstrument();

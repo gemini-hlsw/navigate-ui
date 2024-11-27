@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
+
 import { graphql } from './gen';
 
 const GET_ALTAIR_GUIDE_LOOP = graphql(`

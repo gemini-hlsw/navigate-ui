@@ -1,8 +1,9 @@
-import { beforeEach, describe, expect, Mock } from 'vitest';
-import { Title } from './Title';
+import { page, userEvent } from '@vitest/browser/context';
+import type { Mock } from 'vitest';
+import { beforeEach, describe, expect } from 'vitest';
 import { render } from 'vitest-browser-react';
-import { page } from '@vitest/browser/context';
-import { userEvent } from '@vitest/browser/context';
+
+import { Title } from './Title';
 
 describe('Title test with args', () => {
   const title = 'My title';

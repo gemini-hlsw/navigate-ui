@@ -1,11 +1,12 @@
 import imgUrl from '@assets/underconstruction.png';
 import { useAcObserve, useAcStopObserve } from '@gql/server/AcquisitionCamera';
 import { useGuideState } from '@gql/server/GuideState';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { Button } from 'primereact/button';
 import { Checkbox } from 'primereact/checkbox';
 import { Dropdown } from 'primereact/dropdown';
 import { useCallback, useState } from 'react';
+
 import MainControls from './MainControls';
 
 export default function AcquisitionCamera({ canEdit, ac }: { canEdit: boolean; ac: string }) {

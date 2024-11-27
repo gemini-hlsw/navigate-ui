@@ -1,22 +1,25 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
-import { useMutation, OperationVariables, DocumentNode } from '@apollo/client';
-import { VariablesOf } from '@graphql-typed-document-node/core';
-
-import { useEffect } from 'react';
-import { Button, ButtonProps } from 'primereact/button';
-import { SlewFlagsType } from '@/types';
-import { BTN_CLASSES } from '@/Helpers/constants';
-import { graphql } from './gen';
-import { Instrument, MechSystemState } from './gen/graphql';
-import { useSlewFlags } from '@gql/configs/SlewFlags';
+import type { DocumentNode, OperationVariables } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { useConfiguration } from '@gql/configs/Configuration';
-import { useRotator } from '@gql/configs/Rotator';
-import { useTargets } from '@gql/configs/Target';
 import { useInstrument } from '@gql/configs/Instrument';
+import { useRotator } from '@gql/configs/Rotator';
+import { useSlewFlags } from '@gql/configs/SlewFlags';
+import { useTargets } from '@gql/configs/Target';
+import type { VariablesOf } from '@graphql-typed-document-node/core';
 import { clsx } from 'clsx';
-import { MOUNT_FOLLOW_MUTATION, OIWFS_FOLLOW_MUTATION, ROTATOR_FOLLOW_MUTATION, SCS_FOLLOW_MUTATION } from './follow';
-import { ROTATOR_PARK_MUTATION, MOUNT_PARK_MUTATION, OIWFS_PARK_MUTATION } from './park';
+import type { ButtonProps } from 'primereact/button';
+import { Button } from 'primereact/button';
+import { useEffect } from 'react';
+
+import { BTN_CLASSES } from '@/Helpers/constants';
 import { useToast } from '@/Helpers/toast';
+import type { SlewFlagsType } from '@/types';
+
+import { MOUNT_FOLLOW_MUTATION, OIWFS_FOLLOW_MUTATION, ROTATOR_FOLLOW_MUTATION, SCS_FOLLOW_MUTATION } from './follow';
+import { graphql } from './gen';
+import type { Instrument, MechSystemState } from './gen/graphql';
+import { MOUNT_PARK_MUTATION, OIWFS_PARK_MUTATION, ROTATOR_PARK_MUTATION } from './park';
 
 // Generic mutation button
 function MutationButton<T extends DocumentNode>({

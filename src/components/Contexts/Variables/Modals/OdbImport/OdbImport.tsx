@@ -1,16 +1,18 @@
-import { useEffect, useState } from 'react';
-import { Dialog } from 'primereact/dialog';
-import { Button } from 'primereact/button';
-import { ObservationTable } from './ObservationTable';
-import { useGetGuideEnvironment, useGetObservations } from '@gql/odb/Observation';
-import { ConfigurationType, OdbObservationType, TargetInput } from '@/types';
-import { useRemoveAndCreateBaseTargets, useRemoveAndCreateWfsTargets } from '@gql/configs/Target';
 import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
-import { useOdbVisible } from '@/components/atoms/odb';
-import { useCanEdit } from '@/components/atoms/auth';
 import { useRotator, useUpdateRotator } from '@gql/configs/Rotator';
+import { useRemoveAndCreateBaseTargets, useRemoveAndCreateWfsTargets } from '@gql/configs/Target';
+import type { GetGuideEnvironmentQuery } from '@gql/odb/gen/graphql';
+import { useGetGuideEnvironment, useGetObservations } from '@gql/odb/Observation';
+import { Button } from 'primereact/button';
+import { Dialog } from 'primereact/dialog';
+import { useEffect, useState } from 'react';
+
+import { useCanEdit } from '@/components/atoms/auth';
+import { useOdbVisible } from '@/components/atoms/odb';
 import { useToast } from '@/Helpers/toast';
-import { GetGuideEnvironmentQuery } from '@gql/odb/gen/graphql';
+import type { ConfigurationType, OdbObservationType, TargetInput } from '@/types';
+
+import { ObservationTable } from './ObservationTable';
 
 export function OdbImport() {
   const canEdit = useCanEdit();

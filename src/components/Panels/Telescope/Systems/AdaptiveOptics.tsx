@@ -1,15 +1,17 @@
-import { Title } from '../../../Shared/Title/Title';
-import { InputNumber } from 'primereact/inputnumber';
-import { Dropdown } from 'primereact/dropdown';
-import { Checkbox } from 'primereact/checkbox';
-import { AltairInstrumentType, GemsInstrumentType } from '@/types';
-import { useGemsInstrument, useUpdateGemsInstrument } from '@gql/configs/GemsInstrument';
 import { useAltairInstrument, useUpdateAltairInstrument } from '@gql/configs/AltairInstrument';
-import {
+import { useGemsInstrument, useUpdateGemsInstrument } from '@gql/configs/GemsInstrument';
+import type {
   UpdateAltairInstrumentMutationVariables,
   UpdateGemsInstrumentMutationVariables,
 } from '@gql/configs/gen/graphql';
+import { Checkbox } from 'primereact/checkbox';
+import { Dropdown } from 'primereact/dropdown';
+import { InputNumber } from 'primereact/inputnumber';
+
 import { isNotNullish } from '@/Helpers/functions';
+import type { AltairInstrumentType, GemsInstrumentType } from '@/types';
+
+import { Title } from '../../../Shared/Title/Title';
 
 export function GeMS({ canEdit }: { canEdit: boolean }) {
   const state = useGemsInstrument().data?.gemsInstrument ?? ({} as GemsInstrumentType);

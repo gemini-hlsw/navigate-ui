@@ -1,6 +1,8 @@
-import { Target } from './Target';
-import { TargetType, TypeOfTarget } from '@/types';
 import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
+
+import type { TargetType, TypeOfTarget } from '@/types';
+
+import { Target } from './Target';
 
 export function TargetList({ targets, type }: { targets: TargetType[]; type?: TypeOfTarget }) {
   const configuration = useConfiguration().data?.configuration;

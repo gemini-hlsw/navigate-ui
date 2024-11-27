@@ -1,6 +1,6 @@
-import { InputSwitch } from 'primereact/inputswitch';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
+import { InputSwitch } from 'primereact/inputswitch';
 
 export default function AdjustControls() {
   return (

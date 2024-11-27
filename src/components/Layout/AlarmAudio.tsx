@@ -1,7 +1,8 @@
-import { useEffect, useMemo } from 'react';
-import { useAlarmValue } from '../atoms/alarm';
 import alarmSoundMp3 from '@assets/sounds/alarm.mp3';
 import alarmSoundWebm from '@assets/sounds/alarm.webm';
+import { useEffect, useMemo } from 'react';
+
+import { useAlarmValue } from '../atoms/alarm';
 
 export function AlarmAudio() {
   const alarm = useAlarmValue();

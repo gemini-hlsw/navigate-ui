@@ -1,9 +1,12 @@
+import './WavefrontSensors.scss';
+
 import { Title } from '@Shared/Title/Title';
-import WavefrontSensor from './WavefrontSensor/WavefrontSensor';
+
+import { useCanEdit } from '@/components/atoms/auth';
+
 import AcquisitionCamera from './AcquisitionCamera/AcquisitionCamera';
 import Logs from './Logs/Logs';
-import './WavefrontSensors.scss';
-import { useCanEdit } from '@/components/atoms/auth';
+import WavefrontSensor from './WavefrontSensor/WavefrontSensor';
 
 export function WavefrontSensors({ prevPanel, nextPanel }: { prevPanel: () => void; nextPanel: () => void }) {
   const canEdit = useCanEdit();

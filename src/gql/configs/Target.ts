@@ -1,8 +1,9 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { graphql } from './gen';
 import { isBaseTarget, isOiTarget, isP1Target, isP2Target } from '@gql/util';
 import { useMemo } from 'react';
-import { Target } from './gen/graphql';
+
+import { graphql } from './gen';
+import type { Target } from './gen/graphql';
 
 const GET_TARGETS = graphql(`
   query getTargets {

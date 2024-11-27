@@ -1,5 +1,6 @@
 import { Title } from '@Shared/Title/Title';
-import { TargetType } from '@/types';
+
+import type { TargetType } from '@/types';
 
 export function TargetDetails({ target }: { target: TargetType }) {
   return (

@@ -1,8 +1,10 @@
-import { TabView, TabPanel } from 'primereact/tabview';
 import { Title } from '@Shared/Title/Title';
-import { PWFS1 } from './PWFS1';
-import { ACHR } from './ACHR';
+import { TabPanel, TabView } from 'primereact/tabview';
+
 import { useCanEdit } from '@/components/atoms/auth';
+
+import { ACHR } from './ACHR';
+import { PWFS1 } from './PWFS1';
 
 export function WavefrontSensors() {
   const canEdit = useCanEdit();
