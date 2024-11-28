@@ -81,7 +81,7 @@ export function OdbImport() {
           }
           const { oiwfs, pwfs1, pwfs2 } = extractGuideTargets(guideEnv.data);
 
-          await Promise.all([
+          const [oi, p1, p2] = await Promise.all([
             removeAndCreateWfsTargets({
               variables: {
                 wfs: 'OIWFS',
@@ -108,6 +108,17 @@ export function OdbImport() {
               },
             }),
           ]);
+
+          // Set the first of each result as the selected target if there is only 1
+          const selectedOiTarget = firstIfOnlyOne(oi.data?.removeAndCreateWfsTargets)?.pk;
+          const selectedP1Target = firstIfOnlyOne(p1.data?.removeAndCreateWfsTargets)?.pk;
+          const selectedP2Target = firstIfOnlyOne(p2.data?.removeAndCreateWfsTargets)?.pk;
+
+          if (configuration?.pk && (selectedOiTarget || selectedP1Target || selectedP2Target)) {
+            await updateConfiguration({
+              variables: { pk: configuration.pk, selectedOiTarget, selectedP1Target, selectedP2Target },
+            });
+          }
         }
       },
     });
@@ -165,15 +176,19 @@ function extractGuideTargets(data: GetGuideEnvironmentQuery | undefined) {
         coord1: t.sidereal?.ra.degrees,
         coord2: t.sidereal?.dec.degrees,
       };
-      if (t.probe.includes('OIWFS')) {
+      if (t.probe === 'GMOS_OIWFS') {
         acc.oiwfs.push({ ...auxTarget, type: 'OIWFS' });
-      } else if (t.probe.includes('PWFS1')) {
+      } else if (t.probe === 'PWFS_1') {
         acc.pwfs1.push({ ...auxTarget, type: 'PWFS1' });
-      } else if (t.probe.includes('PWFS2')) {
+      } else if (t.probe === 'PWFS_2') {
         acc.pwfs2.push({ ...auxTarget, type: 'PWFS2' });
       }
       return acc;
     },
     { oiwfs: [], pwfs1: [], pwfs2: [] },
   );
+}
+
+function firstIfOnlyOne<T>(arr: T[] | undefined): T | undefined {
+  return arr?.length === 1 ? arr[0] : undefined;
 }
