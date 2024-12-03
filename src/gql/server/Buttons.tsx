@@ -220,7 +220,7 @@ export function Slew(props: ButtonProps) {
             nodAchopA: true,
             nodAchopB: false,
             nodBchopA: false,
-            nodBchopB: false,
+            nodBchopB: true,
           },
         },
       }),
