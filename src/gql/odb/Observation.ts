@@ -25,8 +25,10 @@ const GET_OBSERVATIONS = graphql(`
           }
           pi {
             user {
-              orcidGivenName
-              orcidFamilyName
+              profile {
+                givenName
+                familyName
+              }
             }
           }
           users {

@@ -15,11 +15,11 @@ export function ObservationTable({
   const [filters, setFilters] = useState({
     id: { value: '', matchMode: FilterMatchMode.CONTAINS },
     title: { value: '', matchMode: FilterMatchMode.CONTAINS },
-    'program.pi.user.orcidGivenName': {
+    'program.pi.user.profile.givenName': {
       value: '',
       matchMode: FilterMatchMode.CONTAINS,
     },
-    'program.pi.user.orcidFamilyName': {
+    'program.pi.user.profile.familyName': {
       value: '',
       matchMode: FilterMatchMode.CONTAINS,
     },
@@ -69,8 +69,8 @@ export function ObservationTable({
         globalFilterFields={[
           'id',
           'title',
-          'program.pi.user.orcidGivenName',
-          'program.pi.user.orcidFamilyName',
+          'program.pi.user.profile.givenName',
+          'program.pi.user.profile.familyName',
           'targetEnvironment.firstScienceTarget.name',
         ]}
         header={header}
@@ -79,14 +79,14 @@ export function ObservationTable({
         <Column field="id" header="ID" filter filterPlaceholder="Search ID" style={{ minWidth: '12rem' }} />
         <Column field="title" header="Title" filter filterPlaceholder="Search Title" style={{ minWidth: '12rem' }} />
         <Column
-          field="program.pi.user.orcidGivenName"
+          field="program.pi.user.profile.givenName"
           header="PI Given Name"
           style={{ minWidth: '12rem' }}
           filter
           filterPlaceholder="Filter Given Name"
         />
         <Column
-          field="program.pi.user.orcidFamilyName"
+          field="program.pi.user.profile.familyName"
           header="PI Family Name"
           style={{ minWidth: '12rem' }}
           filter

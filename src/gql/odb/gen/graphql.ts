@@ -147,6 +147,18 @@ export type AddDatasetEventResult = {
   event: DatasetEvent;
 };
 
+export type AddProgramUserInput = {
+  SET?: InputMaybe<ProgramUserPropertiesInput>;
+  orcidId: Scalars['String']['input'];
+  programId: Scalars['ProgramId']['input'];
+  role: ProgramUserRole;
+};
+
+export type AddProgramUserResult = {
+  __typename?: 'AddProgramUserResult';
+  programUser: ProgramUser;
+};
+
 /** SequenceEvent creation parameters. */
 export type AddSequenceEventInput = {
   command: SequenceCommand;
@@ -1800,7 +1812,7 @@ export type Execution = {
   /** Events associated with the observation, across all visits. */
   events: ExecutionEventSelectResult;
   /** Determines the execution state as a whole of this observation. */
-  state: ObservationExecutionState;
+  executionState: ExecutionState;
   /** Time accounting calculation for this observation. */
   timeCharge: CategorizedTime;
   /** Visits associated with the observation. */
@@ -1902,6 +1914,22 @@ export type ExecutionEventType =
   | 'SLEW'
   /** Step-level event type. */
   | 'STEP';
+
+export type ExecutionState =
+  /** No more data is expected. */
+  | 'COMPLETED'
+  /**
+   * The sequence or observation isn't sufficiently defined, or there is a problem
+   * that must first be resolved.
+   */
+  | 'NOT_DEFINED'
+  /** No execution visit has been recorded. */
+  | 'NOT_STARTED'
+  /**
+   * At least one visit was made, but the sequence or observation is not yet
+   * complete.
+   */
+  | 'ONGOING';
 
 /** State of being: either Deleted or Present */
 export type Existence =
@@ -3743,6 +3771,12 @@ export type Mutation = {
    */
   addDatasetEvent: AddDatasetEventResult;
   /**
+   * Looks up or creates (if necessary) a user associated with a given ORCID id and
+   * adds it to the given program.  No invitation is sent as a result of this
+   * operation.
+   */
+  addProgramUser: AddProgramUserResult;
+  /**
    * Adds a sequence event associated with the given visit. Multiple events
    * will be produced during the execution of a sequence as it is started,
    * paused, continued, etc.
@@ -3865,6 +3899,11 @@ export type MutationAddConditionsEntryArgs = {
 
 export type MutationAddDatasetEventArgs = {
   input: AddDatasetEventInput;
+};
+
+
+export type MutationAddProgramUserArgs = {
+  input: AddProgramUserInput;
 };
 
 
@@ -4259,19 +4298,6 @@ export type ObservationEditInput = {
   programId?: InputMaybe<Scalars['ProgramId']['input']>;
 };
 
-export type ObservationExecutionState =
-  /** No more science data is expected for this observation. */
-  | 'COMPLETED'
-  /**
-   * The observation isn't sufficiently defined, or there is a problem that
-   * must first be resolved.
-   */
-  | 'NOT_DEFINED'
-  /** No execution visit has been recorded for this observation. */
-  | 'NOT_STARTED'
-  /** At least one visit was made for this observation, but it is not yet complete. */
-  | 'ONGOING';
-
 /** Observation properties */
 export type ObservationPropertiesInput = {
   /** The constraintSet defaults to standard values if not specified on creation, and may be edited but not deleted */
@@ -4407,12 +4433,12 @@ export type ObservingMode = {
 
 export type ObservingModeGroup = {
   __typename?: 'ObservingModeGroup';
-  /** IDs of observations that use the same constraints */
-  observationIds: Array<Scalars['ObservationId']['output']>;
   /** Observations associated with the common value */
   observations: ObservationSelectResult;
   /** Commonly held value across the observations */
-  observingMode?: Maybe<ObservingMode>;
+  observingMode: ObservingMode;
+  /** Link back to program. */
+  program: Program;
 };
 
 
@@ -4859,6 +4885,7 @@ export type ProgramUser = {
   __typename?: 'ProgramUser';
   /** User educational status. PHD/Undergrad/Grad/Other */
   educationalStatus?: Maybe<EducationalStatus>;
+  fallbackProfile: UserProfile;
   /** Users' reported gender. */
   gender?: Maybe<Gender>;
   partnerLink: PartnerLink;
@@ -4873,6 +4900,7 @@ export type ProgramUser = {
 export type ProgramUserPropertiesInput = {
   /** The user's educational status. */
   educationalStatus?: InputMaybe<EducationalStatus>;
+  fallbackProfile?: InputMaybe<UserProfileInput>;
   /** The user's reported gender. */
   gender?: InputMaybe<Gender>;
   /** The user's partner. */
@@ -5122,6 +5150,13 @@ export type Query = {
   /** Selects the first `LIMIT` matching observations based on the provided `WHERE` parameter, if any. */
   observations: ObservationSelectResult;
   /**
+   * Observations grouped by commonly held observing modes. Identify the program by
+   * specifying only one of programId, programReference, or proposalReference.  If
+   * more than one is provided, all must match.  If none are set, nothing will
+   * match.
+   */
+  observingModeGroup: ObservingModeGroupSelectResult;
+  /**
    * Returns the program with the given id or reference, if any. Identify the
    * program by specifying only one of programId, programReference, or
    * proposalReference. If more than one is provided, all must match.  If none are
@@ -5224,6 +5259,16 @@ export type QueryObservationsArgs = {
   OFFSET?: InputMaybe<Scalars['ObservationId']['input']>;
   WHERE?: InputMaybe<WhereObservation>;
   includeDeleted?: Scalars['Boolean']['input'];
+};
+
+
+export type QueryObservingModeGroupArgs = {
+  LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
+  WHERE?: InputMaybe<WhereObservation>;
+  includeDeleted?: Scalars['Boolean']['input'];
+  programId?: InputMaybe<Scalars['ProgramId']['input']>;
+  programReference?: InputMaybe<Scalars['ProgramReferenceLabel']['input']>;
+  proposalReference?: InputMaybe<Scalars['ProposalReferenceLabel']['input']>;
 };
 
 
@@ -5591,6 +5636,12 @@ export type SequenceDigest = {
    * and any remaining atoms not included in 'possibleFuture'.
    */
   atomCount: Scalars['NonNegInt']['output'];
+  /**
+   * Execution state for the sequence. Note, acquisition sequences are never
+   * 'COMPLETED'.  The execution state for the observation as a whole is that of
+   * the science sequence.
+   */
+  executionState: ExecutionState;
   /** ObserveClass of the whole sequence.  */
   observeClass: ObserveClass;
   /** Unique offsets that occur in the sequence. */
@@ -7242,11 +7293,8 @@ export type UpdateTargetsResult = {
 export type User = {
   __typename?: 'User';
   id: Scalars['UserId']['output'];
-  orcidCreditName?: Maybe<Scalars['String']['output']>;
-  orcidEmail?: Maybe<Scalars['String']['output']>;
-  orcidFamilyName?: Maybe<Scalars['String']['output']>;
-  orcidGivenName?: Maybe<Scalars['String']['output']>;
   orcidId?: Maybe<Scalars['String']['output']>;
+  profile: UserProfile;
   serviceName?: Maybe<Scalars['String']['output']>;
   type: UserType;
 };
@@ -7283,6 +7331,21 @@ export type UserInvitationStatus =
   | 'REDEEMED'
   /** This invitation was revoked, and can no longer be redeemed. */
   | 'REVOKED';
+
+export type UserProfile = {
+  __typename?: 'UserProfile';
+  creditName?: Maybe<Scalars['String']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  familyName?: Maybe<Scalars['String']['output']>;
+  givenName?: Maybe<Scalars['String']['output']>;
+};
+
+export type UserProfileInput = {
+  creditName?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  familyName?: InputMaybe<Scalars['String']['input']>;
+  givenName?: InputMaybe<Scalars['String']['input']>;
+};
 
 export type UserType =
   | 'GUEST'
@@ -8690,6 +8753,8 @@ export type WhereProgramUser = {
   OR?: InputMaybe<Array<WhereProgramUser>>;
   /** Matches the educational status. */
   educationalStatus?: InputMaybe<WhereOptionEqEducationalStatus>;
+  /** Matches the fallback profile. */
+  fallbackProfile?: InputMaybe<WhereUserProfile>;
   /** Matches the gender status. */
   gender?: InputMaybe<WhereOptionEqGender>;
   /** Matches the partner. */
@@ -8838,13 +8903,17 @@ export type WhereUser = {
   OR?: InputMaybe<Array<WhereUser>>;
   /** Matches the user Id. */
   id?: InputMaybe<WhereOrderUserId>;
-  orcidCreditName?: InputMaybe<WhereOptionString>;
-  orcidEmail?: InputMaybe<WhereOptionString>;
-  orcidFamilyName?: InputMaybe<WhereOptionString>;
-  orcidGivenName?: InputMaybe<WhereOptionString>;
   orcidId?: InputMaybe<WhereOptionString>;
+  profile?: InputMaybe<WhereUserProfile>;
   /** Matches the user type. */
   type?: InputMaybe<WhereEqUserType>;
+};
+
+export type WhereUserProfile = {
+  creditName?: InputMaybe<WhereOptionString>;
+  email?: InputMaybe<WhereOptionString>;
+  familyName?: InputMaybe<WhereOptionString>;
+  givenName?: InputMaybe<WhereOptionString>;
 };
 
 export type WhereWavelength = {
@@ -8860,7 +8929,7 @@ export type WhereWavelength = {
 export type GetObservationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetObservationsQuery = { __typename?: 'Query', observations: { __typename?: 'ObservationSelectResult', matches: Array<{ __typename?: 'Observation', id: string, existence: Existence, title: string, subtitle?: string | null, instrument?: Instrument | null, program: { __typename?: 'Program', id: number, existence: Existence, name?: string | null, proposal?: { __typename?: 'Proposal', title?: string | null } | null, pi?: { __typename?: 'ProgramUser', user?: { __typename?: 'User', orcidGivenName?: string | null, orcidFamilyName?: string | null } | null } | null, users: Array<{ __typename?: 'ProgramUser', user?: { __typename?: 'User', serviceName?: string | null } | null }> }, targetEnvironment: { __typename?: 'TargetEnvironment', firstScienceTarget?: { __typename?: 'Target', id: string, existence: Existence, name: string, sidereal?: { __typename?: 'Sidereal', epoch: string, ra: { __typename?: 'RightAscension', hms: string, degrees: number }, dec: { __typename?: 'Declination', dms: string, degrees: number } } | null } | null } }> } };
+export type GetObservationsQuery = { __typename?: 'Query', observations: { __typename?: 'ObservationSelectResult', matches: Array<{ __typename?: 'Observation', id: string, existence: Existence, title: string, subtitle?: string | null, instrument?: Instrument | null, program: { __typename?: 'Program', id: number, existence: Existence, name?: string | null, proposal?: { __typename?: 'Proposal', title?: string | null } | null, pi?: { __typename?: 'ProgramUser', user?: { __typename?: 'User', profile: { __typename?: 'UserProfile', givenName?: string | null, familyName?: string | null } } | null } | null, users: Array<{ __typename?: 'ProgramUser', user?: { __typename?: 'User', serviceName?: string | null } | null }> }, targetEnvironment: { __typename?: 'TargetEnvironment', firstScienceTarget?: { __typename?: 'Target', id: string, existence: Existence, name: string, sidereal?: { __typename?: 'Sidereal', epoch: string, ra: { __typename?: 'RightAscension', hms: string, degrees: number }, dec: { __typename?: 'Declination', dms: string, degrees: number } } | null } | null } }> } };
 
 export type GetGuideEnvironmentQueryVariables = Exact<{
   obsId: Scalars['ObservationId']['input'];
@@ -8870,5 +8939,5 @@ export type GetGuideEnvironmentQueryVariables = Exact<{
 export type GetGuideEnvironmentQuery = { __typename?: 'Query', observation?: { __typename?: 'Observation', targetEnvironment: { __typename?: 'TargetEnvironment', guideEnvironment: { __typename?: 'GuideEnvironment', posAngle: { __typename?: 'Angle', hms: string, degrees: number }, guideTargets: Array<{ __typename?: 'GuideTarget', probe: GuideProbe, name: string, sidereal?: { __typename?: 'Sidereal', epoch: string, ra: { __typename?: 'RightAscension', hms: string, degrees: number }, dec: { __typename?: 'Declination', dms: string, degrees: number } } | null }> } } } | null };
 
 
-export const GetObservationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getObservations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"observations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"matches"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"existence"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"subtitle"}},{"kind":"Field","name":{"kind":"Name","value":"instrument"}},{"kind":"Field","name":{"kind":"Name","value":"program"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"existence"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"proposal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pi"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"orcidGivenName"}},{"kind":"Field","name":{"kind":"Name","value":"orcidFamilyName"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"serviceName"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"targetEnvironment"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"firstScienceTarget"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"existence"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"sidereal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"epoch"}},{"kind":"Field","name":{"kind":"Name","value":"ra"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}},{"kind":"Field","name":{"kind":"Name","value":"dec"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"dms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetObservationsQuery, GetObservationsQueryVariables>;
+export const GetObservationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getObservations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"observations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"matches"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"existence"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"subtitle"}},{"kind":"Field","name":{"kind":"Name","value":"instrument"}},{"kind":"Field","name":{"kind":"Name","value":"program"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"existence"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"proposal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pi"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"givenName"}},{"kind":"Field","name":{"kind":"Name","value":"familyName"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"serviceName"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"targetEnvironment"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"firstScienceTarget"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"existence"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"sidereal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"epoch"}},{"kind":"Field","name":{"kind":"Name","value":"ra"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}},{"kind":"Field","name":{"kind":"Name","value":"dec"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"dms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetObservationsQuery, GetObservationsQueryVariables>;
 export const GetGuideEnvironmentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getGuideEnvironment"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"obsId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ObservationId"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"observation"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"observationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"obsId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"targetEnvironment"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guideEnvironment"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"posAngle"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guideTargets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"probe"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"sidereal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"epoch"}},{"kind":"Field","name":{"kind":"Name","value":"ra"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}},{"kind":"Field","name":{"kind":"Name","value":"dec"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"dms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetGuideEnvironmentQuery, GetGuideEnvironmentQueryVariables>;
