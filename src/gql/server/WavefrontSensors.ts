@@ -12,7 +12,11 @@ const OIWFS_OBSERVE = graphql(`
 `);
 
 export function useOiwfsObserve() {
-  return useMutation(OIWFS_OBSERVE);
+  return useMutation(OIWFS_OBSERVE, {
+    update(cache) {
+      cache.evict({ fieldName: 'guideState' });
+    },
+  });
 }
 
 const OIWFS_STOP_OBSERVE = graphql(`
@@ -25,5 +29,9 @@ const OIWFS_STOP_OBSERVE = graphql(`
 `);
 
 export function useOiwfsStopObserve() {
-  return useMutation(OIWFS_STOP_OBSERVE);
+  return useMutation(OIWFS_STOP_OBSERVE, {
+    update(cache) {
+      cache.evict({ fieldName: 'guideState' });
+    },
+  });
 }

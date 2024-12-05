@@ -20,9 +20,17 @@ export const RESTORE_TARGET_MUTATION = graphql(`
 `);
 
 export function useSwapTarget() {
-  return useMutation(SWAP_TARGET_MUTATION);
+  return useMutation(SWAP_TARGET_MUTATION, {
+    update(cache) {
+      cache.evict({ fieldName: 'navigateState' });
+    },
+  });
 }
 
 export function useRestoreTarget() {
-  return useMutation(RESTORE_TARGET_MUTATION);
+  return useMutation(RESTORE_TARGET_MUTATION, {
+    update(cache) {
+      cache.evict({ fieldName: 'navigateState' });
+    },
+  });
 }

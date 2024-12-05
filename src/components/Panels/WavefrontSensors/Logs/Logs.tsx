@@ -3,25 +3,9 @@ import { useLogMessages } from '@gql/server/Logs';
 import { Title } from '@Shared/Title/Title';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
-import { useEffect, useState } from 'react';
-import { v4 as uuid } from 'uuid';
 
 export default function Logs() {
-  const MAX_LOG_DISPLAY = 20;
-  const { data } = useLogMessages();
-  const [messages, setMessages] = useState<(LogMessage & { id: string })[]>([]);
-
-  useEffect(() => {
-    if (data?.logMessage) {
-      // Give each message a unique id
-      const msg = { id: uuid(), ...data.logMessage };
-      if (messages.length >= MAX_LOG_DISPLAY) {
-        setMessages([msg, ...messages.splice(0, MAX_LOG_DISPLAY - 1)]);
-      } else {
-        setMessages([msg, ...messages]);
-      }
-    }
-  }, [data]);
+  const { data: messages } = useLogMessages();
 
   return (
     <div className="logs-table">

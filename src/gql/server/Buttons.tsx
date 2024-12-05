@@ -34,6 +34,9 @@ function MutationButton<T extends DocumentNode>({
   const toast = useToast();
   const [mutationFunction, { loading, error }] = useMutation<T>(mutation, {
     variables: variables,
+    update(cache) {
+      cache.evict({ fieldName: 'telescopeState' });
+    },
   });
 
   useEffect(() => {
