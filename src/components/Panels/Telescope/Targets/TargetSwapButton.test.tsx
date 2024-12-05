@@ -138,6 +138,7 @@ const navigateStatesMock = (onSwappedTarget: boolean) => [
       query: NAVIGATE_STATE_SUBSCRIPTION,
       variables: {},
     },
+    maxUsageCount: Infinity,
     result: {
       data: {
         navigateState: {

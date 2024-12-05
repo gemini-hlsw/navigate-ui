@@ -12,7 +12,11 @@ const AC_OBSERVE = graphql(`
 `);
 
 export function useAcObserve() {
-  return useMutation(AC_OBSERVE);
+  return useMutation(AC_OBSERVE, {
+    update(cache) {
+      cache.evict({ fieldName: 'guideState' });
+    },
+  });
 }
 
 const AC_STOP_OBSERVE = graphql(`
@@ -25,5 +29,9 @@ const AC_STOP_OBSERVE = graphql(`
 `);
 
 export function useAcStopObserve() {
-  return useMutation(AC_STOP_OBSERVE);
+  return useMutation(AC_STOP_OBSERVE, {
+    update(cache) {
+      cache.evict({ fieldName: 'guideState' });
+    },
+  });
 }

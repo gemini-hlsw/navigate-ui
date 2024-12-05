@@ -1,7 +1,7 @@
 import type { ApolloError, DocumentNode } from '@apollo/client';
-import { useQuery, useSubscription } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import type { ResultOf } from '@graphql-typed-document-node/core';
-import { useDebugValue } from 'react';
+import { useEffect } from 'react';
 
 /**
  * Combines the results of a query and a subscription into a single object.
@@ -19,18 +19,23 @@ export function useQueryAndSubscription<
 ): {
   data: NonNullable<ResultOf<TQuery | TSub>>[K] | undefined;
   loading: boolean;
-  error: ApolloError | undefined;
+  error?: ApolloError;
 } {
-  const query = useQuery<ResultOf<TQuery>>(queryNode);
-  const subscription = useSubscription<ResultOf<TSub>>(subscriptionNode);
+  const query = useQuery<ResultOf<TQuery>>(queryNode, {
+    nextFetchPolicy: 'cache-only',
+    returnPartialData: true,
+  });
 
-  const isSubscription = subscription.data !== undefined;
-
-  useDebugValue(isSubscription ? 'Subscription data' : 'Query data');
+  useEffect(() =>
+    query.subscribeToMore({
+      document: subscriptionNode,
+      updateQuery: (prev, { subscriptionData }) => subscriptionData.data ?? prev,
+    }),
+  );
 
   return {
-    data: isSubscription ? subscription.data?.[key] : query.data?.[key],
-    loading: isSubscription ? subscription.loading : query.loading,
-    error: subscription.error ?? query.error,
+    ...query,
+    data: query.data?.[key],
+    loading: query.loading || query.data === undefined,
   };
 }
