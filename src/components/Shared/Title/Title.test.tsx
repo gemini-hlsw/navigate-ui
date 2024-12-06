@@ -103,16 +103,19 @@ describe('Title test without args', () => {
 describe('Title with children', () => {
   const title = 'My title';
 
-  const CHILDREN = Math.floor(Math.random() * 10);
-  const children: JSX.Element[] = [];
-  for (let i = 0; i < CHILDREN; i++) {
-    children.push(<span key={i}>node {i}</span>);
-  }
+  let children: React.ReactNode[];
+  beforeEach(() => {
+    const CHILDREN = Math.floor(Math.random() * 10);
+    children = new Array(CHILDREN) as React.ReactNode[];
+    for (let i = 0; i < CHILDREN; i++) {
+      children[i] = <span key={i}>node {i}</span>;
+    }
+  });
 
   it('should render title plus children created', async () => {
     const instance = render(<Title title={title}>{children}</Title>);
     await expect.element(page.getByText(title)).toBeInTheDocument();
 
-    expect(instance.container.firstChild?.childNodes).toHaveLength(CHILDREN + 1);
+    expect(instance.container.firstChild?.childNodes).toHaveLength(children.length + 1);
   });
 });

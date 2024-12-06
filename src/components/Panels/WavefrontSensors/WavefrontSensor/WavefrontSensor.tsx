@@ -18,7 +18,7 @@ export default function WavefrontSensor({
 }) {
   const [freq, setFreq] = useState(100);
 
-  let observeButton: JSX.Element | undefined;
+  let observeButton: React.ReactNode | undefined;
   if (wfs === 'OIWFS') {
     observeButton = <OiwfsObserveButton freq={freq} canEdit={canEdit} />;
   } else if (wfs === 'PWFS1') {

@@ -7,7 +7,7 @@ export function useToast() {
   return useContext(ToastContext);
 }
 
-export function ToastProvider({ children }: { children: React.ReactNode }) {
+export function ToastProvider({ children }: React.PropsWithChildren<unknown>) {
   const ref = useRef<Toast>(null);
   const [toast, setToast] = useState<Toast | null>(null);
 

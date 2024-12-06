@@ -1,8 +1,8 @@
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router';
 
 import { useIsLoggedIn } from '@/components/atoms/auth';
 
-export default function RequireAuth({ children }: { children: JSX.Element }) {
+export default function RequireAuth({ children }: React.PropsWithChildren<unknown>) {
   const isLoggedIn = useIsLoggedIn();
   const location = useLocation();
 

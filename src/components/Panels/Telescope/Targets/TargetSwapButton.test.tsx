@@ -20,7 +20,7 @@ describe(TargetSwapButton.name, () => {
         mocks: [getRotatorMock, getInstrumentMock, getConfigurationMock, swapTargetMock, ...navigateStatesMock(false)],
       });
       // wait for state to load
-      await expect.element(sut.getByRole('button')).toBeInTheDocument();
+      await expect.element(sut.getByRole('button')).toBeVisible();
     });
 
     it('should render', async () => {
@@ -30,7 +30,7 @@ describe(TargetSwapButton.name, () => {
     it('should swap target when onSwappedTarget is false', async () => {
       await sut.getByRole('button').click();
 
-      expect(sut.container.querySelector('.p-button-loading')).toBeNull();
+      await expect.element(sut.getByRole('button')).not.toHaveClass('p-button-loading');
       expect(swapTargetMock.result).toHaveBeenCalledOnce();
     });
   });
@@ -134,6 +134,7 @@ const navigateStatesMock = (onSwappedTarget: boolean) => [
     },
   } satisfies MockedResponse<ResultOf<typeof NAVIGATE_STATE>>,
   {
+    delay: 300,
     request: {
       query: NAVIGATE_STATE_SUBSCRIPTION,
       variables: {},
