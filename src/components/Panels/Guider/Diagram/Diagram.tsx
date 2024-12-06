@@ -1,8 +1,10 @@
-import 'reactflow/dist/style.css';
+import '@xyflow/react/dist/style.css';
 
-import { useEffect } from 'react';
-import type { Edge, Node } from 'reactflow';
-import { Background, Controls, ReactFlow, ReactFlowProvider, useReactFlow } from 'reactflow';
+import type { Edge, Node } from '@xyflow/react';
+import { Background, Controls, ReactFlow, ReactFlowProvider, useReactFlow } from '@xyflow/react';
+import { useEffect, useMemo } from 'react';
+
+import { useThemeValue } from '@/components/atoms/theme';
 
 import { useGetGuideState } from './useGetGuideState';
 
@@ -55,9 +57,10 @@ const initialEdges: Edge[] = [
 
 function Flow() {
   const { setNodes, setEdges, fitView } = useReactFlow();
+  const theme = useThemeValue();
   const state = useGetGuideState();
 
-  useEffect(() => {
+  const [sourceNodes, sourceEdges] = useMemo<[Node[], Edge[]]>(() => {
     // Get active sources first
     const sourceNodes: Node[] = [];
     const sourceEdges: Edge[] = [];
@@ -167,7 +170,7 @@ function Flow() {
     // inacive: Disabled
 
     // Tip/Tilt
-    let tiptiltState;
+    let tiptiltState: string;
     if (state.m2TipTiltEnable) {
       if (sourceEdges.find((n) => n.target === 'tiptilt')) {
         tiptiltState = 'active';
@@ -194,7 +197,7 @@ function Flow() {
     initialEdges.find((n) => n.id === 'tiptilt-mount')!.className = mountState;
 
     // Focus
-    let focusState;
+    let focusState: string;
     if (state.m2FocusEnable) {
       if (sourceEdges.find((n) => n.target === 'focus')) {
         focusState = 'active';
@@ -207,7 +210,7 @@ function Flow() {
     initialNodes.find((n) => n.id === 'focus')!.className = focusState;
 
     // Coma
-    let comaState;
+    let comaState: string;
     if (state.m2ComaEnable) {
       if (sourceEdges.find((n) => n.target === 'coma')) {
         comaState = 'active';
@@ -220,7 +223,7 @@ function Flow() {
     initialNodes.find((n) => n.id === 'coma')!.className = comaState;
 
     // High-O
-    let highoState;
+    let highoState: string;
     if (state.m1CorrectionsEnable) {
       if (sourceEdges.find((n) => n.target === 'higho')) {
         highoState = 'active';
@@ -239,17 +242,30 @@ function Flow() {
       sourceNodes.forEach((n, i) => (n.position.x = i * 100));
     }
 
-    setNodes([...sourceNodes, ...initialNodes]);
-    setEdges([...sourceEdges, ...initialEdges]);
+    return [
+      [...sourceNodes, ...initialNodes],
+      [...sourceEdges, ...initialEdges],
+    ];
+  }, [state]);
 
-    const timeout = setTimeout(() => fitView({ duration: 1000 }), 20);
+  useEffect(() => {
+    setNodes(sourceNodes);
+    setEdges(sourceEdges);
+
+    const timeout = setTimeout(() => void fitView({ duration: 1000 }), 20);
 
     return () => clearTimeout(timeout);
-  }, [state]);
+  }, [sourceNodes, sourceEdges]);
 
   return (
     <div className="diagram">
-      <ReactFlow defaultNodes={initialNodes} defaultEdges={initialEdges} proOptions={{ hideAttribution: true }} fitView>
+      <ReactFlow
+        defaultNodes={initialNodes}
+        defaultEdges={initialEdges}
+        proOptions={{ hideAttribution: true }}
+        colorMode={theme}
+        fitView
+      >
         <Background />
         <Controls showZoom={false} showInteractive={false} position="bottom-right" />
       </ReactFlow>
