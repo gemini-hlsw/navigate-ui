@@ -18,10 +18,10 @@ export function Target({
 }) {
   const canEdit = useCanEdit();
   const setTargetEdit = useSetTargetEdit();
-  const clickRef = useRef<ReturnType<typeof setTimeout>>();
+  const clickRef = useRef<ReturnType<typeof setTimeout>>(null);
 
   function onLongPress() {
-    clearTimeout(clickRef.current);
+    if (clickRef.current) clearTimeout(clickRef.current);
     setTargetEdit({
       isVisible: true,
       target: target,
@@ -43,7 +43,7 @@ export function Target({
         }, 300);
         break;
       case 2:
-        clearTimeout(clickRef.current);
+        if (clickRef.current) clearTimeout(clickRef.current);
         setTargetEdit({
           isVisible: true,
           target: target,
@@ -59,7 +59,7 @@ export function Target({
     return (
       <li
         className={`${selectedTarget === target.pk ? 'selected-target' : ''}`}
-        key={`science-target`}
+        key="science-target"
         {...longPressEvent}
       >
         <div className="target-item">
@@ -77,7 +77,7 @@ export function Target({
     return (
       <li
         className={`${selectedTarget === target.pk ? 'selected-target' : ''}`}
-        key={`science-target`}
+        key="science-target"
         {...longPressEvent}
       >
         <div className="target-item">

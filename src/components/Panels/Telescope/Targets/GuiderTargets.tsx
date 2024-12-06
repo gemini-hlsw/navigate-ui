@@ -28,7 +28,7 @@ export function GuiderTargets() {
 
   const selectedTarget: Target | undefined = allTargets.find((t) => t.pk === configuration?.selectedTarget);
 
-  const displayProbes: JSX.Element[] = [];
+  const displayProbes: React.ReactNode[] = [];
   if (oiTargets.length) {
     const oiSelected = oiTargets.find((t) => t.pk === configuration?.selectedOiTarget);
     displayProbes.push(
@@ -64,8 +64,8 @@ export function GuiderTargets() {
 
   if (!displayProbes.length) {
     displayProbes.push(
-      <div key={`guideProbe-0`} className="guide-probe">
-        <Title title={`OIWFS`} />
+      <div key="guideProbe-0" className="guide-probe">
+        <Title title="OIWFS" />
         <TargetList targets={[]} />
         <GuiderFooter disabled={true} />
       </div>,

@@ -64,7 +64,7 @@ export function Instrument() {
     </div>
   );
 
-  const tableData: JSX.Element[] = [];
+  const tableData: React.ReactNode[] = [];
   instrumentOptions.map((i, idx) => {
     tableData.push(
       <InstrumentDetails
@@ -76,7 +76,7 @@ export function Instrument() {
     );
   });
 
-  let table: JSX.Element | null = null;
+  let table: React.ReactNode | null = null;
   if (port && name) {
     table = (
       <table className="table">
@@ -98,7 +98,7 @@ export function Instrument() {
 
   return (
     <Dialog
-      header={`Import instrument`}
+      header="Import instrument"
       visible={importInstrument}
       footer={footer}
       modal

@@ -3,7 +3,7 @@ import './Login.scss';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { useOdbToken } from '../atoms/odb';
 

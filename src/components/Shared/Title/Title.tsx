@@ -1,14 +1,13 @@
 import { OverlayPanel } from 'primereact/overlaypanel';
-import type { MouseEventHandler, ReactNode } from 'react';
+import type { MouseEventHandler } from 'react';
 import { useRef } from 'react';
 
-interface ParamsInterface {
+type ParamsInterface = React.PropsWithChildren<{
   title: string;
   prevPanel?: MouseEventHandler<HTMLButtonElement>;
   nextPanel?: MouseEventHandler<HTMLButtonElement>;
-  children?: ReactNode;
   className?: string;
-}
+}>;
 
 export function Title({ title, prevPanel, nextPanel, children, className = '' }: ParamsInterface) {
   let prevPanelDisplay = null;
@@ -40,7 +39,7 @@ export function Title({ title, prevPanel, nextPanel, children, className = '' }:
   );
 }
 
-export function TitleDropdown({ children, icon }: { children: ReactNode; icon: string }) {
+export function TitleDropdown({ children, icon }: React.PropsWithChildren<{ icon: string }>) {
   const op = useRef<OverlayPanel>(null);
 
   return (

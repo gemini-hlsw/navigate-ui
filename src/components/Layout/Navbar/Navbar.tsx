@@ -4,7 +4,7 @@ import { useConfiguration } from '@gql/configs/Configuration';
 import { clsx } from 'clsx';
 import { Button } from 'primereact/button';
 import { SplitButton } from 'primereact/splitbutton';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 
 import { useAlarmValue } from '@/components/atoms/alarm';
 import { useIsLoggedIn, useSignout, useUser } from '@/components/atoms/auth';

@@ -1,6 +1,6 @@
 import './Layout.scss';
 
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 
 import { AlarmAudio } from './AlarmAudio';
 import Navbar from './Navbar/Navbar';

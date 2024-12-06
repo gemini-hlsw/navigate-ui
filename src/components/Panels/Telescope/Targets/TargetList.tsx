@@ -72,12 +72,7 @@ export function TargetList({ targets, type }: { targets: TargetType[]; type?: Ty
   if (!displayTargets.length) {
     // Return an empty target as placeholder
     displayTargets.push(
-      <Target
-        key={`obsTarget-0`}
-        target={{} as TargetType}
-        updateSelectedTarget={() => undefined}
-        selectedTarget={0}
-      />,
+      <Target key="obsTarget-0" target={{} as TargetType} updateSelectedTarget={() => undefined} selectedTarget={0} />,
     );
   }
   return (

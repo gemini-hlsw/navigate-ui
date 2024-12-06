@@ -1,4 +1,4 @@
-import type { ApolloError, DocumentNode } from '@apollo/client';
+import type { ApolloError, DocumentNode, MaybeMasked } from '@apollo/client';
 import { useQuery } from '@apollo/client';
 import type { ResultOf } from '@graphql-typed-document-node/core';
 import { useEffect } from 'react';
@@ -11,13 +11,13 @@ import { useEffect } from 'react';
 export function useQueryAndSubscription<
   TQuery extends DocumentNode,
   TSub extends DocumentNode,
-  K extends keyof ResultOf<TQuery | TSub>,
+  K extends keyof MaybeMasked<ResultOf<TQuery | TSub>>,
 >(
   queryNode: TQuery,
   subscriptionNode: TSub,
   key: K,
 ): {
-  data: NonNullable<ResultOf<TQuery | TSub>>[K] | undefined;
+  data: NonNullable<MaybeMasked<ResultOf<TQuery | TSub>>>[K] | undefined;
   loading: boolean;
   error?: ApolloError;
 } {
@@ -26,11 +26,13 @@ export function useQueryAndSubscription<
     returnPartialData: true,
   });
 
-  useEffect(() =>
-    query.subscribeToMore({
-      document: subscriptionNode,
-      updateQuery: (prev, { subscriptionData }) => subscriptionData.data ?? prev,
-    }),
+  useEffect(
+    () =>
+      query.subscribeToMore({
+        document: subscriptionNode,
+        updateQuery: (prev, { subscriptionData }) => subscriptionData.data ?? prev,
+      }),
+    [subscriptionNode],
   );
 
   return {

@@ -2,7 +2,7 @@ import type { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client';
 import { Modals } from '@Contexts/Variables/Modals/Modals';
 import { useEffect } from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router';
 
 import { useThemeValue } from './components/atoms/theme';
 import Home from './components/Layout/Home/Home';
