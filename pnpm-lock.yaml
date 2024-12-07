@@ -27,8 +27,8 @@ importers:
         specifier: 0.109.0
         version: 0.109.0
       lucuma-ui-css:
-        specifier: 0.124.1
-        version: 0.124.1
+        specifier: 0.124.2
+        version: 0.124.2
       primeicons:
         specifier: 7.0.0
         version: 7.0.0
@@ -2985,8 +2985,8 @@ packages:
   lucuma-schemas@0.108.0:
     resolution: {integrity: sha512-bpDRWLdVYAs8VpedKdOZdj5xo5GopN952FwhrAQ354xoK3XKFGhmvpmvX7HZyeqqqpo749UCEx4SkrsinH8/qg==}
 
-  lucuma-ui-css@0.124.1:
-    resolution: {integrity: sha512-A3BGc2f2MIyXYJ+8uD8G+7Xod5k0FVcw4H6P0m7eGmeSeAkrZ2j44A3mf6JAlTtYHZkFA/pa7Oh9cFDDwmCUWw==}
+  lucuma-ui-css@0.124.2:
+    resolution: {integrity: sha512-7Pfm6dxj6ysK3YmwG4yez/uS5D+joUutG7awk4dx8qktPbvogpQMa4+SY2mNIId86tPLuJ3uxVdYyq/1Er6w/A==}
 
   lz-string@1.5.0:
     resolution: {integrity: sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ==}
@@ -7433,7 +7433,7 @@ snapshots:
 
   lucuma-schemas@0.108.0: {}
 
-  lucuma-ui-css@0.124.1: {}
+  lucuma-ui-css@0.124.2: {}
 
   lz-string@1.5.0: {}
 
