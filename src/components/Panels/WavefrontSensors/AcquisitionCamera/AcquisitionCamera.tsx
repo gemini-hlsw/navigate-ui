@@ -25,7 +25,7 @@ export default function AcquisitionCamera({ canEdit, ac }: { canEdit: boolean; a
         : void startObserve({
             variables: { period: { milliseconds: exp * 1000 } },
           }),
-    [exp, integrating],
+    [exp, integrating, startObserve, stopObserve],
   );
 
   const loading = guideStateLoading || startObserveLoading || stopObserveLoading;

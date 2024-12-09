@@ -14,7 +14,7 @@ export function ToastProvider({ children }: React.PropsWithChildren<unknown>) {
   // We have to wrap the ref in a state to force a re-render on initial mount, otherwise the context value will be null
   useEffect(() => {
     if (ref.current) setToast(ref.current);
-  }, [ref.current]);
+  }, [ref]);
 
   return (
     <>

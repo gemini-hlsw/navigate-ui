@@ -5,7 +5,7 @@ import { useLightpathConfig } from '@gql/server/Lightpath';
 import { Title } from '@Shared/Title/Title';
 import { clsx } from 'clsx';
 import { Button } from 'primereact/button';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
 
@@ -14,29 +14,30 @@ export function LightPath() {
 
   const { data, loading: getLoading } = useGetGuideLoop();
   const [updateGuideLoop, { loading: updateLoading }] = useUpdateGuideLoop();
-  const state = data?.guideLoop ?? ({} as Partial<GuideLoop>);
+  const state = useMemo(() => data?.guideLoop ?? ({} as Partial<GuideLoop>), [data?.guideLoop]);
   const lightPath = state.lightPath;
 
   const [updateLightpathConfig, { loading: lightpathConfigLoading }] = useLightpathConfig();
 
-  async function modifyGuideLoop<T extends keyof UpdateGuideLoopMutationVariables>(
-    name: T,
-    value: UpdateGuideLoopMutationVariables[T],
-  ) {
-    if (state.pk)
-      await updateGuideLoop({
-        variables: {
-          pk: state.pk,
-          [name]: value,
-        },
-        optimisticResponse: {
-          updateGuideLoop: {
-            ...(state as GuideLoop),
+  const modifyGuideLoop = useCallback(
+    async <T extends keyof UpdateGuideLoopMutationVariables>(name: T, value: UpdateGuideLoopMutationVariables[T]) => {
+      if (state.pk)
+        await updateGuideLoop({
+          variables: {
+            pk: state.pk,
             [name]: value,
           },
-        },
-      });
-  }
+          optimisticResponse: {
+            updateGuideLoop: {
+              ...(state as GuideLoop),
+              [name]: value,
+            },
+          },
+        });
+    },
+    [state, updateGuideLoop],
+  );
+
   const disabled = !canEdit;
   const loading = getLoading || updateLoading || lightpathConfigLoading;
 
@@ -57,7 +58,7 @@ export function LightPath() {
         }),
       ]);
     },
-    [lightPath],
+    [modifyGuideLoop, updateLightpathConfig],
   );
 
   return (

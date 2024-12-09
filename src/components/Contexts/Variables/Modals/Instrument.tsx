@@ -26,7 +26,7 @@ export function Instrument() {
           setNameOptions(data.distinctInstruments.map((e) => e.name));
         },
       });
-  }, [importInstrument]);
+  }, [getNames, importInstrument]);
 
   useEffect(() => {
     if (name) {
@@ -38,7 +38,7 @@ export function Instrument() {
         },
       });
     }
-  }, [name]);
+  }, [getPorts, name]);
 
   useEffect(() => {
     if (port && name) {
@@ -49,7 +49,7 @@ export function Instrument() {
         },
       });
     }
-  }, [port]);
+  }, [getInstruments, name, port]);
 
   function modifyInstrument() {
     setImportInstrument(false);
