@@ -32,7 +32,7 @@ export function useQueryAndSubscription<
         document: subscriptionNode,
         updateQuery: (prev, { subscriptionData }) => subscriptionData.data ?? prev,
       }),
-    [subscriptionNode],
+    [query, subscriptionNode],
   );
 
   return {

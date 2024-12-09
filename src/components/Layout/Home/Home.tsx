@@ -60,7 +60,7 @@ export default function Home() {
         nextPanel();
       }
     },
-    [prevPanel, nextPanel],
+    [touchPos, prevPanel, nextPanel],
   );
 
   return (

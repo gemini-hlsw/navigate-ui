@@ -76,7 +76,7 @@ function OiwfsObserveButton({ freq, canEdit }: { freq: number; canEdit: boolean 
         : void startObserve({
             variables: { period: { milliseconds: (1 / freq) * 1000 } },
           }),
-    [freq, integrating],
+    [freq, integrating, startObserve, stopObserve],
   );
 
   return (

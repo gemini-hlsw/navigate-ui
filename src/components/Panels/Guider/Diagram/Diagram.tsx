@@ -255,7 +255,7 @@ function Flow() {
     const timeout = setTimeout(() => void fitView({ duration: 1000 }), 20);
 
     return () => clearTimeout(timeout);
-  }, [sourceNodes, sourceEdges]);
+  }, [sourceNodes, sourceEdges, setNodes, setEdges, fitView]);
 
   return (
     <div className="diagram">

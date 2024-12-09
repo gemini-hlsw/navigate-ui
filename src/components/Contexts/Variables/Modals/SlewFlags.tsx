@@ -11,7 +11,7 @@ import type { SlewFlagsType } from '@/types';
 export function SlewFlags() {
   const [slewVisible, setSlewVisible] = useSlewVisible();
 
-  const onHide = useCallback(() => setSlewVisible(false), []);
+  const onHide = useCallback(() => setSlewVisible(false), [setSlewVisible]);
 
   const { data } = useSlewFlags();
   const slewFlags = data?.slewFlags ?? ({} as SlewFlagsType);

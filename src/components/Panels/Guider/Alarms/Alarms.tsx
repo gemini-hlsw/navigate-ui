@@ -31,7 +31,7 @@ export function Alarms() {
         evaluateAlarm(alarms.PWFS2, guideQualities.pwfs2));
 
     toggleGuideAlarm(hasAlarm);
-  }, [alarms, guideQualities]);
+  }, [alarms, guideQualities, toggleGuideAlarm]);
 
   function onUpdateAlarm(variables: UpdateGuideAlarmMutationVariables) {
     void updateAlarm({

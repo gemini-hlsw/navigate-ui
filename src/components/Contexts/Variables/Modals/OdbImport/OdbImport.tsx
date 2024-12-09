@@ -147,7 +147,7 @@ export function OdbImport() {
       void getObservations({
         fetchPolicy: 'no-cache',
       });
-  }, [odbVisible]);
+  }, [getObservations, odbVisible]);
 
   return (
     <Dialog header="Import from ODB" footer={footer} visible={odbVisible} modal onHide={() => setOdbVisible(false)}>

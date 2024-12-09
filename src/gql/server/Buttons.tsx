@@ -48,7 +48,7 @@ function MutationButton<T extends DocumentNode>({
         life: TOAST_LIFE,
       });
     }
-  }, [error]);
+  }, [error, toast]);
 
   return <Button {...props} onClick={() => void mutationFunction({ variables })} loading={props.loading || loading} />;
 }

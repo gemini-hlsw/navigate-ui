@@ -23,7 +23,7 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
   const instrument = data?.instrument;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  function updateInstrument({ key, val }: { key: string; val: unknown }) {
+  function updateInstrument<T>({ key, val }: { key: T; val: unknown }) {
     console.log('Update instrument');
   }
 
