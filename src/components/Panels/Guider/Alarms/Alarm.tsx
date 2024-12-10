@@ -74,7 +74,7 @@ export function Alarm({
           {guideQuality?.centroidDetected ? 'OK' : 'NOK'}
         </output>
         <label htmlFor={`enabled-${id}`} className="label">
-          Enabled
+          Enable
         </label>
         <Checkbox inputId={`enabled-${id}`} disabled={disabledOrNoData} checked={enabled} onChange={onEnabledChange} />
       </div>
