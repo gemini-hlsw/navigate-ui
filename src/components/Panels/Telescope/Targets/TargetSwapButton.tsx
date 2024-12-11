@@ -138,6 +138,10 @@ export function TargetSwapButton({
       let detail;
       if (!selectedTarget) {
         detail = 'No target';
+      } else if (!oiSelected) {
+        detail = 'No guide star';
+      } else if (!acInst) {
+        detail = 'No acquisition camera';
       } else if (!instrument) {
         detail = 'No instrument';
       } else if (!rotator) {
