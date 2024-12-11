@@ -27,10 +27,12 @@ export function GuiderTargets() {
   const configuration = useConfiguration().data?.configuration;
 
   const selectedTarget: Target | undefined = allTargets.find((t) => t.pk === configuration?.selectedTarget);
+  const oiSelected: Target | undefined = oiTargets.find((t) => t.pk === configuration?.selectedOiTarget);
+  const p1Selected: Target | undefined = p1Targets.find((t) => t.pk === configuration?.selectedP1Target);
+  const p2Selected: Target | undefined = p2Targets.find((t) => t.pk === configuration?.selectedP2Target);
 
   const displayProbes: React.ReactNode[] = [];
   if (oiTargets.length) {
-    const oiSelected = oiTargets.find((t) => t.pk === configuration?.selectedOiTarget);
     displayProbes.push(
       <div key={'OIWFS'} className="guide-probe">
         <Title title={oiSelected ? `OIWFS: ${oiSelected.name}` : 'OIWFS'} />
@@ -41,7 +43,6 @@ export function GuiderTargets() {
   }
 
   if (p1Targets.length) {
-    const p1Selected = p1Targets.find((t) => t.pk === configuration?.selectedP1Target);
     displayProbes.push(
       <div key={'PWFS1'} className="guide-probe">
         <Title title={p1Selected ? `PWFS1: ${p1Selected.name}` : 'PWFS1'} />
@@ -52,7 +53,6 @@ export function GuiderTargets() {
   }
 
   if (p2Targets.length) {
-    const p2Selected = p2Targets.find((t) => t.pk === configuration?.selectedP2Target);
     displayProbes.push(
       <div key={'PWFS2'} className="guide-probe">
         <Title title={p2Selected ? `PWFS2: ${p2Selected.name}` : 'PWFS2'} />
@@ -75,7 +75,12 @@ export function GuiderTargets() {
     <div className="guiders">
       <Title title="Guiders" />
       <div className="body">{displayProbes}</div>
-      <TargetSwapButton selectedTarget={selectedTarget} />
+      <TargetSwapButton
+        selectedTarget={selectedTarget}
+        oiSelected={oiSelected}
+        // p1Selected={p1Selected}
+        // p2Selected={p2Selected}
+      />
     </div>
   );
 }
