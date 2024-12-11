@@ -197,12 +197,12 @@ const swapTargetMock: MockedResponse<
         },
         rotator: { ipa: { degrees: 0 }, mode: 'TRACKING' },
         guideTarget: {
-          id: selectedTarget.id,
-          name: selectedTarget.name,
+          id: oiSelected.id,
+          name: oiSelected.name,
           sidereal: {
-            ra: { hms: selectedTarget.ra.hms },
-            dec: { dms: selectedTarget.dec.dms },
-            epoch: selectedTarget.epoch,
+            ra: { hms: oiSelected.ra.hms },
+            dec: { dms: oiSelected.dec.dms },
+            epoch: oiSelected.epoch,
           },
         },
       },
