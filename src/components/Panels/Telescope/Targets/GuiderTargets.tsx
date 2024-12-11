@@ -78,8 +78,8 @@ export function GuiderTargets() {
       <TargetSwapButton
         selectedTarget={selectedTarget}
         oiSelected={oiSelected}
-        p1Selected={p1Selected}
-        p2Selected={p2Selected}
+        // p1Selected={p1Selected}
+        // p2Selected={p2Selected}
       />
     </div>
   );

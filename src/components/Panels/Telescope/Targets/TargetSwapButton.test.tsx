@@ -17,12 +17,7 @@ describe(TargetSwapButton.name, () => {
   describe('onSwappedTarget is false', () => {
     beforeEach(async () => {
       sut = renderWithContext(
-        <TargetSwapButton
-          selectedTarget={selectedTarget as Target}
-          oiSelected={oiSelected as Target}
-          p1Selected={p1Selected as Target}
-          p2Selected={p2Selected as Target}
-        />,
+        <TargetSwapButton selectedTarget={selectedTarget as Target} oiSelected={oiSelected as Target} />,
         {
           mocks: [
             getRotatorMock,
@@ -52,12 +47,7 @@ describe(TargetSwapButton.name, () => {
   describe('onSwappedTarget is true', () => {
     beforeEach(async () => {
       sut = renderWithContext(
-        <TargetSwapButton
-          selectedTarget={selectedTarget as Target}
-          oiSelected={oiSelected as Target}
-          p1Selected={p1Selected as Target}
-          p2Selected={p2Selected as Target}
-        />,
+        <TargetSwapButton selectedTarget={selectedTarget as Target} oiSelected={oiSelected as Target} />,
         {
           mocks: [
             getRotatorMock,
@@ -117,44 +107,6 @@ const oiSelected = {
   el: null,
   epoch: 'J2000.000',
   type: 'OIWFS',
-  createdAt: '2024-09-25T11:57:29.410Z',
-};
-
-const p1Selected = {
-  pk: 11,
-  id: 't-000',
-  name: 'OI Target',
-  ra: {
-    degrees: 56.69542085833334,
-    hms: '03:46:46.901006',
-  },
-  dec: {
-    degrees: 80.07267194527778,
-    dms: '+80:04:21.618990',
-  },
-  az: null,
-  el: null,
-  epoch: 'J2000.000',
-  type: 'P1WFS',
-  createdAt: '2024-09-25T11:57:29.410Z',
-};
-
-const p2Selected = {
-  pk: 12,
-  id: 't-000',
-  name: 'OI Target',
-  ra: {
-    degrees: 56.69542085833334,
-    hms: '03:46:46.901006',
-  },
-  dec: {
-    degrees: 80.07267194527778,
-    dms: '+80:04:21.618990',
-  },
-  az: null,
-  el: null,
-  epoch: 'J2000.000',
-  type: 'P2WFS',
   createdAt: '2024-09-25T11:57:29.410Z',
 };
 

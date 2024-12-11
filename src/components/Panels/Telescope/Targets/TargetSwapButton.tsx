@@ -18,13 +18,13 @@ import { useToast } from '@/Helpers/toast';
 export function TargetSwapButton({
   selectedTarget,
   oiSelected,
-  p1Selected,
-  p2Selected,
+  // p1Selected,
+  // p2Selected,
 }: {
   selectedTarget: Target | undefined;
   oiSelected: Target | undefined;
-  p1Selected: Target | undefined;
-  p2Selected: Target | undefined;
+  // p1Selected: Target | undefined;
+  // p2Selected: Target | undefined;
 }) {
   const canEdit = useCanEdit();
   const toast = useToast();
