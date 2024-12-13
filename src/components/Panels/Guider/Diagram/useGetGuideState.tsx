@@ -17,6 +17,9 @@ export function useGetGuideState() {
       m2TipTiltFocusLink: true,
       m2TipTiltSource: 'OIWFS',
       probeTracking: 'OI➡OI',
+      p1Integrating: false,
+      p2Integrating: false,
+      oiIntegrating: false,
     };
 
   return {
@@ -32,5 +35,8 @@ export function useGetGuideState() {
     m2TipTiltFocusLink: true,
     m2TipTiltSource: data.m2Inputs ? (data.m2Inputs as string[]).join(',') : 'NONE',
     probeTracking: 'OI➡OI',
+    p1Integrating: data.p1Integrating,
+    p2Integrating: data.p2Integrating,
+    oiIntegrating: data.oiIntegrating,
   };
 }

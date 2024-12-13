@@ -10,6 +10,8 @@ const GUIDE_STATE_SUBSCRIPTION = graphql(`
       m2Coma
       m1Input
       mountOffload
+      p1Integrating
+      p2Integrating
       oiIntegrating
       acIntegrating
     }
@@ -23,6 +25,8 @@ const GUIDE_STATE_QUERY = graphql(`
       m2Coma
       m1Input
       mountOffload
+      p1Integrating
+      p2Integrating
       oiIntegrating
       acIntegrating
     }
