@@ -8,6 +8,23 @@ import { Button } from 'primereact/button';
 import { useCallback, useMemo } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
+/**
+ * | UI Option               | LightSource | LightSink |
+ * | ----------------------- | ----------- | --------- |
+ * | Sky -> Instrument       | Sky         | GMOS      |
+ * | Sky -> AO -> Instrument | AO          | GMOS      |
+ * | Sky -> AC               | Sky         | AC        |
+ * | Sky -> AO -> AC         | AO          | AC        |
+ * | GCAL -> Instrument      | GCAL        | GMOS      |
+ *
+ */
+const options: { label: string; from: LightSource; to: LightSink }[] = [
+  { label: 'Sky → Instrument', from: 'SKY', to: 'GMOS' },
+  { label: 'Sky → AO → Instrument', from: 'AO', to: 'GMOS' },
+  { label: 'Sky → AC', from: 'SKY', to: 'AC' },
+  { label: 'Sky → AO → AC', from: 'AO', to: 'AC' },
+  { label: 'GCAL → Instrument', from: 'GCAL', to: 'GMOS' },
+];
 
 export function LightPath() {
   const canEdit = useCanEdit();
@@ -40,14 +57,6 @@ export function LightPath() {
 
   const disabled = !canEdit;
   const loading = getLoading || updateLoading || lightpathConfigLoading;
-
-  const options: { label: string; from: LightSource; to: LightSink }[] = [
-    { label: 'Sky → Instrument', from: 'SKY', to: 'GMOS' },
-    { label: 'Sky → AO → Instrument', from: 'SKY', to: 'GMOS' },
-    { label: 'Sky → AC', from: 'SKY', to: 'AC' },
-    { label: 'Sky → AO → AC', from: 'SKY', to: 'AC' },
-    { label: 'GCAL → Instrument', from: 'GCAL', to: 'GMOS' },
-  ] as const;
 
   const onClick = useCallback(
     async (newLightPath: string, from: LightSource, to: LightSink) => {
