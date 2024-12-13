@@ -16,6 +16,8 @@ export type Scalars = {
   Float: { input: number; output: number; }
   /** AtomId id formatted as `a-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}` */
   AtomId: { input: string; output: string; }
+  /** AttachmentId id formatted as `a-[1-9a-f][0-9a-f]*` */
+  AttachmentId: { input: any; output: any; }
   /** The `BigDecimal` scalar type represents signed fractional values with arbitrary precision. */
   BigDecimal: { input: number; output: number; }
   /** Defines a unique ID for each Call for Proposals. */
@@ -62,8 +64,6 @@ export type Scalars = {
   NonNegLong: { input: number; output: number; }
   /** A `Short` in the range from 0 to 32767 */
   NonNegShort: { input: number; output: number; }
-  /** ObsAttachmentId id formatted as `a-[1-9a-f][0-9a-f]*` */
-  ObsAttachmentId: { input: string; output: string; }
   /** ObservationId id formatted as `o-[1-9a-f][0-9a-f]*` */
   ObservationId: { input: string; output: string; }
   /**
@@ -442,6 +442,41 @@ export type AtomRecordSelectResult = {
 export type AtomStage =
   | 'END_ATOM'
   | 'START_ATOM';
+
+/** Attachment */
+export type Attachment = {
+  __typename?: 'Attachment';
+  attachmentType: AttachmentType;
+  checked: Scalars['Boolean']['output'];
+  description?: Maybe<Scalars['NonEmptyString']['output']>;
+  fileName: Scalars['NonEmptyString']['output'];
+  fileSize: Scalars['Long']['output'];
+  id: Scalars['AttachmentId']['output'];
+  program: Program;
+  updatedAt: Scalars['Timestamp']['output'];
+};
+
+export type AttachmentPropertiesInput = {
+  /** The checked status can be set, or ignored by skipping it altogether */
+  checked?: InputMaybe<Scalars['Boolean']['input']>;
+  /** The description field may be unset by assigning a null value, or ignored by skipping it altogether */
+  description?: InputMaybe<Scalars['NonEmptyString']['input']>;
+};
+
+/** Attachment Types */
+export type AttachmentType =
+  /** A target attachment for custom SEDs */
+  | 'CUSTOM_SED'
+  /** An observation attachment for finder charts */
+  | 'FINDER'
+  /** An observation attachment for MOS masks */
+  | 'MOS_MASK'
+  /** An observation attachment for pre-imaging */
+  | 'PRE_IMAGING'
+  /** A proposal attachment for the science case & design */
+  | 'SCIENCE'
+  /** A proposal attachment for team info, previous use, etc. */
+  | 'TEAM';
 
 /** Brightness bands */
 export type Band =
@@ -2465,12 +2500,21 @@ export type GmosNorthDynamicInput = {
 /** GMOS North Execution Config */
 export type GmosNorthExecutionConfig = {
   __typename?: 'GmosNorthExecutionConfig';
-  /** GMOS North acquisition execution */
+  /**
+   * GMOS North acquisition execution sequence.  Pass `true` to (re)start
+   * acquisition from the initial step.
+   */
   acquisition?: Maybe<GmosNorthExecutionSequence>;
   /** GMOS North science execution */
   science?: Maybe<GmosNorthExecutionSequence>;
   /** GMOS North static configuration */
   static: GmosNorthStatic;
+};
+
+
+/** GMOS North Execution Config */
+export type GmosNorthExecutionConfigAcquisitionArgs = {
+  reset?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** Next atom to execute and potential future atoms. */
@@ -2925,12 +2969,21 @@ export type GmosSouthDynamicInput = {
 /** GMOS South Execution Config */
 export type GmosSouthExecutionConfig = {
   __typename?: 'GmosSouthExecutionConfig';
-  /** GMOS South acquisition execution */
+  /**
+   * GMOS South acquisition execution sequence.  Pass `true` to (re)start
+   * acquisition from the initial step.
+   */
   acquisition?: Maybe<GmosSouthExecutionSequence>;
   /** GMOS South science execution */
   science?: Maybe<GmosSouthExecutionSequence>;
   /** GMOS South static configuration */
   static: GmosSouthStatic;
+};
+
+
+/** GMOS South Execution Config */
+export type GmosSouthExecutionConfigAcquisitionArgs = {
+  reset?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** Next atom to execute and potential future atoms. */
@@ -3865,13 +3918,13 @@ export type Mutation = {
    * observations at once.
    */
   updateAsterisms: UpdateAsterismsResult;
+  updateAttachments: UpdateAttachmentsResult;
   /** Update existing calls for proposals. */
   updateCallsForProposals: UpdateCallsForProposalsResult;
   /** Update existing configuration requests. */
   updateConfigurationRequests: UpdateConfigurationRequestsResult;
   updateDatasets: UpdateDatasetsResult;
   updateGroups: UpdateGroupsResult;
-  updateObsAttachments: UpdateObsAttachmentsResult;
   /** Updates existing observations */
   updateObservations: UpdateObservationsResult;
   /** Updates existing observations times (execution and duration) */
@@ -4067,6 +4120,11 @@ export type MutationUpdateAsterismsArgs = {
 };
 
 
+export type MutationUpdateAttachmentsArgs = {
+  input: UpdateAttachmentsInput;
+};
+
+
 export type MutationUpdateCallsForProposalsArgs = {
   input: UpdateCallsForProposalsInput;
 };
@@ -4084,11 +4142,6 @@ export type MutationUpdateDatasetsArgs = {
 
 export type MutationUpdateGroupsArgs = {
   input: UpdateGroupsInput;
-};
-
-
-export type MutationUpdateObsAttachmentsArgs = {
-  input: UpdateObsAttachmentsInput;
 };
 
 
@@ -4148,49 +4201,6 @@ export type ObsActiveStatus =
   /** ObsActiveStatus Inactive */
   | 'INACTIVE';
 
-/** Program Observation Attachment */
-export type ObsAttachment = {
-  __typename?: 'ObsAttachment';
-  attachmentType: ObsAttachmentType;
-  checked: Scalars['Boolean']['output'];
-  description?: Maybe<Scalars['NonEmptyString']['output']>;
-  fileName: Scalars['NonEmptyString']['output'];
-  fileSize: Scalars['Long']['output'];
-  id: Scalars['ObsAttachmentId']['output'];
-  program: Program;
-  updatedAt: Scalars['Timestamp']['output'];
-};
-
-/** Allowed file extension by obsAttachmentTypeMeta */
-export type ObsAttachmentFileExt = {
-  __typename?: 'ObsAttachmentFileExt';
-  fileExtension: Scalars['NonEmptyString']['output'];
-};
-
-export type ObsAttachmentPropertiesInput = {
-  /** The checked status can be set, or ignored by skipping it altogether */
-  checked?: InputMaybe<Scalars['Boolean']['input']>;
-  /** The description field may be unset by assigning a null value, or ignored by skipping it altogether */
-  description?: InputMaybe<Scalars['NonEmptyString']['input']>;
-};
-
-export type ObsAttachmentType =
-  /** Finder Chart */
-  | 'FINDER'
-  /** MOS Mask */
-  | 'MOS_MASK'
-  /** Pre-Imaging */
-  | 'PRE_IMAGING';
-
-/** Metadata for `enum ObsAttachmentType` */
-export type ObsAttachmentTypeMeta = {
-  __typename?: 'ObsAttachmentTypeMeta';
-  fileExtensions: Array<ObsAttachmentFileExt>;
-  longName: Scalars['String']['output'];
-  shortName: Scalars['String']['output'];
-  tag: ObsAttachmentType;
-};
-
 /** Observation status options */
 export type ObsStatus =
   /** ObsStatus Approved */
@@ -4212,6 +4222,8 @@ export type ObsStatus =
 
 export type Observation = {
   __typename?: 'Observation';
+  /** attachments */
+  attachments: Array<Attachment>;
   /** The Calibration role of this observation */
   calibrationRole?: Maybe<CalibrationRole>;
   /** Parameters relevant to approved configurations. */
@@ -4239,8 +4251,6 @@ export type Observation = {
    * and a selected observing mode.
    */
   itc: Itc;
-  /** attachments */
-  obsAttachments: Array<ObsAttachment>;
   /**
    * Used in conjunction with observationTime for time-dependentent calulations. If not
    * set, the remaining observation execution time will be used.
@@ -4300,6 +4310,8 @@ export type ObservationEditInput = {
 
 /** Observation properties */
 export type ObservationPropertiesInput = {
+  /** The attachments defaults to empty if not specified on creation, and may be edited by specifying a new whole array */
+  attachments?: InputMaybe<Array<Scalars['AttachmentId']['input']>>;
   /** The constraintSet defaults to standard values if not specified on creation, and may be edited but not deleted */
   constraintSet?: InputMaybe<ConstraintSetInput>;
   /** Whether the observation is considered deleted (defaults to PRESENT) but may be edited */
@@ -4308,8 +4320,6 @@ export type ObservationPropertiesInput = {
   groupId?: InputMaybe<Scalars['GroupId']['input']>;
   /** Index in enclosing group or at the top level if ungrouped. If left unspecified on creation, observation will be added last in its enclosing group or at the top level. Cannot be set to null. */
   groupIndex?: InputMaybe<Scalars['NonNegShort']['input']>;
-  /** The obsAttachments defaults to empty if not specified on creation, and may be edited by specifying a new whole array */
-  obsAttachments?: InputMaybe<Array<Scalars['ObsAttachmentId']['input']>>;
   /** Set the notes for  thhe observer */
   observerNotes?: InputMaybe<Scalars['NonEmptyString']['input']>;
   /** The observingMode describes the chosen observing mode and instrument, is optional and may be deleted */
@@ -4696,6 +4706,8 @@ export type Program = {
   allGroupElements: Array<GroupElement>;
   /** All partner time allocations. */
   allocations: Array<Allocation>;
+  /** Attachments assocated with the program */
+  attachments: Array<Attachment>;
   /** Calibration role of the program */
   calibrationRole?: Maybe<CalibrationRole>;
   /** All configuration requests associated with the program. */
@@ -4710,16 +4722,12 @@ export type Program = {
   id: Scalars['ProgramId']['output'];
   /** Program name */
   name?: Maybe<Scalars['NonEmptyString']['output']>;
-  /** ObsAttachments assocated with the program */
-  obsAttachments: Array<ObsAttachment>;
   /** All observations associated with the program. */
   observations: ObservationSelectResult;
   /** Principal Investigator */
   pi?: Maybe<ProgramUser>;
   /** Program proposal */
   proposal?: Maybe<Proposal>;
-  /** ProposalAttachments associated with the program */
-  proposalAttachments: Array<ProposalAttachment>;
   /** Proposal status of the program */
   proposalStatus: ProposalStatus;
   /** Program reference, if any. */
@@ -4999,30 +5007,6 @@ export type Proposal = {
   type: ProposalType;
 };
 
-/** Program Proposal Attachment */
-export type ProposalAttachment = {
-  __typename?: 'ProposalAttachment';
-  attachmentType: ProposalAttachmentType;
-  fileName: Scalars['NonEmptyString']['output'];
-  fileSize: Scalars['Long']['output'];
-  program: Program;
-  updatedAt: Scalars['Timestamp']['output'];
-};
-
-export type ProposalAttachmentType =
-  /** Science Case & Design */
-  | 'SCIENCE'
-  /** Team Info, Previous Use, etc. */
-  | 'TEAM';
-
-/** Metadata for `enum ProposalAttachmentType` */
-export type ProposalAttachmentTypeMeta = {
-  __typename?: 'ProposalAttachmentTypeMeta';
-  longName: Scalars['String']['output'];
-  shortName: Scalars['String']['output'];
-  tag: ProposalAttachmentType;
-};
-
 /** Program proposal */
 export type ProposalPropertiesInput = {
   /** The abstract field may be unset by assigning a null value, or ignored by skipping it altogether */
@@ -5138,8 +5122,6 @@ export type Query = {
   filterTypeMeta: Array<FilterTypeMeta>;
   /** Returns the group indicated by the given groupId, if found. */
   group?: Maybe<Group>;
-  /** Metadata for `enum ObsAttachmentType` */
-  obsAttachmentTypeMeta: Array<ObsAttachmentTypeMeta>;
   /**
    * Returns the observation with the given id or reference, if any.  Identify the
    * observation by specifying only one of observationId or observationReference.
@@ -5170,8 +5152,6 @@ export type Query = {
   programUsers: ProgramUserSelectResult;
   /** Selects the first `LIMIT` matching programs based on the provided `WHERE` parameter, if any. */
   programs: ProgramSelectResult;
-  /** Metadata for `enum ProposalAttachmentType` */
-  proposalAttachmentTypeMeta: Array<ProposalAttachmentTypeMeta>;
   /** Metadata for `enum ProposalStatus */
   proposalStatusMeta: Array<ProposalStatusMeta>;
   /** Spectroscopy configuration options matching the WHERE parameter. */
@@ -7049,6 +7029,25 @@ export type UpdateAsterismsResult = {
   observations: Array<Observation>;
 };
 
+/** Attachment selection and update description.  Use `SET` to specify the changes, `WHERE` to select the attachments to update, and `LIMIT` to control the size of the return value. */
+export type UpdateAttachmentsInput = {
+  /** Caps the number of results returned to the given value (if additional attachments match the WHERE clause they will be updated but not returned). */
+  LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
+  /** Describes the attachment values to modify. */
+  SET: AttachmentPropertiesInput;
+  /** Filters the attachments to be updated according to those that match the given constraints. */
+  WHERE?: InputMaybe<WhereAttachment>;
+};
+
+/** The result of updating the selected attachments, up to `LIMIT` or the maximum of (1000).  If `hasMore` is true, additional attachments were modified and not included here. */
+export type UpdateAttachmentsResult = {
+  __typename?: 'UpdateAttachmentsResult';
+  /** The edited attachments, up to the specified LIMIT or the default maximum of 1000. */
+  attachments: Array<Attachment>;
+  /** `true` when there were additional edits that were not returned. */
+  hasMore: Scalars['Boolean']['output'];
+};
+
 /**
  * Call for proposals selection and update description.  Use `SET` to specify the
  * changes, `WHERE` to select the calls to update, and `LIMIT` to control the
@@ -7141,25 +7140,6 @@ export type UpdateGroupsResult = {
   groups: Array<Group>;
   /** `true` when there were additional edits that were not returned. */
   hasMore: Scalars['Boolean']['output'];
-};
-
-/** Obs Attachment selection and update description.  Use `SET` to specify the changes, `WHERE` to select the obs attachments to update, and `LIMIT` to control the size of the return value. */
-export type UpdateObsAttachmentsInput = {
-  /** Caps the number of results returned to the given value (if additional obs attachments match the WHERE clause they will be updated but not returned). */
-  LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
-  /** Describes the obs attachment values to modify. */
-  SET: ObsAttachmentPropertiesInput;
-  /** Filters the obs attachments to be updated according to those that match the given constraints. */
-  WHERE?: InputMaybe<WhereObsAttachment>;
-};
-
-/** The result of updating the selected obs attachments, up to `LIMIT` or the maximum of (1000).  If `hasMore` is true, additional obs attachments were modified and not included here. */
-export type UpdateObsAttachmentsResult = {
-  __typename?: 'UpdateObsAttachmentsResult';
-  /** `true` when there were additional edits that were not returned. */
-  hasMore: Scalars['Boolean']['output'];
-  /** The edited obs attachments, up to the specified LIMIT or the default maximum of 1000. */
-  obsAttachments: Array<ObsAttachment>;
 };
 
 /** Observation selection and update description.  Use `SET` to specify the changes, `WHERE` to select the observations to update, and `LIMIT` to control the size of the return value. */
@@ -7507,6 +7487,43 @@ export type WhereAngle = {
   milliseconds?: InputMaybe<WhereOrderBigDecimal>;
   minutes?: InputMaybe<WhereOrderBigDecimal>;
   seconds?: InputMaybe<WhereOrderBigDecimal>;
+};
+
+/** Attachment filter options. All specified items must match. */
+export type WhereAttachment = {
+  /** A list of nested attachment filters that all must match in order for the AND group as a whole to match. */
+  AND?: InputMaybe<Array<WhereAttachment>>;
+  /** A nested attachment filter that must not match in order for the NOT itself to match. */
+  NOT?: InputMaybe<WhereAttachment>;
+  /** A list of nested attachment filters where any one match causes the entire OR group as a whole to match. */
+  OR?: InputMaybe<Array<WhereAttachment>>;
+  /** Matches the attachment type */
+  attachmentType?: InputMaybe<WhereAttachmentType>;
+  /** Matches whether the attachment has been checked or not */
+  checked?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Matches the description. */
+  description?: InputMaybe<WhereOptionString>;
+  /** Matches the attachment file name. */
+  fileName?: InputMaybe<WhereString>;
+  /** Matches the attachment ID. */
+  id?: InputMaybe<WhereOrderAttachmentId>;
+  /** Matches the program containing the attachment. */
+  program?: InputMaybe<WhereProgram>;
+};
+
+/**
+ * Filters on equality of the property.  All supplied
+ * criteria must match, but usually only one is selected.  E.g., 'EQ: FINDER'
+ */
+export type WhereAttachmentType = {
+  /** Matches if the property is exactly the supplied value. */
+  EQ?: InputMaybe<AttachmentType>;
+  /** Matches if the property value is any of the supplied options. */
+  IN?: InputMaybe<Array<AttachmentType>>;
+  /** Matches if the property is not the supplied value. */
+  NEQ?: InputMaybe<AttachmentType>;
+  /** Matches if the property value is none of the supplied values. */
+  NIN?: InputMaybe<Array<AttachmentType>>;
 };
 
 export type WhereBoolean = {
@@ -7880,43 +7897,6 @@ export type WhereGroup = {
   name?: InputMaybe<WhereOptionString>;
 };
 
-/** ObsAttachment filter options. All specified items must match. */
-export type WhereObsAttachment = {
-  /** A list of nested attachment filters that all must match in order for the AND group as a whole to match. */
-  AND?: InputMaybe<Array<WhereObsAttachment>>;
-  /** A nested attachment filter that must not match in order for the NOT itself to match. */
-  NOT?: InputMaybe<WhereObsAttachment>;
-  /** A list of nested attachment filters where any one match causes the entire OR group as a whole to match. */
-  OR?: InputMaybe<Array<WhereObsAttachment>>;
-  /** Matches the attachment type */
-  attachmentType?: InputMaybe<WhereObsAttachmentType>;
-  /** Matches whether the attachment has been checked or not */
-  checked?: InputMaybe<Scalars['Boolean']['input']>;
-  /** Matches the description. */
-  description?: InputMaybe<WhereOptionString>;
-  /** Matches the attachment file name. */
-  fileName?: InputMaybe<WhereString>;
-  /** Matches the attachment ID. */
-  id?: InputMaybe<WhereOrderObsAttachmentId>;
-  /** Matches the program containing the attachment. */
-  program?: InputMaybe<WhereProgram>;
-};
-
-/**
- * Filters on equality of the property.  All supplied
- * criteria must match, but usually only one is selected.  E.g., 'EQ: FINDER'
- */
-export type WhereObsAttachmentType = {
-  /** Matches if the property is exactly the supplied value. */
-  EQ?: InputMaybe<ObsAttachmentType>;
-  /** Matches if the property value is any of the supplied options. */
-  IN?: InputMaybe<Array<ObsAttachmentType>>;
-  /** Matches if the property is not the supplied value. */
-  NEQ?: InputMaybe<ObsAttachmentType>;
-  /** Matches if the property value is none of the supplied values. */
-  NIN?: InputMaybe<Array<ObsAttachmentType>>;
-};
-
 /** Observation filter options.  All specified items must match. */
 export type WhereObservation = {
   /** A list of nested observation filters that all must match in order for the AND group as a whole to match. */
@@ -8128,6 +8108,30 @@ export type WhereOptionString = {
   NIN?: InputMaybe<Array<Scalars['NonEmptyString']['input']>>;
   /** Performs string matching with wildcard patterns.  The entire string must not match.  Use % to match a sequence of any characters and _ to match any single character. */
   NLIKE?: InputMaybe<Scalars['NonEmptyString']['input']>;
+};
+
+/**
+ * Filters on equality or order comparisons of the property.  All supplied
+ * criteria must match, but usually only one is selected.  E.g., 'GT = 2'
+ * for an integer property will match when the value is 3 or more.
+ */
+export type WhereOrderAttachmentId = {
+  /** Matches if the property is exactly the supplied value. */
+  EQ?: InputMaybe<Scalars['AttachmentId']['input']>;
+  /** Matches if the property is ordered after (>) the supplied value. */
+  GT?: InputMaybe<Scalars['AttachmentId']['input']>;
+  /** Matches if the property is ordered after or equal (>=) the supplied value. */
+  GTE?: InputMaybe<Scalars['AttachmentId']['input']>;
+  /** Matches if the property value is any of the supplied options. */
+  IN?: InputMaybe<Array<Scalars['AttachmentId']['input']>>;
+  /** Matches if the property is ordered before (<) the supplied value. */
+  LT?: InputMaybe<Scalars['AttachmentId']['input']>;
+  /** Matches if the property is ordered before or equal (<=) the supplied value. */
+  LTE?: InputMaybe<Scalars['AttachmentId']['input']>;
+  /** Matches if the property is not the supplied value. */
+  NEQ?: InputMaybe<Scalars['AttachmentId']['input']>;
+  /** Matches if the property value is none of the supplied values. */
+  NIN?: InputMaybe<Array<Scalars['AttachmentId']['input']>>;
 };
 
 /**
@@ -8383,30 +8387,6 @@ export type WhereOrderLong = {
   NEQ?: InputMaybe<Scalars['Long']['input']>;
   /** Matches if the Long is none of the supplied values. */
   NIN?: InputMaybe<Array<Scalars['Long']['input']>>;
-};
-
-/**
- * Filters on equality or order comparisons of the property.  All supplied
- * criteria must match, but usually only one is selected.  E.g., 'GT = 2'
- * for an integer property will match when the value is 3 or more.
- */
-export type WhereOrderObsAttachmentId = {
-  /** Matches if the property is exactly the supplied value. */
-  EQ?: InputMaybe<Scalars['ObsAttachmentId']['input']>;
-  /** Matches if the property is ordered after (>) the supplied value. */
-  GT?: InputMaybe<Scalars['ObsAttachmentId']['input']>;
-  /** Matches if the property is ordered after or equal (>=) the supplied value. */
-  GTE?: InputMaybe<Scalars['ObsAttachmentId']['input']>;
-  /** Matches if the property value is any of the supplied options. */
-  IN?: InputMaybe<Array<Scalars['ObsAttachmentId']['input']>>;
-  /** Matches if the property is ordered before (<) the supplied value. */
-  LT?: InputMaybe<Scalars['ObsAttachmentId']['input']>;
-  /** Matches if the property is ordered before or equal (<=) the supplied value. */
-  LTE?: InputMaybe<Scalars['ObsAttachmentId']['input']>;
-  /** Matches if the property is not the supplied value. */
-  NEQ?: InputMaybe<Scalars['ObsAttachmentId']['input']>;
-  /** Matches if the property value is none of the supplied values. */
-  NIN?: InputMaybe<Array<Scalars['ObsAttachmentId']['input']>>;
 };
 
 /**
