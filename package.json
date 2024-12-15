@@ -29,7 +29,7 @@
     "@apollo/client": "3.12.3",
     "@xyflow/react": "12.3.6",
     "clsx": "2.1.1",
-    "graphql": "16.9.0",
+    "graphql": "16.10.0",
     "jotai": "2.10.3",
     "lucuma-core": "0.111.1",
     "lucuma-ui-css": "0.124.5",
