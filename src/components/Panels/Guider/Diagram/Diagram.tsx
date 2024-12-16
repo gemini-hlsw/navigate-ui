@@ -61,47 +61,63 @@ function Flow() {
   const state = useGetGuideState();
 
   const [sourceNodes, sourceEdges] = useMemo<[Node[], Edge[]]>(() => {
+    function isSourceActive(source: string | undefined | null) {
+      switch (source) {
+        case 'OIWFS':
+          return state.oiIntegrating;
+        case 'PWFS1':
+          return state.p1Integrating;
+        case 'PWFS2':
+          return state.p2Integrating;
+        default:
+          return false;
+      }
+    }
+
     // Get active sources first
     const sourceNodes: Node[] = [];
     const sourceEdges: Edge[] = [];
     if (state.m2TipTiltEnable && state.m2TipTiltSource) {
       state.m2TipTiltSource.split(',').forEach((source: string) => {
+        const isActive = isSourceActive(source);
         sourceNodes.push({
           id: source,
           data: { label: source },
           position: { x: 0, y: 0 },
-          className: 'active',
+          className: isActive ? 'active' : 'inactive',
           type: 'input',
         });
         sourceEdges.push({
           id: `${source}-tiptilt`,
           source: source,
           target: 'tiptilt',
-          animated: true,
-          className: 'active',
+          animated: isActive,
+          className: isActive ? 'active' : 'inactive',
         });
       });
     }
 
     if (state.m2TipTiltFocusLink) {
       sourceNodes.forEach((n) => {
+        const isActive = isSourceActive(n.id);
         sourceEdges.push({
           id: `${n.id}-focus`,
           source: n.id,
           target: 'focus',
-          animated: true,
-          className: 'active',
+          animated: isActive,
+          className: isActive ? 'active' : 'inactive',
         });
       });
     } else {
       if (state.m2FocusEnable && state.m2FocusSource) {
         state.m2FocusSource.split(',').forEach((s) => {
+          const isActive = isSourceActive(s);
           if (!sourceNodes.find((n) => n.id === s)) {
             sourceNodes.push({
               id: s,
               data: { label: s },
               position: { x: 0, y: 0 },
-              className: 'active',
+              className: isActive ? 'active' : 'inactive',
               type: 'input',
             });
           }
@@ -109,8 +125,8 @@ function Flow() {
             id: `${s}-focus`,
             source: s,
             target: 'focus',
-            animated: true,
-            className: 'active',
+            animated: isActive,
+            className: isActive ? 'active' : 'inactive',
           });
         });
       }
@@ -118,12 +134,13 @@ function Flow() {
 
     if (state.m2ComaEnable) {
       const pos = sourceNodes.findIndex((n) => n.id === state.m2ComaM1CorrectionsSource);
+      const isActive = isSourceActive(state.m2ComaM1CorrectionsSource);
       if (pos === -1) {
         sourceNodes.push({
           id: state.m2ComaM1CorrectionsSource ?? '',
           data: { label: state.m2ComaM1CorrectionsSource },
           position: { x: 0, y: 0 },
-          className: 'active',
+          className: isActive ? 'active' : 'inactive',
           type: 'input',
         });
       } else {
@@ -135,19 +152,20 @@ function Flow() {
         id: `${state.m2ComaM1CorrectionsSource}-coma`,
         source: state.m2ComaM1CorrectionsSource ?? '',
         target: 'coma',
-        animated: true,
-        className: 'active',
+        animated: isActive,
+        className: isActive ? 'active' : 'inactive',
       });
     }
 
     if (state.m1CorrectionsEnable) {
       const pos = sourceNodes.findIndex((n) => n.id === state.m2ComaM1CorrectionsSource);
+      const isActive = isSourceActive(state.m2ComaM1CorrectionsSource);
       if (pos === -1) {
         sourceNodes.push({
           id: state.m2ComaM1CorrectionsSource ?? '',
           data: { label: state.m2ComaM1CorrectionsSource },
           position: { x: 0, y: 0 },
-          className: 'active',
+          className: isActive ? 'active' : 'inactive',
           type: 'input',
         });
       } else {
@@ -159,8 +177,8 @@ function Flow() {
         id: `${state.m2ComaM1CorrectionsSource}-higho`,
         source: state.m2ComaM1CorrectionsSource ?? '',
         target: 'higho',
-        animated: true,
-        className: 'active',
+        animated: isActive,
+        className: isActive ? 'active' : 'inactive',
       });
     }
 
@@ -172,8 +190,14 @@ function Flow() {
     // Tip/Tilt
     let tiptiltState: string;
     if (state.m2TipTiltEnable) {
+      // Check if any source is active
+      const tipTiltActive = sourceEdges.some((n) => n.target === 'tiptilt' && isSourceActive(n.id));
       if (sourceEdges.find((n) => n.target === 'tiptilt')) {
-        tiptiltState = 'active';
+        if (tipTiltActive) {
+          tiptiltState = 'active';
+        } else {
+          tiptiltState = 'idle';
+        }
       } else {
         tiptiltState = 'idle';
       }
@@ -199,8 +223,14 @@ function Flow() {
     // Focus
     let focusState: string;
     if (state.m2FocusEnable) {
+      // Check if any source is active
+      const focusActive = sourceEdges.some((n) => n.target === 'focus' && isSourceActive(n.id));
       if (sourceEdges.find((n) => n.target === 'focus')) {
-        focusState = 'active';
+        if (focusActive) {
+          focusState = 'active';
+        } else {
+          focusState = 'idle';
+        }
       } else {
         focusState = 'idle';
       }
@@ -212,8 +242,14 @@ function Flow() {
     // Coma
     let comaState: string;
     if (state.m2ComaEnable) {
+      // Check if any source is active
+      const comaActive = sourceEdges.some((n) => n.target === 'coma' && isSourceActive(n.id));
       if (sourceEdges.find((n) => n.target === 'coma')) {
-        comaState = 'active';
+        if (comaActive) {
+          comaState = 'active';
+        } else {
+          comaState = 'idle';
+        }
       } else {
         comaState = 'idle';
       }
@@ -225,8 +261,14 @@ function Flow() {
     // High-O
     let highoState: string;
     if (state.m1CorrectionsEnable) {
+      // Check if any source is active
+      const highoActive = sourceEdges.some((n) => n.target === 'higho' && isSourceActive(n.id));
       if (sourceEdges.find((n) => n.target === 'higho')) {
-        highoState = 'active';
+        if (highoActive) {
+          highoState = 'active';
+        } else {
+          highoState = 'idle';
+        }
       } else {
         highoState = 'idle';
       }
