@@ -61,7 +61,7 @@ function Flow() {
   const state = useGetGuideState();
 
   const [sourceNodes, sourceEdges] = useMemo<[Node[], Edge[]]>(() => {
-    function isSourceActive(source: string) {
+    function isSourceActive(source: string | undefined | null) {
       switch (source) {
         case 'OIWFS':
           return state.oiIntegrating;
@@ -134,7 +134,7 @@ function Flow() {
 
     if (state.m2ComaEnable) {
       const pos = sourceNodes.findIndex((n) => n.id === state.m2ComaM1CorrectionsSource);
-      const isActive = isSourceActive(state.m2ComaM1CorrectionsSource ?? '');
+      const isActive = isSourceActive(state.m2ComaM1CorrectionsSource);
       if (pos === -1) {
         sourceNodes.push({
           id: state.m2ComaM1CorrectionsSource ?? '',
@@ -159,7 +159,7 @@ function Flow() {
 
     if (state.m1CorrectionsEnable) {
       const pos = sourceNodes.findIndex((n) => n.id === state.m2ComaM1CorrectionsSource);
-      const isActive = isSourceActive(state.m2ComaM1CorrectionsSource ?? '');
+      const isActive = isSourceActive(state.m2ComaM1CorrectionsSource);
       if (pos === -1) {
         sourceNodes.push({
           id: state.m2ComaM1CorrectionsSource ?? '',
@@ -191,7 +191,7 @@ function Flow() {
     let tiptiltState: string;
     if (state.m2TipTiltEnable) {
       // Check if any source is active
-      const tipTiltActive = sourceEdges.filter((n) => n.target === 'tiptilt').some((n) => isSourceActive(n.id));
+      const tipTiltActive = sourceEdges.some((n) => n.target === 'tiptilt' && isSourceActive(n.id));
       if (sourceEdges.find((n) => n.target === 'tiptilt')) {
         if (tipTiltActive) {
           tiptiltState = 'active';
@@ -224,7 +224,7 @@ function Flow() {
     let focusState: string;
     if (state.m2FocusEnable) {
       // Check if any source is active
-      const focusActive = sourceEdges.filter((n) => n.target === 'focus').some((n) => isSourceActive(n.id));
+      const focusActive = sourceEdges.some((n) => n.target === 'focus' && isSourceActive(n.id));
       if (sourceEdges.find((n) => n.target === 'focus')) {
         if (focusActive) {
           focusState = 'active';
@@ -243,7 +243,7 @@ function Flow() {
     let comaState: string;
     if (state.m2ComaEnable) {
       // Check if any source is active
-      const comaActive = sourceEdges.filter((n) => n.target === 'coma').some((n) => isSourceActive(n.id));
+      const comaActive = sourceEdges.some((n) => n.target === 'coma' && isSourceActive(n.id));
       if (sourceEdges.find((n) => n.target === 'coma')) {
         if (comaActive) {
           comaState = 'active';
@@ -262,7 +262,7 @@ function Flow() {
     let highoState: string;
     if (state.m1CorrectionsEnable) {
       // Check if any source is active
-      const highoActive = sourceEdges.filter((n) => n.target === 'higho').some((n) => isSourceActive(n.id));
+      const highoActive = sourceEdges.some((n) => n.target === 'higho' && isSourceActive(n.id));
       if (sourceEdges.find((n) => n.target === 'higho')) {
         if (highoActive) {
           highoState = 'active';
