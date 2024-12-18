@@ -22,30 +22,30 @@
       }
 
       .react-flow__node.active {
-        background-color: var(--primary-color);
-        color: var(--primary-color-text);
+        background-color: #216CA5;
+        color: #FFF;
       }
 
       .react-flow__node.inactive {
-        background-color: var(--surface-c);
-        color: var(--text-color);
+        background-color: #495057;
+        color: #FFF;
       }
 
       .react-flow__node.idle {
-        background-color: rgba(150, 150, 0, 0.5);
-        color: var(--text-color);
+        background-color: #FFE082;
+        color: #000;
       }
 
       .react-flow__edge.active > path {
-        stroke: var(--primary-color);
+        stroke: #216CA5;
       }
 
       .react-flow__edge.idle > path {
-        stroke: rgba(150, 150, 0, 0.5);
+        stroke: #FFE082;
       }
 
       .react-flow__edge.inactive > path {
-        stroke: var(--surface-border);
+        stroke: #495057;
       }
 
       .react-flow__panel {
@@ -327,6 +327,37 @@
     }
     50% {
       background-color: var(--red-600);
+    }
+  }
+}
+
+.light {
+  .Guider > .guider > .body > .diagram {
+    .react-flow__node.active {
+      background-color: #2196F3;
+      color: #FFF;
+    }
+
+    .react-flow__node.inactive {
+      background-color: #607D8B;
+      color: #FFF;
+    }
+
+    .react-flow__node.idle {
+      background-color: #FBC02D;
+      color: #000;
+    }
+
+    .react-flow__edge.active > path {
+      stroke: #2196F3;
+    }
+
+    .react-flow__edge.idle > path {
+      stroke: #FBC02D;
+    }
+
+    .react-flow__edge.inactive > path {
+      stroke: #a2b1b8;
     }
   }
 }
