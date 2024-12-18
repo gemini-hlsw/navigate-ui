@@ -11,5 +11,5 @@ val root = project
   )
 
 inThisBuild(
-  tlBaseVersion := "0.1"
+  tlBaseVersion := "0.4"
 )
