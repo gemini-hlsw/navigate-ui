@@ -22,26 +22,26 @@
       }
 
       .react-flow__node.active {
-        background-color: #216CA5;
-        color: #FFF;
+        background-color: #216ca5;
+        color: #fff;
       }
 
       .react-flow__node.inactive {
         background-color: #495057;
-        color: #FFF;
+        color: #fff;
       }
 
       .react-flow__node.idle {
-        background-color: #FFE082;
+        background-color: #ffe082;
         color: #000;
       }
 
       .react-flow__edge.active > path {
-        stroke: #216CA5;
+        stroke: #216ca5;
       }
 
       .react-flow__edge.idle > path {
-        stroke: #FFE082;
+        stroke: #ffe082;
       }
 
       .react-flow__edge.inactive > path {
@@ -334,26 +334,26 @@
 .light {
   .Guider > .guider > .body > .diagram {
     .react-flow__node.active {
-      background-color: #2196F3;
-      color: #FFF;
+      background-color: #2196f3;
+      color: #fff;
     }
 
     .react-flow__node.inactive {
-      background-color: #607D8B;
-      color: #FFF;
+      background-color: #607d8b;
+      color: #fff;
     }
 
     .react-flow__node.idle {
-      background-color: #FBC02D;
+      background-color: #fbc02d;
       color: #000;
     }
 
     .react-flow__edge.active > path {
-      stroke: #2196F3;
+      stroke: #2196f3;
     }
 
     .react-flow__edge.idle > path {
-      stroke: #FBC02D;
+      stroke: #fbc02d;
     }
 
     .react-flow__edge.inactive > path {
