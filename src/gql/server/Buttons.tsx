@@ -220,6 +220,7 @@ export function Slew(props: ButtonProps) {
             },
           },
           tracking: {
+            // TODO: this should be selected depending on the "GuiderFooter" dropdown value!
             nodAchopA: true,
             nodAchopB: false,
             nodBchopA: false,
