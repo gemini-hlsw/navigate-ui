@@ -97,6 +97,23 @@ export function TargetSwapButton({
               instParams: instrumentInput,
               rotator: rotatorInput,
               sourceATarget: targetInput,
+              oiwfs: {
+                tracking: {
+                  // TODO: this should be selected depending on the "GuiderFooter" dropdown value!
+                  nodAchopA: true,
+                  nodAchopB: false,
+                  nodBchopA: false,
+                  nodBchopB: true,
+                },
+                target: {
+                  name: oiSelected.name,
+                  sidereal: {
+                    ra: { hms: oiSelected?.ra?.hms },
+                    dec: { dms: oiSelected?.dec?.dms },
+                    epoch: oiSelected.epoch,
+                  },
+                },
+              },
             },
           },
         });

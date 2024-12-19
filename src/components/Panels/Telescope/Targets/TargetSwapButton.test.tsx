@@ -236,6 +236,22 @@ const restoreTargetMock: MockedResponse<
             epoch: selectedTarget.epoch,
           },
         },
+        oiwfs: {
+          tracking: {
+            nodAchopA: true,
+            nodAchopB: false,
+            nodBchopA: false,
+            nodBchopB: true,
+          },
+          target: {
+            name: oiSelected.name,
+            sidereal: {
+              ra: { hms: oiSelected?.ra?.hms },
+              dec: { dms: oiSelected?.dec?.dms },
+              epoch: oiSelected.epoch,
+            },
+          },
+        },
       },
     },
   },
