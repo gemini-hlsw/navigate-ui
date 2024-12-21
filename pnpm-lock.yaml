@@ -24,8 +24,8 @@ importers:
         specifier: 2.10.4
         version: 2.10.4(@types/react@19.0.2)(react@19.0.0)
       lucuma-core:
-        specifier: 0.111.1
-        version: 0.111.1
+        specifier: 0.112.1
+        version: 0.112.1
       lucuma-ui-css:
         specifier: 0.124.7
         version: 0.124.7
@@ -2993,8 +2993,8 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
-  lucuma-core@0.111.1:
-    resolution: {integrity: sha512-zb+EkWMv0n/ZhQ81r5/8l+JoUvCC8O5/wbXtRVGw1/tL2p2OLB7FVnaRbM9B+9TVEw80FfWYUBVIWyHuZOoA7Q==}
+  lucuma-core@0.112.1:
+    resolution: {integrity: sha512-yxZKBVA1oj226y/zuQKR0I7KnbjoESpEk1b8dFLxr/+NP1uck5xzlS9IluHg8M3wPgkHuozRd74M+3RK8nDOJg==}
 
   lucuma-schemas@0.110.1:
     resolution: {integrity: sha512-wCVri8t3eNLi4uLg680bKPTb9dqNfIz8w7eStyNAlVc4tZBtCZWRJJNcKEN+OI1l8/O8LdcHBqxXQ49hEVgzzw==}
@@ -7476,7 +7476,7 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  lucuma-core@0.111.1: {}
+  lucuma-core@0.112.1: {}
 
   lucuma-schemas@0.110.1: {}
 
