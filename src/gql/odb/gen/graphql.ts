@@ -1119,6 +1119,7 @@ export type ConfigurationObservingMode = {
 
 export type ConfigurationRequest = {
   __typename?: 'ConfigurationRequest';
+  applicableObservations: Array<Scalars['ObservationId']['output']>;
   configuration: Configuration;
   id: Scalars['ConfigurationRequestId']['output'];
   program: Program;
@@ -5101,6 +5102,8 @@ export type Query = {
   callForProposals?: Maybe<CallForProposals>;
   /** Select all Calls for Proposals. */
   callsForProposals: CallsForProposalsSelectResult;
+  /** Selects the first `LIMIT` matching configuration requests based on the provided `WHERE` parameter, if any. */
+  configurationRequests: ConfigurationRequestSelectResult;
   /**
    * Observations grouped by commonly held constraints. Identify the program by
    * specifying only one of programId, programReference, or proposalReference.  If
@@ -5190,6 +5193,13 @@ export type QueryCallsForProposalsArgs = {
   OFFSET?: InputMaybe<Scalars['CallForProposalsId']['input']>;
   WHERE?: InputMaybe<WhereCallForProposals>;
   includeDeleted?: Scalars['Boolean']['input'];
+};
+
+
+export type QueryConfigurationRequestsArgs = {
+  LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
+  OFFSET?: InputMaybe<Scalars['ConfigurationRequestId']['input']>;
+  WHERE?: InputMaybe<WhereConfigurationRequest>;
 };
 
 
