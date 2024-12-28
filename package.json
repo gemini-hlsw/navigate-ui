@@ -32,7 +32,7 @@
     "graphql": "16.10.0",
     "jotai": "2.11.0",
     "lucuma-core": "0.112.2",
-    "lucuma-ui-css": "0.124.7",
+    "lucuma-ui-css": "0.127.0",
     "primeicons": "7.0.0",
     "primereact": "10.8.5",
     "react": "19.0.0",
