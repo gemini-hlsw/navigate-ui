@@ -63,7 +63,7 @@
     "eslint-plugin-simple-import-sort": "12.1.1",
     "globals": "15.14.0",
     "husky": "9.1.7",
-    "lint-staged": "15.2.11",
+    "lint-staged": "15.3.0",
     "lucuma-schemas": "0.110.3",
     "playwright": "1.49.1",
     "prettier": "3.4.2",
