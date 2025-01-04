@@ -31,7 +31,7 @@
     "clsx": "2.1.1",
     "graphql": "16.10.0",
     "jotai": "2.11.0",
-    "lucuma-core": "0.112.2",
+    "lucuma-core": "0.113.0",
     "lucuma-ui-css": "0.127.0",
     "primeicons": "7.0.0",
     "primereact": "10.8.5",
