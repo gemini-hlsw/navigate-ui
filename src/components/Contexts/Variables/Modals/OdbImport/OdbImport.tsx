@@ -51,11 +51,11 @@ export function OdbImport() {
           variables: {
             targets: [
               {
-                id: selectedObservation.targetEnvironment.firstScienceTarget?.id,
-                name: selectedObservation.targetEnvironment.firstScienceTarget?.name,
-                coord1: selectedObservation.targetEnvironment.firstScienceTarget?.sidereal?.ra.degrees,
-                coord2: selectedObservation.targetEnvironment.firstScienceTarget?.sidereal?.dec.degrees,
-                epoch: selectedObservation.targetEnvironment.firstScienceTarget?.sidereal?.epoch,
+                id: selectedObservation.targetEnvironment?.firstScienceTarget?.id,
+                name: selectedObservation.targetEnvironment?.firstScienceTarget?.name,
+                coord1: selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.ra.degrees,
+                coord2: selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.dec.degrees,
+                epoch: selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.epoch,
                 type: 'SCIENCE',
               },
             ],

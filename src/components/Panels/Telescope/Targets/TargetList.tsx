@@ -29,33 +29,35 @@ export function TargetList({ targets, type }: { targets: TargetType[]; type?: Ty
   }
 
   async function updateSelectedTarget(targetPk: number) {
-    switch (type) {
-      case 'OIWFS':
-        await updateConfiguration({
-          variables: { pk: configuration!.pk, selectedOiTarget: targetPk },
-        });
-        break;
+    if (configuration?.pk) {
+      switch (type) {
+        case 'OIWFS':
+          await updateConfiguration({
+            variables: { pk: configuration.pk, selectedOiTarget: targetPk },
+          });
+          break;
 
-      case 'PWFS1':
-        await updateConfiguration({
-          variables: { pk: configuration!.pk, selectedP1Target: targetPk },
-        });
-        break;
+        case 'PWFS1':
+          await updateConfiguration({
+            variables: { pk: configuration.pk, selectedP1Target: targetPk },
+          });
+          break;
 
-      case 'PWFS2':
-        await updateConfiguration({
-          variables: { pk: configuration!.pk, selectedP2Target: targetPk },
-        });
-        break;
+        case 'PWFS2':
+          await updateConfiguration({
+            variables: { pk: configuration.pk, selectedP2Target: targetPk },
+          });
+          break;
 
-      default:
-      case 'SCIENCE':
-      case 'BLINDOFFSET':
-      case 'FIXED':
-        await updateConfiguration({
-          variables: { pk: configuration!.pk, selectedTarget: targetPk },
-        });
-        break;
+        default:
+        case 'SCIENCE':
+        case 'BLINDOFFSET':
+        case 'FIXED':
+          await updateConfiguration({
+            variables: { pk: configuration.pk, selectedTarget: targetPk },
+          });
+          break;
+      }
     }
   }
 
