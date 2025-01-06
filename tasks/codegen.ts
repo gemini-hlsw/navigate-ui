@@ -4,9 +4,11 @@ import type { CodegenConfig } from '@graphql-codegen/cli';
 // Some of these might be wrong or incomplete, feel free to adjust as needed
 const scalars = {
   AtomId: 'string',
+  AttachmentId: 'string',
   BigDecimal: 'number',
   CallForProposalsId: 'string',
   ChronicleId: 'string',
+  ConfigurationRequestId: 'string',
   DatasetFilename: 'string',
   DatasetId: 'string',
   DatasetReferenceLabel: 'string',
@@ -35,6 +37,7 @@ const scalars = {
   PosShort: 'number',
   ProgramId: 'number',
   ProgramReferenceLabel: 'string',
+  ProgramUserId: 'string',
   ProposalReferenceLabel: 'string',
   Semester: 'string',
   SignalToNoise: 'number',
