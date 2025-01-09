@@ -3,10 +3,9 @@ import '@xyflow/react/dist/style.css';
 import type { Edge, Node } from '@xyflow/react';
 import { Background, Controls, ReactFlow, ReactFlowProvider, useReactFlow } from '@xyflow/react';
 import { useEffect, useMemo } from 'react';
-
 import { useThemeValue } from '@/components/atoms/theme';
-
 import { useGetGuideState } from './useGetGuideState';
+import { useConfiguration } from '@gql/configs/Configuration';
 
 const initialNodes: Node[] = [
   {
@@ -59,6 +58,7 @@ function Flow() {
   const { setNodes, setEdges, fitView } = useReactFlow();
   const theme = useThemeValue();
   const state = useGetGuideState();
+  const configuration = useConfiguration().data?.configuration;
 
   const [sourceNodes, sourceEdges] = useMemo<[Node[], Edge[]]>(() => {
     function isSourceActive(source: string | undefined | null) {
@@ -77,16 +77,47 @@ function Flow() {
     // Get active sources first
     const sourceNodes: Node[] = [];
     const sourceEdges: Edge[] = [];
+
+    function changeSourceState(source: string | undefined | null, state: boolean) {
+      let findIdx = sourceNodes.findIndex((s) => s.id === source);
+      sourceNodes[findIdx].className = state ? 'active' : 'inactive';
+    }
+
+    // Create missing source nodes depending on the configuration
+    if (configuration?.selectedOiTarget) {
+      sourceNodes.push({
+        id: 'OIWFS',
+        data: { label: 'OIWFS' },
+        position: { x: sourceNodes.length * 100, y: 0 },
+        className: 'inactive',
+        type: 'input',
+      });
+    }
+
+    if (configuration?.selectedP1Target) {
+      sourceNodes.push({
+        id: 'P1WFS',
+        data: { label: 'P1WFS' },
+        position: { x: sourceNodes.length * 100, y: 0 },
+        className: 'inactive',
+        type: 'input',
+      });
+    }
+
+    if (configuration?.selectedP2Target) {
+      sourceNodes.push({
+        id: 'P2WFS',
+        data: { label: 'P2WFS' },
+        position: { x: sourceNodes.length * 100, y: 0 },
+        className: 'inactive',
+        type: 'input',
+      });
+    }
+
     if (state.m2TipTiltEnable && state.m2TipTiltSource) {
       state.m2TipTiltSource.split(',').forEach((source: string) => {
         const isActive = isSourceActive(source);
-        sourceNodes.push({
-          id: source,
-          data: { label: source },
-          position: { x: 0, y: 0 },
-          className: isActive ? 'active' : 'inactive',
-          type: 'input',
-        });
+        changeSourceState(source, isActive);
         sourceEdges.push({
           id: `${source}-tiptilt`,
           source: source,
@@ -113,13 +144,7 @@ function Flow() {
         state.m2FocusSource.split(',').forEach((s) => {
           const isActive = isSourceActive(s);
           if (!sourceNodes.find((n) => n.id === s)) {
-            sourceNodes.push({
-              id: s,
-              data: { label: s },
-              position: { x: 0, y: 0 },
-              className: isActive ? 'active' : 'inactive',
-              type: 'input',
-            });
+            changeSourceState(s, isActive);
           }
           sourceEdges.push({
             id: `${s}-focus`,
@@ -136,13 +161,7 @@ function Flow() {
       const pos = sourceNodes.findIndex((n) => n.id === state.m2ComaM1CorrectionsSource);
       const isActive = isSourceActive(state.m2ComaM1CorrectionsSource);
       if (pos === -1) {
-        sourceNodes.push({
-          id: state.m2ComaM1CorrectionsSource ?? '',
-          data: { label: state.m2ComaM1CorrectionsSource },
-          position: { x: 0, y: 0 },
-          className: isActive ? 'active' : 'inactive',
-          type: 'input',
-        });
+        changeSourceState(state.m2ComaM1CorrectionsSource ?? '', isActive);
       } else {
         if (pos !== sourceNodes.length - 1) {
           sourceNodes.splice(sourceNodes.length - 1, 0, sourceNodes.splice(pos, 1)[0]);
@@ -161,13 +180,7 @@ function Flow() {
       const pos = sourceNodes.findIndex((n) => n.id === state.m2ComaM1CorrectionsSource);
       const isActive = isSourceActive(state.m2ComaM1CorrectionsSource);
       if (pos === -1) {
-        sourceNodes.push({
-          id: state.m2ComaM1CorrectionsSource ?? '',
-          data: { label: state.m2ComaM1CorrectionsSource },
-          position: { x: 0, y: 0 },
-          className: isActive ? 'active' : 'inactive',
-          type: 'input',
-        });
+        changeSourceState(state.m2ComaM1CorrectionsSource ?? '', isActive);
       } else {
         if (pos !== sourceNodes.length - 1) {
           sourceNodes.splice(sourceNodes.length - 1, 0, sourceNodes.splice(pos, 1)[0]);
