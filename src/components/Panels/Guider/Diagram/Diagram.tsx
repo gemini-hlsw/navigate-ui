@@ -1,11 +1,13 @@
 import '@xyflow/react/dist/style.css';
 
+import { useConfiguration } from '@gql/configs/Configuration';
 import type { Edge, Node } from '@xyflow/react';
 import { Background, Controls, ReactFlow, ReactFlowProvider, useReactFlow } from '@xyflow/react';
 import { useEffect, useMemo } from 'react';
+
 import { useThemeValue } from '@/components/atoms/theme';
+
 import { useGetGuideState } from './useGetGuideState';
-import { useConfiguration } from '@gql/configs/Configuration';
 
 const initialNodes: Node[] = [
   {
@@ -79,7 +81,7 @@ function Flow() {
     const sourceEdges: Edge[] = [];
 
     function changeSourceState(source: string | undefined | null, state: boolean) {
-      let findIdx = sourceNodes.findIndex((s) => s.id === source);
+      const findIdx = sourceNodes.findIndex((s) => s.id === source);
       sourceNodes[findIdx].className = state ? 'active' : 'inactive';
     }
 
@@ -301,7 +303,7 @@ function Flow() {
       [...sourceNodes, ...initialNodes],
       [...sourceEdges, ...initialEdges],
     ];
-  }, [state]);
+  }, [state, configuration]);
 
   useEffect(() => {
     setNodes(sourceNodes);

@@ -88,7 +88,6 @@ export type Scalars = {
    * where 2024B refers to the associated semester.
    */
   ProgramReferenceLabel: { input: string; output: string; }
-  ProgramUserId: { input: string; output: string; }
   /**
    * Proposal reference for science programs, formatted as G-YYYY[AB]-NNNN+. For
    * example, G-2024B-1234 where 2024B refers to the associated semester.
@@ -150,6 +149,7 @@ export type AddDatasetEventResult = {
 
 export type AddProgramUserInput = {
   SET?: InputMaybe<ProgramUserPropertiesInput>;
+  orcidId: Scalars['String']['input'];
   programId: Scalars['ProgramId']['input'];
   role: ProgramUserRole;
 };
@@ -1119,10 +1119,8 @@ export type ConfigurationObservingMode = {
 
 export type ConfigurationRequest = {
   __typename?: 'ConfigurationRequest';
-  applicableObservations: Array<Scalars['ObservationId']['output']>;
   configuration: Configuration;
   id: Scalars['ConfigurationRequestId']['output'];
-  justification?: Maybe<Scalars['NonEmptyString']['output']>;
   program: Program;
   status: ConfigurationRequestStatus;
 };
@@ -1145,7 +1143,6 @@ export type ConfigurationRequestEditInput = {
 
 /** Configuration request properties. */
 export type ConfigurationRequestProperties = {
-  justification?: InputMaybe<Scalars['NonEmptyString']['input']>;
   status?: InputMaybe<ConfigurationRequestStatus>;
 };
 
@@ -1309,7 +1306,6 @@ export type CreateCallForProposalsResult = {
 };
 
 export type CreateConfigurationRequestInput = {
-  SET?: InputMaybe<ConfigurationRequestProperties>;
   observationId?: InputMaybe<Scalars['ObservationId']['input']>;
 };
 
@@ -1395,16 +1391,16 @@ export type CreateTargetResult = {
   target: Target;
 };
 
-/**
- * Creates an invitation, if none exists for the indicated 'ProgramUser', and sets
- * it to 'PENDING' status. If there is an outstanding invitation, it must be
- * declined or revoked before a new one may be issued.
- */
+/** Create an invitation. */
 export type CreateUserInvitationInput = {
-  /** The associated program user. */
-  programUserId: Scalars['ProgramUserId']['input'];
+  /** Partner associated with this user, if any. */
+  partnerLink?: InputMaybe<PartnerLinkInput>;
+  /** The program to add a user to. */
+  programId: Scalars['ProgramId']['input'];
   /** The recipient to whom the invitation should be sent. */
   recipientEmail: Scalars['EmailAddress']['input'];
+  /** The role this user will play in the program. */
+  role: ProgramUserRole;
 };
 
 export type CreateUserInvitationResult = {
@@ -1569,18 +1565,6 @@ export type DeclinationInput = {
   degrees?: InputMaybe<Scalars['BigDecimal']['input']>;
   dms?: InputMaybe<Scalars['DmsString']['input']>;
   microarcseconds?: InputMaybe<Scalars['Long']['input']>;
-};
-
-/** Input for deleting a program user. */
-export type DeleteProgramUserInput = {
-  programUserId: Scalars['ProgramUserId']['input'];
-};
-
-/** The result of deleting a program user. */
-export type DeleteProgramUserResult = {
-  __typename?: 'DeleteProgramUserResult';
-  /** `true` if a program user was deleted, `false` otherwise. */
-  result: Scalars['Boolean']['output'];
 };
 
 /** Input for deleting a proposal. */
@@ -3791,14 +3775,15 @@ export type LineFluxSurfaceUnits =
   /** W/m²/arcsec² */
   | 'W_PER_M_SQUARED_PER_ARCSEC_SQUARED';
 
-/**
- * Links a 'User' with a 'Program', filling in the 'user' field of the
- * corresponding 'ProgramUser'.
- */
+/** Link user */
 export type LinkUserInput = {
-  /** The program user that will reference the user. */
-  programUserId: Scalars['ProgramUserId']['input'];
-  /** The user to be linked. */
+  /** Partner associated with this user, if any. */
+  partnerLink?: InputMaybe<PartnerLinkInput>;
+  /** The program to add a user to. */
+  programId: Scalars['ProgramId']['input'];
+  /** The role this user will play in the program. */
+  role: ProgramUserRole;
+  /** The user to be added. */
   userId: Scalars['UserId']['input'];
 };
 
@@ -3839,10 +3824,9 @@ export type Mutation = {
    */
   addDatasetEvent: AddDatasetEventResult;
   /**
-   * Creates a 'ProgramUser' without a link to any existing 'User'.  No invitation
-   * is sent as a result of this operation, but an invitation may be subsequently
-   * sent and when accepted the 'User' field will become available and the 'User'
-   * will gain appropriate access to the program.
+   * Looks up or creates (if necessary) a user associated with a given ORCID id and
+   * adds it to the given program.  No invitation is sent as a result of this
+   * operation.
    */
   addProgramUser: AddProgramUserResult;
   /**
@@ -3888,13 +3872,11 @@ export type Mutation = {
   createTarget: CreateTargetResult;
   /** Create a user invitation. */
   createUserInvitation: CreateUserInvitationResult;
-  /** Deletes a 'ProgramUser'. */
-  deleteProgramUser: DeleteProgramUserResult;
   /** Deletes the given program's proposal, if any. */
   deleteProposal: DeleteProposalResult;
   /**
-   * Ties a specific user to an existing ProgramUser, which must not already be
-   * associated with any user.
+   * Link a user to a program. Any existing link will be replaced.
+   * This operation is available only to Admin and Service users.
    */
   linkUser: LinkUserResult;
   /** Record a new atom */
@@ -3926,7 +3908,10 @@ export type Mutation = {
   setProgramReference: SetProgramReferenceResult;
   /** Set the proposal status. */
   setProposalStatus: SetProposalStatusResult;
-  /** Unlink a user from a program. */
+  /**
+   * Unlink a user from a program.
+   * This operation is available only to Admin and Service users.
+   */
   unlinkUser: UnlinkUserResult;
   /**
    * Update asterisms, adding or deleting targets, in (potentially) multiple
@@ -4047,11 +4032,6 @@ export type MutationCreateTargetArgs = {
 
 export type MutationCreateUserInvitationArgs = {
   input: CreateUserInvitationInput;
-};
-
-
-export type MutationDeleteProgramUserArgs = {
-  input: DeleteProgramUserInput;
 };
 
 
@@ -4911,19 +4891,11 @@ export type ProgramType =
 /** An assignment of a user to a program. */
 export type ProgramUser = {
   __typename?: 'ProgramUser';
-  /** User educational status. PHD/Undergrad/Grad/Other. */
+  /** User educational status. PHD/Undergrad/Grad/Other */
   educationalStatus?: Maybe<EducationalStatus>;
-  /**
-   * Profile information reported when the corresponding ORCiD profile is not set
-   * or is not public.
-   */
   fallbackProfile: UserProfile;
   /** Users' reported gender. */
   gender?: Maybe<Gender>;
-  id: Scalars['ProgramUserId']['output'];
-  /** User invitations, if any, associated with this program user. */
-  invitations: Array<UserInvitation>;
-  /** How the partner is associated with a partner. */
   partnerLink: PartnerLink;
   program?: Maybe<Program>;
   role: ProgramUserRole;
@@ -4936,10 +4908,6 @@ export type ProgramUser = {
 export type ProgramUserPropertiesInput = {
   /** The user's educational status. */
   educationalStatus?: InputMaybe<EducationalStatus>;
-  /**
-   * The fallback profile may used when the ORCiD user profile is not set or not
-   * shared publicly.
-   */
   fallbackProfile?: InputMaybe<UserProfileInput>;
   /** The user's reported gender. */
   gender?: InputMaybe<Gender>;
@@ -5133,8 +5101,6 @@ export type Query = {
   callForProposals?: Maybe<CallForProposals>;
   /** Select all Calls for Proposals. */
   callsForProposals: CallsForProposalsSelectResult;
-  /** Selects the first `LIMIT` matching configuration requests based on the provided `WHERE` parameter, if any. */
-  configurationRequests: ConfigurationRequestSelectResult;
   /**
    * Observations grouped by commonly held constraints. Identify the program by
    * specifying only one of programId, programReference, or proposalReference.  If
@@ -5224,13 +5190,6 @@ export type QueryCallsForProposalsArgs = {
   OFFSET?: InputMaybe<Scalars['CallForProposalsId']['input']>;
   WHERE?: InputMaybe<WhereCallForProposals>;
   includeDeleted?: Scalars['Boolean']['input'];
-};
-
-
-export type QueryConfigurationRequestsArgs = {
-  LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
-  OFFSET?: InputMaybe<Scalars['ConfigurationRequestId']['input']>;
-  WHERE?: InputMaybe<WhereConfigurationRequest>;
 };
 
 
@@ -6995,8 +6954,10 @@ export type ToOActivation =
   | 'STANDARD';
 
 export type UnlinkUserInput = {
-  /** The program user to unlink the user from. */
-  programUserId: Scalars['ProgramUserId']['input'];
+  /** The program to unlink the user from. */
+  programId: Scalars['ProgramId']['input'];
+  /** The user to unlink. */
+  userId: Scalars['UserId']['input'];
 };
 
 export type UnlinkUserResult = {
@@ -7321,16 +7282,22 @@ export type User = {
 /** Invitation */
 export type UserInvitation = {
   __typename?: 'UserInvitation';
-  /** The email sent for the invitation. */
+  /** The email sent for the invitation */
   email?: Maybe<Email>;
   /** Id */
   id: Scalars['UserInvitationId']['output'];
   /** User who issued the invitation. */
   issuer: User;
-  /** The ProgramUser associated with the invitation. */
-  programUser: ProgramUser;
+  /** Redeemer's partner, if any. */
+  partnerLink: PartnerLink;
+  /** The program the redeemer will be added to. */
+  program: Program;
   /** Recipient email address. */
   recipientEmail: Scalars['EmailAddress']['output'];
+  /** User who redeemed the invitation, if any. */
+  redeemer?: Maybe<User>;
+  /** The role the redeemer will play in the program. */
+  role: ProgramUserRole;
   /** Invitation status. */
   status: UserInvitationStatus;
 };
@@ -8517,35 +8484,6 @@ export type WhereOrderProgramId = {
 };
 
 /**
- * Filters on equality or order comparisons of the program user id.  All supplied
- * criteria must match, but usually only one is selected.
- */
-export type WhereOrderProgramUserId = {
-  /** Matches if the program user id is exactly the supplied value. */
-  EQ?: InputMaybe<Scalars['ProgramUserId']['input']>;
-  /** Matches if the program user id is ordered after (>) the supplied value. */
-  GT?: InputMaybe<Scalars['ProgramUserId']['input']>;
-  /**
-   * Matches if the program user id is ordered after or equal (>=) the supplied
-   * value.
-   */
-  GTE?: InputMaybe<Scalars['ProgramUserId']['input']>;
-  /** Matches if the program user id is any of the supplied options. */
-  IN?: InputMaybe<Array<Scalars['ProgramUserId']['input']>>;
-  /** Matches if the program user id is ordered before (<) the supplied value. */
-  LT?: InputMaybe<Scalars['ProgramUserId']['input']>;
-  /**
-   * Matches if the program user id is ordered before or equal (<=) the supplied
-   * value.
-   */
-  LTE?: InputMaybe<Scalars['ProgramUserId']['input']>;
-  /** Matches if the program user id is not the supplied value. */
-  NEQ?: InputMaybe<Scalars['ProgramUserId']['input']>;
-  /** Matches if the program user id is none of the supplied values. */
-  NIN?: InputMaybe<Array<Scalars['ProgramUserId']['input']>>;
-};
-
-/**
  * Filters on equality or order comparisons of Semester.  All supplied
  * criteria must match, but usually only one is selected.  E.g.,
  * 'GT = "2024A"' will match when the value is "2024B" or later.
@@ -8799,8 +8737,6 @@ export type WhereProgramUser = {
   fallbackProfile?: InputMaybe<WhereUserProfile>;
   /** Matches the gender status. */
   gender?: InputMaybe<WhereOptionEqGender>;
-  /** Matches the program user id. */
-  id?: InputMaybe<WhereOrderProgramUserId>;
   /** Matches the partner. */
   partnerLink?: InputMaybe<WherePartnerLink>;
   /** Matches the program. */
@@ -8938,11 +8874,6 @@ export type WhereUser = {
    * as a whole to match.
    */
   AND?: InputMaybe<Array<WhereUser>>;
-  /**
-   * When `true`, matches if the user is not defined. When `false` matches if the
-   * user is defined.
-   */
-  IS_NULL?: InputMaybe<Scalars['Boolean']['input']>;
   /** A nested user filter that must not match in order for the NOT itself to match. */
   NOT?: InputMaybe<WhereUser>;
   /**
