@@ -29,6 +29,7 @@ const GET_TARGETS = graphql(`
       }
       epoch
       type
+      wavelength
       createdAt
     }
   }
@@ -62,8 +63,18 @@ const UPDATE_TARGET = graphql(`
     $coord2: Float
     $epoch: String
     $type: TargetType
+    $wavelength: Int
   ) {
-    updateTarget(pk: $pk, id: $id, name: $name, coord1: $coord1, coord2: $coord2, epoch: $epoch, type: $type) {
+    updateTarget(
+      pk: $pk
+      id: $id
+      name: $name
+      coord1: $coord1
+      coord2: $coord2
+      epoch: $epoch
+      type: $type
+      wavelength: $wavelength
+    ) {
       pk
       id
       name
@@ -85,6 +96,7 @@ const UPDATE_TARGET = graphql(`
       }
       epoch
       type
+      wavelength
       createdAt
     }
   }
@@ -108,8 +120,19 @@ const CREATE_TARGET = graphql(`
     $el: Float
     $epoch: String
     $type: TargetType!
+    $wavelength: Int
   ) {
-    createTarget(id: $id, name: $name, ra: $ra, az: $az, dec: $dec, el: $el, epoch: $epoch, type: $type) {
+    createTarget(
+      id: $id
+      name: $name
+      ra: $ra
+      az: $az
+      dec: $dec
+      el: $el
+      epoch: $epoch
+      type: $type
+      wavelength: $wavelength
+    ) {
       pk
       id
       name
@@ -131,6 +154,7 @@ const CREATE_TARGET = graphql(`
       }
       epoch
       type
+      wavelength
       createdAt
     }
   }
@@ -169,6 +193,7 @@ const REMOVE_AND_CREATE_BASE_TARGETS = graphql(`
       }
       epoch
       type
+      wavelength
       createdAt
     }
   }
@@ -205,6 +230,7 @@ const REMOVE_AND_CREATE_WFS_TARGETS = graphql(`
       }
       epoch
       type
+      wavelength
       createdAt
     }
   }

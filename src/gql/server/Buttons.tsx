@@ -205,7 +205,7 @@ export function Slew(props: ButtonProps) {
           dec: { dms: selectedTarget?.dec?.dms },
           epoch: selectedTarget?.epoch,
         },
-        wavelength: { nanometers: 400 },
+        wavelength: { nanometers: selectedTarget.wavelength },
       },
       instrument: instrument.name as Instrument,
       rotator: { ipa: { degrees: rotator.angle }, mode: rotator.tracking },
