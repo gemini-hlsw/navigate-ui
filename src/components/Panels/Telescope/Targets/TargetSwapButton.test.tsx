@@ -88,6 +88,7 @@ const selectedTarget = {
   el: null,
   epoch: 'J2000.000',
   type: 'SCIENCE',
+  wavelength: 100,
   createdAt: '2024-09-25T11:57:29.410Z',
 };
 
@@ -235,6 +236,7 @@ const restoreTargetMock: MockedResponse<
             dec: { dms: selectedTarget.dec.dms },
             epoch: selectedTarget.epoch,
           },
+          wavelength: { nanometers: selectedTarget.wavelength },
         },
         oiwfs: {
           tracking: {

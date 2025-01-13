@@ -113,3 +113,52 @@ export function useGetGuideEnvironment() {
     },
   });
 }
+
+const GET_CENTRAL_WAVELENGTH = graphql(`
+  query getCentralWavelength($obsId: ObservationId!) {
+    observation(observationId: $obsId) {
+      execution {
+        config {
+          gmosNorth {
+            acquisition {
+              nextAtom {
+                steps {
+                  instrumentConfig {
+                    centralWavelength {
+                      nanometers
+                    }
+                  }
+                }
+              }
+            }
+          }
+          gmosSouth {
+            acquisition {
+              nextAtom {
+                steps {
+                  instrumentConfig {
+                    centralWavelength {
+                      nanometers
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`);
+
+export function useGetCentralWavelength() {
+  const odbToken = useOdbTokenValue();
+  return useLazyQuery(GET_CENTRAL_WAVELENGTH, {
+    context: {
+      clientName: 'odb',
+      headers: {
+        Authorization: `Bearer ${odbToken}`,
+      },
+    },
+  });
+}

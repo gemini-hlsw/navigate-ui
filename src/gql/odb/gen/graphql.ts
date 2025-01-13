@@ -1944,6 +1944,18 @@ export type ExecutionEvent = {
   visit: Visit;
 };
 
+export type ExecutionEventAdded = {
+  __typename?: 'ExecutionEventAdded';
+  value: ExecutionEvent;
+};
+
+export type ExecutionEventAddedInput = {
+  eventType?: InputMaybe<WhereEqExecutionEventType>;
+  observationId?: InputMaybe<Scalars['ObservationId']['input']>;
+  programId?: InputMaybe<Scalars['ProgramId']['input']>;
+  visitId?: InputMaybe<Scalars['VisitId']['input']>;
+};
+
 /** The matching ExecutionEvent results, limited to a maximum of 1000 entries. */
 export type ExecutionEventSelectResult = {
   __typename?: 'ExecutionEventSelectResult';
@@ -2479,6 +2491,11 @@ export type GmosNorthDetector =
 /** GMOS North dynamic step configuration */
 export type GmosNorthDynamic = {
   __typename?: 'GmosNorthDynamic';
+  /**
+   * Central wavelength, which is taken from the grating (if defined) or else
+   * from the filter (if defined).
+   */
+  centralWavelength?: Maybe<Wavelength>;
   /** GMOS detector x offset */
   dtax: GmosDtax;
   /** GMOS exposure time */
@@ -2948,6 +2965,11 @@ export type GmosSouthDetector =
 /** GMOS South dynamic step configuration */
 export type GmosSouthDynamic = {
   __typename?: 'GmosSouthDynamic';
+  /**
+   * Central wavelength, which is taken from the grating (if defined) or else
+   * from the filter (if defined).
+   */
+  centralWavelength?: Maybe<Wavelength>;
   /** GMOS detector x offset */
   dtax: GmosDtax;
   /** GMOS exposure time */
@@ -6369,6 +6391,7 @@ export type StepType =
 export type Subscription = {
   __typename?: 'Subscription';
   configurationRequestEdit: ConfigurationRequestEdit;
+  executionEventAdded: ExecutionEventAdded;
   /**
    * Subscribes to an event that is generated whenever a group is
    * created or updated.  If a group id is provided, the event is only
@@ -6404,6 +6427,11 @@ export type Subscription = {
 
 export type SubscriptionConfigurationRequestEditArgs = {
   input?: InputMaybe<ConfigurationRequestEditInput>;
+};
+
+
+export type SubscriptionExecutionEventAddedArgs = {
+  input?: InputMaybe<ExecutionEventAddedInput>;
 };
 
 
@@ -8987,6 +9015,14 @@ export type GetGuideEnvironmentQueryVariables = Exact<{
 
 export type GetGuideEnvironmentQuery = { __typename?: 'Query', observation?: { __typename?: 'Observation', targetEnvironment: { __typename?: 'TargetEnvironment', guideEnvironment: { __typename?: 'GuideEnvironment', posAngle: { __typename?: 'Angle', hms: string, degrees: number }, guideTargets: Array<{ __typename?: 'GuideTarget', probe: GuideProbe, name: string, sidereal?: { __typename?: 'Sidereal', epoch: string, ra: { __typename?: 'RightAscension', hms: string, degrees: number }, dec: { __typename?: 'Declination', dms: string, degrees: number } } | null }> } } } | null };
 
+export type GetCentralWavelengthQueryVariables = Exact<{
+  obsId: Scalars['ObservationId']['input'];
+}>;
+
+
+export type GetCentralWavelengthQuery = { __typename?: 'Query', observation?: { __typename?: 'Observation', execution: { __typename?: 'Execution', config?: { __typename?: 'ExecutionConfig', gmosNorth?: { __typename?: 'GmosNorthExecutionConfig', acquisition?: { __typename?: 'GmosNorthExecutionSequence', nextAtom: { __typename?: 'GmosNorthAtom', steps: Array<{ __typename?: 'GmosNorthStep', instrumentConfig: { __typename?: 'GmosNorthDynamic', centralWavelength?: { __typename?: 'Wavelength', nanometers: number } | null } }> } } | null } | null, gmosSouth?: { __typename?: 'GmosSouthExecutionConfig', acquisition?: { __typename?: 'GmosSouthExecutionSequence', nextAtom: { __typename?: 'GmosSouthAtom', steps: Array<{ __typename?: 'GmosSouthStep', instrumentConfig: { __typename?: 'GmosSouthDynamic', centralWavelength?: { __typename?: 'Wavelength', nanometers: number } | null } }> } } | null } | null } | null } } | null };
+
 
 export const GetObservationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getObservations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"observations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"matches"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"existence"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"subtitle"}},{"kind":"Field","name":{"kind":"Name","value":"instrument"}},{"kind":"Field","name":{"kind":"Name","value":"program"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"existence"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"proposal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pi"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"givenName"}},{"kind":"Field","name":{"kind":"Name","value":"familyName"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"serviceName"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"targetEnvironment"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"firstScienceTarget"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"existence"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"sidereal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"epoch"}},{"kind":"Field","name":{"kind":"Name","value":"ra"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}},{"kind":"Field","name":{"kind":"Name","value":"dec"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"dms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetObservationsQuery, GetObservationsQueryVariables>;
 export const GetGuideEnvironmentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getGuideEnvironment"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"obsId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ObservationId"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"observation"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"observationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"obsId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"targetEnvironment"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guideEnvironment"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"posAngle"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guideTargets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"probe"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"sidereal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"epoch"}},{"kind":"Field","name":{"kind":"Name","value":"ra"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}},{"kind":"Field","name":{"kind":"Name","value":"dec"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"dms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetGuideEnvironmentQuery, GetGuideEnvironmentQueryVariables>;
+export const GetCentralWavelengthDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getCentralWavelength"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"obsId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ObservationId"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"observation"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"observationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"obsId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"execution"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"config"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gmosNorth"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"acquisition"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nextAtom"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"steps"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"instrumentConfig"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"centralWavelength"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nanometers"}}]}}]}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"gmosSouth"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"acquisition"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nextAtom"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"steps"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"instrumentConfig"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"centralWavelength"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nanometers"}}]}}]}}]}}]}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetCentralWavelengthQuery, GetCentralWavelengthQueryVariables>;

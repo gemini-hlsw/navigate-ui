@@ -1,8 +1,8 @@
 import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
 import { useRotator, useUpdateRotator } from '@gql/configs/Rotator';
 import { useRemoveAndCreateBaseTargets, useRemoveAndCreateWfsTargets } from '@gql/configs/Target';
-import type { GetGuideEnvironmentQuery } from '@gql/odb/gen/graphql';
-import { useGetGuideEnvironment, useGetObservations } from '@gql/odb/Observation';
+import type { GetCentralWavelengthQuery, GetGuideEnvironmentQuery } from '@gql/odb/gen/graphql';
+import { useGetCentralWavelength, useGetGuideEnvironment, useGetObservations } from '@gql/odb/Observation';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { useEffect, useState } from 'react';
@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import { useCanEdit } from '@/components/atoms/auth';
 import { useOdbVisible } from '@/components/atoms/odb';
 import { useToast } from '@/Helpers/toast';
-import type { ConfigurationType, OdbObservationType, TargetInput } from '@/types';
+import type { ConfigurationType, OdbObservationType, SiteType, TargetInput } from '@/types';
 
 import { ObservationTable } from './ObservationTable';
 
@@ -22,6 +22,7 @@ export function OdbImport() {
   const [selectedObservation, setSelectedObservation] = useState<OdbObservationType>({} as OdbObservationType);
   const [getObservations, { loading, data }] = useGetObservations();
   const [getGuideEnvironment, { loading: getGuideEnvironmentLoading }] = useGetGuideEnvironment();
+  const [getCentralWavelength, { loading: getCentralWavelengthLoading }] = useGetCentralWavelength();
   const [removeAndCreateBaseTargets, { loading: removeCreateLoading }] = useRemoveAndCreateBaseTargets();
   const [updateConfiguration, { loading: updateConfigLoading }] = useUpdateConfiguration();
   const [updateRotator, { loading: updateRotatorLoading }] = useUpdateRotator();
@@ -34,6 +35,7 @@ export function OdbImport() {
     removeCreateLoading ||
     updateRotatorLoading ||
     getGuideEnvironmentLoading ||
+    getCentralWavelengthLoading ||
     wfsTargetsLoading;
 
   function updateObs() {
@@ -47,6 +49,21 @@ export function OdbImport() {
       },
       async onCompleted() {
         setOdbVisible(false);
+
+        // Observation selected
+        // First try to get a central wavelength associated to the observation
+        const obsWithWavelength = await getCentralWavelength({ variables: { obsId: selectedObservation.id } });
+        if (obsWithWavelength.error?.message) {
+          toast?.show({
+            severity: 'warn',
+            summary: `No central wavelength for ${selectedObservation.id}`,
+            detail: obsWithWavelength.error.message,
+          });
+        }
+
+        const wavelength = extractCentralWavelength(configuration?.site, obsWithWavelength.data);
+
+        // Second create the observation base target (SCIENCE)
         await removeAndCreateBaseTargets({
           variables: {
             targets: [
@@ -57,6 +74,7 @@ export function OdbImport() {
                 coord2: selectedObservation.targetEnvironment.firstScienceTarget?.sidereal?.dec.degrees,
                 epoch: selectedObservation.targetEnvironment.firstScienceTarget?.sidereal?.epoch,
                 type: 'SCIENCE',
+                wavelength: wavelength,
               },
             ],
           },
@@ -69,6 +87,8 @@ export function OdbImport() {
             });
           },
         });
+
+        // If there is a rotator, retrieve guide targets and create them
         if (rotator) {
           // Get the guide environment separately to avoid large query times for _all_ observations
           const guideEnv = await getGuideEnvironment({ variables: { obsId: selectedObservation.id } });
@@ -187,6 +207,14 @@ function extractGuideTargets(data: GetGuideEnvironmentQuery | undefined) {
     },
     { oiwfs: [], pwfs1: [], pwfs2: [] },
   );
+}
+
+function extractCentralWavelength(site: SiteType | undefined, data: GetCentralWavelengthQuery | undefined) {
+  return site === 'GN'
+    ? data?.observation?.execution.config?.gmosNorth?.acquisition?.nextAtom.steps[0].instrumentConfig.centralWavelength
+        ?.nanometers
+    : data?.observation?.execution.config?.gmosSouth?.acquisition?.nextAtom.steps[0].instrumentConfig.centralWavelength
+        ?.nanometers;
 }
 
 function firstIfOnlyOne<T>(arr: T[] | undefined): T | undefined {

@@ -87,7 +87,7 @@ export function TargetSwapButton({
             epoch: selectedTarget?.epoch,
           },
           // nonsidereal: // <- ???
-          // wavelength: {nanometers: } // <- ???
+          wavelength: { nanometers: selectedTarget.wavelength },
         };
 
         void restoreTarget({
