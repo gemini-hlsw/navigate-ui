@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import { useCanEdit } from '@/components/atoms/auth';
 import { useOdbVisible } from '@/components/atoms/odb';
 import { useToast } from '@/Helpers/toast';
-import type { ConfigurationType, OdbObservationType, TargetInput } from '@/types';
+import type { ConfigurationType, OdbObservationType, SiteType, TargetInput } from '@/types';
 
 import { ObservationTable } from './ObservationTable';
 
@@ -61,7 +61,7 @@ export function OdbImport() {
           });
         }
 
-        const wavelength = extractCentralWavelength(obsWithWavelength.data);
+        const wavelength = extractCentralWavelength(configuration?.site, obsWithWavelength.data);
 
         // Second create the observation base target (SCIENCE)
         await removeAndCreateBaseTargets({
@@ -209,9 +209,12 @@ function extractGuideTargets(data: GetGuideEnvironmentQuery | undefined) {
   );
 }
 
-function extractCentralWavelength(data: GetCentralWavelengthQuery | undefined) {
-  return data?.observation?.execution.config?.gmosNorth?.acquisition?.nextAtom.steps[0].instrumentConfig
-    .centralWavelength?.nanometers;
+function extractCentralWavelength(site: SiteType, data: GetCentralWavelengthQuery | undefined) {
+  return site === 'GN'
+    ? data?.observation?.execution.config?.gmosNorth?.acquisition?.nextAtom.steps[0].instrumentConfig.centralWavelength
+        ?.nanometers
+    : data?.observation?.execution.config?.gmosSouth?.acquisition?.nextAtom.steps[0].instrumentConfig.centralWavelength
+        ?.nanometers;
 }
 
 function firstIfOnlyOne<T>(arr: T[] | undefined): T | undefined {
