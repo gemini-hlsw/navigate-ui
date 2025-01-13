@@ -209,7 +209,7 @@ function extractGuideTargets(data: GetGuideEnvironmentQuery | undefined) {
   );
 }
 
-function extractCentralWavelength(site: SiteType, data: GetCentralWavelengthQuery | undefined) {
+function extractCentralWavelength(site: SiteType | undefined, data: GetCentralWavelengthQuery | undefined) {
   return site === 'GN'
     ? data?.observation?.execution.config?.gmosNorth?.acquisition?.nextAtom.steps[0].instrumentConfig.centralWavelength
         ?.nanometers
