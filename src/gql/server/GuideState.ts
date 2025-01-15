@@ -3,7 +3,7 @@ import { useQueryAndSubscription } from '@gql/use-query-and-subscription';
 
 import { graphql } from './gen';
 
-const GUIDE_STATE_SUBSCRIPTION = graphql(`
+export const GUIDE_STATE_SUBSCRIPTION = graphql(`
   subscription guideState {
     guideState {
       m2Inputs
@@ -18,7 +18,7 @@ const GUIDE_STATE_SUBSCRIPTION = graphql(`
   }
 `);
 
-const GUIDE_STATE_QUERY = graphql(`
+export const GUIDE_STATE_QUERY = graphql(`
   query getGuideState {
     guideState {
       m2Inputs
