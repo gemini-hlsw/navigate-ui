@@ -2,11 +2,12 @@ import type { MockedResponse } from '@apollo/client/testing';
 import { GET_GUIDE_ALARMS, UPDATE_GUIDE_ALARM } from '@gql/configs/GuideAlarm';
 import { renderWithContext } from '@gql/render';
 import { GUIDE_QUALITY_SUBSCRIPTION } from '@gql/server/GuideQuality';
+import { GUIDE_STATE_QUERY, GUIDE_STATE_SUBSCRIPTION } from '@gql/server/GuideState';
 import { page, userEvent } from '@vitest/browser/context';
 
-import { guideAlarmAtom } from '@/components/atoms/alarm';
+import { guideAlarmSoundAtom } from '@/components/atoms/alarm';
 
-import { Alarms, evaluateAlarm } from './Alarms';
+import { Alarms } from './Alarms';
 
 describe(Alarms.name, () => {
   let store: ReturnType<typeof renderWithContext>['store'];
@@ -29,29 +30,7 @@ describe(Alarms.name, () => {
     await userEvent.fill(limitInput, '900');
 
     await expect.element(page.getByTestId('limit-PWFS1')).toHaveValue('900');
-    expect(store.get(guideAlarmAtom)).true;
-  });
-});
-
-describe(evaluateAlarm.name, () => {
-  it('should be false if no alarm is set', () => {
-    expect(evaluateAlarm(undefined, { centroidDetected: false, flux: 900 })).false;
-  });
-
-  it('should be false if no guide quality is set', () => {
-    expect(evaluateAlarm({ enabled: true, limit: 900, wfs: 'OIWFS' }, undefined)).false;
-  });
-
-  it('should be false if the flux is above the limit', () => {
-    expect(evaluateAlarm({ enabled: true, limit: 900, wfs: 'OIWFS' }, { centroidDetected: true, flux: 900 })).false;
-  });
-
-  it('should be true if no centroid is detected', () => {
-    expect(evaluateAlarm({ enabled: true, limit: 900, wfs: 'OIWFS' }, { centroidDetected: false, flux: 900 })).true;
-  });
-
-  it('should be true if flux is below the limit', () => {
-    expect(evaluateAlarm({ enabled: true, limit: 900, wfs: 'OIWFS' }, { centroidDetected: true, flux: 899 })).true;
+    expect(store.get(guideAlarmSoundAtom)).true;
   });
 });
 
@@ -119,6 +98,47 @@ const mocks: MockedResponse[] = [
           wfs: 'PWFS1',
           limit: 900,
           enabled: true,
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: GUIDE_STATE_QUERY,
+      variables: {},
+    },
+    result: {
+      data: {
+        guideState: {
+          m2Inputs: ['OIWFS'],
+          m2Coma: false,
+          m1Input: null,
+          mountOffload: true,
+          p1Integrating: false,
+          p2Integrating: false,
+          oiIntegrating: true,
+          acIntegrating: false,
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: GUIDE_STATE_SUBSCRIPTION,
+      variables: {},
+    },
+    maxUsageCount: 2,
+    result: {
+      data: {
+        guideState: {
+          m2Inputs: ['OIWFS'],
+          m2Coma: false,
+          m1Input: null,
+          mountOffload: true,
+          p1Integrating: false,
+          p2Integrating: false,
+          oiIntegrating: true,
+          acIntegrating: false,
         },
       },
     },

@@ -8,10 +8,10 @@ const alarmAtom = atomWithReset<AlarmType | null>(null);
 export const useAlarm = () => useAtom(alarmAtom);
 export const useAlarmValue = () => useAtomValue(alarmAtom);
 
-export const guideAlarmAtom = atom(
+export const guideAlarmSoundAtom = atom(
   (get) => get(alarmAtom) === 'Guide',
   (_get, set, value: boolean) => set(alarmAtom, value ? 'Guide' : RESET),
 );
-export const useGuideAlarm = () => useAtom(guideAlarmAtom);
-export const useSetGuideAlarm = () => useSetAtom(guideAlarmAtom);
-export const useGuideAlarmValue = () => useAtomValue(guideAlarmAtom);
+export const useGuideAlarm = () => useAtom(guideAlarmSoundAtom);
+export const useSetGuideAlarmSound = () => useSetAtom(guideAlarmSoundAtom);
+export const useGuideAlarmSoundValue = () => useAtomValue(guideAlarmSoundAtom);

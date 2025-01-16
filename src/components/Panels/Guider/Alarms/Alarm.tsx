@@ -10,20 +10,20 @@ import { useId } from 'react';
 
 import { isNotNullish } from '@/Helpers/functions';
 
-import { evaluateAlarm } from './Alarms';
-
 export function Alarm({
   wfs,
   disabled,
   guideQuality,
   alarm,
   onUpdateAlarm,
+  hasAlarm,
 }: {
   wfs: WfsType;
   disabled: boolean;
   guideQuality: GuideQuality | undefined;
   alarm: GuideAlarm | undefined;
   onUpdateAlarm: (alarm: UpdateGuideAlarmMutationVariables) => void;
+  hasAlarm: boolean;
 }) {
   const id = useId();
 
@@ -39,7 +39,6 @@ export function Alarm({
   }
 
   const disabledOrNoData = disabled || !guideQuality || !alarm;
-  const hasAlarm = evaluateAlarm(alarm, guideQuality);
 
   return (
     <div
@@ -74,7 +73,7 @@ export function Alarm({
           {guideQuality?.centroidDetected ? 'OK' : 'NOK'}
         </output>
         <label htmlFor={`enabled-${id}`} className="label">
-          Enabled
+          Enable
         </label>
         <Checkbox inputId={`enabled-${id}`} disabled={disabledOrNoData} checked={enabled} onChange={onEnabledChange} />
       </div>

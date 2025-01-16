@@ -19,7 +19,14 @@ describe(Alarm.name, () => {
   beforeEach(() => {
     onUpdateAlarm = vi.fn();
     sut = render(
-      <Alarm wfs="PWFS1" guideQuality={guideQuality} alarm={alarm} disabled={false} onUpdateAlarm={onUpdateAlarm} />,
+      <Alarm
+        wfs="PWFS1"
+        guideQuality={guideQuality}
+        alarm={alarm}
+        disabled={false}
+        hasAlarm={true}
+        onUpdateAlarm={onUpdateAlarm}
+      />,
     );
   });
 
@@ -35,6 +42,7 @@ describe(Alarm.name, () => {
         guideQuality={{ ...guideQuality, centroidDetected: false }}
         alarm={alarm}
         disabled={false}
+        hasAlarm={false}
         onUpdateAlarm={onUpdateAlarm}
       />,
     );
@@ -55,17 +63,29 @@ describe(Alarm.name, () => {
     expect(onUpdateAlarm).toHaveBeenCalledWith({ wfs: 'PWFS1', limit: 100 });
   });
 
-  it('should not set has-alarm if flux is above limit', async () => {
+  it('should not set has-alarm if hasAlarm is false', async () => {
+    sut.rerender(
+      <Alarm
+        wfs="PWFS1"
+        guideQuality={guideQuality}
+        alarm={alarm}
+        disabled={false}
+        hasAlarm={false}
+        onUpdateAlarm={onUpdateAlarm}
+      />,
+    );
+
     await expect.element(page.getByTestId('no-alarm')).toBeInTheDocument();
   });
 
-  it('should set has-alarm if flux is below limit', async () => {
+  it('should set has-alarm hasAlarm is true', async () => {
     sut.rerender(
       <Alarm
         wfs="PWFS1"
         guideQuality={{ ...guideQuality, flux: 799 }}
         alarm={alarm}
         disabled={false}
+        hasAlarm={true}
         onUpdateAlarm={onUpdateAlarm}
       />,
     );
@@ -79,24 +99,12 @@ describe(Alarm.name, () => {
         guideQuality={{ ...guideQuality, centroidDetected: false }}
         alarm={alarm}
         disabled={false}
+        hasAlarm={true}
         onUpdateAlarm={onUpdateAlarm}
       />,
     );
 
     await expect.element(page.getByTestId('has-alarm')).toBeInTheDocument();
-  });
-
-  it('should not set has-alarm if disabled', async () => {
-    sut.rerender(
-      <Alarm
-        wfs="PWFS1"
-        guideQuality={{ ...guideQuality, flux: 799 }}
-        alarm={{ ...alarm, enabled: false }}
-        disabled={false}
-        onUpdateAlarm={onUpdateAlarm}
-      />,
-    );
-    await expect.element(page.getByTestId('no-alarm')).toBeInTheDocument();
   });
 });
 

@@ -7,7 +7,6 @@ export function useGetGuideState() {
     return {
       mountOffload: false,
       daytimeMode: false,
-      lightPath: 'Sky ➡ AO ➡ AC',
       m1CorrectionsEnable: false,
       m2ComaEnable: false,
       m2ComaM1CorrectionsSource: 'OIWFS',
@@ -25,7 +24,6 @@ export function useGetGuideState() {
   return {
     mountOffload: data.mountOffload,
     daytimeMode: true,
-    lightPath: 'Sky ➡ AO ➡ AC',
     m1CorrectionsEnable: Boolean(data.m1Input),
     m2ComaEnable: data.m2Coma,
     m2ComaM1CorrectionsSource: data.m1Input,

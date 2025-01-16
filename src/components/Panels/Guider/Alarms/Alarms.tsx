@@ -1,18 +1,21 @@
-import type { GuideAlarm, UpdateGuideAlarmMutationVariables } from '@gql/configs/gen/graphql';
+import type { UpdateGuideAlarmMutationVariables } from '@gql/configs/gen/graphql';
 import { useGuideAlarms, useUpdateGuideAlarm } from '@gql/configs/GuideAlarm';
-import type { GuideQuality } from '@gql/server/gen/graphql';
 import { useGuideQualities } from '@gql/server/GuideQuality';
+import { useGuideState } from '@gql/server/GuideState';
 import { Title } from '@Shared/Title/Title';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
-import { useSetGuideAlarm } from '@/components/atoms/alarm';
+import { useSetGuideAlarmSound } from '@/components/atoms/alarm';
 import { useCanEdit } from '@/components/atoms/auth';
 
 import { Alarm } from './Alarm';
+import { evaluateAlarm, evaluateAlarmSound } from './evaluate';
 
 export function Alarms() {
   const canEdit = useCanEdit();
-  const toggleGuideAlarm = useSetGuideAlarm();
+  const toggleGuideAlarm = useSetGuideAlarmSound();
+
+  const { loading: guideStateLoading, data: guideState } = useGuideState();
 
   const { data, loading: subscriptionLoading } = useGuideQualities();
   const guideQualities = data?.guidersQualityValues;
@@ -26,20 +29,22 @@ export function Alarms() {
     const hasAlarm =
       !!alarms &&
       !!guideQualities &&
-      (evaluateAlarm(alarms.OIWFS, guideQualities.oiwfs) ||
-        evaluateAlarm(alarms.PWFS1, guideQualities.pwfs1) ||
-        evaluateAlarm(alarms.PWFS2, guideQualities.pwfs2));
+      !!guideState &&
+      (evaluateAlarmSound(alarms.OIWFS, guideQualities.oiwfs, guideState) ||
+        evaluateAlarmSound(alarms.PWFS1, guideQualities.pwfs1, guideState) ||
+        evaluateAlarmSound(alarms.PWFS2, guideQualities.pwfs2, guideState));
 
     toggleGuideAlarm(hasAlarm);
-  }, [alarms, guideQualities, toggleGuideAlarm]);
+  }, [alarms, guideQualities, guideState, toggleGuideAlarm]);
 
-  function onUpdateAlarm(variables: UpdateGuideAlarmMutationVariables) {
-    void updateAlarm({
-      variables,
-    });
-  }
+  const onUpdateAlarm = useCallback(
+    (variables: UpdateGuideAlarmMutationVariables) => {
+      void updateAlarm({ variables });
+    },
+    [updateAlarm],
+  );
 
-  const disabled = !canEdit || subscriptionLoading || alarmsLoading || updateLoading;
+  const disabled = !canEdit || subscriptionLoading || alarmsLoading || updateLoading || guideStateLoading;
 
   return (
     <div className="alarms">
@@ -51,6 +56,7 @@ export function Alarms() {
           alarm={alarms?.PWFS1}
           disabled={disabled}
           onUpdateAlarm={onUpdateAlarm}
+          hasAlarm={evaluateAlarm(alarms?.PWFS1, guideQualities?.pwfs1, guideState)}
         />
         <Alarm
           wfs="PWFS2"
@@ -58,6 +64,7 @@ export function Alarms() {
           alarm={alarms?.PWFS2}
           disabled={disabled}
           onUpdateAlarm={onUpdateAlarm}
+          hasAlarm={evaluateAlarm(alarms?.PWFS2, guideQualities?.pwfs2, guideState)}
         />
         <Alarm
           wfs="OIWFS"
@@ -65,14 +72,9 @@ export function Alarms() {
           alarm={alarms?.OIWFS}
           disabled={disabled}
           onUpdateAlarm={onUpdateAlarm}
+          hasAlarm={evaluateAlarm(alarms?.OIWFS, guideQualities?.oiwfs, guideState)}
         />
       </div>
     </div>
   );
-}
-
-export function evaluateAlarm(alarm: GuideAlarm | undefined, guideQuality: GuideQuality | undefined): boolean {
-  if (!alarm || !guideQuality) return false;
-
-  return alarm.enabled && (guideQuality.flux < alarm.limit || !guideQuality.centroidDetected);
 }
