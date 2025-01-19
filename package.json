@@ -67,7 +67,7 @@
     "lucuma-schemas": "0.113.0",
     "playwright": "1.49.1",
     "prettier": "3.4.2",
-    "sass": "1.83.1",
+    "sass": "1.83.4",
     "typescript": "5.7.3",
     "typescript-eslint": "8.19.1",
     "vite": "6.0.7",
