@@ -95,15 +95,25 @@ export function CRCS({ className, state, ...props }: ButtonProps & { state: Mech
   );
 }
 
-export function PWFS1({ className, state, ...props }: ButtonProps & { state: MechSystemState | undefined }) {
+export function PWFS1({
+  className,
+  state,
+  inUse,
+  ...props
+}: ButtonProps & { state: MechSystemState | undefined; inUse: boolean }) {
   // TODO: Implement PWFS1 mutation
-  const { classes, title } = classNameForState(state, true);
+  const { classes, title } = classNameForState(state, inUse);
   return <Button {...props} title={title} className={clsx(className, classes)} />;
 }
 
-export function PWFS2({ className, state, ...props }: ButtonProps & { state: MechSystemState | undefined }) {
+export function PWFS2({
+  className,
+  state,
+  inUse,
+  ...props
+}: ButtonProps & { state: MechSystemState | undefined; inUse: boolean }) {
   // TODO: Implement PWFS2 mutation
-  const { classes, title } = classNameForState(state, true);
+  const { classes, title } = classNameForState(state, inUse);
   return <Button {...props} title={title} className={clsx(className, classes)} />;
 }
 
@@ -112,8 +122,13 @@ export function AOWFS({ className, ...props }: ButtonProps) {
   return <Button {...props} className={clsx(className, BTN_CLASSES.INACTIVE)} />;
 }
 
-export function OIWFS({ className, state, ...props }: ButtonProps & { state: MechSystemState | undefined }) {
-  const { classes, title } = classNameForState(state, true);
+export function OIWFS({
+  className,
+  state,
+  inUse,
+  ...props
+}: ButtonProps & { state: MechSystemState | undefined; inUse: boolean }) {
+  const { classes, title } = classNameForState(state, inUse);
   return (
     <MutationButton
       mutation={OIWFS_FOLLOW_MUTATION}
