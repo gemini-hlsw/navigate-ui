@@ -2095,6 +2095,63 @@ export type FixedExposureModeInput = {
   time: TimeSpanInput;
 };
 
+/** Flamingos2 Disperser */
+export type Flamingos2Disperser =
+  /** Flamingos2Disperser R=1200 (H + K) grism */
+  | 'R1200HK'
+  /** Flamingos2Disperser R=1200 (J + H) grism */
+  | 'R1200JH'
+  /** Flamingos2Disperser R=3000 (J or H or K) grism */
+  | 'R3000';
+
+/** Flamingos2 Filter */
+export type Flamingos2Filter =
+  /** Flamingos2Filter Dark */
+  | 'DARK'
+  /** Flamingos2Filter F1056 (1.056 um) */
+  | 'F1056'
+  /** Flamingos2Filter F1063 (1.063 um) */
+  | 'F1063'
+  /** Flamingos2Filter H (1.65 um) */
+  | 'H'
+  /** Flamingos2Filter HK (spectroscopic) */
+  | 'HK'
+  /** Flamingos2Filter J (1.25 um) */
+  | 'J'
+  /** Flamingos2Filter JH (spectroscopic) */
+  | 'JH'
+  /** Flamingos2Filter J-low (1.15 um) */
+  | 'J_LOW'
+  /** Flamingos2Filter K-blue (2.06 um) */
+  | 'K_BLUE'
+  /** Flamingos2Filter K-long (2.20 um) */
+  | 'K_LONG'
+  /** Flamingos2Filter K-short (2.15 um) */
+  | 'K_SHORT'
+  /** Flamingos2Filter Open */
+  | 'OPEN'
+  /** Flamingos2Filter Y (1.02 um) */
+  | 'Y';
+
+/** Flamingos2 FPU */
+export type Flamingos2Fpu =
+  /** Flamingos2Fpu 1-Pixel Long Slit */
+  | 'LONG_SLIT_1'
+  /** Flamingos2Fpu 2-Pixel Long Slit */
+  | 'LONG_SLIT_2'
+  /** Flamingos2Fpu 1-Pixel Long Slit */
+  | 'LONG_SLIT_3'
+  /** Flamingos2Fpu 4-Pixel Long Slit */
+  | 'LONG_SLIT_4'
+  /** Flamingos2Fpu 6-Pixel Long Slit */
+  | 'LONG_SLIT_6'
+  /** Flamingos2Fpu 8-Pixel Long Slit */
+  | 'LONG_SLIT_8'
+  /** Flamingos2Fpu 2-Pixel Pinhole Grid */
+  | 'PINHOLE'
+  /** Flamingos2Fpu Sub-Pixel Pinhole Gr */
+  | 'SUB_PIX_PINHOLE';
+
 /** Flux density entry */
 export type FluxDensity = {
   density: Scalars['PosBigDecimal']['input'];
@@ -3443,6 +3500,13 @@ export type Group = {
   program: Program;
   system: Scalars['Boolean']['output'];
   /**
+   * Prepared time by band ignoring `minimumRequired`, for observations that can be
+   * calculated.  In order for an observation to have an estimate, it must be
+   * fully defined such that a sequence can be generated for it.  All defined
+   * observations in every band present in the group are included.
+   */
+  timeEstimateBanded: Array<BandedTime>;
+  /**
    * Remaining execution time estimate range, assuming it can be calculated.  In
    * order for an observation to have an estimate, it must be fully defined such
    * that a sequence can be generated for it.  If a group has observations that
@@ -4777,6 +4841,13 @@ export type Program = {
   /** Program-wide time charge, summing all corrected observation time charges. */
   timeCharge: Array<BandedTime>;
   /**
+   * Prepared time by band ignoring `minimumRequired` in groups, for observations
+   * that can be calculated.  In order for an observation to have an estimate, it
+   * must be fully defined such that a sequence can be generated for it.  All
+   * defined observations in every band present in the program are included.
+   */
+  timeEstimateBanded: Array<BandedTime>;
+  /**
    * Remaining execution time estimate range, assuming it can be calculated.  In
    * order for an observation to have an estimate, it must be fully defined such
    * that a sequence can be generated for it.  If a program has observations that
@@ -5188,6 +5259,12 @@ export type Query = {
   /** Selects the first `LIMIT` matching observations based on the provided `WHERE` parameter, if any. */
   observations: ObservationSelectResult;
   /**
+   * Selects observations via a normal predicate *and* an additional filter for allowed
+   * workflow states. This query is intended for operations and is available only for
+   * service users.
+   */
+  observationsByWorkflowState: Array<Observation>;
+  /**
    * Observations grouped by commonly held observing modes. Identify the program by
    * specifying only one of programId, programReference, or proposalReference.  If
    * more than one is provided, all must match.  If none are set, nothing will
@@ -5302,6 +5379,12 @@ export type QueryObservationsArgs = {
   OFFSET?: InputMaybe<Scalars['ObservationId']['input']>;
   WHERE?: InputMaybe<WhereObservation>;
   includeDeleted?: Scalars['Boolean']['input'];
+};
+
+
+export type QueryObservationsByWorkflowStateArgs = {
+  WHERE?: InputMaybe<WhereObservation>;
+  states?: InputMaybe<Array<ObservationWorkflowState>>;
 };
 
 
@@ -5992,6 +6075,11 @@ export type SpectroscopyConfigOption = {
   capability?: Maybe<SpectroscopyCapabilities>;
   disperserLabel: Scalars['NonEmptyString']['output'];
   filterLabel?: Maybe<Scalars['NonEmptyString']['output']>;
+  /**
+   * For Flamingos2 options, the Flamingos 2configuration.  Null for other
+   * instruments.
+   */
+  flamingos2?: Maybe<SpectroscopyConfigOptionFlamingos2>;
   focalPlane: FocalPlane;
   fpuLabel: Scalars['NonEmptyString']['output'];
   /**
@@ -6014,6 +6102,13 @@ export type SpectroscopyConfigOption = {
   wavelengthMax: Wavelength;
   wavelengthMin: Wavelength;
   wavelengthOptimal: Wavelength;
+};
+
+export type SpectroscopyConfigOptionFlamingos2 = {
+  __typename?: 'SpectroscopyConfigOptionFlamingos2';
+  disperser: Flamingos2Disperser;
+  filter: Flamingos2Filter;
+  fpu: Flamingos2Fpu;
 };
 
 export type SpectroscopyConfigOptionGmosNorth = {
