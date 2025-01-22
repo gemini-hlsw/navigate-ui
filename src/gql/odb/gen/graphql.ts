@@ -879,6 +879,20 @@ export type CategorizedTimeRange = {
   minimum: CategorizedTime;
 };
 
+/** Input used to change the role of a program user. */
+export type ChangeProgramUserRoleInput = {
+  /** New role they should assume. */
+  newRole: ProgramUserRole;
+  /** Program user to update. */
+  programUserId: Scalars['ProgramUserId']['input'];
+};
+
+/** Result of the program user role update, which is the updated program user itself. */
+export type ChangeProgramUserRoleResult = {
+  __typename?: 'ChangeProgramUserRoleResult';
+  programUser: ProgramUser;
+};
+
 /** Who is charged for time, if anyone. */
 export type ChargeClass =
   /** Time that is not charged. */
@@ -3953,6 +3967,8 @@ export type Mutation = {
    * be introduced.
    */
   addTimeChargeCorrection: AddTimeChargeCorrectionResult;
+  /** Update the role of a program user. */
+  changeProgramUserRole: ChangeProgramUserRoleResult;
   /** Copy this group and its contents, recursively, as a sibling of itself. */
   cloneGroup: CloneGroupResult;
   cloneObservation: CloneObservationResult;
@@ -4078,6 +4094,11 @@ export type MutationAddStepEventArgs = {
 
 export type MutationAddTimeChargeCorrectionArgs = {
   input: AddTimeChargeCorrectionInput;
+};
+
+
+export type MutationChangeProgramUserRoleArgs = {
+  input: ChangeProgramUserRoleInput;
 };
 
 
