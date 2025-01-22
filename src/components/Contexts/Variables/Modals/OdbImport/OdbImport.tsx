@@ -188,10 +188,8 @@ function extractGuideTargets(data: GetGuideEnvironmentQuery | undefined) {
     Record<'oiwfs' | 'pwfs1' | 'pwfs2', TargetInput[]>
   >(
     (acc, t) => {
-      const auxTarget: TargetInput = {
+      const auxTarget: Omit<TargetInput, 'type'> = {
         name: t.name,
-        id: undefined,
-        type: 'OIWFS',
         epoch: t.sidereal?.epoch,
         coord1: t.sidereal?.ra.degrees,
         coord2: t.sidereal?.dec.degrees,
@@ -202,6 +200,8 @@ function extractGuideTargets(data: GetGuideEnvironmentQuery | undefined) {
         acc.pwfs1.push({ ...auxTarget, type: 'PWFS1' });
       } else if (t.probe === 'PWFS_2') {
         acc.pwfs2.push({ ...auxTarget, type: 'PWFS2' });
+      } else {
+        console.warn('Unknown guide target:', t);
       }
       return acc;
     },
