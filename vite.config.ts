@@ -87,8 +87,13 @@ export default defineConfig(({ mode }) => ({
     setupFiles: ['vitest-browser-react'],
     browser: {
       enabled: true,
-      name: 'chromium',
       provider: 'playwright',
+      instances: [
+        {
+          browser: 'chromium',
+          name: 'chromium',
+        },
+      ],
     },
   },
   base: '/',
