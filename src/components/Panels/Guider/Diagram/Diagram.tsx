@@ -82,6 +82,7 @@ function Flow() {
 
     function changeSourceState(source: string | undefined | null, state: boolean) {
       const findIdx = sourceNodes.findIndex((s) => s.id === source);
+      if (findIdx === -1) return;
       sourceNodes[findIdx].className = state ? 'active' : 'inactive';
     }
 
@@ -206,7 +207,8 @@ function Flow() {
     let tiptiltState: string;
     if (state.m2TipTiltEnable) {
       // Check if any source is active
-      const tipTiltActive = sourceEdges.some((n) => n.target === 'tiptilt' && isSourceActive(n.id));
+      const tipTiltActive = sourceEdges.some((n) => n.target === 'tiptilt' && isSourceActive(n.source));
+      console.log(sourceEdges);
       if (sourceEdges.find((n) => n.target === 'tiptilt')) {
         if (tipTiltActive) {
           tiptiltState = 'active';
@@ -239,7 +241,7 @@ function Flow() {
     let focusState: string;
     if (state.m2FocusEnable) {
       // Check if any source is active
-      const focusActive = sourceEdges.some((n) => n.target === 'focus' && isSourceActive(n.id));
+      const focusActive = sourceEdges.some((n) => n.target === 'focus' && isSourceActive(n.source));
       if (sourceEdges.find((n) => n.target === 'focus')) {
         if (focusActive) {
           focusState = 'active';
@@ -258,7 +260,7 @@ function Flow() {
     let comaState: string;
     if (state.m2ComaEnable) {
       // Check if any source is active
-      const comaActive = sourceEdges.some((n) => n.target === 'coma' && isSourceActive(n.id));
+      const comaActive = sourceEdges.some((n) => n.target === 'coma' && isSourceActive(n.source));
       if (sourceEdges.find((n) => n.target === 'coma')) {
         if (comaActive) {
           comaState = 'active';
@@ -277,7 +279,7 @@ function Flow() {
     let highoState: string;
     if (state.m1CorrectionsEnable) {
       // Check if any source is active
-      const highoActive = sourceEdges.some((n) => n.target === 'higho' && isSourceActive(n.id));
+      const highoActive = sourceEdges.some((n) => n.target === 'higho' && isSourceActive(n.source));
       if (sourceEdges.find((n) => n.target === 'higho')) {
         if (highoActive) {
           highoState = 'active';
