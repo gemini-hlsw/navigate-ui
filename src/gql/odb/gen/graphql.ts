@@ -2018,18 +2018,18 @@ export type Existence =
 /** Exposure time mode, either signal to noise or fixed */
 export type ExposureTimeMode = {
   __typename?: 'ExposureTimeMode';
-  /** Fixed exposure time mode data, if applicable */
-  fixedExposure?: Maybe<FixedExposureMode>;
-  /** Signal to noise exposure time mode data, if applicable */
-  signalToNoise?: Maybe<SignalToNoiseMode>;
+  /** Signal to noise exposure time mode data, if applicable. */
+  signalToNoise?: Maybe<SignalToNoiseExposureTimeMode>;
+  /** Time and Count mode data, if applicable. */
+  timeAndCount?: Maybe<TimeAndCountExposureTimeMode>;
 };
 
 /** Exposure time mode input.  Specify fixed or signal to noise, but not both */
 export type ExposureTimeModeInput = {
-  /** The fixedExposure field must be either specified or skipped altogether.  It cannot be unset with a null value. */
-  fixedExposure?: InputMaybe<FixedExposureModeInput>;
   /** The signalToNoise field must be either specified or skipped altogether.  It cannot be unset with a null value. */
-  signalToNoise?: InputMaybe<SignalToNoiseModeInput>;
+  signalToNoise?: InputMaybe<SignalToNoiseExposureTimeModeInput>;
+  /** The timeAndCount field must be either specified or skipped altogether.  It cannot be unset with a null value. */
+  timeAndCount?: InputMaybe<TimeAndCountExposureTimeModeInput>;
 };
 
 /** Proposal properties for Fast Turnaround CallForProposals. */
@@ -2090,23 +2090,6 @@ export type FilterTypeMeta = {
   longName: Scalars['String']['output'];
   shortName: Scalars['String']['output'];
   tag: FilterType;
-};
-
-/** Fixed exposure time mode */
-export type FixedExposureMode = {
-  __typename?: 'FixedExposureMode';
-  /** Exposure count */
-  count: Scalars['NonNegInt']['output'];
-  /** Exposure time */
-  time: TimeSpan;
-};
-
-/** Fixed exposure time mode parameters */
-export type FixedExposureModeInput = {
-  /** exposure count */
-  count: Scalars['NonNegInt']['input'];
-  /** exposure time */
-  time: TimeSpanInput;
 };
 
 /** Flamingos2 Disperser */
@@ -5945,14 +5928,18 @@ export type SiderealInput = {
 };
 
 /** Signal to noise exposure time mode */
-export type SignalToNoiseMode = {
-  __typename?: 'SignalToNoiseMode';
+export type SignalToNoiseExposureTimeMode = {
+  __typename?: 'SignalToNoiseExposureTimeMode';
+  /** Signal/Noise wavelength */
+  at: Wavelength;
   /** Signal/Noise value */
   value: Scalars['SignalToNoise']['output'];
 };
 
 /** Signal-to-noise mode parameters */
-export type SignalToNoiseModeInput = {
+export type SignalToNoiseExposureTimeModeInput = {
+  /** Corresponding wavelength. */
+  at: WavelengthInput;
   /** s/n value */
   value: Scalars['SignalToNoise']['input'];
 };
@@ -6146,16 +6133,14 @@ export type SpectroscopyScienceRequirements = {
   __typename?: 'SpectroscopyScienceRequirements';
   /** Spectroscopy Capabilities */
   capability?: Maybe<SpectroscopyCapabilities>;
+  /** Requested exposure time mode. */
+  exposureTimeMode?: Maybe<ExposureTimeMode>;
   /** Focal plane choice */
   focalPlane?: Maybe<FocalPlane>;
   /** Focal plane angle */
   focalPlaneAngle?: Maybe<Angle>;
   /** Requested resolution */
   resolution?: Maybe<Scalars['PosInt']['output']>;
-  /** Requested signal to noise ratio */
-  signalToNoise?: Maybe<Scalars['SignalToNoise']['output']>;
-  /** Requested wavelength for the requested signal to noise */
-  signalToNoiseAt?: Maybe<Wavelength>;
   /** Requested central wavelength */
   wavelength?: Maybe<Wavelength>;
   /** Wavelength range */
@@ -6166,16 +6151,17 @@ export type SpectroscopyScienceRequirements = {
 export type SpectroscopyScienceRequirementsInput = {
   /** The capabilities field may be unset by assigning a null value, or ignored by skipping it altogether */
   capability?: InputMaybe<SpectroscopyCapabilities>;
+  /**
+   * ExposureTimeMode, which may be unset by assigning a null value, or ignored by
+   * skipping it altogether.
+   */
+  exposureTimeMode?: InputMaybe<ExposureTimeModeInput>;
   /** The focalPlane field may be unset by assigning a null value, or ignored by skipping it altogether */
   focalPlane?: InputMaybe<FocalPlane>;
   /** The focalPlaneAngle field may be unset by assigning a null value, or ignored by skipping it altogether */
   focalPlaneAngle?: InputMaybe<AngleInput>;
   /** The resolution field may be unset by assigning a null value, or ignored by skipping it altogether */
   resolution?: InputMaybe<Scalars['PosInt']['input']>;
-  /** The signalToNoise field may be unset by assigning a null value, or ignored by skipping it altogether */
-  signalToNoise?: InputMaybe<Scalars['SignalToNoise']['input']>;
-  /** The signalToNoiseAt field may be unset by assigning a null value, or ignored by skipping it altogether */
-  signalToNoiseAt?: InputMaybe<WavelengthInput>;
   /** The wavelength field may be unset by assigning a null value, or ignored by skipping it altogether */
   wavelength?: InputMaybe<WavelengthInput>;
   /** The wavelengthCoverage field may be unset by assigning a null value, or ignored by skipping it altogether */
@@ -6881,6 +6867,27 @@ export type TimeAccountingCategory =
   | 'UH'
   /** United States */
   | 'US';
+
+/** Time and Count exposure time mode. */
+export type TimeAndCountExposureTimeMode = {
+  __typename?: 'TimeAndCountExposureTimeMode';
+  /** S/N at Wavelength. */
+  at: Wavelength;
+  /** Exposure count. */
+  count: Scalars['NonNegInt']['output'];
+  /** Exposure time. */
+  time: TimeSpan;
+};
+
+/** Time And Count exposure time mode parameters */
+export type TimeAndCountExposureTimeModeInput = {
+  /** S/N at wavelength. */
+  at: WavelengthInput;
+  /** Exposure count. */
+  count: Scalars['NonNegInt']['input'];
+  /** Exposure time. */
+  time: TimeSpanInput;
+};
 
 /**
  * A manual correction to time accounting calculations.  Note that the
