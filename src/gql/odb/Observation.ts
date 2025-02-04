@@ -13,27 +13,16 @@ const GET_OBSERVATIONS = graphql(`
         title
         subtitle
         instrument
-        # execution {
-        #   state
-        # }
         program {
           id
           existence
           name
-          proposal {
-            title
-          }
           pi {
             user {
               profile {
                 givenName
                 familyName
               }
-            }
-          }
-          users {
-            user {
-              serviceName
             }
           }
         }
