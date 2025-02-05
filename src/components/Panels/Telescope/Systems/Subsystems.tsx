@@ -165,7 +165,7 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         disabled={!canEdit}
         style={{ gridArea: 'g55' }}
         value={aperture}
-        onValueChange={(e) => setAperture(e.value ? e.value : 0)}
+        onValueChange={(e) => setAperture(e.value ?? 0)}
         mode="decimal"
         className="under-construction"
       />
@@ -191,7 +191,7 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         disabled={!canEdit}
         style={{ gridArea: 'g62' }}
         value={WVGate}
-        onValueChange={(e) => setWVGate(e.value ? e.value : 0)}
+        onValueChange={(e) => setWVGate(e.value ?? 0)}
         mode="decimal"
         className="under-construction"
       />
@@ -219,7 +219,7 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         disabled={!canEdit}
         style={{ gridArea: 'g72' }}
         value={EVGate}
-        onValueChange={(e) => setEVGate(e.value ? e.value : 0)}
+        onValueChange={(e) => setEVGate(e.value ?? 0)}
         mode="decimal"
         className="under-construction"
       />

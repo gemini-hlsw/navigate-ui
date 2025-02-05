@@ -82,7 +82,7 @@ export default function MainControls({ canEdit }: { canEdit: boolean }) {
           disabled={!canEdit}
           style={{ gridArea: 'g23' }}
           value={slider}
-          onValueChange={(e) => setSlider(e.value ? e.value : 0)}
+          onValueChange={(e) => setSlider(e.value ?? 0)}
           mode="decimal"
         />
         <Button
@@ -114,7 +114,7 @@ export default function MainControls({ canEdit }: { canEdit: boolean }) {
           disabled={!canEdit}
           style={{ gridArea: 'g32' }}
           value={slider}
-          onValueChange={(e) => setSlider(e.value ? e.value : 0)}
+          onValueChange={(e) => setSlider(e.value ?? 0)}
           mode="decimal"
           minFractionDigits={2}
         />
@@ -122,7 +122,7 @@ export default function MainControls({ canEdit }: { canEdit: boolean }) {
           disabled={!canEdit}
           style={{ gridArea: 'g33' }}
           value={slider}
-          onValueChange={(e) => setSlider(e.value ? e.value : 0)}
+          onValueChange={(e) => setSlider(e.value ?? 0)}
           mode="decimal"
           minFractionDigits={2}
         />
