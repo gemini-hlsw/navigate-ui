@@ -445,8 +445,14 @@ export type ProperMotionRa = {
 export type Query = {
   __typename?: 'Query';
   guideState: GuideConfigurationState;
+  instrumentPort?: Maybe<Scalars['Int']['output']>;
   navigateState: NavigateState;
   telescopeState: TelescopeState;
+};
+
+
+export type QueryInstrumentPortArgs = {
+  instrument: Instrument;
 };
 
 export type RadialVelocity = {

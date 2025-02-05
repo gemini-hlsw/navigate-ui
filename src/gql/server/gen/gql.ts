@@ -13,7 +13,34 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
-const documents = {
+type Documents = {
+    "\n  mutation acObserve($period: TimeSpanInput!) {\n    acObserve(period: $period) {\n      result\n      msg\n    }\n  }\n": typeof types.AcObserveDocument,
+    "\n  mutation acStopObserve {\n    acStopObserve {\n      result\n      msg\n    }\n  }\n": typeof types.AcStopObserveDocument,
+    "\n  mutation runSlew($slewOptions: SlewOptionsInput!, $config: TcsConfigInput!) {\n    slew(slewOptions: $slewOptions, config: $config) {\n      result\n    }\n  }\n": typeof types.RunSlewDocument,
+    "\n  subscription guidersQualityValues {\n    guidersQualityValues {\n      pwfs1 {\n        flux\n        centroidDetected\n      }\n      pwfs2 {\n        flux\n        centroidDetected\n      }\n      oiwfs {\n        flux\n        centroidDetected\n      }\n    }\n  }\n": typeof types.GuidersQualityValuesDocument,
+    "\n  subscription guideState {\n    guideState {\n      m2Inputs\n      m2Coma\n      m1Input\n      mountOffload\n      p1Integrating\n      p2Integrating\n      oiIntegrating\n      acIntegrating\n    }\n  }\n": typeof types.GuideStateDocument,
+    "\n  query getGuideState {\n    guideState {\n      m2Inputs\n      m2Coma\n      m1Input\n      mountOffload\n      p1Integrating\n      p2Integrating\n      oiIntegrating\n      acIntegrating\n    }\n  }\n": typeof types.GetGuideStateDocument,
+    "\n  mutation guideEnable($config: GuideConfigurationInput!) {\n    guideEnable(config: $config) {\n      result\n      msg\n    }\n  }\n": typeof types.GuideEnableDocument,
+    "\n  mutation guideDisable {\n    guideDisable {\n      result\n      msg\n    }\n  }\n": typeof types.GuideDisableDocument,
+    "\n  mutation lightpathConfig($from: LightSource!, $to: LightSink!) {\n    lightpathConfig(from: $from, to: $to) {\n      result\n      msg\n    }\n  }\n": typeof types.LightpathConfigDocument,
+    "\n  subscription logMessage {\n    logMessage {\n      timestamp\n      level\n      thread\n      message\n    }\n  }\n": typeof types.LogMessageDocument,
+    "\n  query getNavigateState {\n    navigateState {\n      onSwappedTarget\n    }\n  }\n": typeof types.GetNavigateStateDocument,
+    "\n  subscription navigateStates {\n    navigateState {\n      onSwappedTarget\n    }\n  }\n": typeof types.NavigateStatesDocument,
+    "\n  mutation swapTarget($swapConfig: SwapConfigInput!) {\n    swapTarget(swapConfig: $swapConfig) {\n      result\n      msg\n    }\n  }\n": typeof types.SwapTargetDocument,
+    "\n  mutation restoreTarget($config: TcsConfigInput!) {\n    restoreTarget(config: $config) {\n      result\n      msg\n    }\n  }\n": typeof types.RestoreTargetDocument,
+    "\n  query getTelescopeState {\n    telescopeState {\n      mount {\n        parked\n        follow\n      }\n      scs {\n        parked\n        follow\n      }\n      crcs {\n        parked\n        follow\n      }\n      pwfs1 {\n        parked\n        follow\n      }\n      pwfs2 {\n        parked\n        follow\n      }\n      oiwfs {\n        parked\n        follow\n      }\n    }\n  }\n": typeof types.GetTelescopeStateDocument,
+    "\n  subscription telescopeStates {\n    telescopeState {\n      mount {\n        parked\n        follow\n      }\n      scs {\n        parked\n        follow\n      }\n      crcs {\n        parked\n        follow\n      }\n      pwfs1 {\n        parked\n        follow\n      }\n      pwfs2 {\n        parked\n        follow\n      }\n      oiwfs {\n        parked\n        follow\n      }\n    }\n  }\n": typeof types.TelescopeStatesDocument,
+    "\n  mutation oiwfsObserve($period: TimeSpanInput!) {\n    oiwfsObserve(period: $period) {\n      result\n      msg\n    }\n  }\n": typeof types.OiwfsObserveDocument,
+    "\n  mutation oiwfsStopObserve {\n    oiwfsStopObserve {\n      result\n      msg\n    }\n  }\n": typeof types.OiwfsStopObserveDocument,
+    "\n  mutation changeMountState($enable: Boolean!) {\n    mountFollow(enable: $enable) {\n      result\n      msg\n    }\n  }\n": typeof types.ChangeMountStateDocument,
+    "\n  mutation changeRotatorState($enable: Boolean!) {\n    rotatorFollow(enable: $enable) {\n      result\n      msg\n    }\n  }\n": typeof types.ChangeRotatorStateDocument,
+    "\n  mutation changeScsState($enable: Boolean!) {\n    scsFollow(enable: $enable) {\n      result\n      msg\n    }\n  }\n": typeof types.ChangeScsStateDocument,
+    "\n  mutation changeOiwfsState($enable: Boolean!) {\n    oiwfsFollow(enable: $enable) {\n      result\n      msg\n    }\n  }\n": typeof types.ChangeOiwfsStateDocument,
+    "\n  mutation mountPark {\n    mountPark {\n      result\n      msg\n    }\n  }\n": typeof types.MountParkDocument,
+    "\n  mutation rotatorPark {\n    rotatorPark {\n      result\n      msg\n    }\n  }\n": typeof types.RotatorParkDocument,
+    "\n  mutation oiwfsPark {\n    oiwfsPark {\n      result\n      msg\n    }\n  }\n": typeof types.OiwfsParkDocument,
+};
+const documents: Documents = {
     "\n  mutation acObserve($period: TimeSpanInput!) {\n    acObserve(period: $period) {\n      result\n      msg\n    }\n  }\n": types.AcObserveDocument,
     "\n  mutation acStopObserve {\n    acStopObserve {\n      result\n      msg\n    }\n  }\n": types.AcStopObserveDocument,
     "\n  mutation runSlew($slewOptions: SlewOptionsInput!, $config: TcsConfigInput!) {\n    slew(slewOptions: $slewOptions, config: $config) {\n      result\n    }\n  }\n": types.RunSlewDocument,
