@@ -1,18 +1,42 @@
 import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
 import { useRotator, useUpdateRotator } from '@gql/configs/Rotator';
 import { useRemoveAndCreateBaseTargets, useRemoveAndCreateWfsTargets } from '@gql/configs/Target';
-import type { GetCentralWavelengthQuery, GetGuideEnvironmentQuery } from '@gql/odb/gen/graphql';
-import { useGetCentralWavelength, useGetGuideEnvironment, useGetObservations } from '@gql/odb/Observation';
+import type { GetCentralWavelengthQuery, GetGuideEnvironmentQuery, Instrument } from '@gql/odb/gen/graphql';
+import { useGetCentralWavelength, useGetGuideEnvironment, useGetObservationsByState } from '@gql/odb/Observation';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
-import { useEffect, useState } from 'react';
+import { InputText } from 'primereact/inputtext';
+import { MultiSelect } from 'primereact/multiselect';
+import { startTransition, useCallback, useState } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
 import { useOdbVisible } from '@/components/atoms/odb';
 import { useToast } from '@/Helpers/toast';
-import type { ConfigurationType, OdbObservationType, SiteType, TargetInput } from '@/types';
+import type { ConfigurationType, OdbObservationType, Semester, SiteType, TargetInput } from '@/types';
 
 import { ObservationTable } from './ObservationTable';
+
+const instrumentOptions: readonly Instrument[] = Object.freeze([
+  'ACQ_CAM',
+  'ALOPEKE',
+  'BHROS',
+  'FLAMINGOS2',
+  'GHOST',
+  'GMOS_NORTH',
+  'GMOS_SOUTH',
+  'GNIRS',
+  'GPI',
+  'GSAOI',
+  'MICHELLE',
+  'NICI',
+  'NIFS',
+  'NIRI',
+  'PHOENIX',
+  'SCORPIO',
+  'TRECS',
+  'VISITOR',
+  'ZORRO',
+]);
 
 export function OdbImport() {
   const canEdit = useCanEdit();
@@ -20,13 +44,19 @@ export function OdbImport() {
   const toast = useToast();
   const [odbVisible, setOdbVisible] = useOdbVisible();
   const [selectedObservation, setSelectedObservation] = useState<OdbObservationType>({} as OdbObservationType);
-  const [getObservations, { loading, data }] = useGetObservations();
+  const [getReadyObservations, { loading, data }] = useGetObservationsByState();
   const [getGuideEnvironment, { loading: getGuideEnvironmentLoading }] = useGetGuideEnvironment();
   const [getCentralWavelength, { loading: getCentralWavelengthLoading }] = useGetCentralWavelength();
   const [removeAndCreateBaseTargets, { loading: removeCreateLoading }] = useRemoveAndCreateBaseTargets();
   const [updateConfiguration, { loading: updateConfigLoading }] = useUpdateConfiguration();
   const [updateRotator, { loading: updateRotatorLoading }] = useUpdateRotator();
   const [removeAndCreateWfsTargets, { loading: wfsTargetsLoading }] = useRemoveAndCreateWfsTargets();
+
+  // observationsByState params
+  // TODO: states could be in the form too, if needed
+  const [semesterInput, setSemesterInput] = useState<string>('');
+  const [semester, setSemester] = useState<Semester | undefined>();
+  const [instrumentsInput, setInstrumentsInput] = useState<Instrument[]>([]);
 
   const rotator = useRotator().data?.rotator;
 
@@ -144,6 +174,79 @@ export function OdbImport() {
     });
   }
 
+  const queryObservations = useCallback(async () => {
+    if (!semester) {
+      toast?.show({
+        severity: 'warn',
+        summary: `Invalid semester '${semester ?? ''}'`,
+        detail: 'Please enter a valid semester in the format YYYYA or YYYYB',
+      });
+    } else if (!instrumentsInput.length) {
+      toast?.show({
+        severity: 'warn',
+        summary: 'No instruments selected',
+        detail: 'Please select at least one instrument',
+      });
+    } else {
+      const res = await getReadyObservations({
+        variables: {
+          instruments: instrumentsInput,
+          states: ['READY', 'ONGOING'],
+          semester,
+        },
+        fetchPolicy: 'no-cache',
+      });
+      if (res.error?.message) {
+        toast?.show({
+          severity: 'error',
+          summary: 'Error querying observations',
+          detail: res.error.message,
+        });
+      }
+    }
+  }, [getReadyObservations, instrumentsInput, semester, toast]);
+
+  const headerForm = (
+    <>
+      <div className="header-item">
+        <label htmlFor="semester">Semester</label>
+        <InputText
+          id="semester"
+          // YYYYA or YYYYB
+          keyfilter={/\d{4}[AB]/}
+          validateOnly
+          invalid={semester === undefined}
+          disabled={loading}
+          value={semesterInput}
+          onInput={(e, valid) =>
+            startTransition(() => {
+              setSemesterInput(e.currentTarget.value);
+              setSemester(valid ? (e.currentTarget.value as Semester) : undefined);
+            })
+          }
+        />
+      </div>
+      <div className="header-item">
+        <label htmlFor="instrument">Instruments</label>
+        <MultiSelect
+          id="instrument"
+          disabled={loading}
+          value={instrumentsInput}
+          onChange={(e) =>
+            startTransition(() => {
+              setInstrumentsInput(e.value as Instrument[]);
+            })
+          }
+          options={instrumentOptions as unknown[]}
+          placeholder="Select instrument(s)"
+        />
+      </div>
+      <div className="header-item">
+        <Button onClick={() => void queryObservations()} label="Query" loading={loading || updateLoading} />
+      </div>
+    </>
+  );
+
   const footer = (
     <div className="modal-footer">
       <div className="right">
@@ -162,19 +265,13 @@ export function OdbImport() {
     </div>
   );
 
-  useEffect(() => {
-    if (odbVisible)
-      void getObservations({
-        fetchPolicy: 'no-cache',
-      });
-  }, [getObservations, odbVisible]);
-
   return (
     <Dialog header="Import from ODB" footer={footer} visible={odbVisible} modal onHide={() => setOdbVisible(false)}>
       {
         <ObservationTable
+          headerItems={headerForm}
           loading={loading}
-          observations_list={data?.observations?.matches}
+          observations_list={data?.observationsByWorkflowState}
           selectedObservation={selectedObservation}
           setSelectedObservation={setSelectedObservation}
         />

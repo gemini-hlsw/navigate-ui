@@ -1,16 +1,27 @@
 import { FilterMatchMode } from 'primereact/api';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
+import { IconField } from 'primereact/iconfield';
+import { InputIcon } from 'primereact/inputicon';
 import { InputText } from 'primereact/inputtext';
 import { useState } from 'react';
 
-import type { ParamsInterface } from '@/types';
+import type { OdbObservationType } from '@/types';
+
+interface ParamsInterface {
+  loading: boolean;
+  observations_list: OdbObservationType[] | undefined;
+  selectedObservation: OdbObservationType;
+  setSelectedObservation: (_: OdbObservationType) => void;
+  headerItems?: React.ReactNode;
+}
 
 export function ObservationTable({
   loading,
   observations_list,
   selectedObservation,
   setSelectedObservation,
+  headerItems,
 }: ParamsInterface) {
   const [filters, setFilters] = useState({
     id: { value: '', matchMode: FilterMatchMode.CONTAINS },
@@ -42,11 +53,12 @@ export function ObservationTable({
 
   const header = (
     <div className="header-table">
-      <span>{selectedObservation.title && `Selected Observation: ${selectedObservation.title}`}</span>
-      <span className="p-input-icon-left">
-        <i className="pi pi-search" />
+      {selectedObservation.title && <span>Selected Observation: {selectedObservation.title}</span>}
+      {headerItems}
+      <IconField iconPosition="left">
+        <InputIcon className="pi pi-search" />
         <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Keyword Search" />
-      </span>
+      </IconField>
     </div>
   );
 

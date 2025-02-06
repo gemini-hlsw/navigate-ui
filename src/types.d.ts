@@ -17,12 +17,12 @@ import type {
   TargetType as TypeOfTarget,
   User as UserType,
 } from '@gql/configs/gen/graphql';
-import type { GetObservationsQuery } from '@gql/odb/gen/graphql';
+import type { GetObservationsByStateQuery, Scalars as OdbScalars } from '@gql/odb/gen/graphql';
 import type { RotatorTrackingMode as TrackingType } from '@gql/server/gen/graphql';
 
 export type ThemeType = 'light' | 'dark';
 
-export type OdbObservationType = NonNullable<GetObservationsQuery['observations']['matches'][number]>;
+export type OdbObservationType = NonNullable<GetObservationsByStateQuery['observationsByWorkflowState'][number]>;
 
 export type {
   AltairGuideLoopType,
@@ -48,15 +48,10 @@ export type {
 
 export type PanelType = 'Telescope' | 'WavefrontSensors' | 'Guider';
 
-export interface ParamsInterface {
-  loading: boolean;
-  observations_list: OdbObservationType[] | undefined;
-  selectedObservation: OdbObservationType;
-  setSelectedObservation: (_: OdbObservationType) => void;
-}
-
 export interface TargetEditType {
   isVisible: boolean;
   target: TargetType;
   targetIndex: number | undefined;
 }
+
+export type Semester = OdbScalars['Semester']['input'];

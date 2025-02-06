@@ -4,43 +4,48 @@ import { useOdbTokenValue } from '@/components/atoms/odb';
 
 import { graphql } from './gen';
 
-const GET_OBSERVATIONS = graphql(`
-  query getObservations {
-    observations {
-      matches {
+const GET_OBSERVATIONS_BY_STATE = graphql(`
+  query getObservationsByState(
+    $states: [ObservationWorkflowState!]!
+    $instruments: [Instrument!]!
+    $semester: Semester!
+  ) {
+    observationsByWorkflowState(
+      states: $states
+      WHERE: { program: { reference: { instrument: { IN: $instruments }, semester: { EQ: $semester } } } }
+    ) {
+      id
+      existence
+      title
+      subtitle
+      instrument
+      program {
         id
         existence
-        title
-        subtitle
-        instrument
-        program {
-          id
-          existence
-          name
-          pi {
-            user {
-              profile {
-                givenName
-                familyName
-              }
+        name
+        pi {
+          user {
+            profile {
+              givenName
+              familyName
             }
           }
         }
-        targetEnvironment {
-          firstScienceTarget {
-            id
-            existence
-            name
-            sidereal {
-              epoch
-              ra {
-                hms
-                degrees
-              }
-              dec {
-                dms
-                degrees
-              }
+      }
+      targetEnvironment {
+        firstScienceTarget {
+          id
+          existence
+          name
+          sidereal {
+            epoch
+            ra {
+              hms
+              degrees
+            }
+            dec {
+              dms
+              degrees
             }
           }
         }
@@ -49,9 +54,9 @@ const GET_OBSERVATIONS = graphql(`
   }
 `);
 
-export function useGetObservations() {
+export function useGetObservationsByState() {
   const odbToken = useOdbTokenValue();
-  return useLazyQuery(GET_OBSERVATIONS, {
+  return useLazyQuery(GET_OBSERVATIONS_BY_STATE, {
     context: {
       clientName: 'odb',
       headers: {
