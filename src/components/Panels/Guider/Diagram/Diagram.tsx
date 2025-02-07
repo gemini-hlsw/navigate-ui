@@ -56,6 +56,8 @@ const initialEdges: Edge[] = [
   },
 ];
 
+const WFS_LIST = ['OIWFS', 'P1WFS', 'P2WFS'];
+
 function Flow() {
   const { setNodes, setEdges, fitView } = useReactFlow();
   const theme = useThemeValue();
@@ -117,10 +119,40 @@ function Flow() {
       });
     }
 
+    // Create node if not present
+    const wfsFromDevices = state.m2TipTiltSource.split(',');
+    if (state.m2FocusSource && state.m2FocusSource in WFS_LIST && !(state.m2FocusSource in wfsFromDevices)) {
+      wfsFromDevices.push(state.m2FocusSource);
+    }
+    if (
+      state.m2ComaM1CorrectionsSource &&
+      state.m2ComaM1CorrectionsSource in WFS_LIST &&
+      !(state.m2ComaM1CorrectionsSource in wfsFromDevices)
+    ) {
+      wfsFromDevices.push(state.m2ComaM1CorrectionsSource);
+    }
+
+    for (const source of wfsFromDevices) {
+      if (!(source in sourceNodes) && source in WFS_LIST) {
+        sourceNodes.push({
+          id: source,
+          data: { label: source },
+          position: { x: sourceNodes.length * 100, y: 0 },
+          className: 'inactive',
+          type: 'input',
+        });
+      }
+    }
+
+    // Change state of source depending on the configuration
+    for (const source of WFS_LIST) {
+      const isActive = isSourceActive(source);
+      changeSourceState(source, isActive);
+    }
+
     if (state.m2TipTiltEnable && state.m2TipTiltSource) {
       state.m2TipTiltSource.split(',').forEach((source: string) => {
         const isActive = isSourceActive(source);
-        changeSourceState(source, isActive);
         sourceEdges.push({
           id: `${source}-tiptilt`,
           source: source,
@@ -146,9 +178,6 @@ function Flow() {
       if (state.m2FocusEnable && state.m2FocusSource) {
         state.m2FocusSource.split(',').forEach((s) => {
           const isActive = isSourceActive(s);
-          if (!sourceNodes.find((n) => n.id === s)) {
-            changeSourceState(s, isActive);
-          }
           sourceEdges.push({
             id: `${s}-focus`,
             source: s,
@@ -163,12 +192,8 @@ function Flow() {
     if (state.m2ComaEnable) {
       const pos = sourceNodes.findIndex((n) => n.id === state.m2ComaM1CorrectionsSource);
       const isActive = isSourceActive(state.m2ComaM1CorrectionsSource);
-      if (pos === -1) {
-        changeSourceState(state.m2ComaM1CorrectionsSource ?? '', isActive);
-      } else {
-        if (pos !== sourceNodes.length - 1) {
-          sourceNodes.splice(sourceNodes.length - 1, 0, sourceNodes.splice(pos, 1)[0]);
-        }
+      if (pos !== -1 && pos !== sourceNodes.length - 1) {
+        sourceNodes.splice(sourceNodes.length - 1, 0, sourceNodes.splice(pos, 1)[0]);
       }
       sourceEdges.push({
         id: `${state.m2ComaM1CorrectionsSource}-coma`,
@@ -182,12 +207,8 @@ function Flow() {
     if (state.m1CorrectionsEnable) {
       const pos = sourceNodes.findIndex((n) => n.id === state.m2ComaM1CorrectionsSource);
       const isActive = isSourceActive(state.m2ComaM1CorrectionsSource);
-      if (pos === -1) {
-        changeSourceState(state.m2ComaM1CorrectionsSource ?? '', isActive);
-      } else {
-        if (pos !== sourceNodes.length - 1) {
-          sourceNodes.splice(sourceNodes.length - 1, 0, sourceNodes.splice(pos, 1)[0]);
-        }
+      if (pos !== -1 && pos !== sourceNodes.length - 1) {
+        sourceNodes.splice(sourceNodes.length - 1, 0, sourceNodes.splice(pos, 1)[0]);
       }
       sourceEdges.push({
         id: `${state.m2ComaM1CorrectionsSource}-higho`,
@@ -208,7 +229,6 @@ function Flow() {
     if (state.m2TipTiltEnable) {
       // Check if any source is active
       const tipTiltActive = sourceEdges.some((n) => n.target === 'tiptilt' && isSourceActive(n.source));
-      console.log(sourceEdges);
       if (sourceEdges.find((n) => n.target === 'tiptilt')) {
         if (tipTiltActive) {
           tiptiltState = 'active';
