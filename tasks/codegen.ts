@@ -39,7 +39,7 @@ const scalars = {
   ProgramReferenceLabel: 'string',
   ProgramUserId: 'string',
   ProposalReferenceLabel: 'string',
-  Semester: 'string',
+  Semester: "`${number}${number}${number}${number}${'A' | 'B'}`",
   SignalToNoise: 'number',
   StepId: 'string',
   TargetId: 'string',
