@@ -73,7 +73,7 @@
     "vite": "6.1.0",
     "vite-plugin-mkcert": "1.17.6",
     "vitest": "3.0.5",
-    "vitest-browser-react": "0.0.4"
+    "vitest-browser-react": "0.1.1"
   },
   "lint-staged": {
     "*.{js,mjs,ts,tsx,jsx,css,md,json,yml}": "prettier --write"
