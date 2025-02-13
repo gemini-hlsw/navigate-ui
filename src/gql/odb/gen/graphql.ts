@@ -5021,6 +5021,8 @@ export type ProgramUser = {
   fallbackProfile: UserProfile;
   /** Users' reported gender. */
   gender?: Maybe<Gender>;
+  /** Has access to data. */
+  hasDataAccess: Scalars['Boolean']['output'];
   id: Scalars['ProgramUserId']['output'];
   /** User invitations, if any, associated with this program user. */
   invitations: Array<UserInvitation>;
@@ -5044,6 +5046,12 @@ export type ProgramUserPropertiesInput = {
   fallbackProfile?: InputMaybe<UserProfileInput>;
   /** The user's reported gender. */
   gender?: InputMaybe<Gender>;
+  /**
+   * Whether the user has data access.  This property may be changed only by the
+   * PI (or staff).  If a COI attempts to change the data access flag, the entire
+   * update is ignored.
+   */
+  hasDataAccess?: InputMaybe<Scalars['Boolean']['input']>;
   /** The user's partner. */
   partnerLink?: InputMaybe<PartnerLinkInput>;
   /** Is a thesis included in the proposal. */
@@ -5056,6 +5064,8 @@ export type ProgramUserRole =
   | 'COI'
   /** Co-Investigator (read-only access) */
   | 'COI_RO'
+  /** External */
+  | 'EXTERNAL'
   /** Primary Investigator */
   | 'PI'
   /** Staff/Partner Primary Support */
@@ -5247,6 +5257,14 @@ export type Query = {
   events: ExecutionEventSelectResult;
   /** Metadata for `enum FilterType` */
   filterTypeMeta: Array<FilterTypeMeta>;
+  /**
+   * Obtains a list of program references for which the user with ORCiD `orcidId`
+   * has GOA data-download access privileges.  These will be those for which the
+   * user is a ProgramUser of any role with the `hasDataAccess` flag set.
+   *
+   * This query is for use by staff and the GOA and will fail for other users.
+   */
+  goaDataDownloadAccess: Array<Scalars['ProgramReferenceLabel']['output']>;
   /** Returns the group indicated by the given groupId, if found. */
   group?: Maybe<Group>;
   /**
@@ -5360,6 +5378,11 @@ export type QueryEventsArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
   OFFSET?: InputMaybe<Scalars['ExecutionEventId']['input']>;
   WHERE?: InputMaybe<WhereExecutionEvent>;
+};
+
+
+export type QueryGoaDataDownloadAccessArgs = {
+  orcidId: Scalars['String']['input'];
 };
 
 
@@ -8946,6 +8969,8 @@ export type WhereProgramUser = {
   fallbackProfile?: InputMaybe<WhereUserProfile>;
   /** Matches the gender status. */
   gender?: InputMaybe<WhereOptionEqGender>;
+  /** Matches the data access flag. */
+  hasDataAccess?: InputMaybe<WhereBoolean>;
   /** Matches the program user id. */
   id?: InputMaybe<WhereOrderProgramUserId>;
   /** Matches the partner. */
