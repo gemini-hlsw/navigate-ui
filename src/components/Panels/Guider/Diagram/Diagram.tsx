@@ -137,7 +137,7 @@ function Flow() {
     }
 
     for (const source of wfsFromDevices) {
-      if (sourceNodes.findIndex((n) => n.id === source) === -1 && WFS_LIST.includes(source)) {
+      if (!sourceNodes.some((n) => n.id === source) && WFS_LIST.includes(source)) {
         sourceNodes.push({
           id: source,
           data: { label: source },
