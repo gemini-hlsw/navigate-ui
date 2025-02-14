@@ -5,3 +5,6 @@ export const BTN_CLASSES = {
   ERROR: 'p-button-danger',
   INACTIVE: 'p-button-secondary',
 };
+
+export const frontendVersion = import.meta.env.FRONTEND_VERSION;
+export const frontendCommit = import.meta.env.FRONTEND_COMMIT;
