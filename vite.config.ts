@@ -1,8 +1,14 @@
 /// <reference types="vitest" />
 import react from '@vitejs/plugin-react-swc';
+import { execSync } from 'child_process';
 import path from 'path';
 import { defineConfig } from 'vite';
 import mkcert from 'vite-plugin-mkcert';
+
+import pkgJson from './package.json';
+
+const version = (process.env.GITHUB_REF_NAME || 'v' + pkgJson.version).trim();
+const commitHash = (process.env.GITHUB_SHA || execSync('git rev-parse --short HEAD').toString()).trim();
 
 function fixCssRoot() {
   return {
@@ -23,6 +29,8 @@ fixCssRoot.postcss = true;
 export default defineConfig(({ mode }) => ({
   define: {
     'globalThis.__DEV__': JSON.stringify(mode !== 'production'),
+    'import.meta.env.FRONTEND_COMMIT': JSON.stringify(commitHash),
+    'import.meta.env.FRONTEND_VERSION': JSON.stringify(version),
   },
   resolve: {
     alias: {

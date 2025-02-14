@@ -6,6 +6,7 @@ import { Button } from 'primereact/button';
 import { SplitButton } from 'primereact/splitbutton';
 import { Link, useNavigate } from 'react-router';
 
+import { useSetAboutVisible } from '@/components/atoms/about';
 import { useAlarmValue } from '@/components/atoms/alarm';
 import { useIsLoggedIn, useSignout, useUser } from '@/components/atoms/auth';
 import { useOdbTokenValue } from '@/components/atoms/odb';
@@ -18,6 +19,7 @@ export default function Navbar() {
   const isLoggedIn = useIsLoggedIn();
   const signout = useSignout();
   const navigate = useNavigate();
+  const toggleAboutVisible = useSetAboutVisible();
 
   // Will be removed in the future
   const odbToken = useOdbTokenValue();
@@ -49,6 +51,11 @@ export default function Navbar() {
       label: 'ODB Token',
       icon: 'pi pi-key',
       command: () => navigate('/token'),
+    },
+    {
+      label: 'About',
+      icon: 'pi pi-info-circle',
+      command: () => toggleAboutVisible(),
     },
   ];
 
