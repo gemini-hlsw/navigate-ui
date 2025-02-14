@@ -43,7 +43,7 @@ export function OdbImport() {
   const configuration = useConfiguration().data?.configuration;
   const toast = useToast();
   const [odbVisible, setOdbVisible] = useOdbVisible();
-  const [selectedObservation, setSelectedObservation] = useState<OdbObservationType>({} as OdbObservationType);
+  const [selectedObservation, setSelectedObservation] = useState<OdbObservationType | null>(null);
   const [getReadyObservations, { loading, data }] = useGetObservationsByState();
   const [getGuideEnvironment, { loading: getGuideEnvironmentLoading }] = useGetGuideEnvironment();
   const [getCentralWavelength, { loading: getCentralWavelengthLoading }] = useGetCentralWavelength();
@@ -69,6 +69,14 @@ export function OdbImport() {
     wfsTargetsLoading;
 
   function updateObs() {
+    if (!selectedObservation) {
+      toast?.show({
+        severity: 'warn',
+        summary: 'No observation selected',
+        detail: 'Please select an observation to import',
+      });
+      return;
+    }
     void updateConfiguration({
       variables: {
         ...(configuration as ConfigurationType),
@@ -178,7 +186,7 @@ export function OdbImport() {
     if (!semester) {
       toast?.show({
         severity: 'warn',
-        summary: `Invalid semester '${semester ?? ''}'`,
+        summary: `Invalid semester '${semesterInput}'`,
         detail: 'Please enter a valid semester in the format YYYYA or YYYYB',
       });
     } else if (!instrumentsInput.length) {
@@ -204,7 +212,7 @@ export function OdbImport() {
         });
       }
     }
-  }, [getReadyObservations, instrumentsInput, semester, toast]);
+  }, [getReadyObservations, instrumentsInput, semesterInput, semester, toast]);
 
   const headerForm = (
     <>
@@ -213,15 +221,17 @@ export function OdbImport() {
         <InputText
           id="semester"
           // YYYYA or YYYYB
-          keyfilter={/\d{4}[AB]/}
+          keyfilter={/^\d{4}[AB]$/}
           validateOnly
           invalid={semester === undefined}
           disabled={loading}
           value={semesterInput}
           onInput={(e, valid) =>
             startTransition(() => {
-              setSemesterInput(e.currentTarget.value);
-              setSemester(valid ? (e.currentTarget.value as Semester) : undefined);
+              const inputValue = e.currentTarget.value;
+              setSemesterInput(inputValue);
+              // valid is true if the input is an empty string
+              setSemester(valid && inputValue ? (inputValue as Semester) : undefined);
             })
           }
         />
@@ -231,6 +241,7 @@ export function OdbImport() {
         <MultiSelect
           id="instrument"
           disabled={loading}
+          invalid={!instrumentsInput.length}
           value={instrumentsInput}
           onChange={(e) =>
             startTransition(() => {
@@ -252,8 +263,8 @@ export function OdbImport() {
       <div className="right">
         <Button
           disabled={
-            !(canEdit && selectedObservation.targetEnvironment?.firstScienceTarget?.name) ||
-            !selectedObservation.targetEnvironment?.firstScienceTarget?.name
+            !(canEdit && selectedObservation?.targetEnvironment?.firstScienceTarget?.name) ||
+            !selectedObservation?.targetEnvironment?.firstScienceTarget?.name
           }
           className=""
           label="Import to Navigate"

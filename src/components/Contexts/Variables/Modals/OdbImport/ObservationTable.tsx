@@ -11,8 +11,8 @@ import type { OdbObservationType } from '@/types';
 interface ParamsInterface {
   loading: boolean;
   observations_list: OdbObservationType[] | undefined;
-  selectedObservation: OdbObservationType;
-  setSelectedObservation: (_: OdbObservationType) => void;
+  selectedObservation: OdbObservationType | null;
+  setSelectedObservation: (_: OdbObservationType | null) => void;
   headerItems?: React.ReactNode;
 }
 
@@ -53,7 +53,7 @@ export function ObservationTable({
 
   const header = (
     <div className="header-table">
-      {selectedObservation.title && <span>Selected Observation: {selectedObservation.title}</span>}
+      {selectedObservation?.title && <span>Selected Observation: {selectedObservation.title}</span>}
       {headerItems}
       <IconField iconPosition="left">
         <InputIcon className="pi pi-search" />
@@ -71,9 +71,9 @@ export function ObservationTable({
         paginator
         selectionMode="single"
         selection={selectedObservation}
-        onSelectionChange={(e) => setSelectedObservation(e.value)}
+        onSelectionChange={(e) => setSelectedObservation(e.value as OdbObservationType | null)}
         className="p-datatable-customers"
-        rows={10}
+        rows={15}
         dataKey="id"
         filters={filters}
         filterDisplay="row"
