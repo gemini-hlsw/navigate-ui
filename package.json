@@ -30,7 +30,7 @@
     "@xyflow/react": "12.4.3",
     "clsx": "2.1.1",
     "graphql": "16.10.0",
-    "jotai": "2.11.3",
+    "jotai": "2.12.0",
     "lucuma-core": "0.115.2",
     "lucuma-ui-css": "0.129.0",
     "primeicons": "7.0.0",
