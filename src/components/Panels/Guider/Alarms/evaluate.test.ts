@@ -46,6 +46,26 @@ describe(evaluateAlarm.name, () => {
       ),
     ).true;
   });
+
+  it('should be false if the alarm is not active', () => {
+    expect(
+      evaluateAlarm(
+        { enabled: true, limit: 900, wfs: 'OIWFS' },
+        { centroidDetected: true, flux: 899 },
+        createGuideState({ oiIntegrating: false }),
+      ),
+    ).false;
+  });
+
+  it('should be true if the alarm is active', () => {
+    expect(
+      evaluateAlarm(
+        { enabled: true, limit: 900, wfs: 'OIWFS' },
+        { centroidDetected: true, flux: 899 },
+        createGuideState({ oiIntegrating: true }),
+      ),
+    ).true;
+  });
 });
 
 describe(evaluateAlarmSound.name, () => {
