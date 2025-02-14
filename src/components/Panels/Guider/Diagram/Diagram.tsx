@@ -121,19 +121,23 @@ function Flow() {
 
     // Create node if not present
     const wfsFromDevices = state.m2TipTiltSource.split(',');
-    if (state.m2FocusSource && state.m2FocusSource in WFS_LIST && !(state.m2FocusSource in wfsFromDevices)) {
+    if (
+      state.m2FocusSource &&
+      WFS_LIST.includes(state.m2FocusSource) &&
+      !wfsFromDevices.includes(state.m2FocusSource)
+    ) {
       wfsFromDevices.push(state.m2FocusSource);
     }
     if (
       state.m2ComaM1CorrectionsSource &&
-      state.m2ComaM1CorrectionsSource in WFS_LIST &&
-      !(state.m2ComaM1CorrectionsSource in wfsFromDevices)
+      WFS_LIST.includes(state.m2ComaM1CorrectionsSource) &&
+      !wfsFromDevices.includes(state.m2ComaM1CorrectionsSource)
     ) {
       wfsFromDevices.push(state.m2ComaM1CorrectionsSource);
     }
 
     for (const source of wfsFromDevices) {
-      if (!(source in sourceNodes) && source in WFS_LIST) {
+      if (!sourceNodes.some((n) => n.id === source) && WFS_LIST.includes(source)) {
         sourceNodes.push({
           id: source,
           data: { label: source },
