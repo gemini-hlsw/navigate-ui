@@ -1,4 +1,5 @@
 import { useMutation } from '@apollo/client';
+import type { Dispatch } from 'react';
 
 import { graphql } from './gen';
 
@@ -19,18 +20,14 @@ export const RESTORE_TARGET_MUTATION = graphql(`
   }
 `);
 
-export function useSwapTarget() {
+export function useSwapTarget(setStale: Dispatch<boolean>) {
   return useMutation(SWAP_TARGET_MUTATION, {
-    update(cache) {
-      cache.evict({ fieldName: 'navigateState' });
-    },
+    onCompleted: () => setStale(true),
   });
 }
 
-export function useRestoreTarget() {
+export function useRestoreTarget(setStale: Dispatch<boolean>) {
   return useMutation(RESTORE_TARGET_MUTATION, {
-    update(cache) {
-      cache.evict({ fieldName: 'navigateState' });
-    },
+    onCompleted: () => setStale(true),
   });
 }

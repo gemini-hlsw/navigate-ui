@@ -1,4 +1,7 @@
 import { useMutation } from '@apollo/client';
+import type { Dispatch } from 'react';
+
+import type { SetStale } from '@/Helpers/hooks';
 
 import { graphql } from './gen';
 
@@ -11,11 +14,9 @@ const OIWFS_OBSERVE = graphql(`
   }
 `);
 
-export function useOiwfsObserve() {
+export function useOiwfsObserve(setStale: SetStale) {
   return useMutation(OIWFS_OBSERVE, {
-    update(cache) {
-      cache.evict({ fieldName: 'guideState' });
-    },
+    onCompleted: () => setStale(true),
   });
 }
 
@@ -28,10 +29,8 @@ const OIWFS_STOP_OBSERVE = graphql(`
   }
 `);
 
-export function useOiwfsStopObserve() {
+export function useOiwfsStopObserve(setStale: Dispatch<boolean>) {
   return useMutation(OIWFS_STOP_OBSERVE, {
-    update(cache) {
-      cache.evict({ fieldName: 'guideState' });
-    },
+    onCompleted: () => setStale(true),
   });
 }

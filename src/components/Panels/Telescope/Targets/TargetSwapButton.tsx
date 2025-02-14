@@ -29,9 +29,9 @@ export function TargetSwapButton({
   const canEdit = useCanEdit();
   const toast = useToast();
 
-  const { data, loading: stateLoading } = useNavigateState();
-  const [swapTarget, { loading: swapLoading }] = useSwapTarget();
-  const [restoreTarget, { loading: restoreLoading }] = useRestoreTarget();
+  const { data, loading: stateLoading, setStale } = useNavigateState();
+  const [swapTarget, { loading: swapLoading }] = useSwapTarget(setStale);
+  const [restoreTarget, { loading: restoreLoading }] = useRestoreTarget(setStale);
 
   const { data: configurationData, loading: configurationLoading } = useConfiguration();
   const configuration = configurationData?.configuration;

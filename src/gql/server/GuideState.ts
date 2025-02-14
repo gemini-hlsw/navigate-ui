@@ -47,11 +47,7 @@ const GUIDE_ENABLE = graphql(`
 `);
 
 export function useGuideEnable() {
-  return useMutation(GUIDE_ENABLE, {
-    update(cache) {
-      cache.evict({ fieldName: 'guideState' });
-    },
-  });
+  return useMutation(GUIDE_ENABLE);
 }
 
 const GUIDE_DISABLE = graphql(`
@@ -64,9 +60,5 @@ const GUIDE_DISABLE = graphql(`
 `);
 
 export function useGuideDisable() {
-  return useMutation(GUIDE_DISABLE, {
-    update(cache) {
-      cache.evict({ fieldName: 'guideState' });
-    },
-  });
+  return useMutation(GUIDE_DISABLE);
 }
