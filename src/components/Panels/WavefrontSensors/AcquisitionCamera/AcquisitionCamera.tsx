@@ -10,10 +10,11 @@ import { useCallback, useState } from 'react';
 import MainControls from './MainControls';
 
 export default function AcquisitionCamera({ canEdit, ac }: { canEdit: boolean; ac: string }) {
-  const [startObserve, { loading: startObserveLoading }] = useAcObserve();
-  const [stopObserve, { loading: stopObserveLoading }] = useAcStopObserve();
+  const { data: guideStateData, loading: guideStateLoading, setStale } = useGuideState();
 
-  const { data: guideStateData, loading: guideStateLoading } = useGuideState();
+  const [startObserve, { loading: startObserveLoading }] = useAcObserve(setStale);
+  const [stopObserve, { loading: stopObserveLoading }] = useAcStopObserve(setStale);
+
   const integrating = guideStateData?.acIntegrating;
 
   const [exp, setExp] = useState(1);

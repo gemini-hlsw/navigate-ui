@@ -63,10 +63,11 @@ export default function WavefrontSensor({
 }
 
 function OiwfsObserveButton({ freq, canEdit }: { freq: number; canEdit: boolean }) {
-  const [startObserve, { loading: startObserveLoading }] = useOiwfsObserve();
-  const [stopObserve, { loading: stopObserveLoading }] = useOiwfsStopObserve();
+  const { data: guideStateData, loading: guideStateLoading, setStale } = useGuideState();
 
-  const { data: guideStateData, loading: guideStateLoading } = useGuideState();
+  const [startObserve, { loading: startObserveLoading }] = useOiwfsObserve(setStale);
+  const [stopObserve, { loading: stopObserveLoading }] = useOiwfsStopObserve(setStale);
+
   const integrating = guideStateData?.oiIntegrating;
 
   const onClick = useCallback(

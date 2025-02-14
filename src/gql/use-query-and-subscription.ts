@@ -3,6 +3,9 @@ import { useQuery } from '@apollo/client';
 import type { ResultOf } from '@graphql-typed-document-node/core';
 import { useEffect } from 'react';
 
+import type { SetStale } from '@/Helpers/hooks';
+import { useStale } from '@/Helpers/hooks';
+
 /**
  * Combines the results of a query and a subscription into a single object.
  *
@@ -20,7 +23,10 @@ export function useQueryAndSubscription<
   data: NonNullable<MaybeMasked<ResultOf<TQuery | TSub>>>[K] | undefined;
   loading: boolean;
   error?: ApolloError;
+  setStale: SetStale;
 } {
+  const [stale, setStale] = useStale();
+
   const query = useQuery<ResultOf<TQuery>>(queryNode, {
     nextFetchPolicy: 'cache-only',
     returnPartialData: true,
@@ -35,9 +41,14 @@ export function useQueryAndSubscription<
     [query, subscriptionNode],
   );
 
+  useEffect(() => {
+    setStale(false);
+  }, [query.data, setStale]);
+
   return {
     ...query,
     data: query.data?.[key],
-    loading: query.loading || query.data === undefined,
+    loading: query.loading || query.data === undefined || stale,
+    setStale,
   };
 }

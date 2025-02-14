@@ -39,7 +39,6 @@ describe(TargetSwapButton.name, () => {
     it('should swap target when onSwappedTarget is false', async () => {
       await sut.getByRole('button').click();
 
-      await expect.element(sut.getByRole('button')).not.toHaveClass('p-button-loading');
       expect(swapTargetMock.result).toHaveBeenCalledOnce();
     });
   });

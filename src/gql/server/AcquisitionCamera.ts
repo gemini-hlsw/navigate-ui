@@ -1,4 +1,5 @@
 import { useMutation } from '@apollo/client';
+import type { Dispatch } from 'react';
 
 import { graphql } from './gen';
 
@@ -11,11 +12,9 @@ const AC_OBSERVE = graphql(`
   }
 `);
 
-export function useAcObserve() {
+export function useAcObserve(setStale: Dispatch<boolean>) {
   return useMutation(AC_OBSERVE, {
-    update(cache) {
-      cache.evict({ fieldName: 'guideState' });
-    },
+    onCompleted: () => setStale(true),
   });
 }
 
@@ -28,10 +27,8 @@ const AC_STOP_OBSERVE = graphql(`
   }
 `);
 
-export function useAcStopObserve() {
+export function useAcStopObserve(setStale: Dispatch<boolean>) {
   return useMutation(AC_STOP_OBSERVE, {
-    update(cache) {
-      cache.evict({ fieldName: 'guideState' });
-    },
+    onCompleted: () => setStale(true),
   });
 }
