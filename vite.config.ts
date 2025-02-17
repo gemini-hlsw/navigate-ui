@@ -55,6 +55,7 @@ export default defineConfig(({ mode }) => ({
     },
   },
   server: {
+    allowedHosts: ['localhost', '.lucuma.xyz'],
     host: '0.0.0.0',
     proxy: {
       '^/navigate/graphql': {
@@ -76,15 +77,7 @@ export default defineConfig(({ mode }) => ({
       },
     },
   },
-  preview: {
-    host: '0.0.0.0',
-  },
   css: {
-    preprocessorOptions: {
-      scss: {
-        charset: false,
-      },
-    },
     postcss: {
       plugins: [fixCssRoot()],
     },
@@ -104,5 +97,4 @@ export default defineConfig(({ mode }) => ({
       ],
     },
   },
-  base: '/',
 }));
