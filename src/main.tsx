@@ -1,5 +1,4 @@
 import './styles/main.scss';
-import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 
 import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';
