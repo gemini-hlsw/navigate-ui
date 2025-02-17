@@ -64,17 +64,14 @@ export function Instrument() {
     </div>
   );
 
-  const tableData: React.ReactNode[] = [];
-  instrumentOptions.map((i, idx) => {
-    tableData.push(
-      <InstrumentDetails
-        instrument={i}
-        selectedPk={currentInstrument.pk}
-        setInstrument={setCurrentInstrument}
-        key={idx}
-      />,
-    );
-  });
+  const tableData = instrumentOptions.map((i) => (
+    <InstrumentDetails
+      instrument={i}
+      selectedPk={currentInstrument.pk}
+      setInstrument={setCurrentInstrument}
+      key={i.name}
+    />
+  ));
 
   let table: React.ReactNode | null = null;
   if (port && name) {

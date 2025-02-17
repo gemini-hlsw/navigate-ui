@@ -28,17 +28,14 @@ export function GuidersDetails() {
     },
   ];
 
-  const rows: React.ReactNode[] = [];
-  GUIDERS_VALUES.map((row, index) => {
-    rows.push(
-      <div className="row" key={`guiders-row-${index}`}>
-        <span>{row.name}</span>
-        <span className={row.x > row.x_max || row.x < row.x_min ? 'vals error' : 'vals'}>{row.x.toFixed(2)}</span>
-        <span className={row.y > row.y_max || row.y < row.y_min ? 'vals error' : 'vals'}>{row.y.toFixed(2)}</span>
-        <span className={row.r > row.r_max || row.r < row.r_min ? 'vals error' : 'vals'}>{row.r.toFixed(2)}</span>
-      </div>,
-    );
-  });
+  const rows = GUIDERS_VALUES.map((row) => (
+    <div className="row" key={`guiders-row-${row.name}`}>
+      <span>{row.name}</span>
+      <span className={row.x > row.x_max || row.x < row.x_min ? 'vals error' : 'vals'}>{row.x.toFixed(2)}</span>
+      <span className={row.y > row.y_max || row.y < row.y_min ? 'vals error' : 'vals'}>{row.y.toFixed(2)}</span>
+      <span className={row.r > row.r_max || row.r < row.r_min ? 'vals error' : 'vals'}>{row.r.toFixed(2)}</span>
+    </div>
+  ));
 
   return (
     <div className="guiders-details">
