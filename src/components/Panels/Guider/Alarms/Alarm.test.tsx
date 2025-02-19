@@ -35,7 +35,7 @@ describe(Alarm.name, () => {
     await expect.element(page.getByLabelText('Subaperture')).toHaveTextContent('OK');
   });
 
-  it('should show NOK for no centroid', async () => {
+  it('should show BAD for no centroid', async () => {
     sut.rerender(
       <Alarm
         wfs="PWFS1"
@@ -46,7 +46,7 @@ describe(Alarm.name, () => {
         onUpdateAlarm={onUpdateAlarm}
       />,
     );
-    await expect.element(page.getByLabelText('Subaperture')).toHaveTextContent('NOK');
+    await expect.element(page.getByLabelText('Subaperture')).toHaveTextContent('BAD');
   });
 
   it('should call onUpdateAlarm when enabled changes', async () => {
