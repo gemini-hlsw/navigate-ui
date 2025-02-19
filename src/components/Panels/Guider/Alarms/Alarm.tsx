@@ -70,7 +70,7 @@ export function Alarm({
           Subaperture
         </label>
         <output id={`centroid-${id}`} style={{ alignSelf: 'center' }}>
-          {guideQuality?.centroidDetected ? 'OK' : 'NOK'}
+          {guideQuality?.centroidDetected ? 'OK' : 'BAD'}
         </output>
         <label htmlFor={`enabled-${id}`} className="label">
           Enable
