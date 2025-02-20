@@ -18,7 +18,6 @@ export function About() {
           Frontend: {frontendVersion}@{frontendCommit}
         </p>
         <p>Configs API: {version.data?.version.version}</p>
-        <p>Database: {version.data?.version.databaseVersion}</p>
         {/* TODO: Server version */}
       </div>
     </Dialog>
