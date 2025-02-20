@@ -7,5 +7,3 @@ export const BTN_CLASSES = {
 };
 
 export const frontendVersion = import.meta.env.FRONTEND_VERSION;
-export const frontendCommit = import.meta.env.FRONTEND_COMMIT;
-export const frontendBuildTime = new Date(import.meta.env.FRONTEND_BUILD_TIME);

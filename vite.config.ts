@@ -8,8 +8,17 @@ import mkcert from 'vite-plugin-mkcert';
 import pkgJson from './package.json';
 
 const version = (process.env.GITHUB_REF_NAME || 'v' + pkgJson.version).trim();
-const commitHash = (process.env.GITHUB_SHA || execSync('git rev-parse --short HEAD').toString()).trim();
+const commitHash = (process.env.GITHUB_SHA || execSync('git rev-parse --short HEAD').toString()).trim().slice(0, 7);
+
 const buildTime = new Date();
+function formatDate(date: Date) {
+  const years = date.getFullYear();
+  // Months are 0-indexed
+  const months = date.getMonth() + 1;
+  const days = date.getDate();
+  return `${years}${months.toString().padStart(2, '0')}${days.toString().padStart(2, '0')}`;
+}
+const frontendVersion = `${version}+${formatDate(buildTime)}.${commitHash}`;
 
 function fixCssRoot() {
   return {
@@ -30,9 +39,7 @@ fixCssRoot.postcss = true;
 export default defineConfig(({ mode }) => ({
   define: {
     'globalThis.__DEV__': JSON.stringify(mode !== 'production'),
-    'import.meta.env.FRONTEND_COMMIT': JSON.stringify(commitHash),
-    'import.meta.env.FRONTEND_VERSION': JSON.stringify(version),
-    'import.meta.env.FRONTEND_BUILD_TIME': JSON.stringify(buildTime),
+    'import.meta.env.FRONTEND_VERSION': JSON.stringify(frontendVersion),
   },
   resolve: {
     alias: {
