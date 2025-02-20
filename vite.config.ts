@@ -9,6 +9,7 @@ import pkgJson from './package.json';
 
 const version = (process.env.GITHUB_REF_NAME || 'v' + pkgJson.version).trim();
 const commitHash = (process.env.GITHUB_SHA || execSync('git rev-parse --short HEAD').toString()).trim();
+const buildTime = new Date();
 
 function fixCssRoot() {
   return {
@@ -31,6 +32,7 @@ export default defineConfig(({ mode }) => ({
     'globalThis.__DEV__': JSON.stringify(mode !== 'production'),
     'import.meta.env.FRONTEND_COMMIT': JSON.stringify(commitHash),
     'import.meta.env.FRONTEND_VERSION': JSON.stringify(version),
+    'import.meta.env.FRONTEND_BUILD_TIME': JSON.stringify(buildTime),
   },
   resolve: {
     alias: {
