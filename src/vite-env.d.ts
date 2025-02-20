@@ -3,7 +3,6 @@
 // Extra variables that will be replaced by Vite in the build process, defined in vite.config.ts
 interface ImportMetaEnv {
   readonly FRONTEND_VERSION: string;
-  readonly FRONTEND_COMMIT: string;
 }
 
 interface ImportMeta {
