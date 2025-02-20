@@ -22,10 +22,6 @@ import { graphql } from './gen';
 import type { Instrument, MechSystemState } from './gen/graphql';
 import { MOUNT_PARK_MUTATION, OIWFS_PARK_MUTATION, ROTATOR_PARK_MUTATION } from './park';
 
-type MutationButtonProps = {
-  setStale: SetStale;
-} & ButtonProps;
-
 // Generic mutation button
 function MutationButton<T extends DocumentNode>({
   mutation,
@@ -60,7 +56,7 @@ function MutationButton<T extends DocumentNode>({
 
 // BUTTONS
 
-export function MCS({ className, state, ...props }: MutationButtonProps & { state: MechSystemState | undefined }) {
+export function MCS({ className, state, ...props }: ButtonProps & { state: MechSystemState | undefined }) {
   const { classes, title } = classNameForState(state, true);
 
   return (
@@ -74,7 +70,7 @@ export function MCS({ className, state, ...props }: MutationButtonProps & { stat
   );
 }
 
-export function SCS({ className, state, ...props }: MutationButtonProps & { state: MechSystemState | undefined }) {
+export function SCS({ className, state, ...props }: ButtonProps & { state: MechSystemState | undefined }) {
   const { classes, title } = classNameForState(state, true);
   return (
     <MutationButton
@@ -87,7 +83,7 @@ export function SCS({ className, state, ...props }: MutationButtonProps & { stat
   );
 }
 
-export function CRCS({ className, state, ...props }: MutationButtonProps & { state: MechSystemState | undefined }) {
+export function CRCS({ className, state, ...props }: ButtonProps & { state: MechSystemState | undefined }) {
   const { classes, title } = classNameForState(state, true);
   return (
     <MutationButton
@@ -104,10 +100,8 @@ export function PWFS1({
   className,
   state,
   inUse,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  setStale,
   ...props
-}: MutationButtonProps & { state: MechSystemState | undefined; inUse: boolean }) {
+}: ButtonProps & { state: MechSystemState | undefined; inUse: boolean }) {
   // TODO: Implement PWFS1 mutation
   const { classes, title } = classNameForState(state, inUse);
   return <Button {...props} title={title} className={clsx(className, classes)} />;
@@ -117,10 +111,8 @@ export function PWFS2({
   className,
   state,
   inUse,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  setStale,
   ...props
-}: MutationButtonProps & { state: MechSystemState | undefined; inUse: boolean }) {
+}: ButtonProps & { state: MechSystemState | undefined; inUse: boolean }) {
   // TODO: Implement PWFS2 mutation
   const { classes, title } = classNameForState(state, inUse);
   return <Button {...props} title={title} className={clsx(className, classes)} />;
@@ -136,7 +128,7 @@ export function OIWFS({
   state,
   inUse,
   ...props
-}: MutationButtonProps & { state: MechSystemState | undefined; inUse: boolean }) {
+}: ButtonProps & { state: MechSystemState | undefined; inUse: boolean }) {
   const { classes, title } = classNameForState(state, inUse);
   return (
     <MutationButton
