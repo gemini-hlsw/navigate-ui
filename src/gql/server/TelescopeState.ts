@@ -1,3 +1,4 @@
+import type { QueryAndSubscriptionOptions } from '../use-query-and-subscription';
 import { useQueryAndSubscription } from '../use-query-and-subscription';
 import { graphql } from './gen';
 
@@ -63,6 +64,6 @@ const TELESCOPE_STATE_SUBSCRIPTION = graphql(`
   }
 `);
 
-export function useTelescopeState() {
-  return useQueryAndSubscription(GET_TELESCOPE_STATE, TELESCOPE_STATE_SUBSCRIPTION, 'telescopeState');
+export function useTelescopeState(options?: QueryAndSubscriptionOptions) {
+  return useQueryAndSubscription(GET_TELESCOPE_STATE, TELESCOPE_STATE_SUBSCRIPTION, 'telescopeState', options);
 }

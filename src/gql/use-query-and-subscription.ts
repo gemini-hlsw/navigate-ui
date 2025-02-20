@@ -6,6 +6,15 @@ import { useEffect } from 'react';
 import type { SetStale } from '@/Helpers/hooks';
 import { useStale } from '@/Helpers/hooks';
 
+export interface QueryAndSubscriptionOptions {
+  /**
+   * If true, the returned `setStale` can be used to set stale (loading) to true after a mutation. New data in the subscription will set stale to false.
+   *
+   * Default: true
+   */
+  useStale: boolean;
+}
+
 /**
  * Combines the results of a query and a subscription into a single object.
  *
@@ -19,6 +28,7 @@ export function useQueryAndSubscription<
   queryNode: TQuery,
   subscriptionNode: TSub,
   key: K,
+  options: QueryAndSubscriptionOptions = { useStale: true },
 ): {
   data: NonNullable<MaybeMasked<ResultOf<TQuery | TSub>>>[K] | undefined;
   loading: boolean;
@@ -42,13 +52,13 @@ export function useQueryAndSubscription<
   );
 
   useEffect(() => {
-    setStale(false);
-  }, [query.data, setStale]);
+    if (options.useStale) setStale(false);
+  }, [query.data, setStale, options.useStale]);
 
   return {
     ...query,
     data: query.data?.[key],
-    loading: query.loading || query.data === undefined || stale,
+    loading: query.loading || query.data === undefined || (options.useStale && stale),
     setStale,
   };
 }

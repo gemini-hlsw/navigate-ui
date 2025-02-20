@@ -4,12 +4,12 @@ import { useTelescopeState } from '@gql/server/TelescopeState';
 import { Button } from 'primereact/button';
 
 export function Indicators({ canEdit }: { canEdit: boolean }) {
-  const { data, loading: telescopeLoading, setStale } = useTelescopeState();
+  const { data, loading: telescopeLoading } = useTelescopeState({ useStale: false });
   const { data: targetsData, loading: targetsLoading } = useTargets();
 
   const loading = telescopeLoading || targetsLoading;
 
-  const buttonProps = { loading, disabled: !canEdit, setStale };
+  const buttonProps = { loading, disabled: !canEdit };
 
   return (
     <div className="left">
