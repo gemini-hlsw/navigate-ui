@@ -11,17 +11,14 @@ export function About() {
 
   const onHide = useCallback(() => toggleAboutVisible(false), [toggleAboutVisible]);
   const configsVersion = useConfigsVersion().data?.version.version;
-  const serverVersion = useServerVersion().data?.serverVersion?.split('-');
+  const serverVersion = useServerVersion().data?.serverVersion;
 
   return (
     <Dialog header="NAVIGATE" visible={aboutVisible} modal onHide={onHide}>
       <div className="about-dialog">
         <p>Frontend: {frontendVersion}</p>
         <p>Configs API: {configsVersion}</p>
-        <p>
-          Server:{' '}
-          {serverVersion?.length === 3 ? `${serverVersion[2]}+${serverVersion[0]}.${serverVersion[1]}` : serverVersion}
-        </p>
+        <p>Server: {serverVersion}</p>
       </div>
     </Dialog>
   );
