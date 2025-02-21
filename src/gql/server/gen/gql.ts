@@ -30,6 +30,7 @@ type Documents = {
     "\n  mutation restoreTarget($config: TcsConfigInput!) {\n    restoreTarget(config: $config) {\n      result\n      msg\n    }\n  }\n": typeof types.RestoreTargetDocument,
     "\n  query getTelescopeState {\n    telescopeState {\n      mount {\n        parked\n        follow\n      }\n      scs {\n        parked\n        follow\n      }\n      crcs {\n        parked\n        follow\n      }\n      pwfs1 {\n        parked\n        follow\n      }\n      pwfs2 {\n        parked\n        follow\n      }\n      oiwfs {\n        parked\n        follow\n      }\n    }\n  }\n": typeof types.GetTelescopeStateDocument,
     "\n  subscription telescopeStates {\n    telescopeState {\n      mount {\n        parked\n        follow\n      }\n      scs {\n        parked\n        follow\n      }\n      crcs {\n        parked\n        follow\n      }\n      pwfs1 {\n        parked\n        follow\n      }\n      pwfs2 {\n        parked\n        follow\n      }\n      oiwfs {\n        parked\n        follow\n      }\n    }\n  }\n": typeof types.TelescopeStatesDocument,
+    "\n  query version {\n    serverVersion\n  }\n": typeof types.VersionDocument,
     "\n  mutation oiwfsObserve($period: TimeSpanInput!) {\n    oiwfsObserve(period: $period) {\n      result\n      msg\n    }\n  }\n": typeof types.OiwfsObserveDocument,
     "\n  mutation oiwfsStopObserve {\n    oiwfsStopObserve {\n      result\n      msg\n    }\n  }\n": typeof types.OiwfsStopObserveDocument,
     "\n  mutation changeMountState($enable: Boolean!) {\n    mountFollow(enable: $enable) {\n      result\n      msg\n    }\n  }\n": typeof types.ChangeMountStateDocument,
@@ -57,6 +58,7 @@ const documents: Documents = {
     "\n  mutation restoreTarget($config: TcsConfigInput!) {\n    restoreTarget(config: $config) {\n      result\n      msg\n    }\n  }\n": types.RestoreTargetDocument,
     "\n  query getTelescopeState {\n    telescopeState {\n      mount {\n        parked\n        follow\n      }\n      scs {\n        parked\n        follow\n      }\n      crcs {\n        parked\n        follow\n      }\n      pwfs1 {\n        parked\n        follow\n      }\n      pwfs2 {\n        parked\n        follow\n      }\n      oiwfs {\n        parked\n        follow\n      }\n    }\n  }\n": types.GetTelescopeStateDocument,
     "\n  subscription telescopeStates {\n    telescopeState {\n      mount {\n        parked\n        follow\n      }\n      scs {\n        parked\n        follow\n      }\n      crcs {\n        parked\n        follow\n      }\n      pwfs1 {\n        parked\n        follow\n      }\n      pwfs2 {\n        parked\n        follow\n      }\n      oiwfs {\n        parked\n        follow\n      }\n    }\n  }\n": types.TelescopeStatesDocument,
+    "\n  query version {\n    serverVersion\n  }\n": types.VersionDocument,
     "\n  mutation oiwfsObserve($period: TimeSpanInput!) {\n    oiwfsObserve(period: $period) {\n      result\n      msg\n    }\n  }\n": types.OiwfsObserveDocument,
     "\n  mutation oiwfsStopObserve {\n    oiwfsStopObserve {\n      result\n      msg\n    }\n  }\n": types.OiwfsStopObserveDocument,
     "\n  mutation changeMountState($enable: Boolean!) {\n    mountFollow(enable: $enable) {\n      result\n      msg\n    }\n  }\n": types.ChangeMountStateDocument,
@@ -146,6 +148,10 @@ export function graphql(source: "\n  query getTelescopeState {\n    telescopeSta
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  subscription telescopeStates {\n    telescopeState {\n      mount {\n        parked\n        follow\n      }\n      scs {\n        parked\n        follow\n      }\n      crcs {\n        parked\n        follow\n      }\n      pwfs1 {\n        parked\n        follow\n      }\n      pwfs2 {\n        parked\n        follow\n      }\n      oiwfs {\n        parked\n        follow\n      }\n    }\n  }\n"): (typeof documents)["\n  subscription telescopeStates {\n    telescopeState {\n      mount {\n        parked\n        follow\n      }\n      scs {\n        parked\n        follow\n      }\n      crcs {\n        parked\n        follow\n      }\n      pwfs1 {\n        parked\n        follow\n      }\n      pwfs2 {\n        parked\n        follow\n      }\n      oiwfs {\n        parked\n        follow\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query version {\n    serverVersion\n  }\n"): (typeof documents)["\n  query version {\n    serverVersion\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

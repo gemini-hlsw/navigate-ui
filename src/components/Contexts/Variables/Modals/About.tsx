@@ -1,4 +1,5 @@
-import { useVersion } from '@gql/configs/Version';
+import { useVersion as useConfigsVersion } from '@gql/configs/Version';
+import { useVersion as useServerVersion } from '@gql/server/Version';
 import { Dialog } from 'primereact/dialog';
 import { useCallback } from 'react';
 
@@ -9,14 +10,15 @@ export function About() {
   const [aboutVisible, toggleAboutVisible] = useAboutVisible();
 
   const onHide = useCallback(() => toggleAboutVisible(false), [toggleAboutVisible]);
-  const version = useVersion();
+  const configsVersion = useConfigsVersion().data?.version.version;
+  const serverVersion = useServerVersion().data?.serverVersion;
 
   return (
     <Dialog header="NAVIGATE" visible={aboutVisible} modal onHide={onHide}>
       <div className="about-dialog">
         <p>Frontend: {frontendVersion}</p>
-        <p>Configs API: {version.data?.version.version}</p>
-        {/* TODO: Server version */}
+        <p>Configs API: {configsVersion}</p>
+        <p>Server: {serverVersion}</p>
       </div>
     </Dialog>
   );
