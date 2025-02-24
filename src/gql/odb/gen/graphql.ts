@@ -8110,12 +8110,16 @@ export type WhereObservation = {
   OR?: InputMaybe<Array<WhereObservation>>;
   /** Matches the observation id. */
   id?: InputMaybe<WhereOrderObservationId>;
+  /** Matches on the instrument in use, if any. */
+  instrument?: InputMaybe<WhereOptionEqInstrument>;
   /** Matches the associated program. */
   program?: InputMaybe<WhereProgram>;
   /** Matches the observation reference, if any. */
   reference?: InputMaybe<WhereObservationReference>;
   /** Matches the observation science band. */
   scienceBand?: InputMaybe<WhereOptionOrderScienceBand>;
+  /** Matches on the site associated with the observation's instrument, if any. */
+  site?: InputMaybe<WhereOptionEqSite>;
   /** Matches the subtitle of the observation. */
   subtitle?: InputMaybe<WhereOptionString>;
 };
@@ -8149,7 +8153,10 @@ export type WhereOptionEqCalibrationRole = {
   EQ?: InputMaybe<CalibrationRole>;
   /** Matches if the property value is any of the supplied options. */
   IN?: InputMaybe<Array<CalibrationRole>>;
-  /** When `true`, matches if the QaState is not defined. When `false` matches if the QaState is defined. */
+  /**
+   * When `true`, matches if the calibration role is not defined. When `false`
+   * matches if the calibration role is defined.
+   */
   IS_NULL?: InputMaybe<Scalars['Boolean']['input']>;
   /** Matches if the property is not the supplied value. */
   NEQ?: InputMaybe<CalibrationRole>;
@@ -8192,6 +8199,26 @@ export type WhereOptionEqGender = {
 };
 
 /**
+ * Filters on equality (or not) of the instrument. All supplied criteria must
+ * match, but usually only one is selected.
+ */
+export type WhereOptionEqInstrument = {
+  /** Matches if the instrument is exactly the supplied value. */
+  EQ?: InputMaybe<Instrument>;
+  /** Matches if the instrument is any of the supplied options. */
+  IN?: InputMaybe<Array<Instrument>>;
+  /**
+   * When `true`, matches if the instrument is not defined. When `false` matches if
+   * the instrument is defined.
+   */
+  IS_NULL?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Matches if the instrument is not the supplied value. */
+  NEQ?: InputMaybe<Instrument>;
+  /** Matches if the instrument is none of the supplied values. */
+  NIN?: InputMaybe<Array<Instrument>>;
+};
+
+/**
  * Filters on equality (or not) of the (optional) partner. All supplied criteria
  * must match, but usually only one is selected.
  */
@@ -8228,6 +8255,26 @@ export type WhereOptionEqQaState = {
   NEQ?: InputMaybe<DatasetQaState>;
   /** Matches if the property value is none of the supplied values. */
   NIN?: InputMaybe<Array<DatasetQaState>>;
+};
+
+/**
+ * Filters on equality of an optional site property.  All supplied criteria must
+ * match, but usually only one is selected.
+ */
+export type WhereOptionEqSite = {
+  /** Matches if the site is exactly the supplied value. */
+  EQ?: InputMaybe<Site>;
+  /** Matches if the site is any of the supplied options. */
+  IN?: InputMaybe<Array<Site>>;
+  /**
+   * When `true`, matches if the site is not defined. When `false` matches if the
+   * site role is defined.
+   */
+  IS_NULL?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Matches if the site is not the supplied value. */
+  NEQ?: InputMaybe<Site>;
+  /** Matches if the site is none of the supplied values. */
+  NIN?: InputMaybe<Array<Site>>;
 };
 
 /**
