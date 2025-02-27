@@ -2,11 +2,11 @@ import type { GuideAlarm, UpdateGuideAlarmMutationVariables, WfsType } from '@gq
 import type { GuideQuality } from '@gql/server/gen/graphql';
 import { Title } from '@Shared/Title/Title';
 import { clsx } from 'clsx';
-import type { CheckboxChangeEvent } from 'primereact/checkbox';
-import { Checkbox } from 'primereact/checkbox';
 import type { InputNumberValueChangeEvent } from 'primereact/inputnumber';
 import { InputNumber } from 'primereact/inputnumber';
-import { useId } from 'react';
+import type { ToggleButtonChangeEvent } from 'primereact/togglebutton';
+import { ToggleButton } from 'primereact/togglebutton';
+import { useCallback, useId } from 'react';
 
 import { isNotNullish } from '@/Helpers/functions';
 
@@ -30,13 +30,19 @@ export function Alarm({
   const limit = alarm?.limit;
   const enabled = alarm?.enabled ?? true;
 
-  function onLimitChange(e: InputNumberValueChangeEvent) {
-    if (isNotNullish(e.value)) onUpdateAlarm({ wfs, limit: e.value });
-  }
+  const onLimitChange = useCallback(
+    (e: InputNumberValueChangeEvent) => {
+      if (isNotNullish(e.value)) onUpdateAlarm({ wfs, limit: e.value });
+    },
+    [onUpdateAlarm, wfs],
+  );
 
-  function onEnabledChange(e: CheckboxChangeEvent): void {
-    if (isNotNullish(e.checked)) onUpdateAlarm({ wfs, enabled: e.checked });
-  }
+  const onEnabledChange = useCallback(
+    (e: ToggleButtonChangeEvent) => {
+      if (isNotNullish(e.value)) onUpdateAlarm({ wfs, enabled: e.value });
+    },
+    [onUpdateAlarm, wfs],
+  );
 
   const disabledOrNoData = disabled || !guideQuality || !alarm;
 
@@ -47,6 +53,16 @@ export function Alarm({
     >
       <div className="title-bar">
         <Title title={wfs} />
+        <ToggleButton
+          onLabel=""
+          offLabel=""
+          onIcon="pi pi-volume-up"
+          offIcon="pi pi-volume-off"
+          disabled={disabledOrNoData}
+          checked={enabled}
+          onChange={onEnabledChange}
+          tooltip={enabled ? 'Mute' : 'Unmute'}
+        />
       </div>
       <div className="body">
         <label htmlFor={`flux-${id}`} className="label">
@@ -72,10 +88,6 @@ export function Alarm({
         <output id={`centroid-${id}`} style={{ alignSelf: 'center' }}>
           {guideQuality?.centroidDetected ? 'OK' : 'BAD'}
         </output>
-        <label htmlFor={`enabled-${id}`} className="label">
-          Enable
-        </label>
-        <Checkbox inputId={`enabled-${id}`} disabled={disabledOrNoData} checked={enabled} onChange={onEnabledChange} />
       </div>
     </div>
   );
