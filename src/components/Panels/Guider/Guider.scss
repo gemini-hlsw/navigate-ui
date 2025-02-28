@@ -279,20 +279,20 @@
               grid-column-start: 2;
               background-color: transparent;
             }
+
+            .p-togglebutton {
+              justify-self: end;
+              .p-button-icon-left {
+                margin-right: 0;
+              }
+            }
           }
 
           > .body {
             display: grid;
             grid-template-columns: 2fr 1fr;
-            grid-template-rows: repeat(4, 22px);
-            gap: 4px 8px;
+            gap: 8px;
             padding: 8px;
-            justify-items: start;
-            > .p-inputnumber {
-              > .p-inputtext {
-                width: 100%;
-              }
-            }
           }
 
           &.has-alarm {
