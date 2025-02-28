@@ -9,6 +9,7 @@ import Home from './components/Layout/Home/Home';
 import Layout from './components/Layout/Layout';
 import Login from './components/Login/Login';
 import Token from './components/Token/Token';
+import { VersionManager } from './components/VersionManager/VersionManager';
 import { ToastProvider } from './Helpers/toast';
 
 const router = createBrowserRouter([
@@ -29,6 +30,7 @@ export function App({ client }: { client: ApolloClient<NormalizedCacheObject> })
       <ToastProvider>
         <Modals />
         <RouterProvider router={router} />
+        <VersionManager />
       </ToastProvider>
     </ApolloProvider>
   );
