@@ -10,11 +10,9 @@ import type { VariablesOf } from '@graphql-typed-document-node/core';
 import { clsx } from 'clsx';
 import type { ButtonProps } from 'primereact/button';
 import { Button } from 'primereact/button';
-import { useEffect } from 'react';
 
 import { BTN_CLASSES } from '@/Helpers/constants';
 import type { SetStale } from '@/Helpers/hooks';
-import { useToast } from '@/Helpers/toast';
 import type { SlewFlagsType } from '@/types';
 
 import { MOUNT_FOLLOW_MUTATION, OIWFS_FOLLOW_MUTATION, ROTATOR_FOLLOW_MUTATION, SCS_FOLLOW_MUTATION } from './follow';
@@ -33,23 +31,10 @@ function MutationButton<T extends DocumentNode>({
   variables: VariablesOf<T> extends OperationVariables ? VariablesOf<T> : never;
   setStale?: SetStale;
 } & ButtonProps) {
-  const TOAST_LIFE = 5000;
-  const toast = useToast();
-  const [mutationFunction, { loading, error }] = useMutation<T>(mutation, {
+  const [mutationFunction, { loading }] = useMutation<T>(mutation, {
     variables: variables,
     onCompleted: () => setStale?.(true),
   });
-
-  useEffect(() => {
-    if (error) {
-      toast?.show({
-        severity: 'error',
-        summary: error.name,
-        detail: error.message,
-        life: TOAST_LIFE,
-      });
-    }
-  }, [error, toast]);
 
   return <Button {...props} onClick={() => void mutationFunction({ variables })} loading={props.loading || loading} />;
 }

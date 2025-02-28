@@ -2,7 +2,7 @@ import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { Toast } from 'primereact/toast';
 import { useEffect, useRef } from 'react';
 
-const toastAtom = atom<Toast | null>(null);
+export const toastAtom = atom<Toast | null>(null);
 
 export function useToast() {
   return useAtomValue(toastAtom);

@@ -90,14 +90,9 @@ export function OdbImport() {
 
         // Observation selected
         // First try to get a central wavelength associated to the observation
-        const obsWithWavelength = await getCentralWavelength({ variables: { obsId: selectedObservation.id } });
-        if (obsWithWavelength.error?.message) {
-          toast?.show({
-            severity: 'warn',
-            summary: `No central wavelength for ${selectedObservation.id}`,
-            detail: obsWithWavelength.error.message,
-          });
-        }
+        const obsWithWavelength = await getCentralWavelength({
+          variables: { obsId: selectedObservation.id },
+        });
 
         const wavelength = extractCentralWavelength(configuration?.site, obsWithWavelength.data);
 
@@ -129,14 +124,10 @@ export function OdbImport() {
         // If there is a rotator, retrieve guide targets and create them
         if (rotator) {
           // Get the guide environment separately to avoid large query times for _all_ observations
-          const guideEnv = await getGuideEnvironment({ variables: { obsId: selectedObservation.id } });
-          if (guideEnv.error?.message) {
-            toast?.show({
-              severity: 'warn',
-              summary: `No guide environment for ${selectedObservation.id}`,
-              detail: guideEnv.error.message,
-            });
-          }
+          const guideEnv = await getGuideEnvironment({
+            variables: { obsId: selectedObservation.id },
+          });
+
           const { oiwfs, pwfs1, pwfs2 } = extractGuideTargets(guideEnv.data);
 
           const [oi, p1, p2] = await Promise.all([
@@ -196,7 +187,7 @@ export function OdbImport() {
         detail: 'Please select at least one instrument',
       });
     } else {
-      const res = await getReadyObservations({
+      await getReadyObservations({
         variables: {
           instruments: instrumentsInput,
           states: ['READY', 'ONGOING'],
@@ -204,13 +195,6 @@ export function OdbImport() {
         },
         fetchPolicy: 'no-cache',
       });
-      if (res.error?.message) {
-        toast?.show({
-          severity: 'error',
-          summary: 'Error querying observations',
-          detail: res.error.message,
-        });
-      }
     }
   }, [getReadyObservations, instrumentsInput, semesterInput, semester, toast]);
 
