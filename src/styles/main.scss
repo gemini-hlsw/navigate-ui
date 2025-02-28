@@ -144,6 +144,12 @@ button.p-component.p-button {
   }
 }
 
+.graphql-error-toast .p-toast-detail {
+  font-size: 0.8rem;
+  // Whitespaces in the error message are preserved
+  white-space: pre-wrap;
+}
+
 .dark .p-checkbox .p-checkbox-box,
 .light .p-checkbox .p-checkbox-box {
   border-width: 1px;

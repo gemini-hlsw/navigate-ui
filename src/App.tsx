@@ -1,9 +1,11 @@
 import type { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client';
 import { Modals } from '@Contexts/Variables/Modals/Modals';
+import { Provider as AtomProvider } from 'jotai';
 import { useEffect } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router';
 
+import { store } from './components/atoms/store';
 import { useThemeValue } from './components/atoms/theme';
 import Home from './components/Layout/Home/Home';
 import Layout from './components/Layout/Layout';
@@ -26,12 +28,14 @@ export function App({ client }: { client: ApolloClient<NormalizedCacheObject> })
   }, [theme]);
 
   return (
-    <ApolloProvider client={client}>
-      <ToastProvider>
-        <Modals />
-        <RouterProvider router={router} />
-        <VersionManager />
-      </ToastProvider>
-    </ApolloProvider>
+    <AtomProvider store={store}>
+      <ApolloProvider client={client}>
+        <ToastProvider>
+          <Modals />
+          <RouterProvider router={router} />
+          <VersionManager />
+        </ToastProvider>
+      </ApolloProvider>
+    </AtomProvider>
   );
 }
