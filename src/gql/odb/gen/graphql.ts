@@ -4812,6 +4812,13 @@ export type PosAngleConstraintMode =
 
 export type Program = {
   __typename?: 'Program';
+  /**
+   * Active period for this program.  Observations must be completed during this
+   * time interval. By default, if there is an associated proposal tied to a
+   * particular Call for Proposals (CfP), the active period will correspond to the
+   * Cfp active period.
+   */
+  active: DateInterval;
   /** All group elements (observations and sub-groups) in the program. */
   allGroupElements: Array<GroupElement>;
   /** All partner time allocations. */
@@ -4909,6 +4916,24 @@ export type ProgramEditInput = {
 
 /** Program properties */
 export type ProgramPropertiesInput = {
+  /**
+   * Active period end date (exclusive) for this program.  The date is considered
+   * to be the local date at each observation site.  Observations may end the
+   * morning of the indicated date at the site of the observation.
+   *
+   * This property is avaliable only to those with staff access or better. Not
+   * nullable.  Limited to dates between 1900 and 2100 (exclusive).
+   */
+  activeEnd?: InputMaybe<Scalars['Date']['input']>;
+  /**
+   * Active period start date (inclusive) for this program.  The date is considered
+   * to be the local date at each observation site.  Observations may begin the
+   * evening of the indicated date at the site of the observation.
+   *
+   * This property is avaliable only to those with staff access or better. Not
+   * nullable.  Limited to dates between 1900 and 2100 (exclusive).
+   */
+  activeStart?: InputMaybe<Scalars['Date']['input']>;
   /** The program description / abstract, which is both optional and nullable. */
   description?: InputMaybe<Scalars['NonEmptyString']['input']>;
   /** Whether the program is considered deleted (defaults to PRESENT) but may be edited */
@@ -8967,6 +8992,10 @@ export type WhereProgram = {
   NOT?: InputMaybe<WhereProgram>;
   /** A list of nested program filters where any one match causes the entire OR group as a whole to match. */
   OR?: InputMaybe<Array<WhereProgram>>;
+  /** Matches the active period end. */
+  activeEnd?: InputMaybe<WhereOrderDate>;
+  /** Matches the active period start. */
+  activeStart?: InputMaybe<WhereOrderDate>;
   /** Matches the calibration role. */
   calibrationRole?: InputMaybe<WhereOptionEqCalibrationRole>;
   /** Matches the program ID. */
