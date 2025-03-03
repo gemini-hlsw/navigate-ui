@@ -35,6 +35,8 @@ jobs:
           path: |
             dist
             !dist/**/*.md
+      - name: Run BundleMon
+        uses: lironer/bundlemon-action@v1
 
   sbt-update:
     runs-on: ubuntu-latest
