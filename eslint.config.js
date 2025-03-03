@@ -3,7 +3,7 @@
 import eslint from '@eslint/js';
 import importX from 'eslint-plugin-import-x';
 import reactPlugin from 'eslint-plugin-react';
-import hooksPlugin from 'eslint-plugin-react-hooks';
+import * as reactHooks from 'eslint-plugin-react-hooks';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import globals from 'globals';
 import { config, configs } from 'typescript-eslint';
@@ -17,6 +17,7 @@ export default config(
   importX.flatConfigs.recommended,
   importX.flatConfigs.react,
   importX.flatConfigs.typescript,
+  reactHooks.configs['recommended-latest'],
   {
     languageOptions: {
       parserOptions: {
@@ -36,15 +37,12 @@ export default config(
       'simple-import-sort/imports': 'error',
 
       eqeqeq: 'error',
-
-      ...hooksPlugin.configs.recommended.rules,
     },
     settings: {
       react: { version: 'detect' },
     },
     plugins: {
       'simple-import-sort': simpleImportSort,
-      'react-hooks': hooksPlugin,
     },
   },
   {
