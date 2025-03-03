@@ -1450,6 +1450,11 @@ export type Dataset = {
   index: Scalars['PosInt']['output'];
   /** Dataset time interval, if the dataset collection has started. */
   interval?: Maybe<TimestampInterval>;
+  /**
+   * Has the dataset been written to disk?  Note, we assume the dataset has been
+   * written when an `END_WRITE` event is received from Observe.
+   */
+  isWritten: Scalars['Boolean']['output'];
   /** Observation associated with this dataset. */
   observation: Observation;
   /** Dataset QA state, if any has been set. */
@@ -1466,6 +1471,35 @@ export type Dataset = {
 export type DatasetEventsArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
   OFFSET?: InputMaybe<Scalars['ExecutionEventId']['input']>;
+};
+
+export type DatasetEdit = {
+  __typename?: 'DatasetEdit';
+  /** The id of the edited object. */
+  datasetId: Scalars['DatasetId']['output'];
+  /** Type of edit. */
+  editType: EditType;
+  /** Edited dataset. */
+  value?: Maybe<Dataset>;
+};
+
+/**
+ * Specifies filtering options for dataset edit events from the `datasetEdit`
+ * subscription.
+ */
+export type DatasetEditInput = {
+  /** If set, only events for the associated dataset are sent. */
+  datasetId?: InputMaybe<Scalars['DatasetId']['input']>;
+  /**
+   * If set, only events for datasets that are written to disk are sent.  (Note,
+   * datasets are considered to be written when an `END_WRITE` event is received by
+   * the database.)
+   */
+  isWritten?: InputMaybe<Scalars['Boolean']['input']>;
+  /** If set, only events for datasets produced by the associated observation are sent. */
+  observationId?: InputMaybe<Scalars['ObservationId']['input']>;
+  /** If set, only events for datasets produced by the associated program are sent. */
+  programId?: InputMaybe<Scalars['ProgramId']['input']>;
 };
 
 /** Time estimate for taking an individual dataset. */
@@ -6537,6 +6571,14 @@ export type StepType =
 export type Subscription = {
   __typename?: 'Subscription';
   configurationRequestEdit: ConfigurationRequestEdit;
+  /**
+   * Subscribes to an event that is generated whenever a dataset is created or
+   * updated.  The input allows the caller to filter on program, observation or
+   * individual dataset (so that all events received correspond to that program,
+   * observation or dataset).  It also permits limiting events to only those for
+   * which a dataset file has been written.
+   */
+  datasetEdit: DatasetEdit;
   executionEventAdded: ExecutionEventAdded;
   /**
    * Subscribes to an event that is generated whenever a group is
@@ -6573,6 +6615,11 @@ export type Subscription = {
 
 export type SubscriptionConfigurationRequestEditArgs = {
   input?: InputMaybe<ConfigurationRequestEditInput>;
+};
+
+
+export type SubscriptionDatasetEditArgs = {
+  input?: InputMaybe<DatasetEditInput>;
 };
 
 
@@ -7823,6 +7870,12 @@ export type WhereDataset = {
   id?: InputMaybe<WhereOrderDatasetId>;
   /** Matches the particular dataset index within the step. */
   index?: InputMaybe<WhereOrderPosInt>;
+  /**
+   * If `true`, matches when the dataset has been written (or not). In particular, a dataset
+   * is considered written when a corresponding `END_WRITE` dataset event has been
+   * recieved.
+   */
+  isWritten?: InputMaybe<WhereBoolean>;
   /** Matches all datasets associated with the observation. */
   observation?: InputMaybe<WhereObservation>;
   /** Matches the dataset QA state. */
