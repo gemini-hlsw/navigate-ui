@@ -74,5 +74,19 @@
   },
   "lint-staged": {
     "*.{js,mjs,ts,tsx,jsx,css,md,json,yml}": "prettier --write"
+  },
+  "bundlemon": {
+    "baseDir": "./dist/navigate-ui",
+    "files": [
+      {
+        "path": "assets/*-<hash>.js"
+      },
+      {
+        "path": "assets/*-<hash>.css"
+      }
+    ],
+    "reportOutput": [
+      "github"
+    ]
   }
 }
