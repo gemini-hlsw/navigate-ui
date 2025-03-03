@@ -8,6 +8,13 @@ This tool will be used to configure the telescope and its subsystems to point an
 
 Make sure you have installed [NodeJS](https://nodejs.org/en/) and [ni](https://github.com/antfu/ni) in your machine.
 
+We are now using FontAwesome Pro which requires a license. To build the app locally request a TOKEN
+from the admins and you need to setup an env variable containing it like
+
+```bash
+export FONTAWESOME_NPM_AUTH_TOKEN=...
+```
+
 - Install dependencies
 
   ```bash

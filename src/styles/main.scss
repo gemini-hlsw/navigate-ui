@@ -92,6 +92,12 @@ button.p-component.p-button {
   margin-right: 0;
 }
 
+.mutation-button-icons {
+  display: flex;
+  flex-direction: row;
+  gap: 0.2rem;
+}
+
 .p-datatable {
   .p-datatable-thead {
     > tr {
