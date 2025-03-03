@@ -19,6 +19,9 @@ const GET_OBSERVATIONS_BY_STATE = graphql(`
       title
       subtitle
       instrument
+      reference {
+        label
+      }
       program {
         id
         existence
