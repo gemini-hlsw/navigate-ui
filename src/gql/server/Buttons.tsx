@@ -10,7 +10,9 @@ import type { VariablesOf } from '@graphql-typed-document-node/core';
 import { clsx } from 'clsx';
 import type { ButtonProps } from 'primereact/button';
 import { Button } from 'primereact/button';
+import type { ReactNode } from 'react';
 
+import { Crosshairs, CrosshairsSlash, Parking, ParkingSlash } from '@/components/Icons';
 import { BTN_CLASSES } from '@/Helpers/constants';
 import type { SetStale } from '@/Helpers/hooks';
 import type { SlewFlagsType } from '@/types';
@@ -25,10 +27,13 @@ function MutationButton<T extends DocumentNode>({
   mutation,
   variables,
   setStale,
+  icons,
+  label,
   ...props
 }: {
   mutation: T;
   variables: VariablesOf<T> extends OperationVariables ? VariablesOf<T> : never;
+  icons?: ReactNode[];
   setStale?: SetStale;
 } & ButtonProps) {
   const [mutationFunction, { loading }] = useMutation<T>(mutation, {
@@ -36,19 +41,25 @@ function MutationButton<T extends DocumentNode>({
     onCompleted: () => setStale?.(true),
   });
 
-  return <Button {...props} onClick={() => void mutationFunction({ variables })} loading={props.loading || loading} />;
+  return (
+    <Button {...props} onClick={() => void mutationFunction({ variables })} loading={props.loading || loading}>
+      {icons?.length && <span className="mutation-button-icons">{icons}</span>}
+      <span className="p-button-label">{label}</span>
+    </Button>
+  );
 }
 
 // BUTTONS
 
 export function MCS({ className, state, ...props }: ButtonProps & { state: MechSystemState | undefined }) {
-  const { classes, title } = classNameForState(state, true);
+  const { classes, title, icons } = classNameForState(state, true);
 
   return (
     <MutationButton
       mutation={MOUNT_FOLLOW_MUTATION}
       variables={{ enable: state?.follow === 'NOT_FOLLOWING' }}
       {...props}
+      icons={icons}
       title={title}
       className={clsx(className, classes)}
     />
@@ -56,10 +67,11 @@ export function MCS({ className, state, ...props }: ButtonProps & { state: MechS
 }
 
 export function SCS({ className, state, ...props }: ButtonProps & { state: MechSystemState | undefined }) {
-  const { classes, title } = classNameForState(state, true);
+  const { classes, title, icons } = classNameForState(state, true);
   return (
     <MutationButton
       mutation={SCS_FOLLOW_MUTATION}
+      icons={icons}
       variables={{ enable: state?.follow === 'NOT_FOLLOWING' }}
       {...props}
       title={title}
@@ -69,10 +81,11 @@ export function SCS({ className, state, ...props }: ButtonProps & { state: MechS
 }
 
 export function CRCS({ className, state, ...props }: ButtonProps & { state: MechSystemState | undefined }) {
-  const { classes, title } = classNameForState(state, true);
+  const { classes, title, icons } = classNameForState(state, true);
   return (
     <MutationButton
       mutation={ROTATOR_FOLLOW_MUTATION}
+      icons={icons}
       variables={{ enable: state?.follow === 'NOT_FOLLOWING' }}
       {...props}
       title={title}
@@ -114,10 +127,11 @@ export function OIWFS({
   inUse,
   ...props
 }: ButtonProps & { state: MechSystemState | undefined; inUse: boolean }) {
-  const { classes, title } = classNameForState(state, inUse);
+  const { classes, title, icons } = classNameForState(state, inUse);
   return (
     <MutationButton
       mutation={OIWFS_FOLLOW_MUTATION}
+      icons={icons}
       variables={{ enable: state?.follow === 'NOT_FOLLOWING' }}
       {...props}
       title={title}
@@ -251,7 +265,7 @@ export function Slew(props: ButtonProps) {
 function classNameForState(
   state: MechSystemState | undefined,
   usedSubsystem: boolean,
-): { classes: string; title: string } {
+): { classes: string; title: string; icons: ReactNode[] } {
   const title =
     (state?.follow === 'FOLLOWING' ? 'Following' : 'Not following') +
     ', ' +
@@ -259,13 +273,18 @@ function classNameForState(
     ', ' +
     (usedSubsystem ? 'Used subsystem' : 'Not used subsystem');
 
-  if (!state) return { classes: '', title };
+  if (!state) return { classes: '', icons: [], title };
+
+  const icons = [
+    state.follow === 'FOLLOWING' ? Crosshairs : CrosshairsSlash,
+    state.parked === 'PARKED' ? Parking : ParkingSlash,
+  ];
 
   if (!usedSubsystem) {
-    return { classes: 'p-button-secondary', title };
+    return { classes: 'p-button-secondary', title, icons };
   } else if (state.follow === 'FOLLOWING' && state.parked === 'NOT_PARKED') {
-    return { classes: '', title };
+    return { classes: '', title, icons };
   } else {
-    return { classes: BTN_CLASSES.ACTIVE, title };
+    return { classes: BTN_CLASSES.ACTIVE, title, icons };
   }
 }
