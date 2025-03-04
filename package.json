@@ -79,15 +79,12 @@
   },
   "bundlemon": {
     "baseDir": "./dist/navigate-ui",
+    "pathLabels": {
+      "hash": "[a-zA-Z0-9\\-_]+"
+    },
     "files": [
       {
-        "path": "assets/*-<hash>.js"
-      },
-      {
-        "path": "assets/*-<hash>-<hash>.css"
-      },
-      {
-        "path": "assets/*-<hash>.css"
+        "path": "assets/*-<hash>.{js,css}"
       }
     ],
     "reportOutput": [
