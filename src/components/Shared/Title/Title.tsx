@@ -2,6 +2,8 @@ import { OverlayPanel } from 'primereact/overlaypanel';
 import type { MouseEventHandler } from 'react';
 import { useRef } from 'react';
 
+import { ChevronLeft, ChevronRight } from '@/components/Icons';
+
 type ParamsInterface = React.PropsWithChildren<{
   title: string;
   prevPanel?: MouseEventHandler<HTMLButtonElement>;
@@ -14,7 +16,9 @@ export function Title({ title, prevPanel, nextPanel, children, className = '' }:
   if (prevPanel) {
     prevPanelDisplay = (
       <button className="p-panel" onClick={prevPanel}>
-        <i className="pi pi-angle-left"></i>
+        <i>
+          <ChevronLeft />
+        </i>
         <span className="sr-only">Previous panel</span>
       </button>
     );
@@ -24,7 +28,9 @@ export function Title({ title, prevPanel, nextPanel, children, className = '' }:
   if (nextPanel) {
     nextPanelDisplay = (
       <button className="n-panel" onClick={nextPanel}>
-        <i className="pi pi-angle-right"></i>
+        <i>
+          <ChevronRight />
+        </i>
         <span className="sr-only">Next panel</span>
       </button>
     );
@@ -39,12 +45,12 @@ export function Title({ title, prevPanel, nextPanel, children, className = '' }:
   );
 }
 
-export function TitleDropdown({ children, icon }: React.PropsWithChildren<{ icon: string }>) {
+export function TitleDropdown({ children, icon }: React.PropsWithChildren<{ icon: React.ReactElement }>) {
   const op = useRef<OverlayPanel>(null);
 
   return (
     <span className="title-dropdown" aria-label="Settings" onClick={(e) => op.current?.toggle(e)}>
-      <i className={`pi pi-${icon} ml-2`}></i>
+      <i className="ml-2">{icon}</i>
       <OverlayPanel ref={op}>{children}</OverlayPanel>
     </span>
   );

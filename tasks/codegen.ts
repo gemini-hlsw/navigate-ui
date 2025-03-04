@@ -2,6 +2,7 @@ import type { CodegenConfig } from '@graphql-codegen/cli';
 
 // Simple mapping of scalar types to their TypeScript representation
 // Some of these might be wrong or incomplete, feel free to adjust as needed
+/*eslint sort-keys: "error"*/
 const scalars = {
   AtomId: 'string',
   AttachmentId: 'string',
@@ -50,6 +51,7 @@ const scalars = {
   UserInvitationKey: 'string',
   VisitId: 'string',
 };
+/*eslint-disable sort-keys*/
 
 const sharedConfig = {
   scalars,

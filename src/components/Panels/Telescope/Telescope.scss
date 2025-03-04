@@ -389,8 +389,9 @@
           align-items: center;
           cursor: pointer;
           transition: background-color 0.2s;
+          justify-content: center;
 
-          > i {
+          > .svg-inline--fa {
             transition:
               transform 0.5s,
               color 0.2s;
@@ -401,7 +402,7 @@
           left: 100px;
 
           > .expand-button {
-            > i {
+            > .svg-inline--fa {
               transform: rotate(180deg);
             }
           }
@@ -410,7 +411,7 @@
         > .expand-button:hover {
           background-color: var(--surface-c);
 
-          i {
+          .svg-inline--fa {
             color: var(--primary-color);
           }
         }

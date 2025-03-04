@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { useOdbToken } from '../atoms/odb';
+import { Check, Key } from '../Icons';
 
 export default function Token() {
   const navigate = useNavigate();
@@ -20,13 +21,13 @@ export default function Token() {
         </div>
         <div className="p-inputgroup mb-10">
           <span className="p-inputgroup-addon">
-            <i className="pi pi-key"></i>
+            <Key />
           </span>
           <InputText placeholder="ODB Token" value={auxOdbToken} onChange={(e) => setAuxOdbToken(e.target.value)} />
         </div>
         <Button
           label="Done"
-          icon="pi pi-check"
+          icon={<Check className="p-button-icon-right" />}
           iconPos="right"
           className=" p-button-success"
           onClick={() => {

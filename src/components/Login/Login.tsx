@@ -9,6 +9,7 @@ import { useLocation, useNavigate } from 'react-router';
 import { useToast } from '@/Helpers/toast';
 
 import { useSignIn } from '../atoms/auth';
+import { Check, Key, User, XMark } from '../Icons';
 
 interface LocationInterface {
   from: {
@@ -60,13 +61,13 @@ export default function Login() {
         </div>
         <div className="p-inputgroup mb-10">
           <span className="p-inputgroup-addon">
-            <i className="pi pi-user"></i>
+            <User />
           </span>
           <InputText placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
         </div>
         <div className="p-inputgroup mb-10">
           <span className="p-inputgroup-addon">
-            <i className="pi pi-key"></i>
+            <Key />
           </span>
           <Password placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </div>
@@ -74,14 +75,20 @@ export default function Login() {
           <div className="text-right w-100">
             <Button
               label="Submit"
-              icon="pi pi-check"
+              icon={<Check size="lg" className="p-button-icon-right" />}
               iconPos="right"
               onClick={() => void handleSubmit()}
               loading={loading}
             />
           </div>
           <div className="text-left w-100">
-            <Button label="Cancel" icon="pi pi-times" iconPos="right" className=" p-button-danger" onClick={goHome} />
+            <Button
+              label="Cancel"
+              icon={<XMark size="lg" className="p-button-icon-right" />}
+              iconPos="right"
+              className=" p-button-danger"
+              onClick={goHome}
+            />
           </div>
         </div>
       </div>

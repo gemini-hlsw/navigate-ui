@@ -3,11 +3,11 @@ import { useGetGuideLoop, useUpdateGuideLoop } from '@gql/configs/GuideLoop';
 import type { LightSink, LightSource } from '@gql/server/gen/graphql';
 import { useLightpathConfig } from '@gql/server/Lightpath';
 import { Title } from '@Shared/Title/Title';
-import { clsx } from 'clsx';
 import { Button } from 'primereact/button';
 import { useCallback, useMemo } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
+import { Check } from '@/components/Icons';
 /**
  * | UI Option               | LightSource | LightSink |
  * | ----------------------- | ----------- | --------- |
@@ -77,7 +77,7 @@ export function LightPath() {
         {options.map(({ label, from, to }) => {
           return (
             <Button
-              icon={clsx(label === lightPath && 'pi pi-check')}
+              icon={label === lightPath && <Check size="lg" />}
               key={label}
               loading={loading}
               disabled={disabled}

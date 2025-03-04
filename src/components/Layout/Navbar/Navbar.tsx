@@ -11,6 +11,7 @@ import { useAlarmValue } from '@/components/atoms/alarm';
 import { useIsLoggedIn, useSignout, useUser } from '@/components/atoms/auth';
 import { useOdbTokenValue } from '@/components/atoms/odb';
 import { useTheme } from '@/components/atoms/theme';
+import { ChevronDown, Info, Key, KeySolid, Map, Moon, SignIn, SignOut, Sun, User } from '@/components/Icons';
 
 export default function Navbar() {
   const configuration = useConfiguration().data?.configuration;
@@ -26,7 +27,8 @@ export default function Navbar() {
 
   const alarm = useAlarmValue();
 
-  const themeIcon: string = theme === 'dark' ? 'pi pi-moon' : 'pi pi-sun';
+  const ThemeIcon = theme === 'dark' ? Moon : Sun;
+  const SignInIcon = isLoggedIn ? SignIn : SignOut;
 
   function userSession() {
     if (isLoggedIn) {
@@ -39,22 +41,22 @@ export default function Navbar() {
   const items = [
     {
       label: 'Switch theme',
-      icon: themeIcon,
+      icon: <ThemeIcon className="p-menuitem-icon" />,
       command: toggleTheme,
     },
     {
       label: isLoggedIn ? 'Logout' : 'Login',
-      icon: isLoggedIn ? 'pi pi-sign-out' : 'pi pi-sign-in',
+      icon: <SignInIcon className="p-menuitem-icon" />,
       command: userSession,
     },
     {
       label: 'ODB Token',
-      icon: 'pi pi-key',
+      icon: <KeySolid className="p-menuitem-icon" />,
       command: () => navigate('/token'),
     },
     {
       label: 'About',
-      icon: 'pi pi-info-circle',
+      icon: <Info className="p-menuitem-icon" />,
       command: () => toggleAboutVisible(),
     },
   ];
@@ -63,7 +65,11 @@ export default function Navbar() {
     <nav className={clsx('top-bar', alarm && 'animate-error-bg')}>
       <div className="left">
         <Link to="/">
-          <Button icon="pi pi-map" iconPos="left" className="p-button-text nav-btn main-title">
+          <Button
+            icon={<Map className="p-button-icon" size="lg" />}
+            iconPos="left"
+            className="p-button-text nav-btn main-title"
+          >
             <span>N</span>
             <span>A</span>
             <span>V</span>
@@ -74,23 +80,23 @@ export default function Navbar() {
             <span>E</span>
           </Button>
         </Link>
-        <span className="site">{configuration?.site ?? ''}</span>
+        {configuration?.site && <span className="site">{configuration.site}</span>}
       </div>
       <div className="center">
-        <span className="observation">{configuration?.obsTitle ?? ''}</span>
+        {configuration?.obsTitle && <span className="observation">{configuration.obsTitle}</span>}
       </div>
       <div className="right">
         {!odbToken && (
           <Link to="/token" style={{ animation: 'blink 1s infinite' }}>
-            <i className="pi pi-key"></i>
+            <Key />
           </Link>
         )}
         <SplitButton
           label={user ? user.displayName : 'Guest'}
-          icon="pi pi-user"
+          icon={<User size="lg" />}
           className="p-button-text nav-btn"
           model={items}
-          dropdownIcon="pi pi-chevron-down"
+          dropdownIcon={<ChevronDown size="lg" />}
         ></SplitButton>
       </div>
     </nav>

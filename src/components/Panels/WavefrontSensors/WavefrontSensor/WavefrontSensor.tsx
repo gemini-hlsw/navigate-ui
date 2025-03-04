@@ -7,6 +7,8 @@ import { Checkbox } from 'primereact/checkbox';
 import { Dropdown } from 'primereact/dropdown';
 import { useCallback, useState } from 'react';
 
+import { Camera, Play, Stop } from '@/components/Icons';
+
 export default function WavefrontSensor({
   canEdit,
   wfs,
@@ -52,7 +54,7 @@ export default function WavefrontSensor({
         <Button
           disabled={!canEdit}
           style={{ gridArea: 'g23' }}
-          icon="pi pi-camera"
+          icon={<Camera />}
           aria-label="Take Sky"
           tooltip="Take Sky"
         />
@@ -85,7 +87,7 @@ function OiwfsObserveButton({ freq, canEdit }: { freq: number; canEdit: boolean 
       loading={guideStateLoading || startObserveLoading || stopObserveLoading}
       disabled={!canEdit}
       style={{ gridArea: 'g13' }}
-      icon={clsx('pi', integrating ? 'pi-stop' : 'pi-play')}
+      icon={integrating ? <Stop /> : <Play />}
       className={clsx(integrating && 'p-button-danger')}
       aria-label={integrating ? 'Stop' : 'Start'}
       tooltip={integrating ? 'Stop' : 'Start'}
@@ -99,7 +101,7 @@ function Pwfs1ObserveButton({ canEdit }: { canEdit: boolean }) {
     <Button
       className="under-construction"
       disabled={!canEdit}
-      icon="pi pi-play"
+      icon={<Play />}
       style={{ gridArea: 'g13' }}
       aria-label="Start"
       tooltip="Start"
@@ -112,7 +114,7 @@ function Pwfs2ObserveButton({ canEdit }: { canEdit: boolean }) {
     <Button
       className="under-construction"
       disabled={!canEdit}
-      icon="pi pi-play"
+      icon={<Play />}
       style={{ gridArea: 'g13' }}
       aria-label="Start"
       tooltip="Start"

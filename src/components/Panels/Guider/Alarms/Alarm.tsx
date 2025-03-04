@@ -8,6 +8,7 @@ import type { ToggleButtonChangeEvent } from 'primereact/togglebutton';
 import { ToggleButton } from 'primereact/togglebutton';
 import { useCallback, useId } from 'react';
 
+import { Volume, VolumeSlash } from '@/components/Icons';
 import { isNotNullish } from '@/Helpers/functions';
 
 export function Alarm({
@@ -56,8 +57,8 @@ export function Alarm({
         <ToggleButton
           onLabel=""
           offLabel=""
-          onIcon="pi pi-volume-up"
-          offIcon="pi pi-volume-off"
+          onIcon={<Volume />}
+          offIcon={<VolumeSlash />}
           disabled={disabledOrNoData}
           checked={enabled}
           onChange={onEnabledChange}

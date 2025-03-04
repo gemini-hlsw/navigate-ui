@@ -4,6 +4,7 @@ import { Divider } from 'primereact/divider';
 
 import { useCanEdit } from '@/components/atoms/auth';
 import { useSetOdbVisible } from '@/components/atoms/odb';
+import { List } from '@/components/Icons';
 
 interface ParamsInterface {
   prevPanel: () => void;
@@ -16,7 +17,7 @@ export function TelescopeTitle({ prevPanel, nextPanel }: ParamsInterface) {
 
   return (
     <Title title="TELESCOPE SETUP" prevPanel={prevPanel} nextPanel={nextPanel}>
-      <TitleDropdown icon="list">
+      <TitleDropdown icon={<List />}>
         <Button
           disabled={!canEdit}
           className="p-button-text"

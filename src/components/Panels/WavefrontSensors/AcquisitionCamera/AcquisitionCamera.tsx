@@ -1,11 +1,12 @@
 import imgUrl from '@assets/underconstruction.png';
 import { useAcObserve, useAcStopObserve } from '@gql/server/AcquisitionCamera';
 import { useGuideState } from '@gql/server/GuideState';
-import { clsx } from 'clsx';
 import { Button } from 'primereact/button';
 import { Checkbox } from 'primereact/checkbox';
 import { Dropdown } from 'primereact/dropdown';
 import { useCallback, useState } from 'react';
+
+import { Camera, Play, Stop } from '@/components/Icons';
 
 import MainControls from './MainControls';
 
@@ -70,7 +71,7 @@ export default function AcquisitionCamera({ canEdit, ac }: { canEdit: boolean; a
             loading={loading}
             disabled={!canEdit}
             style={{ gridArea: 'g5' }}
-            icon={clsx('pi', integrating ? 'pi-stop' : 'pi-play')}
+            icon={integrating ? <Stop /> : <Play />}
             aria-label={integrating ? 'Stop' : 'Start'}
             tooltip={integrating ? 'Stop' : 'Start'}
             onClick={onClick}
@@ -79,7 +80,7 @@ export default function AcquisitionCamera({ canEdit, ac }: { canEdit: boolean; a
             className="under-construction"
             disabled={!canEdit}
             style={{ gridArea: 'g6' }}
-            icon="pi pi-camera"
+            icon={<Camera />}
             aria-label="Take Sky"
             tooltip="Take Sky"
           />
