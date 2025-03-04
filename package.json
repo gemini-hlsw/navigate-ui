@@ -84,6 +84,9 @@
         "path": "assets/*-<hash>.js"
       },
       {
+        "path": "assets/*-<hash>-<hash>.css"
+      },
+      {
         "path": "assets/*-<hash>.css"
       }
     ],
