@@ -1,10 +1,12 @@
 import { FilterMatchMode } from 'primereact/api';
+import type { ColumnProps as PColumnProps } from 'primereact/column';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { IconField } from 'primereact/iconfield';
 import { InputIcon } from 'primereact/inputicon';
 import { InputText } from 'primereact/inputtext';
-import { useState } from 'react';
+import { MultiSelect } from 'primereact/multiselect';
+import { useCallback, useMemo, useState } from 'react';
 
 import type { OdbObservationType } from '@/types';
 
@@ -15,6 +17,43 @@ interface ParamsInterface {
   setSelectedObservation: (_: OdbObservationType | null) => void;
   headerItems?: React.ReactNode;
 }
+
+interface ColumnProps extends PColumnProps {
+  field: string;
+  header: string;
+  filterPlaceholder: string;
+  visible: boolean;
+}
+
+const defaultColumns: ColumnProps[] = [
+  { field: 'id', header: 'ID', filterPlaceholder: 'Search ID', visible: true },
+  { field: 'title', header: 'Title', filterPlaceholder: 'Search Title', visible: true },
+  {
+    field: 'program.pi.user.profile.givenName',
+    header: 'PI Given Name',
+    filterPlaceholder: 'Filter Given Name',
+    visible: true,
+  },
+  {
+    field: 'program.pi.user.profile.familyName',
+    header: 'PI Family Name',
+    filterPlaceholder: 'Filter Family Name',
+    visible: true,
+  },
+  {
+    field: 'reference.label',
+    header: 'Observation Reference',
+    filterPlaceholder: 'Filter Observation Reference',
+    visible: true,
+  },
+  {
+    field: 'targetEnvironment.firstScienceTarget.name',
+    header: 'Target Name',
+    filterPlaceholder: 'Filter Target Name',
+    visible: false,
+  },
+  { field: 'instrument', header: 'Instrument', filterPlaceholder: 'Filter Instrument', visible: false },
+];
 
 export function ObservationTable({
   loading,
@@ -51,6 +90,16 @@ export function ObservationTable({
     setGlobalFilterValue(value);
   }
 
+  const [columns, setColumns] = useState(defaultColumns);
+
+  const visibleColumns = useMemo(() => columns.filter((c) => c.visible), [columns]);
+
+  const onMultiSelectChange = useCallback(
+    (e: { value: ColumnProps[] }) =>
+      setColumns(columns.map((c) => ({ ...c, visible: e.value.some((v) => v.field === c.field) }))),
+    [setColumns, columns],
+  );
+
   const header = (
     <div className="header-table">
       {selectedObservation?.title && <span>Selected Observation: {selectedObservation.title}</span>}
@@ -59,14 +108,21 @@ export function ObservationTable({
         <InputIcon className="pi pi-search" />
         <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Keyword Search" />
       </IconField>
+      <MultiSelect
+        selectedItemsLabel={`${visibleColumns.length} columns selected`}
+        maxSelectedLabels={2}
+        value={visibleColumns}
+        options={columns}
+        onChange={onMultiSelectChange}
+        optionLabel="header"
+        placeholder="Select columns"
+      />
     </div>
   );
 
   return (
     <div className="target-table">
       <DataTable
-        // Temporarily remove this filter, until odb is updated
-        // value={(observations_list ?? []).filter((el) => ['ONGOING', 'NOT_STARTED'].includes(el.execution.state))}
         value={observations_list}
         paginator
         selectionMode="single"
@@ -78,39 +134,13 @@ export function ObservationTable({
         filters={filters}
         filterDisplay="row"
         loading={loading}
-        globalFilterFields={[
-          'id',
-          'title',
-          'program.pi.user.profile.givenName',
-          'program.pi.user.profile.familyName',
-          'targetEnvironment.firstScienceTarget.name',
-        ]}
+        globalFilterFields={visibleColumns.map((c) => c.field)}
         header={header}
         emptyMessage="No observations found."
       >
-        <Column field="id" header="ID" filter filterPlaceholder="Search ID" style={{ minWidth: '12rem' }} />
-        <Column field="title" header="Title" filter filterPlaceholder="Search Title" style={{ minWidth: '12rem' }} />
-        <Column
-          field="program.pi.user.profile.givenName"
-          header="PI Given Name"
-          style={{ minWidth: '12rem' }}
-          filter
-          filterPlaceholder="Filter Given Name"
-        />
-        <Column
-          field="program.pi.user.profile.familyName"
-          header="PI Family Name"
-          style={{ minWidth: '12rem' }}
-          filter
-          filterPlaceholder="Filter Family Name"
-        />
-        <Column
-          field="targetEnvironment.firstScienceTarget.name"
-          header="Target Name"
-          style={{ minWidth: '12rem' }}
-          filter
-          filterPlaceholder="Filter Target Name"
-        />
+        {visibleColumns.map((column) => (
+          <Column {...column} key={column.field} filter />
+        ))}
       </DataTable>
     </div>
   );

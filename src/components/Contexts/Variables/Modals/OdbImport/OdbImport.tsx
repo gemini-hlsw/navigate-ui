@@ -54,8 +54,10 @@ export function OdbImport() {
 
   // observationsByState params
   // TODO: states could be in the form too, if needed
-  const [semesterInput, setSemesterInput] = useState<string>('');
-  const [semester, setSemester] = useState<Semester | undefined>();
+  // Default to the current semester
+  const now = new Date();
+  const [semesterInput, setSemesterInput] = useState<string>(`${now.getFullYear()}${now.getMonth() < 6 ? 'A' : 'B'}`);
+  const [semester, setSemester] = useState<Semester | undefined>(semesterInput as Semester);
   const [instrumentsInput, setInstrumentsInput] = useState<Instrument[]>([]);
 
   const rotator = useRotator().data?.rotator;
