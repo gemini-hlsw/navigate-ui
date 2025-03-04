@@ -1,42 +1,19 @@
 import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
 import { useRotator, useUpdateRotator } from '@gql/configs/Rotator';
 import { useRemoveAndCreateBaseTargets, useRemoveAndCreateWfsTargets } from '@gql/configs/Target';
-import type { GetCentralWavelengthQuery, GetGuideEnvironmentQuery, Instrument } from '@gql/odb/gen/graphql';
+import type { GetCentralWavelengthQuery, GetGuideEnvironmentQuery } from '@gql/odb/gen/graphql';
 import { useGetCentralWavelength, useGetGuideEnvironment, useGetObservationsByState } from '@gql/odb/Observation';
+import { dateToLocalObservingNight } from 'lucuma-core';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
-import { InputText } from 'primereact/inputtext';
-import { MultiSelect } from 'primereact/multiselect';
-import { startTransition, useCallback, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
 import { useOdbVisible } from '@/components/atoms/odb';
 import { useToast } from '@/Helpers/toast';
-import type { ConfigurationType, OdbObservationType, Semester, SiteType, TargetInput } from '@/types';
+import type { ConfigurationType, OdbObservationType, SiteType, TargetInput } from '@/types';
 
 import { ObservationTable } from './ObservationTable';
-
-const instrumentOptions: readonly Instrument[] = Object.freeze([
-  'ACQ_CAM',
-  'ALOPEKE',
-  'BHROS',
-  'FLAMINGOS2',
-  'GHOST',
-  'GMOS_NORTH',
-  'GMOS_SOUTH',
-  'GNIRS',
-  'GPI',
-  'GSAOI',
-  'MICHELLE',
-  'NICI',
-  'NIFS',
-  'NIRI',
-  'PHOENIX',
-  'SCORPIO',
-  'TRECS',
-  'VISITOR',
-  'ZORRO',
-]);
 
 export function OdbImport() {
   const canEdit = useCanEdit();
@@ -52,13 +29,7 @@ export function OdbImport() {
   const [updateRotator, { loading: updateRotatorLoading }] = useUpdateRotator();
   const [removeAndCreateWfsTargets, { loading: wfsTargetsLoading }] = useRemoveAndCreateWfsTargets();
 
-  // observationsByState params
-  // TODO: states could be in the form too, if needed
-  // Default to the current semester
-  const now = new Date();
-  const [semesterInput, setSemesterInput] = useState<string>(`${now.getFullYear()}${now.getMonth() < 6 ? 'A' : 'B'}`);
-  const [semester, setSemester] = useState<Semester | undefined>(semesterInput as Semester);
-  const [instrumentsInput, setInstrumentsInput] = useState<Instrument[]>([]);
+  const observingNight = dateToLocalObservingNight(new Date());
 
   const rotator = useRotator().data?.rotator;
 
@@ -175,73 +146,25 @@ export function OdbImport() {
     });
   }
 
-  const queryObservations = useCallback(async () => {
-    if (!semester) {
-      toast?.show({
-        severity: 'warn',
-        summary: `Invalid semester '${semesterInput}'`,
-        detail: 'Please enter a valid semester in the format YYYYA or YYYYB',
-      });
-    } else if (!instrumentsInput.length) {
-      toast?.show({
-        severity: 'warn',
-        summary: 'No instruments selected',
-        detail: 'Please select at least one instrument',
-      });
-    } else {
-      await getReadyObservations({
+  useEffect(() => {
+    if (configuration?.site && odbVisible) {
+      void getReadyObservations({
         variables: {
-          instruments: instrumentsInput,
+          date: observingNight,
+          site: configuration.site,
           states: ['READY', 'ONGOING'],
-          semester,
         },
         fetchPolicy: 'no-cache',
       });
     }
-  }, [getReadyObservations, instrumentsInput, semesterInput, semester, toast]);
+  }, [configuration?.site, getReadyObservations, observingNight, odbVisible]);
 
-  const headerForm = (
-    <>
-      <div className="header-item">
-        <label htmlFor="semester">Semester</label>
-        <InputText
-          id="semester"
-          // YYYYA or YYYYB
-          keyfilter={/^\d{4}[AB]$/}
-          validateOnly
-          invalid={semester === undefined}
-          disabled={loading}
-          value={semesterInput}
-          onInput={(e, valid) =>
-            startTransition(() => {
-              const inputValue = e.currentTarget.value;
-              setSemesterInput(inputValue);
-              // valid is true if the input is an empty string
-              setSemester(valid && inputValue ? (inputValue as Semester) : undefined);
-            })
-          }
-        />
-      </div>
-      <div className="header-item">
-        <label htmlFor="instrument">Instruments</label>
-        <MultiSelect
-          id="instrument"
-          disabled={loading}
-          invalid={!instrumentsInput.length}
-          value={instrumentsInput}
-          onChange={(e) =>
-            startTransition(() => {
-              setInstrumentsInput(e.value as Instrument[]);
-            })
-          }
-          options={instrumentOptions as unknown[]}
-          placeholder="Select instrument(s)"
-        />
-      </div>
-      <div className="header-item">
-        <Button onClick={() => void queryObservations()} label="Query" loading={loading || updateLoading} />
-      </div>
-    </>
+  const header = (
+    <div className="header-item">
+      <span>
+        Observing Night {observingNight} @ {configuration?.site}
+      </span>
+    </div>
   );
 
   const footer = (
@@ -266,7 +189,7 @@ export function OdbImport() {
     <Dialog header="Import from ODB" footer={footer} visible={odbVisible} modal onHide={() => setOdbVisible(false)}>
       {
         <ObservationTable
-          headerItems={headerForm}
+          headerItems={header}
           loading={loading}
           observations_list={data?.observationsByWorkflowState}
           selectedObservation={selectedObservation}
