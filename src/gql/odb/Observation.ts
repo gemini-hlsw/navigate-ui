@@ -5,14 +5,14 @@ import { useOdbTokenValue } from '@/components/atoms/odb';
 import { graphql } from './gen';
 
 const GET_OBSERVATIONS_BY_STATE = graphql(`
-  query getObservationsByState(
-    $states: [ObservationWorkflowState!]!
-    $instruments: [Instrument!]!
-    $semester: Semester!
-  ) {
+  query getObservationsByState($states: [ObservationWorkflowState!]!, $site: Site!, $date: Date!) {
     observationsByWorkflowState(
       states: $states
-      WHERE: { program: { reference: { instrument: { IN: $instruments }, semester: { EQ: $semester } } } }
+      WHERE: {
+        site: { EQ: $site }
+        program: { AND: [{ activeStart: { LTE: $date } }, { activeEnd: { GTE: $date } }] }
+        reference: { IS_NULL: false }
+      }
     ) {
       id
       existence
