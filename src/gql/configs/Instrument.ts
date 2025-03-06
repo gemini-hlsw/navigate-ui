@@ -1,4 +1,4 @@
-import { useLazyQuery, useQuery } from '@apollo/client';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import type { OptionsOf } from '@gql/util';
 
 import { graphql } from './gen';
@@ -80,6 +80,51 @@ export const GET_INSTRUMENT = graphql(`
 export function useInstrument(options: OptionsOf<typeof GET_INSTRUMENT> = {}) {
   return useQuery(GET_INSTRUMENT, {
     ...options,
+    context: { clientName: 'navigateConfigs' },
+  });
+}
+
+export const UPDATE_INSTRUMENT = graphql(`
+  mutation updateInstrument(
+    $pk: Int!
+    $name: String
+    $iaa: Float
+    $issPort: Int
+    $focusOffset: Float
+    $wfs: WfsType
+    $originX: Float
+    $originY: Float
+    $ao: Boolean
+    $extraParams: JSON
+  ) {
+    updateInstrument(
+      pk: $pk
+      name: $name
+      iaa: $iaa
+      issPort: $issPort
+      focusOffset: $focusOffset
+      wfs: $wfs
+      originX: $originX
+      originY: $originY
+      ao: $ao
+      extraParams: $extraParams
+    ) {
+      pk
+      name
+      iaa
+      issPort
+      focusOffset
+      wfs
+      originX
+      originY
+      ao
+      extraParams
+    }
+  }
+`);
+
+export function useUpdateInstrument() {
+  return useMutation(UPDATE_INSTRUMENT, {
     context: { clientName: 'navigateConfigs' },
   });
 }
