@@ -22,6 +22,8 @@ function HydrateAtoms<T extends AtomTuples>({
   return children;
 }
 
+export type RenderResultWithStore = ReturnType<typeof renderWithContext>;
+
 /**
  * Render the given UI with the given atoms hydrated, and sets up ApolloProvider with the given mocks
  */

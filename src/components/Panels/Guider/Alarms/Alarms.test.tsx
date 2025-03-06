@@ -1,5 +1,6 @@
 import type { MockedResponse } from '@apollo/client/testing';
 import { GET_GUIDE_ALARMS, UPDATE_GUIDE_ALARM } from '@gql/configs/GuideAlarm';
+import type { RenderResultWithStore } from '@gql/render';
 import { renderWithContext } from '@gql/render';
 import { GUIDE_QUALITY_SUBSCRIPTION } from '@gql/server/GuideQuality';
 import { GUIDE_STATE_QUERY, GUIDE_STATE_SUBSCRIPTION } from '@gql/server/GuideState';
@@ -10,7 +11,7 @@ import { guideAlarmSoundAtom } from '@/components/atoms/alarm';
 import { Alarms } from './Alarms';
 
 describe(Alarms.name, () => {
-  let store: ReturnType<typeof renderWithContext>['store'];
+  let store: RenderResultWithStore['store'];
   beforeEach(async () => {
     store = renderWithContext(<Alarms />, { mocks }).store;
 
