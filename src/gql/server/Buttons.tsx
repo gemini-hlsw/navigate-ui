@@ -276,8 +276,12 @@ function classNameForState(
   if (!state) return { classes: '', icons: [], title };
 
   const icons = [
-    state.follow === 'FOLLOWING' ? Crosshairs : CrosshairsSlash,
-    state.parked === 'PARKED' ? Parking : ParkingSlash,
+    state.follow === 'FOLLOWING' ? (
+      <Crosshairs width="16px" key="follow" />
+    ) : (
+      <CrosshairsSlash width="16px" key="follow" />
+    ),
+    state.parked === 'PARKED' ? <Parking width="16px" key="parked" /> : <ParkingSlash width="16px" key="parked" />,
   ];
 
   if (!usedSubsystem) {

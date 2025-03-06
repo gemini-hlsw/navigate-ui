@@ -3,6 +3,8 @@ import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 import { useRef, useState } from 'react';
 
+import { CaretDown, CaretLeft, CaretRight, CaretUp } from '@/components/Icons';
+
 export default function MainControls({ canEdit }: { canEdit: boolean }) {
   const [slider, setSlider] = useState(10);
   const upKey = useRef(null);
@@ -67,7 +69,7 @@ export default function MainControls({ canEdit }: { canEdit: boolean }) {
           onClick={handleClick}
           ref={upKey}
           style={{ gridArea: 'gu' }}
-          icon="pi pi-caret-up"
+          icon={<CaretUp size="xl" />}
           aria-label="Bookmark"
         />
         <Button
@@ -75,7 +77,7 @@ export default function MainControls({ canEdit }: { canEdit: boolean }) {
           onClick={handleClick}
           ref={leftKey}
           style={{ gridArea: 'gl' }}
-          icon="pi pi-caret-left"
+          icon={<CaretLeft size="xl" />}
           aria-label="Bookmark"
         />
         <InputNumber
@@ -90,7 +92,7 @@ export default function MainControls({ canEdit }: { canEdit: boolean }) {
           onClick={handleClick}
           ref={rightKey}
           style={{ gridArea: 'gr' }}
-          icon="pi pi-caret-right"
+          icon={<CaretRight size="xl" />}
           aria-label="Bookmark"
         />
         <Button
@@ -98,7 +100,7 @@ export default function MainControls({ canEdit }: { canEdit: boolean }) {
           onClick={handleClick}
           ref={downKey}
           style={{ gridArea: 'gd' }}
-          icon="pi pi-caret-down"
+          icon={<CaretDown size="xl" />}
           aria-label="Bookmark"
         />
       </div>

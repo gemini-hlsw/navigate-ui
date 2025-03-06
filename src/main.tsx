@@ -1,5 +1,4 @@
 import './styles/main.scss';
-import 'primeicons/primeicons.css';
 
 import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';
 import { createClient } from '@gql/ApolloConfigs';

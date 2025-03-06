@@ -4,13 +4,14 @@ import { Button } from 'primereact/button';
 
 import { useCanEdit } from '@/components/atoms/auth';
 import { useSetSlewVisible } from '@/components/atoms/slew';
+import { Gear } from '@/components/Icons';
 
 export function Footer() {
   const canEdit = useCanEdit();
   const setSlewVisible = useSetSlewVisible();
   return (
     <div className="footer">
-      <TitleDropdown icon="cog">
+      <TitleDropdown icon={<Gear />}>
         <Button
           disabled={!canEdit}
           className="p-button-text"

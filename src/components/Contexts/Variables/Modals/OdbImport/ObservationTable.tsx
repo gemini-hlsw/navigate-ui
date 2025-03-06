@@ -8,6 +8,7 @@ import { InputText } from 'primereact/inputtext';
 import { MultiSelect } from 'primereact/multiselect';
 import { useCallback, useMemo, useState } from 'react';
 
+import { Search } from '@/components/Icons';
 import type { OdbObservationType } from '@/types';
 
 interface ParamsInterface {
@@ -105,7 +106,9 @@ export function ObservationTable({
       {selectedObservation?.title && <span>Selected Observation: {selectedObservation.title}</span>}
       {headerItems}
       <IconField iconPosition="left">
-        <InputIcon className="pi pi-search" />
+        <InputIcon>
+          <Search />
+        </InputIcon>
         <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Keyword Search" />
       </IconField>
       <MultiSelect

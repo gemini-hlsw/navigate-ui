@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { useState } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
+import { ChevronRight } from '@/components/Icons';
 
 import { Altair, GeMS } from './AdaptiveOptics';
 import { AgMechanism } from './AgMechanism';
@@ -35,7 +36,7 @@ export function Systems() {
         <AgMechanism canEdit={canEdit} />
         <BotSubsystems canEdit={canEdit} />
         <div className="expand-button" onClick={toggle}>
-          <i className="pi pi-angle-right"></i>
+          <ChevronRight />
         </div>
       </div>
       <div className="right">

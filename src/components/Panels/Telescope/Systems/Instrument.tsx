@@ -7,6 +7,7 @@ import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
 
 import { useSetImportInstrument } from '@/components/atoms/instrument';
+import { List } from '@/components/Icons';
 
 export function Instrument({ canEdit }: { canEdit: boolean }) {
   const configuration = useConfiguration().data?.configuration;
@@ -34,7 +35,7 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
   return (
     <div className="instrument">
       <Title title="Instrument">
-        <TitleDropdown icon="list">
+        <TitleDropdown icon={<List />}>
           <Button
             disabled={!canEdit}
             className="p-button-text"

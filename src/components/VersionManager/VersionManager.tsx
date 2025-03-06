@@ -8,6 +8,8 @@ import { useCallback, useEffect, useRef } from 'react';
 import { isNotNullish } from '@/Helpers/functions';
 import { useToast } from '@/Helpers/toast';
 
+import { RotateRight } from '../Icons';
+
 // 1 minute
 const pollInterval = 1000 * 60;
 
@@ -38,7 +40,7 @@ export function VersionManager() {
               <p>
                 A new {serverName} version is available ({newVersion}). Please reload the page.
               </p>
-              <Button icon="pi pi-refresh" label="Reload" onClick={() => window.location.reload()} />
+              <Button icon={<RotateRight />} label="Reload" onClick={() => window.location.reload()} />
             </div>
           ),
           sticky: true,
