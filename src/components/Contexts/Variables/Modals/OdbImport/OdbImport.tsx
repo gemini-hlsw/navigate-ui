@@ -57,6 +57,7 @@ export function OdbImport() {
         obsTitle: selectedObservation.title,
         obsSubtitle: selectedObservation.subtitle,
         obsInstrument: selectedObservation.instrument,
+        obsReference: selectedObservation.reference?.label,
       },
       async onCompleted() {
         setOdbVisible(false);

@@ -27,6 +27,12 @@ interface ColumnProps extends PColumnProps {
 }
 
 const defaultColumns: ColumnProps[] = [
+  {
+    field: 'reference.label',
+    header: 'Observation Reference',
+    filterPlaceholder: 'Filter Observation Reference',
+    visible: true,
+  },
   { field: 'id', header: 'ID', filterPlaceholder: 'Search ID', visible: true },
   { field: 'title', header: 'Title', filterPlaceholder: 'Search Title', visible: true },
   {
@@ -39,12 +45,6 @@ const defaultColumns: ColumnProps[] = [
     field: 'program.pi.user.profile.familyName',
     header: 'PI Family Name',
     filterPlaceholder: 'Filter Family Name',
-    visible: true,
-  },
-  {
-    field: 'reference.label',
-    header: 'Observation Reference',
-    filterPlaceholder: 'Filter Observation Reference',
     visible: true,
   },
   {
@@ -64,6 +64,7 @@ export function ObservationTable({
   headerItems,
 }: ParamsInterface) {
   const [filters, setFilters] = useState({
+    'reference.label': { value: '', matchMode: FilterMatchMode.CONTAINS },
     id: { value: '', matchMode: FilterMatchMode.CONTAINS },
     title: { value: '', matchMode: FilterMatchMode.CONTAINS },
     'program.pi.user.profile.givenName': {
