@@ -22,7 +22,7 @@ export function Indicators({ canEdit }: { canEdit: boolean }) {
       <Button className="under-construction" loading={loading} disabled={!canEdit} label="ODGW" />
       <AOWFS label="AOWFS" loading={loading} disabled={!canEdit} />
       <Button className="under-construction" loading={loading} disabled={!canEdit} label="Dome" />
-      <Button className="under-construction" loading={loading} disabled={!canEdit} label="Shuters" />
+      <Button className="under-construction" loading={loading} disabled={!canEdit} label="Shutters" />
       <Button className="under-construction" loading={loading} disabled={!canEdit} label="W VGate" />
       <Button className="under-construction" loading={loading} disabled={!canEdit} label="E VGate" />
     </div>
