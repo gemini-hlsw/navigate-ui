@@ -63,38 +63,21 @@ export function ObservationTable({
   setSelectedObservation,
   headerItems,
 }: ParamsInterface) {
-  const [filters, setFilters] = useState({
-    'reference.label': { value: '', matchMode: FilterMatchMode.CONTAINS },
-    id: { value: '', matchMode: FilterMatchMode.CONTAINS },
-    title: { value: '', matchMode: FilterMatchMode.CONTAINS },
-    'program.pi.user.profile.givenName': {
-      value: '',
-      matchMode: FilterMatchMode.CONTAINS,
+  const [columns, setColumns] = useState(defaultColumns);
+  const visibleColumns = useMemo(() => columns.filter((c) => c.visible), [columns]);
+  const filters = visibleColumns.reduce(
+    (acc, c) => ({ ...acc, [c.field]: { value: '', matchMode: FilterMatchMode.CONTAINS } }),
+    {
+      global: { value: '', matchMode: FilterMatchMode.CONTAINS },
     },
-    'program.pi.user.profile.familyName': {
-      value: '',
-      matchMode: FilterMatchMode.CONTAINS,
-    },
-    'targetEnvironment.firstScienceTarget.name': {
-      value: '',
-      matchMode: FilterMatchMode.CONTAINS,
-    },
-    global: { value: '', matchMode: FilterMatchMode.CONTAINS },
-  });
+  );
   const [globalFilterValue, setGlobalFilterValue] = useState('');
 
   function onGlobalFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
-    const _filters = { ...filters };
-    _filters.global.value = value;
-
-    setFilters(_filters);
+    filters.global.value = value;
     setGlobalFilterValue(value);
   }
-
-  const [columns, setColumns] = useState(defaultColumns);
-
-  const visibleColumns = useMemo(() => columns.filter((c) => c.visible), [columns]);
 
   const onMultiSelectChange = useCallback(
     (e: { value: ColumnProps[] }) =>
