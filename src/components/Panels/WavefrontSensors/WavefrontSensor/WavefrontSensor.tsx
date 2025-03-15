@@ -5,7 +5,7 @@ import { clsx } from 'clsx';
 import { Button } from 'primereact/button';
 import { Checkbox } from 'primereact/checkbox';
 import { Dropdown } from 'primereact/dropdown';
-import { useCallback, useState } from 'react';
+import { useCallback, useId, useState } from 'react';
 
 import { Camera, Play, Stop } from '@/components/Icons';
 
@@ -18,6 +18,7 @@ export default function WavefrontSensor({
   wfs: string;
   className?: string;
 }) {
+  const id = useId();
   const [freq, setFreq] = useState(100);
 
   let observeButton: React.ReactNode | undefined;
@@ -49,16 +50,30 @@ export default function WavefrontSensor({
           onChange={(e) => setFreq(e.value as number)}
         />
         {observeButton}
-        <span style={{ alignSelf: 'center', gridArea: 'g21' }}>Save</span>
-        <Checkbox disabled={!canEdit} style={{ gridArea: 'g22' }} checked={true} />
+        <label htmlFor={`save-${id}`} style={{ alignSelf: 'center', gridArea: 'g21' }}>
+          Save
+        </label>
+        <Checkbox
+          inputId={`save-${id}`}
+          className="under-construction"
+          disabled={!canEdit}
+          style={{ gridArea: 'g22' }}
+          checked={true}
+        />
         <Button
+          className="under-construction"
           disabled={!canEdit}
           style={{ gridArea: 'g23' }}
           icon={<Camera />}
           aria-label="Take Sky"
           tooltip="Take Sky"
         />
-        <Button disabled={!canEdit} style={{ gridArea: 'g3', width: '97%' }} label="Autoadjust" />
+        <Button
+          className="under-construction"
+          disabled={!canEdit}
+          style={{ gridArea: 'g3', width: '97%' }}
+          label="Autoadjust"
+        />
       </div>
     </div>
   );
