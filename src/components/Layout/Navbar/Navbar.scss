@@ -51,6 +51,13 @@
     > .observation {
       color: var(--primary-color-text);
     }
+
+    > .observation-ref {
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: bold;
+      margin-left: 10px;
+      color: var(--primary-color);
+    }
   }
 
   .main-title {

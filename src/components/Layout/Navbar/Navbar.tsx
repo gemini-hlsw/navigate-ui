@@ -84,6 +84,7 @@ export default function Navbar() {
       </div>
       <div className="center">
         {configuration?.obsTitle && <span className="observation">{configuration.obsTitle}</span>}
+        {configuration?.obsReference && <span className="observation-ref">{configuration.obsReference}</span>}
       </div>
       <div className="right">
         {!odbToken && (
