@@ -53,7 +53,7 @@
     "globals": "16.0.0",
     "graphql": "16.10.0",
     "husky": "9.1.7",
-    "jotai": "2.12.1",
+    "jotai": "2.12.2",
     "lint-staged": "15.4.3",
     "lucuma-core": "0.116.4",
     "lucuma-schemas": "0.122.2",
