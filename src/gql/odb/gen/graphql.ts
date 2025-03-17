@@ -2152,12 +2152,6 @@ export type Flamingos2Disperser =
 
 /** Flamingos2 Filter */
 export type Flamingos2Filter =
-  /** Flamingos2Filter Dark */
-  | 'DARK'
-  /** Flamingos2Filter F1056 (1.056 um) */
-  | 'F1056'
-  /** Flamingos2Filter F1063 (1.063 um) */
-  | 'F1063'
   /** Flamingos2Filter H (1.65 um) */
   | 'H'
   /** Flamingos2Filter HK (spectroscopic) */
@@ -2174,8 +2168,6 @@ export type Flamingos2Filter =
   | 'K_LONG'
   /** Flamingos2Filter K-short (2.15 um) */
   | 'K_SHORT'
-  /** Flamingos2Filter Open */
-  | 'OPEN'
   /** Flamingos2Filter Y (1.02 um) */
   | 'Y';
 
@@ -2751,8 +2743,6 @@ export type GmosNorthGrating =
   | 'B480_G5309'
   /** GmosNorthGrating B600_G5303 */
   | 'B600_G5303'
-  /** GmosNorthGrating B600_G5307 */
-  | 'B600_G5307'
   /** GmosNorthGrating B1200_G5301 */
   | 'B1200_G5301'
   /** GmosNorthGrating R150_G5306 */
@@ -4080,6 +4070,8 @@ export type Mutation = {
   updateObservations: UpdateObservationsResult;
   /** Updates existing observations times (execution and duration) */
   updateObservationsTimes: UpdateObservationsResult;
+  /** Updates existing program notes. */
+  updateProgramNotes: UpdateProgramNotesResult;
   /** Updates existing program users. */
   updateProgramUsers: UpdateProgramUsersResult;
   /** Updates existing programs. */
@@ -4318,6 +4310,11 @@ export type MutationUpdateObservationsArgs = {
 
 export type MutationUpdateObservationsTimesArgs = {
   input: UpdateObservationsTimesInput;
+};
+
+
+export type MutationUpdateProgramNotesArgs = {
+  input: UpdateProgramNotesInput;
 };
 
 
@@ -7764,6 +7761,41 @@ export type UpdateObservationsTimesInput = {
   WHERE?: InputMaybe<WhereObservation>;
   /** Set to `true` to include deleted observations. */
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/**
+ * Program note selection and update description.  Use `SET" to specify the changes,
+ * `WHERE` to select the programs to update, and `LIMIT` to control the size of the
+ * return value.
+ */
+export type UpdateProgramNotesInput = {
+  /**
+   * Caps the number of results returned to the given value (if additional notes
+   * match the WHERE clause they will be updated but not returned).
+   */
+  LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
+  /** Describes the program note values to modify. */
+  SET: ProgramNotePropertiesInput;
+  /**
+   * Filters the program notes to be updated according to those that match the
+   * given constraints.
+   */
+  WHERE?: InputMaybe<WhereProgramNote>;
+  /** Set to `true` to include deleted notes. */
+  includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/**
+ * The result of updating the selected notes, up to `LIMIT` or the maximum of
+ * (1000).  If `hasMore` is true, additional notes were modified and not included
+ * here.
+ */
+export type UpdateProgramNotesResult = {
+  __typename?: 'UpdateProgramNotesResult';
+  /** `true` when there were additional edits that were not returned. */
+  hasMore: Scalars['Boolean']['output'];
+  /** The edited notes, up to the specified LIMIT or the default maximum of 1000. */
+  programNotes: Array<ProgramNote>;
 };
 
 /**
