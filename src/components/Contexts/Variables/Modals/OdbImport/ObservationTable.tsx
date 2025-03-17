@@ -27,6 +27,12 @@ interface ColumnProps extends PColumnProps {
 }
 
 const defaultColumns: ColumnProps[] = [
+  {
+    field: 'reference.label',
+    header: 'Observation Reference',
+    filterPlaceholder: 'Filter Observation Reference',
+    visible: true,
+  },
   { field: 'id', header: 'ID', filterPlaceholder: 'Search ID', visible: true },
   { field: 'title', header: 'Title', filterPlaceholder: 'Search Title', visible: true },
   {
@@ -39,12 +45,6 @@ const defaultColumns: ColumnProps[] = [
     field: 'program.pi.user.profile.familyName',
     header: 'PI Family Name',
     filterPlaceholder: 'Filter Family Name',
-    visible: true,
-  },
-  {
-    field: 'reference.label',
-    header: 'Observation Reference',
-    filterPlaceholder: 'Filter Observation Reference',
     visible: true,
   },
   {
@@ -63,37 +63,24 @@ export function ObservationTable({
   setSelectedObservation,
   headerItems,
 }: ParamsInterface) {
-  const [filters, setFilters] = useState({
-    id: { value: '', matchMode: FilterMatchMode.CONTAINS },
-    title: { value: '', matchMode: FilterMatchMode.CONTAINS },
-    'program.pi.user.profile.givenName': {
-      value: '',
-      matchMode: FilterMatchMode.CONTAINS,
-    },
-    'program.pi.user.profile.familyName': {
-      value: '',
-      matchMode: FilterMatchMode.CONTAINS,
-    },
-    'targetEnvironment.firstScienceTarget.name': {
-      value: '',
-      matchMode: FilterMatchMode.CONTAINS,
-    },
-    global: { value: '', matchMode: FilterMatchMode.CONTAINS },
-  });
-  const [globalFilterValue, setGlobalFilterValue] = useState('');
-
-  function onGlobalFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const value = e.target.value;
-    const _filters = { ...filters };
-    _filters.global.value = value;
-
-    setFilters(_filters);
-    setGlobalFilterValue(value);
-  }
-
   const [columns, setColumns] = useState(defaultColumns);
-
   const visibleColumns = useMemo(() => columns.filter((c) => c.visible), [columns]);
+  const [globalFilterValue, setGlobalFilterValue] = useState('');
+  const filters = useMemo(
+    () =>
+      visibleColumns.reduce((acc, c) => ({ ...acc, [c.field]: { value: '', matchMode: FilterMatchMode.CONTAINS } }), {
+        global: { value: globalFilterValue, matchMode: FilterMatchMode.CONTAINS },
+      }),
+    [visibleColumns, globalFilterValue],
+  );
+
+  const onGlobalFilterChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      setGlobalFilterValue(value);
+    },
+    [setGlobalFilterValue],
+  );
 
   const onMultiSelectChange = useCallback(
     (e: { value: ColumnProps[] }) =>

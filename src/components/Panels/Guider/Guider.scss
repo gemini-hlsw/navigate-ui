@@ -202,9 +202,11 @@
       border-top: 1px solid var(--surface-border);
       > .body {
         padding: 4px;
-        display: flex;
+        display: grid;
         gap: 4px;
-        flex-direction: column;
+        // flex-direction: column;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(3, 22px);
       }
     }
 
@@ -255,7 +257,7 @@
 
     > .alarms {
       flex-shrink: 1;
-      min-height: 160px;
+      // min-height: 160px;
       border-top: 1px solid var(--surface-border);
       overflow-y: auto;
       > .body {

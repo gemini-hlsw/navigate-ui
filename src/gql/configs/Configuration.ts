@@ -18,6 +18,7 @@ export const GET_CONFIGURATION = graphql(`
       obsId
       obsInstrument
       obsSubtitle
+      obsReference
     }
   }
 `);
@@ -43,6 +44,7 @@ const UPDATE_CONFIGURATION = graphql(`
     $obsId: String
     $obsInstrument: String
     $obsSubtitle: String
+    $obsReference: String
   ) {
     updateConfiguration(
       pk: $pk
@@ -58,6 +60,7 @@ const UPDATE_CONFIGURATION = graphql(`
       obsId: $obsId
       obsInstrument: $obsInstrument
       obsSubtitle: $obsSubtitle
+      obsReference: $obsReference
     ) {
       pk
       site
@@ -72,6 +75,7 @@ const UPDATE_CONFIGURATION = graphql(`
       obsId
       obsInstrument
       obsSubtitle
+      obsReference
     }
   }
 `);
