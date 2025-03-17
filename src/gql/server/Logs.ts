@@ -1,9 +1,9 @@
 import { useSubscription } from '@apollo/client';
+import { type GetLogsQuery } from '@gql/configs/gen/graphql';
+import { useCreateLog, useLogs } from '@gql/configs/Logs';
 import { useState } from 'react';
-import { v4 as uuid } from 'uuid';
 
 import { graphql } from './gen';
-import type { LogMessage } from './gen/graphql';
 
 const LOGS_SUBSCRIPTION = graphql(`
   subscription logMessage {
@@ -17,22 +17,27 @@ const LOGS_SUBSCRIPTION = graphql(`
 `);
 
 export function useLogMessages() {
-  const MAX_LOG_DISPLAY = 20;
-  const [messages, setMessages] = useState<(LogMessage & { id: string })[]>([]);
+  const { data } = useLogs();
+  const [createLog] = useCreateLog();
+  const [messages, setMessages] = useState<GetLogsQuery['logs']>([]);
 
   const sub = useSubscription(LOGS_SUBSCRIPTION, {
     onData({ data }) {
       if (data.data?.logMessage) {
-        // Give each message a unique id
-        const msg = { id: uuid(), ...data.data.logMessage };
-        if (messages.length >= MAX_LOG_DISPLAY) {
-          setMessages([msg, ...messages.splice(0, MAX_LOG_DISPLAY - 1)]);
-        } else {
-          setMessages([msg, ...messages]);
-        }
+        void createLog({
+          variables: {
+            time: new Date(data.data.logMessage.timestamp).toISOString(),
+            message: data.data.logMessage.message,
+            level: data.data.logMessage.level,
+          },
+          onCompleted: (logs) => {
+            if (!logs.addLog) return;
+            setMessages(logs.addLog);
+          },
+        });
       }
     },
   });
 
-  return { ...sub, data: messages };
+  return { ...sub, data: messages?.length ? messages : data?.logs };
 }

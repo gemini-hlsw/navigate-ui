@@ -1,4 +1,3 @@
-import type { LogMessage } from '@gql/server/gen/graphql';
 import { useLogMessages } from '@gql/server/Logs';
 import { Title } from '@Shared/Title/Title';
 import { Column } from 'primereact/column';
@@ -11,8 +10,8 @@ export default function Logs() {
     <div className="logs-table">
       <Title title="Log" />
       <DataTable
-        value={messages}
-        rowClassName={(data: LogMessage) => data.level.toLowerCase()}
+        value={messages ?? []}
+        rowClassName={(data) => data?.level.toLowerCase()}
         stripedRows
         dataKey="id"
         emptyMessage="No logs yet"
@@ -21,7 +20,7 @@ export default function Logs() {
           e.stopPropagation();
         }}
       >
-        <Column field="timestamp" header="Timestamp" className="text-small"></Column>
+        <Column field="time" header="Timestamp" className="text-small"></Column>
         <Column field="message" header="Message" className="text-small"></Column>
       </DataTable>
     </div>
