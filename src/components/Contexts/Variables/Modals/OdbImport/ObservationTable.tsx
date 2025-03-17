@@ -65,19 +65,22 @@ export function ObservationTable({
 }: ParamsInterface) {
   const [columns, setColumns] = useState(defaultColumns);
   const visibleColumns = useMemo(() => columns.filter((c) => c.visible), [columns]);
-  const filters = visibleColumns.reduce(
-    (acc, c) => ({ ...acc, [c.field]: { value: '', matchMode: FilterMatchMode.CONTAINS } }),
-    {
-      global: { value: '', matchMode: FilterMatchMode.CONTAINS },
-    },
-  );
   const [globalFilterValue, setGlobalFilterValue] = useState('');
+  const filters = useMemo(
+    () =>
+      visibleColumns.reduce((acc, c) => ({ ...acc, [c.field]: { value: '', matchMode: FilterMatchMode.CONTAINS } }), {
+        global: { value: globalFilterValue, matchMode: FilterMatchMode.CONTAINS },
+      }),
+    [visibleColumns, globalFilterValue],
+  );
 
-  function onGlobalFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const value = e.target.value;
-    filters.global.value = value;
-    setGlobalFilterValue(value);
-  }
+  const onGlobalFilterChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      setGlobalFilterValue(value);
+    },
+    [setGlobalFilterValue],
+  );
 
   const onMultiSelectChange = useCallback(
     (e: { value: ColumnProps[] }) =>
