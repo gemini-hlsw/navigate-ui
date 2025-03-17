@@ -62,7 +62,6 @@ export function Alarm({
           disabled={disabledOrNoData}
           checked={enabled}
           onChange={onEnabledChange}
-          tooltip={enabled ? 'Mute' : 'Unmute'}
         />
       </div>
       <div className="body">
