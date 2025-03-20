@@ -19,7 +19,7 @@ export type Scalars = {
   /** AttachmentId id formatted as `a-[1-9a-f][0-9a-f]*` */
   AttachmentId: { input: string; output: string; }
   /** The `BigDecimal` scalar type represents signed fractional values with arbitrary precision. */
-  BigDecimal: { input: number; output: number; }
+  BigDecimal: { input: string|number; output: string|number; }
   /** Defines a unique ID for each Call for Proposals. */
   CallForProposalsId: { input: string; output: string; }
   ChronicleId: { input: string; output: string; }
@@ -82,8 +82,6 @@ export type Scalars = {
   PosShort: { input: number; output: number; }
   /** ProgramId id formatted as `p-[1-9a-f][0-9a-f]*` */
   ProgramId: { input: number; output: number; }
-  /** ProgramNoteId is formated as `n-[1-9a-f][0-9a-f]*` */
-  ProgramNoteId: { input: any; output: any; }
   /**
    * Program reference, formatted according to the type.  For example, a Science
    * Program has format G-YYYY[AB]-NNNN+-[CDLFSV]. For example, G-2024B-1234-Q
@@ -1373,19 +1371,6 @@ export type CreateProgramInput = {
   SET?: InputMaybe<ProgramPropertiesInput>;
 };
 
-export type CreateProgramNoteInput = {
-  SET: ProgramNotePropertiesInput;
-  programId?: InputMaybe<Scalars['ProgramId']['input']>;
-  programReference?: InputMaybe<Scalars['ProgramReferenceLabel']['input']>;
-  proposalReference?: InputMaybe<Scalars['ProposalReferenceLabel']['input']>;
-};
-
-export type CreateProgramNoteResult = {
-  __typename?: 'CreateProgramNoteResult';
-  /** The newly create program note. */
-  programNote: ProgramNote;
-};
-
 /** The result of creating a new program. */
 export type CreateProgramResult = {
   __typename?: 'CreateProgramResult';
@@ -2152,6 +2137,12 @@ export type Flamingos2Disperser =
 
 /** Flamingos2 Filter */
 export type Flamingos2Filter =
+  /** Flamingos2Filter Dark */
+  | 'DARK'
+  /** Flamingos2Filter F1056 (1.056 um) */
+  | 'F1056'
+  /** Flamingos2Filter F1063 (1.063 um) */
+  | 'F1063'
   /** Flamingos2Filter H (1.65 um) */
   | 'H'
   /** Flamingos2Filter HK (spectroscopic) */
@@ -2168,6 +2159,8 @@ export type Flamingos2Filter =
   | 'K_LONG'
   /** Flamingos2Filter K-short (2.15 um) */
   | 'K_SHORT'
+  /** Flamingos2Filter Open */
+  | 'OPEN'
   /** Flamingos2Filter Y (1.02 um) */
   | 'Y';
 
@@ -2743,6 +2736,8 @@ export type GmosNorthGrating =
   | 'B480_G5309'
   /** GmosNorthGrating B600_G5303 */
   | 'B600_G5303'
+  /** GmosNorthGrating B600_G5307 */
+  | 'B600_G5307'
   /** GmosNorthGrating B1200_G5301 */
   | 'B1200_G5301'
   /** GmosNorthGrating R150_G5306 */
@@ -3800,7 +3795,7 @@ export type ItcResult = {
   __typename?: 'ItcResult';
   exposureCount: Scalars['NonNegInt']['output'];
   exposureTime: TimeSpan;
-  signalToNoise?: Maybe<Scalars['SignalToNoise']['output']>;
+  signalToNoise: Scalars['SignalToNoise']['output'];
   targetId: Scalars['TargetId']['output'];
 };
 
@@ -4006,8 +4001,6 @@ export type Mutation = {
   createObservation: CreateObservationResult;
   /** Creates a new program according to provided properties */
   createProgram: CreateProgramResult;
-  /** Creates a new program note according to provided parameters */
-  createProgramNote: CreateProgramNoteResult;
   /** Creates a new proposal according to the provided properties */
   createProposal?: Maybe<CreateProposalResult>;
   /** Creates a new target according to the provided parameters.  Only one of sidereal or nonsidereal may be specified. */
@@ -4070,8 +4063,6 @@ export type Mutation = {
   updateObservations: UpdateObservationsResult;
   /** Updates existing observations times (execution and duration) */
   updateObservationsTimes: UpdateObservationsResult;
-  /** Updates existing program notes. */
-  updateProgramNotes: UpdateProgramNotesResult;
   /** Updates existing program users. */
   updateProgramUsers: UpdateProgramUsersResult;
   /** Updates existing programs. */
@@ -4165,11 +4156,6 @@ export type MutationCreateObservationArgs = {
 
 export type MutationCreateProgramArgs = {
   input: CreateProgramInput;
-};
-
-
-export type MutationCreateProgramNoteArgs = {
-  input: CreateProgramNoteInput;
 };
 
 
@@ -4310,11 +4296,6 @@ export type MutationUpdateObservationsArgs = {
 
 export type MutationUpdateObservationsTimesArgs = {
   input: UpdateObservationsTimesInput;
-};
-
-
-export type MutationUpdateProgramNotesArgs = {
-  input: UpdateProgramNotesInput;
 };
 
 
@@ -4894,8 +4875,6 @@ export type Program = {
   id: Scalars['ProgramId']['output'];
   /** Program name / title. */
   name?: Maybe<Scalars['NonEmptyString']['output']>;
-  /** Notes associated with the program, if any. */
-  notes: Array<ProgramNote>;
   /** All observations associated with the program. */
   observations: ObservationSelectResult;
   /** Principal Investigator */
@@ -4948,11 +4927,6 @@ export type ProgramGroupElementsArgs = {
 };
 
 
-export type ProgramNotesArgs = {
-  includeDeleted?: Scalars['Boolean']['input'];
-};
-
-
 export type ProgramObservationsArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
   OFFSET?: InputMaybe<Scalars['ObservationId']['input']>;
@@ -4972,49 +4946,6 @@ export type ProgramEdit = {
 
 export type ProgramEditInput = {
   programId?: InputMaybe<Scalars['ProgramId']['input']>;
-};
-
-/**
- * Program notes are arbitrary titled text messages associated with a particular
- * program.  Notes may be private, in which case they are only visible to staff.
- */
-export type ProgramNote = {
-  __typename?: 'ProgramNote';
-  /** DELETED or PRESENT */
-  existence: Existence;
-  /** This note's unique id. */
-  id: Scalars['ProgramNoteId']['output'];
-  /** Whether the note is only available to Gemini staff. */
-  isPrivate: Scalars['Boolean']['output'];
-  /** The program with which this note is associated. */
-  program: Program;
-  /** The note text, if any. */
-  text?: Maybe<Scalars['NonEmptyString']['output']>;
-  /** The note title. */
-  title: Scalars['NonEmptyString']['output'];
-};
-
-/** ProgramNote creation and edit properties. */
-export type ProgramNotePropertiesInput = {
-  /** Whether the program is considered deleted (defaults to PRESENT). */
-  existence?: InputMaybe<Existence>;
-  /**
-   * Whether the note is only available to Gemini staff.  This property is
-   * available only to Gemini staff and defaults to false.
-   */
-  isPrivate?: InputMaybe<Scalars['Boolean']['input']>;
-  /** The note text, if any. */
-  text?: InputMaybe<Scalars['NonEmptyString']['input']>;
-  /** The note title.  Required on creation. */
-  title?: InputMaybe<Scalars['NonEmptyString']['input']>;
-};
-
-export type ProgramNoteSelectResult = {
-  __typename?: 'ProgramNoteSelectResult';
-  /** `true` when there were additional matches that were not returned. */
-  hasMore: Scalars['Boolean']['output'];
-  /** Matching notes up to the return size limit of 1000. */
-  matches: Array<ProgramNote>;
 };
 
 /** Program properties */
@@ -5424,13 +5355,6 @@ export type Query = {
    * set, nothing will match.
    */
   program?: Maybe<Program>;
-  /** Selects the program note with the given id, if any. */
-  programNote?: Maybe<ProgramNote>;
-  /**
-   * Selects the first `LIMIT` matching program notes based on the provided `WHERE`
-   * parameter, if any.
-   */
-  programNotes: ProgramNoteSelectResult;
   /**
    * Selects the first `LIMIT` matching program users based on the provided `WHERE`
    * parameter, if any.
@@ -5560,19 +5484,6 @@ export type QueryProgramArgs = {
   programId?: InputMaybe<Scalars['ProgramId']['input']>;
   programReference?: InputMaybe<Scalars['ProgramReferenceLabel']['input']>;
   proposalReference?: InputMaybe<Scalars['ProposalReferenceLabel']['input']>;
-};
-
-
-export type QueryProgramNoteArgs = {
-  programNoteId: Scalars['ProgramNoteId']['input'];
-};
-
-
-export type QueryProgramNotesArgs = {
-  LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
-  OFFSET?: InputMaybe<Scalars['ProgramNoteId']['input']>;
-  WHERE?: InputMaybe<WhereProgramNote>;
-  includeDeleted?: Scalars['Boolean']['input'];
 };
 
 
@@ -7764,41 +7675,6 @@ export type UpdateObservationsTimesInput = {
 };
 
 /**
- * Program note selection and update description.  Use `SET" to specify the changes,
- * `WHERE` to select the programs to update, and `LIMIT` to control the size of the
- * return value.
- */
-export type UpdateProgramNotesInput = {
-  /**
-   * Caps the number of results returned to the given value (if additional notes
-   * match the WHERE clause they will be updated but not returned).
-   */
-  LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
-  /** Describes the program note values to modify. */
-  SET: ProgramNotePropertiesInput;
-  /**
-   * Filters the program notes to be updated according to those that match the
-   * given constraints.
-   */
-  WHERE?: InputMaybe<WhereProgramNote>;
-  /** Set to `true` to include deleted notes. */
-  includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
-/**
- * The result of updating the selected notes, up to `LIMIT` or the maximum of
- * (1000).  If `hasMore` is true, additional notes were modified and not included
- * here.
- */
-export type UpdateProgramNotesResult = {
-  __typename?: 'UpdateProgramNotesResult';
-  /** `true` when there were additional edits that were not returned. */
-  hasMore: Scalars['Boolean']['output'];
-  /** The edited notes, up to the specified LIMIT or the default maximum of 1000. */
-  programNotes: Array<ProgramNote>;
-};
-
-/**
  * Parameters for the 'updateProgramUsers' mutation.  Use 'SET' to specify the
  * changes, 'WHERE' to select the program users to update, and 'LIMIT' to control
  * the size of the return value.
@@ -9154,29 +9030,6 @@ export type WhereOrderProgramId = {
 };
 
 /**
- * Filters on equality or order comparisons of the program note Id. All supplied
- * criteria must match, but usually only one is selected.
- */
-export type WhereOrderProgramNoteId = {
-  /** Matches if the program note id is exactly the supplied value. */
-  EQ?: InputMaybe<Scalars['ProgramNoteId']['input']>;
-  /** Matches if the program note id is ordered after (>) the supplied value. */
-  GT?: InputMaybe<Scalars['ProgramNoteId']['input']>;
-  /** Matches if the program note id is ordered after or equal (>=) the supplied value. */
-  GTE?: InputMaybe<Scalars['ProgramNoteId']['input']>;
-  /** Matches if the program note id is any of the supplied options. */
-  IN?: InputMaybe<Array<Scalars['ProgramNoteId']['input']>>;
-  /** Matches if the program note is ordered before (<) the supplied value. */
-  LT?: InputMaybe<Scalars['ProgramNoteId']['input']>;
-  /** Matches if the program note id is ordered before or equal (<=) the supplied value. */
-  LTE?: InputMaybe<Scalars['ProgramNoteId']['input']>;
-  /** Matches if the program note id is not the supplied value. */
-  NEQ?: InputMaybe<Scalars['ProgramNoteId']['input']>;
-  /** Matches if the program note id is none of the supplied values. */
-  NIN?: InputMaybe<Array<Scalars['ProgramNoteId']['input']>>;
-};
-
-/**
  * Filters on equality or order comparisons of the program user id.  All supplied
  * criteria must match, but usually only one is selected.
  */
@@ -9432,35 +9285,6 @@ export type WhereProgram = {
   type?: InputMaybe<WhereEqProgramType>;
 };
 
-/** Program note filter options.  All specified items must match. */
-export type WhereProgramNote = {
-  /**
-   * A list of nested program note filters that all must match in order for the
-   * AND group as a whole to match.
-   */
-  AND?: InputMaybe<Array<WhereProgramNote>>;
-  /**
-   * A nested program note filter that must not match in order for the NOT itself
-   * to match.
-   */
-  NOT?: InputMaybe<WhereProgramNote>;
-  /**
-   * A list of nested program note filters where any one match causes the entire
-   * OR group as a whole to match.
-   */
-  OR?: InputMaybe<Array<WhereProgramNote>>;
-  /** Matches the program note ID. */
-  id?: InputMaybe<WhereOrderProgramNoteId>;
-  /** Matches the private status. */
-  isPrivate?: InputMaybe<WhereBoolean>;
-  /** Matches the program. */
-  program?: InputMaybe<WhereProgram>;
-  /** Mathces the program note text. */
-  text?: InputMaybe<WhereOptionString>;
-  /** Matches the program note title. */
-  title?: InputMaybe<WhereString>;
-};
-
 export type WhereProgramReference = {
   /** Matches if the program reference is not defined. */
   IS_NULL?: InputMaybe<Scalars['Boolean']['input']>;
@@ -9677,14 +9501,14 @@ export type GetObservationsByStateQueryVariables = Exact<{
 }>;
 
 
-export type GetObservationsByStateQuery = { __typename?: 'Query', observationsByWorkflowState: Array<{ __typename?: 'Observation', id: string, existence: Existence, title: string, subtitle?: string | null, instrument?: Instrument | null, reference?: { __typename?: 'ObservationReference', label: string } | null, program: { __typename?: 'Program', id: number, existence: Existence, name?: string | null, pi?: { __typename?: 'ProgramUser', user?: { __typename?: 'User', profile: { __typename?: 'UserProfile', givenName?: string | null, familyName?: string | null } } | null } | null }, targetEnvironment: { __typename?: 'TargetEnvironment', firstScienceTarget?: { __typename?: 'Target', id: string, existence: Existence, name: string, sidereal?: { __typename?: 'Sidereal', epoch: string, ra: { __typename?: 'RightAscension', hms: string, degrees: number }, dec: { __typename?: 'Declination', dms: string, degrees: number } } | null } | null } }> };
+export type GetObservationsByStateQuery = { __typename?: 'Query', observationsByWorkflowState: Array<{ __typename?: 'Observation', id: string, existence: Existence, title: string, subtitle?: string | null, instrument?: Instrument | null, reference?: { __typename?: 'ObservationReference', label: string } | null, program: { __typename?: 'Program', id: number, existence: Existence, name?: string | null, pi?: { __typename?: 'ProgramUser', user?: { __typename?: 'User', profile: { __typename?: 'UserProfile', givenName?: string | null, familyName?: string | null } } | null } | null }, targetEnvironment: { __typename?: 'TargetEnvironment', firstScienceTarget?: { __typename?: 'Target', id: string, existence: Existence, name: string, sidereal?: { __typename?: 'Sidereal', epoch: string, ra: { __typename?: 'RightAscension', hms: string, degrees: string|number }, dec: { __typename?: 'Declination', dms: string, degrees: string|number } } | null, sourceProfile: { __typename?: 'SourceProfile', point?: { __typename?: 'SpectralDefinitionIntegrated', bandNormalized?: { __typename?: 'BandNormalizedIntegrated', brightnesses: Array<{ __typename?: 'BandBrightnessIntegrated', band: Band, value: string|number }> } | null } | null } } | null } }> };
 
 export type GetGuideEnvironmentQueryVariables = Exact<{
   obsId: Scalars['ObservationId']['input'];
 }>;
 
 
-export type GetGuideEnvironmentQuery = { __typename?: 'Query', observation?: { __typename?: 'Observation', targetEnvironment: { __typename?: 'TargetEnvironment', guideEnvironment: { __typename?: 'GuideEnvironment', posAngle: { __typename?: 'Angle', hms: string, degrees: number }, guideTargets: Array<{ __typename?: 'GuideTarget', probe: GuideProbe, name: string, sidereal?: { __typename?: 'Sidereal', epoch: string, ra: { __typename?: 'RightAscension', hms: string, degrees: number }, dec: { __typename?: 'Declination', dms: string, degrees: number } } | null }> } } } | null };
+export type GetGuideEnvironmentQuery = { __typename?: 'Query', observation?: { __typename?: 'Observation', targetEnvironment: { __typename?: 'TargetEnvironment', guideEnvironment: { __typename?: 'GuideEnvironment', posAngle: { __typename?: 'Angle', hms: string, degrees: string|number }, guideTargets: Array<{ __typename?: 'GuideTarget', probe: GuideProbe, name: string, sidereal?: { __typename?: 'Sidereal', epoch: string, ra: { __typename?: 'RightAscension', hms: string, degrees: string|number }, dec: { __typename?: 'Declination', dms: string, degrees: string|number } } | null, sourceProfile: { __typename?: 'SourceProfile', point?: { __typename?: 'SpectralDefinitionIntegrated', bandNormalized?: { __typename?: 'BandNormalizedIntegrated', brightnesses: Array<{ __typename?: 'BandBrightnessIntegrated', band: Band, value: string|number }> } | null } | null } }> } } } | null };
 
 export type GetCentralWavelengthQueryVariables = Exact<{
   obsId: Scalars['ObservationId']['input'];
@@ -9694,6 +9518,6 @@ export type GetCentralWavelengthQueryVariables = Exact<{
 export type GetCentralWavelengthQuery = { __typename?: 'Query', observation?: { __typename?: 'Observation', execution: { __typename?: 'Execution', config?: { __typename?: 'ExecutionConfig', gmosNorth?: { __typename?: 'GmosNorthExecutionConfig', acquisition?: { __typename?: 'GmosNorthExecutionSequence', nextAtom: { __typename?: 'GmosNorthAtom', steps: Array<{ __typename?: 'GmosNorthStep', instrumentConfig: { __typename?: 'GmosNorthDynamic', centralWavelength?: { __typename?: 'Wavelength', nanometers: number } | null } }> } } | null } | null, gmosSouth?: { __typename?: 'GmosSouthExecutionConfig', acquisition?: { __typename?: 'GmosSouthExecutionSequence', nextAtom: { __typename?: 'GmosSouthAtom', steps: Array<{ __typename?: 'GmosSouthStep', instrumentConfig: { __typename?: 'GmosSouthDynamic', centralWavelength?: { __typename?: 'Wavelength', nanometers: number } | null } }> } } | null } | null } | null } } | null };
 
 
-export const GetObservationsByStateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getObservationsByState"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"states"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ObservationWorkflowState"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"site"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Site"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"date"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Date"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"observationsByWorkflowState"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"states"},"value":{"kind":"Variable","name":{"kind":"Name","value":"states"}}},{"kind":"Argument","name":{"kind":"Name","value":"WHERE"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"site"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"EQ"},"value":{"kind":"Variable","name":{"kind":"Name","value":"site"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"program"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"AND"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"activeStart"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"LTE"},"value":{"kind":"Variable","name":{"kind":"Name","value":"date"}}}]}}]},{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"activeEnd"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"GTE"},"value":{"kind":"Variable","name":{"kind":"Name","value":"date"}}}]}}]}]}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"reference"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"IS_NULL"},"value":{"kind":"BooleanValue","value":false}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"existence"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"subtitle"}},{"kind":"Field","name":{"kind":"Name","value":"instrument"}},{"kind":"Field","name":{"kind":"Name","value":"reference"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"label"}}]}},{"kind":"Field","name":{"kind":"Name","value":"program"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"existence"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"pi"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"givenName"}},{"kind":"Field","name":{"kind":"Name","value":"familyName"}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"targetEnvironment"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"firstScienceTarget"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"existence"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"sidereal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"epoch"}},{"kind":"Field","name":{"kind":"Name","value":"ra"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}},{"kind":"Field","name":{"kind":"Name","value":"dec"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"dms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetObservationsByStateQuery, GetObservationsByStateQueryVariables>;
-export const GetGuideEnvironmentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getGuideEnvironment"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"obsId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ObservationId"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"observation"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"observationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"obsId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"targetEnvironment"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guideEnvironment"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"posAngle"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guideTargets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"probe"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"sidereal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"epoch"}},{"kind":"Field","name":{"kind":"Name","value":"ra"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}},{"kind":"Field","name":{"kind":"Name","value":"dec"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"dms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetGuideEnvironmentQuery, GetGuideEnvironmentQueryVariables>;
+export const GetObservationsByStateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getObservationsByState"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"states"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ObservationWorkflowState"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"site"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Site"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"date"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Date"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"observationsByWorkflowState"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"states"},"value":{"kind":"Variable","name":{"kind":"Name","value":"states"}}},{"kind":"Argument","name":{"kind":"Name","value":"WHERE"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"site"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"EQ"},"value":{"kind":"Variable","name":{"kind":"Name","value":"site"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"program"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"AND"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"activeStart"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"LTE"},"value":{"kind":"Variable","name":{"kind":"Name","value":"date"}}}]}}]},{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"activeEnd"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"GTE"},"value":{"kind":"Variable","name":{"kind":"Name","value":"date"}}}]}}]}]}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"reference"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"IS_NULL"},"value":{"kind":"BooleanValue","value":false}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"existence"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"subtitle"}},{"kind":"Field","name":{"kind":"Name","value":"instrument"}},{"kind":"Field","name":{"kind":"Name","value":"reference"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"label"}}]}},{"kind":"Field","name":{"kind":"Name","value":"program"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"existence"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"pi"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"givenName"}},{"kind":"Field","name":{"kind":"Name","value":"familyName"}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"targetEnvironment"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"firstScienceTarget"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"existence"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"sidereal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"epoch"}},{"kind":"Field","name":{"kind":"Name","value":"ra"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}},{"kind":"Field","name":{"kind":"Name","value":"dec"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"dms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"sourceProfile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"point"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bandNormalized"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"brightnesses"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"band"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetObservationsByStateQuery, GetObservationsByStateQueryVariables>;
+export const GetGuideEnvironmentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getGuideEnvironment"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"obsId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ObservationId"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"observation"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"observationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"obsId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"targetEnvironment"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guideEnvironment"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"posAngle"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guideTargets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"probe"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"sidereal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"epoch"}},{"kind":"Field","name":{"kind":"Name","value":"ra"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}},{"kind":"Field","name":{"kind":"Name","value":"dec"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"dms"}},{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"sourceProfile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"point"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bandNormalized"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"brightnesses"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"band"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}}]}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetGuideEnvironmentQuery, GetGuideEnvironmentQueryVariables>;
 export const GetCentralWavelengthDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getCentralWavelength"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"obsId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ObservationId"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"observation"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"observationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"obsId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"execution"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"config"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gmosNorth"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"acquisition"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nextAtom"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"steps"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"instrumentConfig"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"centralWavelength"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nanometers"}}]}}]}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"gmosSouth"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"acquisition"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nextAtom"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"steps"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"instrumentConfig"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"centralWavelength"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nanometers"}}]}}]}}]}}]}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetCentralWavelengthQuery, GetCentralWavelengthQueryVariables>;

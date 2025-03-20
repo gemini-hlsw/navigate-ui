@@ -14,7 +14,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
-  BigDecimal: { input: number; output: number; }
+  BigDecimal: { input: string|number; output: string|number; }
   DmsString: { input: string; output: string; }
   EpochString: { input: string; output: string; }
   HmsString: { input: string; output: string; }
