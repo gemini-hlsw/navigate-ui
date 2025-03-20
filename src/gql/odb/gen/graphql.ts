@@ -82,6 +82,8 @@ export type Scalars = {
   PosShort: { input: number; output: number; }
   /** ProgramId id formatted as `p-[1-9a-f][0-9a-f]*` */
   ProgramId: { input: number; output: number; }
+  /** ProgramNoteId is formated as `n-[1-9a-f][0-9a-f]*` */
+  ProgramNoteId: { input: any; output: any; }
   /**
    * Program reference, formatted according to the type.  For example, a Science
    * Program has format G-YYYY[AB]-NNNN+-[CDLFSV]. For example, G-2024B-1234-Q
@@ -1371,6 +1373,19 @@ export type CreateProgramInput = {
   SET?: InputMaybe<ProgramPropertiesInput>;
 };
 
+export type CreateProgramNoteInput = {
+  SET: ProgramNotePropertiesInput;
+  programId?: InputMaybe<Scalars['ProgramId']['input']>;
+  programReference?: InputMaybe<Scalars['ProgramReferenceLabel']['input']>;
+  proposalReference?: InputMaybe<Scalars['ProposalReferenceLabel']['input']>;
+};
+
+export type CreateProgramNoteResult = {
+  __typename?: 'CreateProgramNoteResult';
+  /** The newly create program note. */
+  programNote: ProgramNote;
+};
+
 /** The result of creating a new program. */
 export type CreateProgramResult = {
   __typename?: 'CreateProgramResult';
@@ -2137,12 +2152,6 @@ export type Flamingos2Disperser =
 
 /** Flamingos2 Filter */
 export type Flamingos2Filter =
-  /** Flamingos2Filter Dark */
-  | 'DARK'
-  /** Flamingos2Filter F1056 (1.056 um) */
-  | 'F1056'
-  /** Flamingos2Filter F1063 (1.063 um) */
-  | 'F1063'
   /** Flamingos2Filter H (1.65 um) */
   | 'H'
   /** Flamingos2Filter HK (spectroscopic) */
@@ -2159,8 +2168,6 @@ export type Flamingos2Filter =
   | 'K_LONG'
   /** Flamingos2Filter K-short (2.15 um) */
   | 'K_SHORT'
-  /** Flamingos2Filter Open */
-  | 'OPEN'
   /** Flamingos2Filter Y (1.02 um) */
   | 'Y';
 
@@ -2736,8 +2743,6 @@ export type GmosNorthGrating =
   | 'B480_G5309'
   /** GmosNorthGrating B600_G5303 */
   | 'B600_G5303'
-  /** GmosNorthGrating B600_G5307 */
-  | 'B600_G5307'
   /** GmosNorthGrating B1200_G5301 */
   | 'B1200_G5301'
   /** GmosNorthGrating R150_G5306 */
@@ -3795,7 +3800,7 @@ export type ItcResult = {
   __typename?: 'ItcResult';
   exposureCount: Scalars['NonNegInt']['output'];
   exposureTime: TimeSpan;
-  signalToNoise: Scalars['SignalToNoise']['output'];
+  signalToNoise?: Maybe<Scalars['SignalToNoise']['output']>;
   targetId: Scalars['TargetId']['output'];
 };
 
@@ -4001,6 +4006,8 @@ export type Mutation = {
   createObservation: CreateObservationResult;
   /** Creates a new program according to provided properties */
   createProgram: CreateProgramResult;
+  /** Creates a new program note according to provided parameters */
+  createProgramNote: CreateProgramNoteResult;
   /** Creates a new proposal according to the provided properties */
   createProposal?: Maybe<CreateProposalResult>;
   /** Creates a new target according to the provided parameters.  Only one of sidereal or nonsidereal may be specified. */
@@ -4063,6 +4070,8 @@ export type Mutation = {
   updateObservations: UpdateObservationsResult;
   /** Updates existing observations times (execution and duration) */
   updateObservationsTimes: UpdateObservationsResult;
+  /** Updates existing program notes. */
+  updateProgramNotes: UpdateProgramNotesResult;
   /** Updates existing program users. */
   updateProgramUsers: UpdateProgramUsersResult;
   /** Updates existing programs. */
@@ -4156,6 +4165,11 @@ export type MutationCreateObservationArgs = {
 
 export type MutationCreateProgramArgs = {
   input: CreateProgramInput;
+};
+
+
+export type MutationCreateProgramNoteArgs = {
+  input: CreateProgramNoteInput;
 };
 
 
@@ -4296,6 +4310,11 @@ export type MutationUpdateObservationsArgs = {
 
 export type MutationUpdateObservationsTimesArgs = {
   input: UpdateObservationsTimesInput;
+};
+
+
+export type MutationUpdateProgramNotesArgs = {
+  input: UpdateProgramNotesInput;
 };
 
 
@@ -4875,6 +4894,8 @@ export type Program = {
   id: Scalars['ProgramId']['output'];
   /** Program name / title. */
   name?: Maybe<Scalars['NonEmptyString']['output']>;
+  /** Notes associated with the program, if any. */
+  notes: Array<ProgramNote>;
   /** All observations associated with the program. */
   observations: ObservationSelectResult;
   /** Principal Investigator */
@@ -4927,6 +4948,11 @@ export type ProgramGroupElementsArgs = {
 };
 
 
+export type ProgramNotesArgs = {
+  includeDeleted?: Scalars['Boolean']['input'];
+};
+
+
 export type ProgramObservationsArgs = {
   LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
   OFFSET?: InputMaybe<Scalars['ObservationId']['input']>;
@@ -4946,6 +4972,49 @@ export type ProgramEdit = {
 
 export type ProgramEditInput = {
   programId?: InputMaybe<Scalars['ProgramId']['input']>;
+};
+
+/**
+ * Program notes are arbitrary titled text messages associated with a particular
+ * program.  Notes may be private, in which case they are only visible to staff.
+ */
+export type ProgramNote = {
+  __typename?: 'ProgramNote';
+  /** DELETED or PRESENT */
+  existence: Existence;
+  /** This note's unique id. */
+  id: Scalars['ProgramNoteId']['output'];
+  /** Whether the note is only available to Gemini staff. */
+  isPrivate: Scalars['Boolean']['output'];
+  /** The program with which this note is associated. */
+  program: Program;
+  /** The note text, if any. */
+  text?: Maybe<Scalars['NonEmptyString']['output']>;
+  /** The note title. */
+  title: Scalars['NonEmptyString']['output'];
+};
+
+/** ProgramNote creation and edit properties. */
+export type ProgramNotePropertiesInput = {
+  /** Whether the program is considered deleted (defaults to PRESENT). */
+  existence?: InputMaybe<Existence>;
+  /**
+   * Whether the note is only available to Gemini staff.  This property is
+   * available only to Gemini staff and defaults to false.
+   */
+  isPrivate?: InputMaybe<Scalars['Boolean']['input']>;
+  /** The note text, if any. */
+  text?: InputMaybe<Scalars['NonEmptyString']['input']>;
+  /** The note title.  Required on creation. */
+  title?: InputMaybe<Scalars['NonEmptyString']['input']>;
+};
+
+export type ProgramNoteSelectResult = {
+  __typename?: 'ProgramNoteSelectResult';
+  /** `true` when there were additional matches that were not returned. */
+  hasMore: Scalars['Boolean']['output'];
+  /** Matching notes up to the return size limit of 1000. */
+  matches: Array<ProgramNote>;
 };
 
 /** Program properties */
@@ -5355,6 +5424,13 @@ export type Query = {
    * set, nothing will match.
    */
   program?: Maybe<Program>;
+  /** Selects the program note with the given id, if any. */
+  programNote?: Maybe<ProgramNote>;
+  /**
+   * Selects the first `LIMIT` matching program notes based on the provided `WHERE`
+   * parameter, if any.
+   */
+  programNotes: ProgramNoteSelectResult;
   /**
    * Selects the first `LIMIT` matching program users based on the provided `WHERE`
    * parameter, if any.
@@ -5484,6 +5560,19 @@ export type QueryProgramArgs = {
   programId?: InputMaybe<Scalars['ProgramId']['input']>;
   programReference?: InputMaybe<Scalars['ProgramReferenceLabel']['input']>;
   proposalReference?: InputMaybe<Scalars['ProposalReferenceLabel']['input']>;
+};
+
+
+export type QueryProgramNoteArgs = {
+  programNoteId: Scalars['ProgramNoteId']['input'];
+};
+
+
+export type QueryProgramNotesArgs = {
+  LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
+  OFFSET?: InputMaybe<Scalars['ProgramNoteId']['input']>;
+  WHERE?: InputMaybe<WhereProgramNote>;
+  includeDeleted?: Scalars['Boolean']['input'];
 };
 
 
@@ -7675,6 +7764,41 @@ export type UpdateObservationsTimesInput = {
 };
 
 /**
+ * Program note selection and update description.  Use `SET" to specify the changes,
+ * `WHERE` to select the programs to update, and `LIMIT` to control the size of the
+ * return value.
+ */
+export type UpdateProgramNotesInput = {
+  /**
+   * Caps the number of results returned to the given value (if additional notes
+   * match the WHERE clause they will be updated but not returned).
+   */
+  LIMIT?: InputMaybe<Scalars['NonNegInt']['input']>;
+  /** Describes the program note values to modify. */
+  SET: ProgramNotePropertiesInput;
+  /**
+   * Filters the program notes to be updated according to those that match the
+   * given constraints.
+   */
+  WHERE?: InputMaybe<WhereProgramNote>;
+  /** Set to `true` to include deleted notes. */
+  includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/**
+ * The result of updating the selected notes, up to `LIMIT` or the maximum of
+ * (1000).  If `hasMore` is true, additional notes were modified and not included
+ * here.
+ */
+export type UpdateProgramNotesResult = {
+  __typename?: 'UpdateProgramNotesResult';
+  /** `true` when there were additional edits that were not returned. */
+  hasMore: Scalars['Boolean']['output'];
+  /** The edited notes, up to the specified LIMIT or the default maximum of 1000. */
+  programNotes: Array<ProgramNote>;
+};
+
+/**
  * Parameters for the 'updateProgramUsers' mutation.  Use 'SET' to specify the
  * changes, 'WHERE' to select the program users to update, and 'LIMIT' to control
  * the size of the return value.
@@ -9030,6 +9154,29 @@ export type WhereOrderProgramId = {
 };
 
 /**
+ * Filters on equality or order comparisons of the program note Id. All supplied
+ * criteria must match, but usually only one is selected.
+ */
+export type WhereOrderProgramNoteId = {
+  /** Matches if the program note id is exactly the supplied value. */
+  EQ?: InputMaybe<Scalars['ProgramNoteId']['input']>;
+  /** Matches if the program note id is ordered after (>) the supplied value. */
+  GT?: InputMaybe<Scalars['ProgramNoteId']['input']>;
+  /** Matches if the program note id is ordered after or equal (>=) the supplied value. */
+  GTE?: InputMaybe<Scalars['ProgramNoteId']['input']>;
+  /** Matches if the program note id is any of the supplied options. */
+  IN?: InputMaybe<Array<Scalars['ProgramNoteId']['input']>>;
+  /** Matches if the program note is ordered before (<) the supplied value. */
+  LT?: InputMaybe<Scalars['ProgramNoteId']['input']>;
+  /** Matches if the program note id is ordered before or equal (<=) the supplied value. */
+  LTE?: InputMaybe<Scalars['ProgramNoteId']['input']>;
+  /** Matches if the program note id is not the supplied value. */
+  NEQ?: InputMaybe<Scalars['ProgramNoteId']['input']>;
+  /** Matches if the program note id is none of the supplied values. */
+  NIN?: InputMaybe<Array<Scalars['ProgramNoteId']['input']>>;
+};
+
+/**
  * Filters on equality or order comparisons of the program user id.  All supplied
  * criteria must match, but usually only one is selected.
  */
@@ -9283,6 +9430,35 @@ export type WhereProgram = {
   reference?: InputMaybe<WhereProgramReference>;
   /** Mathces the program type. */
   type?: InputMaybe<WhereEqProgramType>;
+};
+
+/** Program note filter options.  All specified items must match. */
+export type WhereProgramNote = {
+  /**
+   * A list of nested program note filters that all must match in order for the
+   * AND group as a whole to match.
+   */
+  AND?: InputMaybe<Array<WhereProgramNote>>;
+  /**
+   * A nested program note filter that must not match in order for the NOT itself
+   * to match.
+   */
+  NOT?: InputMaybe<WhereProgramNote>;
+  /**
+   * A list of nested program note filters where any one match causes the entire
+   * OR group as a whole to match.
+   */
+  OR?: InputMaybe<Array<WhereProgramNote>>;
+  /** Matches the program note ID. */
+  id?: InputMaybe<WhereOrderProgramNoteId>;
+  /** Matches the private status. */
+  isPrivate?: InputMaybe<WhereBoolean>;
+  /** Matches the program. */
+  program?: InputMaybe<WhereProgram>;
+  /** Mathces the program note text. */
+  text?: InputMaybe<WhereOptionString>;
+  /** Matches the program note title. */
+  title?: InputMaybe<WhereString>;
 };
 
 export type WhereProgramReference = {
