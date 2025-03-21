@@ -25,7 +25,7 @@ export function Telescope({ prevPanel, nextPanel }: { prevPanel: () => void; nex
       <TelescopeTitle prevPanel={prevPanel} nextPanel={nextPanel} />
       <div className="body">
         <div className="base-target">
-          <Title title={selectedTarget ? `Base Target: ${selectedTarget.name}` : 'Base Target'} />
+          <Title title={selectedTarget ? `Base Target: ${selectedTarget.name}` : 'No Base Target Selected'} />
           <TargetList targets={baseTargets} />
         </div>
         <GuiderTargets />

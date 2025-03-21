@@ -27,6 +27,7 @@ const GET_TARGETS = graphql(`
         degrees
         dms
       }
+      magnitude
       epoch
       type
       wavelength
@@ -61,6 +62,7 @@ const UPDATE_TARGET = graphql(`
     $name: String
     $coord1: Float
     $coord2: Float
+    $magnitude: Float
     $epoch: String
     $type: TargetType
     $wavelength: Int
@@ -71,6 +73,7 @@ const UPDATE_TARGET = graphql(`
       name: $name
       coord1: $coord1
       coord2: $coord2
+      magnitude: $magnitude
       epoch: $epoch
       type: $type
       wavelength: $wavelength
@@ -94,6 +97,7 @@ const UPDATE_TARGET = graphql(`
         degrees
         dms
       }
+      magnitude
       epoch
       type
       wavelength
@@ -118,6 +122,7 @@ const CREATE_TARGET = graphql(`
     $az: Float
     $dec: Float
     $el: Float
+    $magnitude: Float
     $epoch: String
     $type: TargetType!
     $wavelength: Int
@@ -129,6 +134,7 @@ const CREATE_TARGET = graphql(`
       az: $az
       dec: $dec
       el: $el
+      magnitude: $magnitude
       epoch: $epoch
       type: $type
       wavelength: $wavelength
@@ -152,6 +158,7 @@ const CREATE_TARGET = graphql(`
         degrees
         dms
       }
+      magnitude
       epoch
       type
       wavelength
@@ -191,6 +198,7 @@ const REMOVE_AND_CREATE_BASE_TARGETS = graphql(`
         degrees
         dms
       }
+      magnitude
       epoch
       type
       wavelength
@@ -228,6 +236,7 @@ const REMOVE_AND_CREATE_WFS_TARGETS = graphql(`
         degrees
         dms
       }
+      magnitude
       epoch
       type
       wavelength

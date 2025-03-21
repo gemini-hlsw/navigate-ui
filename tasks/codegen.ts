@@ -6,7 +6,7 @@ import type { CodegenConfig } from '@graphql-codegen/cli';
 const scalars = {
   AtomId: 'string',
   AttachmentId: 'string',
-  BigDecimal: 'number',
+  BigDecimal: 'string|number',
   CallForProposalsId: 'string',
   ChronicleId: 'string',
   ConfigurationRequestId: 'string',
