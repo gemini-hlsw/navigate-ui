@@ -12,7 +12,7 @@ export default function Logs() {
       <Title title="Log" />
       <DataTable
         value={messages}
-        rowClassName={(data: LogMessage) => data.level.toLowerCase()}
+        rowClassName={(data: LogMessage) => data?.level?.toLowerCase() ?? ''}
         stripedRows
         dataKey="id"
         emptyMessage="No logs yet"
