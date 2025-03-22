@@ -96,8 +96,8 @@ importers:
         specifier: 15.5.0
         version: 15.5.0
       lucuma-core:
-        specifier: 0.118.0
-        version: 0.118.0
+        specifier: 0.119.0
+        version: 0.119.0
       lucuma-schemas:
         specifier: 0.123.1
         version: 0.123.1
@@ -2669,8 +2669,8 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
-  lucuma-core@0.118.0:
-    resolution: {integrity: sha512-auJ82Sh33Ru4Y5F3Z6+CUEP5WR7aDIbDoCYTv2uakVBR4C/eXrY+BYZj5AJSBrbRq1lO41aN4vjvLMz+HwUlsQ==}
+  lucuma-core@0.119.0:
+    resolution: {integrity: sha512-kZsCbyEfoBHEaonidJCU8Qjm1lj/YBGMrAxSNKcIWJcd5UA5cJJPPAj42OExhytNL+BatqTUSpMauSE+Ko2Y9g==}
 
   lucuma-schemas@0.123.1:
     resolution: {integrity: sha512-gy/pPxCDzlv4gjqvlu+aJUkryIjOVMz0fUDlkWjTYi8SKuJcltojh3HjxBTxU75CKeTmyRAYGm04VeGMqP2ejg==}
@@ -6712,7 +6712,7 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  lucuma-core@0.118.0: {}
+  lucuma-core@0.119.0: {}
 
   lucuma-schemas@0.123.1: {}
 
