@@ -50,7 +50,9 @@ export function createClient(env: Environment) {
 
   const odbLink = new HttpLink({ uri: withAbsoluteUri(env.odbURI) });
 
-  const wsLink = new WebSocketLink(new SubscriptionClient(withAbsoluteUri(env.navigateServerWsURI, true)));
+  const wsLink = new WebSocketLink(
+    new SubscriptionClient(withAbsoluteUri(env.navigateServerWsURI, true), { reconnect: true }),
+  );
 
   return new ApolloClient({
     name: 'navigate-ui',
