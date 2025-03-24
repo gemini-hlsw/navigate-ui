@@ -51,6 +51,16 @@ const GET_OBSERVATIONS_BY_STATE = graphql(`
               degrees
             }
           }
+          sourceProfile {
+            point {
+              bandNormalized {
+                brightnesses {
+                  band
+                  value
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -90,6 +100,16 @@ const GET_GUIDE_ENVIRONMENT = graphql(`
               dec {
                 dms
                 degrees
+              }
+            }
+            sourceProfile {
+              point {
+                bandNormalized {
+                  brightnesses {
+                    band
+                    value
+                  }
+                }
               }
             }
           }

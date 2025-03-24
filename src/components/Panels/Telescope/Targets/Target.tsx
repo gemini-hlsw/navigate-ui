@@ -88,6 +88,8 @@ export function Target({
           <span>RA</span>
           <span className="text-right">{target.dec?.dms}</span>
           <span>Dec</span>
+          <span className="text-right">{target.magnitude ? target.magnitude.toFixed(2) : ''}</span>
+          <span>Mag</span>
         </div>
       </li>
     );

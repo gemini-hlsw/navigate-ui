@@ -1,7 +1,7 @@
 import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
 import { useRotator, useUpdateRotator } from '@gql/configs/Rotator';
 import { useRemoveAndCreateBaseTargets, useRemoveAndCreateWfsTargets } from '@gql/configs/Target';
-import type { GetCentralWavelengthQuery, GetGuideEnvironmentQuery } from '@gql/odb/gen/graphql';
+import type { GetCentralWavelengthQuery, GetGuideEnvironmentQuery, SourceProfile } from '@gql/odb/gen/graphql';
 import { useGetCentralWavelength, useGetGuideEnvironment, useGetObservationsByState } from '@gql/odb/Observation';
 import { dateToLocalObservingNight } from 'lucuma-core';
 import { Button } from 'primereact/button';
@@ -77,9 +77,18 @@ export function OdbImport() {
               {
                 id: selectedObservation.targetEnvironment?.firstScienceTarget?.id,
                 name: selectedObservation.targetEnvironment?.firstScienceTarget?.name,
-                coord1: selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.ra.degrees,
-                coord2: selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.dec.degrees,
+                coord1:
+                  typeof selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.ra.degrees === 'string'
+                    ? parseFloat(selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.ra.degrees)
+                    : selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.ra.degrees,
+                coord2:
+                  typeof selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.dec.degrees === 'string'
+                    ? parseFloat(selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.dec.degrees)
+                    : selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.dec.degrees,
                 epoch: selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.epoch,
+                magnitude: extractMagnitude(
+                  selectedObservation.targetEnvironment?.firstScienceTarget?.sourceProfile as SourceProfile,
+                ),
                 type: 'SCIENCE',
                 wavelength: wavelength,
               },
@@ -126,7 +135,10 @@ export function OdbImport() {
             updateRotator({
               variables: {
                 pk: rotator?.pk,
-                angle: guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees ?? 0,
+                angle:
+                  typeof guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees === 'string'
+                    ? parseFloat(guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees)
+                    : (guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees ?? 0),
                 tracking: 'TRACKING',
               },
             }),
@@ -201,6 +213,15 @@ export function OdbImport() {
   );
 }
 
+function extractMagnitude(sourceProfile: SourceProfile | undefined) {
+  if (!sourceProfile?.point?.bandNormalized?.brightnesses.length) return null;
+
+  const brigthness =
+    sourceProfile.point?.bandNormalized?.brightnesses.find((b) => b.band === 'SLOAN_G') ??
+    sourceProfile.point?.bandNormalized?.brightnesses[0];
+  return typeof brigthness.value === 'string' ? parseFloat(brigthness.value) : brigthness.value;
+}
+
 function extractGuideTargets(data: GetGuideEnvironmentQuery | undefined) {
   return (data?.observation?.targetEnvironment.guideEnvironment.guideTargets ?? []).reduce<
     Record<'oiwfs' | 'pwfs1' | 'pwfs2', TargetInput[]>
@@ -209,8 +230,11 @@ function extractGuideTargets(data: GetGuideEnvironmentQuery | undefined) {
       const auxTarget: Omit<TargetInput, 'type'> = {
         name: t.name,
         epoch: t.sidereal?.epoch,
-        coord1: t.sidereal?.ra.degrees,
-        coord2: t.sidereal?.dec.degrees,
+        coord1:
+          typeof t.sidereal?.ra.degrees === 'string' ? parseFloat(t.sidereal?.ra.degrees) : t.sidereal?.ra.degrees,
+        coord2:
+          typeof t.sidereal?.dec.degrees === 'string' ? parseFloat(t.sidereal?.dec.degrees) : t.sidereal?.dec.degrees,
+        magnitude: extractMagnitude(t.sourceProfile as SourceProfile),
       };
       if (t.probe === 'GMOS_OIWFS') {
         acc.oiwfs.push({ ...auxTarget, type: 'OIWFS' });
