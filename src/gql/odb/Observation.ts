@@ -1,7 +1,5 @@
 import { useLazyQuery } from '@apollo/client';
 
-import { useOdbTokenValue } from '@/components/atoms/odb';
-
 import { graphql } from './gen';
 
 const GET_OBSERVATIONS_BY_STATE = graphql(`
@@ -58,14 +56,8 @@ const GET_OBSERVATIONS_BY_STATE = graphql(`
 `);
 
 export function useGetObservationsByState() {
-  const odbToken = useOdbTokenValue();
   return useLazyQuery(GET_OBSERVATIONS_BY_STATE, {
-    context: {
-      clientName: 'odb',
-      headers: {
-        Authorization: `Bearer ${odbToken}`,
-      },
-    },
+    context: { clientName: 'odb' },
   });
 }
 
@@ -100,14 +92,8 @@ const GET_GUIDE_ENVIRONMENT = graphql(`
 `);
 
 export function useGetGuideEnvironment() {
-  const odbToken = useOdbTokenValue();
   return useLazyQuery(GET_GUIDE_ENVIRONMENT, {
-    context: {
-      clientName: 'odb',
-      headers: {
-        Authorization: `Bearer ${odbToken}`,
-      },
-    },
+    context: { clientName: 'odb' },
   });
 }
 
@@ -149,13 +135,7 @@ const GET_CENTRAL_WAVELENGTH = graphql(`
 `);
 
 export function useGetCentralWavelength() {
-  const odbToken = useOdbTokenValue();
   return useLazyQuery(GET_CENTRAL_WAVELENGTH, {
-    context: {
-      clientName: 'odb',
-      headers: {
-        Authorization: `Bearer ${odbToken}`,
-      },
-    },
+    context: { clientName: 'odb' },
   });
 }
