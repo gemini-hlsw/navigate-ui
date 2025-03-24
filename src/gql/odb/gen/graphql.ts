@@ -614,7 +614,7 @@ export type BandedTime = {
   __typename?: 'BandedTime';
   /** ScienceBand associated with the time, if any. */
   band?: Maybe<ScienceBand>;
-  /** Time distributed across the program, partner, and non-charged categories. */
+  /** Time distributed across the program and non-charged categories. */
   time: CategorizedTime;
 };
 
@@ -860,11 +860,9 @@ export type CategorizedTime = {
   __typename?: 'CategorizedTime';
   /** Execution time that is not charged. */
   nonCharged: TimeSpan;
-  /** Time charged to the partner. */
-  partner: TimeSpan;
   /** Time charged to the program / PI. */
   program: TimeSpan;
-  /** Total of program, partner and uncharged times. */
+  /** Total of program and uncharged times. */
   total: TimeSpan;
 };
 
@@ -899,8 +897,6 @@ export type ChangeProgramUserRoleResult = {
 export type ChargeClass =
   /** Time that is not charged. */
   | 'NON_CHARGED'
-  /** Time charged to a partner country / entity. */
-  | 'PARTNER'
   /** Time charged to the science program. */
   | 'PROGRAM';
 
@@ -2709,8 +2705,6 @@ export type GmosNorthFilter =
   | 'R_PRIME_RG610'
   /** GmosNorthFilter SII */
   | 'SII'
-  /** GmosNorthFilter UPrime */
-  | 'U_PRIME'
   /** GmosNorthFilter Y */
   | 'Y'
   /** GmosNorthFilter Z */
@@ -2741,12 +2735,8 @@ export type GmosNorthFpuInput = {
 export type GmosNorthGrating =
   /** GmosNorthGrating B480_G5309 */
   | 'B480_G5309'
-  /** GmosNorthGrating B600_G5303 */
-  | 'B600_G5303'
   /** GmosNorthGrating B1200_G5301 */
   | 'B1200_G5301'
-  /** GmosNorthGrating R150_G5306 */
-  | 'R150_G5306'
   /** GmosNorthGrating R150_G5308 */
   | 'R150_G5308'
   /** GmosNorthGrating R400_G5305 */
@@ -2925,10 +2915,6 @@ export type GmosNorthLongSlitInput = {
 export type GmosNorthStageMode =
   /** GmosNorthStageMode FollowXy */
   | 'FOLLOW_XY'
-  /** GmosNorthStageMode FollowXyz */
-  | 'FOLLOW_XYZ'
-  /** GmosNorthStageMode FollowZ */
-  | 'FOLLOW_Z'
   /** GmosNorthStageMode NoFollow */
   | 'NO_FOLLOW';
 
@@ -2978,8 +2964,6 @@ export type GmosNorthStep = {
 
 /** GMOS Region Of Interest */
 export type GmosRoi =
-  /** GmosRoi BottomSpectrum */
-  | 'BOTTOM_SPECTRUM'
   /** GmosRoi Ccd2 */
   | 'CCD2'
   /** GmosRoi CentralSpectrum */
@@ -2989,9 +2973,7 @@ export type GmosRoi =
   /** GmosRoi Custom */
   | 'CUSTOM'
   /** GmosRoi FullFrame */
-  | 'FULL_FRAME'
-  /** GmosRoi TopSpectrum */
-  | 'TOP_SPECTRUM';
+  | 'FULL_FRAME';
 
 /** GmosSouth atom, a collection of steps that should be executed in their entirety */
 export type GmosSouthAtom = {
@@ -3161,8 +3143,6 @@ export type GmosSouthFilter =
   | 'I_PRIME_CA_T'
   /** GmosSouthFilter IPrime_RG780 */
   | 'I_PRIME_RG780'
-  /** GmosSouthFilter Lya395 */
-  | 'LYA395'
   /** GmosSouthFilter OG515 */
   | 'OG515'
   /** GmosSouthFilter OIII */
@@ -3395,8 +3375,6 @@ export type GmosSouthLongSlitInput = {
 
 /** GMOS South stage mode */
 export type GmosSouthStageMode =
-  /** GmosSouthStageMode FollowXy */
-  | 'FOLLOW_XY'
   /** GmosSouthStageMode FollowXyz */
   | 'FOLLOW_XYZ'
   /** GmosSouthStageMode FollowZ */
@@ -4580,14 +4558,10 @@ export type ObservationWorkflowState =
 export type ObserveClass =
   /** Acquisition, charged to the program. */
   | 'ACQUISITION'
-  /** Acquisition calibration, charged to the program. */
-  | 'ACQUISITION_CAL'
   /** Daytime calibration, charged to the observatory. */
   | 'DAY_CAL'
-  /** Nighttime calibration, charged to the partner. */
-  | 'PARTNER_CAL'
   /** Nighttime calibration, charged to the program. */
-  | 'PROGRAM_CAL'
+  | 'NIGHT_CAL'
   /** Science dataset, charged to the program. */
   | 'SCIENCE';
 
@@ -7338,8 +7312,6 @@ export type TimeChargeDaylightDiscount = TimeChargeDiscount & {
   comment: Scalars['String']['output'];
   /** The interval during which this discount applies. */
   interval: TimestampInterval;
-  /** Time amount to discount from the partner. */
-  partner: TimeSpan;
   /** Time amount to discount from the program. */
   program: TimeSpan;
   /** The site where the observation was executed. */
@@ -7347,17 +7319,14 @@ export type TimeChargeDaylightDiscount = TimeChargeDiscount & {
 };
 
 /**
- * Describes a time charge discount, broken out by charge class (program vs.
- * partner).  For each class, the associated time is subtracted and then added to
- * uncharged.
+ * Describes a time charge discount, broken out by charge class.  For each class,
+ * the associated time is subtracted and then added to uncharged.
  */
 export type TimeChargeDiscount = {
   /** Additional detail. */
   comment: Scalars['String']['output'];
   /** The interval during which this discount applies. */
   interval: TimestampInterval;
-  /** Time amount to discount from the partner. */
-  partner: TimeSpan;
   /** Time amount to discount from the program. */
   program: TimeSpan;
 };
@@ -7392,8 +7361,6 @@ export type TimeChargeNoDataDiscount = TimeChargeDiscount & {
   comment: Scalars['String']['output'];
   /** The interval during which this discount applies. */
   interval: TimestampInterval;
-  /** Time amount to discount from the partner. */
-  partner: TimeSpan;
   /** Time amount to discount from the program. */
   program: TimeSpan;
 };
@@ -7406,8 +7373,6 @@ export type TimeChargeQaDiscount = TimeChargeDiscount & {
   datasets: Array<Dataset>;
   /** The interval during which this discount applies. */
   interval: TimestampInterval;
-  /** Time amount to discount from the partner. */
-  partner: TimeSpan;
   /** Time amount to discount from the program. */
   program: TimeSpan;
 };
