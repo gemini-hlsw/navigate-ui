@@ -1,5 +1,6 @@
 // Apollo
 import { ApolloClient, ApolloLink, defaultDataIdFromObject, HttpLink, InMemoryCache } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 // Subscription channel
 import { WebSocketLink } from '@apollo/client/link/ws';
@@ -7,6 +8,7 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import { Kind, OperationTypeNode } from 'graphql/language';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 
+import { odbTokenAtom } from '@/components/atoms/odb';
 import { store } from '@/components/atoms/store';
 import type { Environment } from '@/Helpers/environment';
 import { toastAtom } from '@/Helpers/toast';
@@ -48,6 +50,19 @@ export function createClient(env: Environment) {
 
   const navigateConfigs = new HttpLink({ uri: withAbsoluteUri(env.navigateConfigsURI) });
 
+  const odbAuthLink = setContext((_, { headers }) => {
+    const token = store.get(odbTokenAtom);
+    if (!token) {
+      store.get(toastAtom)?.show({
+        severity: 'warn',
+        summary: 'ODB Token',
+        detail: 'Provide an ODB token before querying ODB',
+      });
+    }
+
+    return { headers: { ...(headers as Record<string, string>), Authorization: token ? `Bearer ${token}` : '' } };
+  });
+
   const odbLink = new HttpLink({ uri: withAbsoluteUri(env.odbURI) });
 
   const wsLink = new WebSocketLink(
@@ -60,7 +75,7 @@ export function createClient(env: Environment) {
       errorLink,
       ApolloLink.split(
         (operation) => operation.getContext().clientName === 'odb',
-        odbLink,
+        odbAuthLink.concat(odbLink),
         ApolloLink.split(
           (operation) => operation.getContext().clientName === 'navigateConfigs',
           navigateConfigs,
