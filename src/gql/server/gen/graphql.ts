@@ -161,7 +161,6 @@ export type GuidersQualityValues = {
 export type Instrument =
   | 'ACQ_CAM'
   | 'ALOPEKE'
-  | 'BHROS'
   | 'FLAMINGOS2'
   | 'GHOST'
   | 'GMOS_NORTH'
@@ -169,13 +168,8 @@ export type Instrument =
   | 'GNIRS'
   | 'GPI'
   | 'GSAOI'
-  | 'MICHELLE'
-  | 'NICI'
-  | 'NIFS'
   | 'NIRI'
-  | 'PHOENIX'
   | 'SCORPIO'
-  | 'TRECS'
   | 'VISITOR'
   | 'ZORRO';
 
@@ -197,11 +191,9 @@ export type LightSink =
   | 'GSAOI'
   | 'HR'
   | 'IGRINS2'
-  | 'NIFS'
   | 'NIRI_F6'
   | 'NIRI_F14'
   | 'NIRI_F32'
-  | 'PHOENIX'
   | 'VISITOR';
 
 export type LightSource =
