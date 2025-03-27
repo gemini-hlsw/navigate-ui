@@ -14,6 +14,8 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
+    "\n  subscription acquisitionAdjustmentState {\n    acquisitionAdjustmentState {\n      offset {\n        p {\n          arcseconds\n        }\n        q {\n          arcseconds\n        }\n      }\n      ipa {\n        degrees\n      }\n      iaa {\n        degrees\n      }\n      command\n    }\n  }\n": typeof types.AcquisitionAdjustmentStateDocument,
+    "\n  mutation acquisitionAdjustment($input: AcquisitionAdjustmentInput!) {\n    acquisitionAdjustment(adjustment: $input) {\n      result\n      msg\n    }\n  }\n": typeof types.AcquisitionAdjustmentDocument,
     "\n  mutation acObserve($period: TimeSpanInput!) {\n    acObserve(period: $period) {\n      result\n      msg\n    }\n  }\n": typeof types.AcObserveDocument,
     "\n  mutation acStopObserve {\n    acStopObserve {\n      result\n      msg\n    }\n  }\n": typeof types.AcStopObserveDocument,
     "\n  mutation runSlew($slewOptions: SlewOptionsInput!, $config: TcsConfigInput!) {\n    slew(slewOptions: $slewOptions, config: $config) {\n      result\n    }\n  }\n": typeof types.RunSlewDocument,
@@ -42,6 +44,8 @@ type Documents = {
     "\n  mutation oiwfsPark {\n    oiwfsPark {\n      result\n      msg\n    }\n  }\n": typeof types.OiwfsParkDocument,
 };
 const documents: Documents = {
+    "\n  subscription acquisitionAdjustmentState {\n    acquisitionAdjustmentState {\n      offset {\n        p {\n          arcseconds\n        }\n        q {\n          arcseconds\n        }\n      }\n      ipa {\n        degrees\n      }\n      iaa {\n        degrees\n      }\n      command\n    }\n  }\n": types.AcquisitionAdjustmentStateDocument,
+    "\n  mutation acquisitionAdjustment($input: AcquisitionAdjustmentInput!) {\n    acquisitionAdjustment(adjustment: $input) {\n      result\n      msg\n    }\n  }\n": types.AcquisitionAdjustmentDocument,
     "\n  mutation acObserve($period: TimeSpanInput!) {\n    acObserve(period: $period) {\n      result\n      msg\n    }\n  }\n": types.AcObserveDocument,
     "\n  mutation acStopObserve {\n    acStopObserve {\n      result\n      msg\n    }\n  }\n": types.AcStopObserveDocument,
     "\n  mutation runSlew($slewOptions: SlewOptionsInput!, $config: TcsConfigInput!) {\n    slew(slewOptions: $slewOptions, config: $config) {\n      result\n    }\n  }\n": types.RunSlewDocument,
@@ -84,6 +88,14 @@ const documents: Documents = {
  */
 export function graphql(source: string): unknown;
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  subscription acquisitionAdjustmentState {\n    acquisitionAdjustmentState {\n      offset {\n        p {\n          arcseconds\n        }\n        q {\n          arcseconds\n        }\n      }\n      ipa {\n        degrees\n      }\n      iaa {\n        degrees\n      }\n      command\n    }\n  }\n"): (typeof documents)["\n  subscription acquisitionAdjustmentState {\n    acquisitionAdjustmentState {\n      offset {\n        p {\n          arcseconds\n        }\n        q {\n          arcseconds\n        }\n      }\n      ipa {\n        degrees\n      }\n      iaa {\n        degrees\n      }\n      command\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation acquisitionAdjustment($input: AcquisitionAdjustmentInput!) {\n    acquisitionAdjustment(adjustment: $input) {\n      result\n      msg\n    }\n  }\n"): (typeof documents)["\n  mutation acquisitionAdjustment($input: AcquisitionAdjustmentInput!) {\n    acquisitionAdjustment(adjustment: $input) {\n      result\n      msg\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
