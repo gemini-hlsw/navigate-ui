@@ -150,6 +150,10 @@ button.p-component.p-button {
   }
 }
 
+.p-toast {
+  z-index: 1201;
+}
+
 .graphql-error-toast .p-toast-detail {
   font-size: 0.8rem;
   // Whitespaces in the error message are preserved

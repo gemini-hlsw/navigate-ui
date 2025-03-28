@@ -1,0 +1,6 @@
+.acquisition-adjustment-prompt {
+  display: flex;
+  gap: 8px;
+  flex-direction: row;
+  margin-bottom: 1rem;
+}

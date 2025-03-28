@@ -26,6 +26,45 @@ export type Scalars = {
   Timestamp: { input: string; output: string; }
 };
 
+export type AcquisitionAdjustmentInput = {
+  command?: AcquistionAdjustmentCommand;
+  iaa?: InputMaybe<AngleInput>;
+  ipa?: InputMaybe<AngleInput>;
+  offset: OffsetInput;
+};
+
+export type AcquisitionAdjustmentState = {
+  __typename?: 'AcquisitionAdjustmentState';
+  command: AcquistionAdjustmentCommand;
+  iaa?: Maybe<Angle>;
+  ipa?: Maybe<Angle>;
+  offset: Offset;
+};
+
+export type AcquistionAdjustmentCommand =
+  /**  Request the user to confirm the adjustment  */
+  | 'ASK_USER'
+  /**  User cancels the adjustment  */
+  | 'USER_CANCELS'
+  /**  User confirms to apply the adjustment  */
+  | 'USER_CONFIRMS';
+
+export type Angle = {
+  __typename?: 'Angle';
+  arcminutes: Scalars['BigDecimal']['output'];
+  arcseconds: Scalars['BigDecimal']['output'];
+  degrees: Scalars['BigDecimal']['output'];
+  dms: Scalars['String']['output'];
+  hms: Scalars['String']['output'];
+  hours: Scalars['BigDecimal']['output'];
+  microarcseconds: Scalars['Long']['output'];
+  microseconds: Scalars['BigDecimal']['output'];
+  milliarcseconds: Scalars['BigDecimal']['output'];
+  milliseconds: Scalars['BigDecimal']['output'];
+  minutes: Scalars['BigDecimal']['output'];
+  seconds: Scalars['BigDecimal']['output'];
+};
+
 export type AngleInput = {
   arcminutes?: InputMaybe<Scalars['BigDecimal']['input']>;
   arcseconds?: InputMaybe<Scalars['BigDecimal']['input']>;
@@ -229,6 +268,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   acObserve: OperationOutcome;
   acStopObserve: OperationOutcome;
+  acquisitionAdjustment: OperationOutcome;
   guideDisable: OperationOutcome;
   guideEnable: OperationOutcome;
   instrumentSpecifics: OperationOutcome;
@@ -261,6 +301,11 @@ export type Mutation = {
 
 export type MutationAcObserveArgs = {
   period: TimeSpanInput;
+};
+
+
+export type MutationAcquisitionAdjustmentArgs = {
+  adjustment: AcquisitionAdjustmentInput;
 };
 
 
@@ -356,6 +401,37 @@ export type NonsiderealInput = {
   des?: InputMaybe<Scalars['NonEmptyString']['input']>;
   key?: InputMaybe<Scalars['NonEmptyString']['input']>;
   keyType?: InputMaybe<EphemerisKeyType>;
+};
+
+export type Offset = {
+  __typename?: 'Offset';
+  p: OffsetP;
+  q: OffsetQ;
+};
+
+export type OffsetComponentInput = {
+  arcseconds?: InputMaybe<Scalars['BigDecimal']['input']>;
+  microarcseconds?: InputMaybe<Scalars['Long']['input']>;
+  milliarcseconds?: InputMaybe<Scalars['BigDecimal']['input']>;
+};
+
+export type OffsetInput = {
+  p: OffsetComponentInput;
+  q: OffsetComponentInput;
+};
+
+export type OffsetP = {
+  __typename?: 'OffsetP';
+  arcseconds: Scalars['BigDecimal']['output'];
+  microarcseconds: Scalars['Long']['output'];
+  milliarcseconds: Scalars['BigDecimal']['output'];
+};
+
+export type OffsetQ = {
+  __typename?: 'OffsetQ';
+  arcseconds: Scalars['BigDecimal']['output'];
+  microarcseconds: Scalars['Long']['output'];
+  milliarcseconds: Scalars['BigDecimal']['output'];
 };
 
 export type OperationOutcome = {
@@ -530,6 +606,7 @@ export type SlewOptionsInput = {
 
 export type Subscription = {
   __typename?: 'Subscription';
+  acquisitionAdjustmentState: AcquisitionAdjustmentState;
   guideState: GuideConfigurationState;
   guidersQualityValues: GuidersQualityValues;
   logMessage: LogMessage;
@@ -600,6 +677,18 @@ export type WavelengthInput = {
   nanometers?: InputMaybe<Scalars['PosBigDecimal']['input']>;
   picometers?: InputMaybe<Scalars['PosInt']['input']>;
 };
+
+export type AcquisitionAdjustmentStateSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AcquisitionAdjustmentStateSubscription = { __typename?: 'Subscription', acquisitionAdjustmentState: { __typename?: 'AcquisitionAdjustmentState', command: AcquistionAdjustmentCommand, offset: { __typename?: 'Offset', p: { __typename?: 'OffsetP', arcseconds: string|number }, q: { __typename?: 'OffsetQ', arcseconds: string|number } }, ipa?: { __typename?: 'Angle', degrees: string|number } | null, iaa?: { __typename?: 'Angle', degrees: string|number } | null } };
+
+export type AcquisitionAdjustmentMutationVariables = Exact<{
+  input: AcquisitionAdjustmentInput;
+}>;
+
+
+export type AcquisitionAdjustmentMutation = { __typename?: 'Mutation', acquisitionAdjustment: { __typename?: 'OperationOutcome', result: OperationResult, msg?: string | null } };
 
 export type AcObserveMutationVariables = Exact<{
   period: TimeSpanInput;
@@ -756,6 +845,8 @@ export type OiwfsParkMutationVariables = Exact<{ [key: string]: never; }>;
 export type OiwfsParkMutation = { __typename?: 'Mutation', oiwfsPark: { __typename?: 'OperationOutcome', result: OperationResult, msg?: string | null } };
 
 
+export const AcquisitionAdjustmentStateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"acquisitionAdjustmentState"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"acquisitionAdjustmentState"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offset"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"p"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"arcseconds"}}]}},{"kind":"Field","name":{"kind":"Name","value":"q"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"arcseconds"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"ipa"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}},{"kind":"Field","name":{"kind":"Name","value":"iaa"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"degrees"}}]}},{"kind":"Field","name":{"kind":"Name","value":"command"}}]}}]}}]} as unknown as DocumentNode<AcquisitionAdjustmentStateSubscription, AcquisitionAdjustmentStateSubscriptionVariables>;
+export const AcquisitionAdjustmentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"acquisitionAdjustment"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"AcquisitionAdjustmentInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"acquisitionAdjustment"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"adjustment"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}},{"kind":"Field","name":{"kind":"Name","value":"msg"}}]}}]}}]} as unknown as DocumentNode<AcquisitionAdjustmentMutation, AcquisitionAdjustmentMutationVariables>;
 export const AcObserveDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"acObserve"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"period"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"TimeSpanInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"acObserve"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"period"},"value":{"kind":"Variable","name":{"kind":"Name","value":"period"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}},{"kind":"Field","name":{"kind":"Name","value":"msg"}}]}}]}}]} as unknown as DocumentNode<AcObserveMutation, AcObserveMutationVariables>;
 export const AcStopObserveDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"acStopObserve"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"acStopObserve"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}},{"kind":"Field","name":{"kind":"Name","value":"msg"}}]}}]}}]} as unknown as DocumentNode<AcStopObserveMutation, AcStopObserveMutationVariables>;
 export const RunSlewDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"runSlew"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"slewOptions"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SlewOptionsInput"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"config"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"TcsConfigInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"slew"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"slewOptions"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slewOptions"}}},{"kind":"Argument","name":{"kind":"Name","value":"config"},"value":{"kind":"Variable","name":{"kind":"Name","value":"config"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}}]}}]}}]} as unknown as DocumentNode<RunSlewMutation, RunSlewMutationVariables>;
