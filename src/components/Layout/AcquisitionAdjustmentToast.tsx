@@ -13,6 +13,7 @@ import { Check, XMark } from '../Icons';
 type AcquisitionAdjustmentState = NonNullable<
   ReturnType<typeof useAcquisitionAdjustmentState>['data']
 >['acquisitionAdjustmentState'];
+
 export function AcquisitionAdjustmentToast() {
   const toast = useToast();
 
@@ -31,6 +32,7 @@ export function AcquisitionAdjustmentToast() {
       return () => toast?.remove(acquisitionAdjustmentToast);
     }
   }, [data, toast]);
+
   return <></>;
 }
 
