@@ -2040,6 +2040,8 @@ export type ExecutionEventType =
 export type ExecutionState =
   /** No more data is expected. */
   | 'COMPLETED'
+  /** User marked the observation complete regardless of any remaining steps. */
+  | 'DECLARED_COMPLETE'
   /**
    * The sequence or observation isn't sufficiently defined, or there is a problem
    * that must first be resolved.
@@ -2993,8 +2995,6 @@ export type GmosSouthAtom = {
 
 /** GMOS South FPU */
 export type GmosSouthBuiltinFpu =
-  /** GmosSouthBuiltinFpu Bhros */
-  | 'BHROS'
   /** GmosSouthBuiltinFpu Ifu2Slits */
   | 'IFU2_SLITS'
   /** GmosSouthBuiltinFpu IfuBlue */
@@ -3730,8 +3730,6 @@ export type Instrument =
   | 'ACQ_CAM'
   /** Instrument Alopeke */
   | 'ALOPEKE'
-  /** Instrument Bhros */
-  | 'BHROS'
   /** Instrument Flamingos2 */
   | 'FLAMINGOS2'
   /** Instrument Ghost */
@@ -3746,20 +3744,10 @@ export type Instrument =
   | 'GPI'
   /** Instrument Gsaoi */
   | 'GSAOI'
-  /** Instrument Michelle */
-  | 'MICHELLE'
-  /** Instrument Nici */
-  | 'NICI'
-  /** Instrument Nifs */
-  | 'NIFS'
   /** Instrument Niri */
   | 'NIRI'
-  /** Instrument Phoenix */
-  | 'PHOENIX'
   /** Instrument Scorpio */
   | 'SCORPIO'
-  /** Instrument Trecs */
-  | 'TRECS'
   /** Instrument Visitor */
   | 'VISITOR'
   /** Instrument Zorro */
@@ -4373,6 +4361,11 @@ export type Observation = {
   configurationRequests: Array<ConfigurationRequest>;
   /** The constraint set for the observation */
   constraintSet: ConstraintSet;
+  /**
+   * When true, a user has taken action to explicitly mark the observation complete
+   * regardless of how many steps have been executed and which steps may remain.
+   */
+  declaredComplete: Scalars['Boolean']['output'];
   /** Execution sequence and runtime artifacts */
   execution: Execution;
   /** DELETED or PRESENT */
@@ -4455,6 +4448,12 @@ export type ObservationPropertiesInput = {
   attachments?: InputMaybe<Array<Scalars['AttachmentId']['input']>>;
   /** The constraintSet defaults to standard values if not specified on creation, and may be edited but not deleted */
   constraintSet?: InputMaybe<ConstraintSetInput>;
+  /**
+   * Set to `true` to mark the observation as complete regardless of how many steps
+   * may remain.  Set to `false` (the default) to allow all prescribed steps to
+   * execute before considering the observation complete.
+   */
+  declaredComplete?: InputMaybe<Scalars['Boolean']['input']>;
   /** Whether the observation is considered deleted (defaults to PRESENT) but may be edited */
   existence?: InputMaybe<Existence>;
   /** Enclosing group, if any. */
@@ -8457,8 +8456,8 @@ export type WhereExecutionEvent = {
   eventType?: InputMaybe<WhereEqExecutionEventType>;
   /** Matches on the execution event id */
   id?: InputMaybe<WhereOrderExecutionEventId>;
-  /** Matches on observation id */
-  observationId?: InputMaybe<WhereOrderObservationId>;
+  /** Matches on observation */
+  observation?: InputMaybe<WhereObservation>;
   /** Matches on event reception time */
   received?: InputMaybe<WhereOrderTimestamp>;
   /** Matches the sequence command type, for sequence events. */
@@ -8493,6 +8492,8 @@ export type WhereObservation = {
   NOT?: InputMaybe<WhereObservation>;
   /** A list of nested observation filters where any one match causes the entire OR group as a whole to match. */
   OR?: InputMaybe<Array<WhereObservation>>;
+  /** Matches on whether the observation has been marked explicitly complete. */
+  declaredComplete?: InputMaybe<WhereBoolean>;
   /** Matches the observation id. */
   id?: InputMaybe<WhereOrderObservationId>;
   /** Matches on the instrument in use, if any. */
