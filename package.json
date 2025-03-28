@@ -56,7 +56,7 @@
     "jotai": "2.12.2",
     "lint-staged": "15.5.0",
     "lucuma-core": "0.119.0",
-    "lucuma-schemas": "0.123.2",
+    "lucuma-schemas": "0.124.0",
     "lucuma-ui-css": "0.134.1",
     "playwright": "1.51.1",
     "prettier": "3.5.3",
