@@ -1,6 +1,7 @@
 import './AcquisitionAdjustmentToast.css';
 
 import { useAcquisitionAdjustment, useAcquisitionAdjustmentState } from '@gql/server/AcquisitionAdjustment';
+import type { AcquisitionAdjustmentInput } from '@gql/server/gen/graphql';
 import { Button } from 'primereact/button';
 import { ButtonGroup } from 'primereact/buttongroup';
 import type { ToastMessage } from 'primereact/toast';
@@ -37,9 +38,9 @@ export function AcquisitionAdjustmentToast() {
 }
 
 function AcquisitionAdjustmentPrompt({ state }: { state: AcquisitionAdjustmentState }) {
-  const [adjustAcquisition] = useAcquisitionAdjustment();
+  const [adjustAcquisition, { loading }] = useAcquisitionAdjustment();
 
-  const input = {
+  const input: Omit<AcquisitionAdjustmentInput, 'command'> = {
     offset: {
       p: {
         arcseconds: state.offset.p.arcseconds,
@@ -48,16 +49,12 @@ function AcquisitionAdjustmentPrompt({ state }: { state: AcquisitionAdjustmentSt
         arcseconds: state.offset.q.arcseconds,
       },
     },
-    iaa: state.iaa
-      ? {
-          degrees: state.iaa?.degrees,
-        }
-      : undefined,
-    ipa: state.ipa
-      ? {
-          degrees: state.ipa?.degrees,
-        }
-      : undefined,
+    iaa: {
+      degrees: state.iaa?.degrees,
+    },
+    ipa: {
+      degrees: state.ipa?.degrees,
+    },
   };
 
   return (
@@ -70,6 +67,7 @@ function AcquisitionAdjustmentPrompt({ state }: { state: AcquisitionAdjustmentSt
       </div>
       <ButtonGroup>
         <Button
+          loading={loading}
           icon={<Check />}
           size="small"
           severity="success"
@@ -86,6 +84,7 @@ function AcquisitionAdjustmentPrompt({ state }: { state: AcquisitionAdjustmentSt
           }
         />
         <Button
+          loading={loading}
           icon={<XMark />}
           size="small"
           severity="secondary"
