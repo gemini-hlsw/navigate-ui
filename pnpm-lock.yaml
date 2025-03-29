@@ -102,8 +102,8 @@ importers:
         specifier: 0.124.0
         version: 0.124.0
       lucuma-ui-css:
-        specifier: 0.134.1
-        version: 0.134.1
+        specifier: 0.136.0
+        version: 0.136.0
       playwright:
         specifier: 1.51.1
         version: 1.51.1
@@ -2708,8 +2708,8 @@ packages:
   lucuma-schemas@0.124.0:
     resolution: {integrity: sha512-Oe78WWMEgTwvhseX+kcSloD1SlOOwoFHlZO7X6pAJmH7TUucNaCCTciBxRmWPtx7jwFxyNZ2xNefwENb57x9Nw==}
 
-  lucuma-ui-css@0.134.1:
-    resolution: {integrity: sha512-esM6lj/Er5Hv2mtPhaCEqfoLeV/yV4eSLGlcaiLx7M/gML8Yywi+ZaDMo53UDn0AMuKXgKPN7e7fS3sksc2Lvw==}
+  lucuma-ui-css@0.136.0:
+    resolution: {integrity: sha512-RGaDDptQmSafzEt0JpyvW+lYQCiFbuz/osYcy04A9w5xoLhtNUVAmzA0Ra8Wg0loZfcs+bdkXqzH/yOkua3pvQ==}
 
   lz-string@1.5.0:
     resolution: {integrity: sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ==}
@@ -6772,7 +6772,7 @@ snapshots:
 
   lucuma-schemas@0.124.0: {}
 
-  lucuma-ui-css@0.134.1: {}
+  lucuma-ui-css@0.136.0: {}
 
   lz-string@1.5.0: {}
 
