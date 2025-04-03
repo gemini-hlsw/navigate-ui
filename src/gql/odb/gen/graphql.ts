@@ -3766,7 +3766,7 @@ export type ItcResult = {
   __typename?: 'ItcResult';
   exposureCount: Scalars['NonNegInt']['output'];
   exposureTime: TimeSpan;
-  signalToNoise?: Maybe<Scalars['SignalToNoise']['output']>;
+  signalToNoiseAt?: Maybe<SignalToNoiseAt>;
   targetId: Scalars['TargetId']['output'];
 };
 
@@ -4361,11 +4361,6 @@ export type Observation = {
   configurationRequests: Array<ConfigurationRequest>;
   /** The constraint set for the observation */
   constraintSet: ConstraintSet;
-  /**
-   * When true, a user has taken action to explicitly mark the observation complete
-   * regardless of how many steps have been executed and which steps may remain.
-   */
-  declaredComplete: Scalars['Boolean']['output'];
   /** Execution sequence and runtime artifacts */
   execution: Execution;
   /** DELETED or PRESENT */
@@ -4448,12 +4443,6 @@ export type ObservationPropertiesInput = {
   attachments?: InputMaybe<Array<Scalars['AttachmentId']['input']>>;
   /** The constraintSet defaults to standard values if not specified on creation, and may be edited but not deleted */
   constraintSet?: InputMaybe<ConstraintSetInput>;
-  /**
-   * Set to `true` to mark the observation as complete regardless of how many steps
-   * may remain.  Set to `false` (the default) to allow all prescribed steps to
-   * execute before considering the observation complete.
-   */
-  declaredComplete?: InputMaybe<Scalars['Boolean']['input']>;
   /** Whether the observation is considered deleted (defaults to PRESENT) but may be edited */
   existence?: InputMaybe<Existence>;
   /** Enclosing group, if any. */
@@ -6069,6 +6058,17 @@ export type SiderealInput = {
   ra?: InputMaybe<RightAscensionInput>;
   /** The radialVelocity field may be unset by assigning a null value, or ignored by skipping it altogether */
   radialVelocity?: InputMaybe<RadialVelocityInput>;
+};
+
+/** Calculated signal to noise at a specific wavelength */
+export type SignalToNoiseAt = {
+  __typename?: 'SignalToNoiseAt';
+  /** Single exposure signal to noise */
+  single: Scalars['SignalToNoise']['output'];
+  /** Total exposure signal to noise */
+  total: Scalars['SignalToNoise']['output'];
+  /** Wavelength sn was calculated at */
+  wavelength: Wavelength;
 };
 
 /** Signal to noise exposure time mode */
@@ -8492,8 +8492,6 @@ export type WhereObservation = {
   NOT?: InputMaybe<WhereObservation>;
   /** A list of nested observation filters where any one match causes the entire OR group as a whole to match. */
   OR?: InputMaybe<Array<WhereObservation>>;
-  /** Matches on whether the observation has been marked explicitly complete. */
-  declaredComplete?: InputMaybe<WhereBoolean>;
   /** Matches the observation id. */
   id?: InputMaybe<WhereOrderObservationId>;
   /** Matches on the instrument in use, if any. */
