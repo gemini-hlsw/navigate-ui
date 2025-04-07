@@ -1,7 +1,7 @@
 // @ts-check
 
 import eslint from '@eslint/js';
-import importX from 'eslint-plugin-import-x';
+import { flatConfigs } from 'eslint-plugin-import-x';
 import reactPlugin from 'eslint-plugin-react';
 import * as reactHooks from 'eslint-plugin-react-hooks';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
@@ -14,9 +14,9 @@ export default config(
   ...configs.stylisticTypeChecked,
   reactPlugin.configs.flat.recommended,
   reactPlugin.configs.flat['jsx-runtime'],
-  importX.flatConfigs.recommended,
-  importX.flatConfigs.react,
-  importX.flatConfigs.typescript,
+  flatConfigs.recommended,
+  flatConfigs.react,
+  flatConfigs.typescript,
   reactHooks.configs['recommended-latest'],
   {
     languageOptions: {
