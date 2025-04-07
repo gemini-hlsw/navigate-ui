@@ -176,8 +176,8 @@ export type AddSequenceEventResult = {
 
 /** SlewEvent creation parameters. */
 export type AddSlewEventInput = {
+  observationId: Scalars['ObservationId']['input'];
   slewStage: SlewStage;
-  visitId: Scalars['VisitId']['input'];
 };
 
 /** The result of adding a slew event. */
@@ -985,20 +985,20 @@ export type CloneTargetResult = {
 };
 
 /** Cloud extinction */
-export type CloudExtinction =
-  /** CloudExtinction OnePointFive */
+export type CloudExtinctionPreset =
+  /** CloudExtinctionPreset OnePointFive */
   | 'ONE_POINT_FIVE'
-  /** CloudExtinction OnePointZero */
+  /** CloudExtinctionPreset OnePointZero */
   | 'ONE_POINT_ZERO'
-  /** CloudExtinction PointFive */
+  /** CloudExtinctionPreset PointFive */
   | 'POINT_FIVE'
-  /** CloudExtinction PointOne */
+  /** CloudExtinctionPreset PointOne */
   | 'POINT_ONE'
-  /** CloudExtinction PointThree */
+  /** CloudExtinctionPreset PointThree */
   | 'POINT_THREE'
-  /** CloudExtinction ThreePointZero */
+  /** CloudExtinctionPreset ThreePointZero */
   | 'THREE_POINT_ZERO'
-  /** CloudExtinction TwoPointZero */
+  /** CloudExtinctionPreset TwoPointZero */
   | 'TWO_POINT_ZERO';
 
 export type CommissioningProgramReference = ProgramReference & {
@@ -1105,8 +1105,8 @@ export type Configuration = {
 
 export type ConfigurationConditions = {
   __typename?: 'ConfigurationConditions';
-  cloudExtinction: CloudExtinction;
-  imageQuality: ImageQuality;
+  cloudExtinction: CloudExtinctionPreset;
+  imageQuality: ImageQualityPreset;
   skyBackground: SkyBackground;
   waterVapor: WaterVapor;
 };
@@ -1179,11 +1179,11 @@ export type ConfigurationRequestStatus =
 export type ConstraintSet = {
   __typename?: 'ConstraintSet';
   /** Cloud extinction */
-  cloudExtinction: CloudExtinction;
+  cloudExtinction: CloudExtinctionPreset;
   /** Either air mass range or elevation range */
   elevationRange: ElevationRange;
   /** Image quality */
-  imageQuality: ImageQuality;
+  imageQuality: ImageQualityPreset;
   /** Sky background */
   skyBackground: SkyBackground;
   /** Water vapor */
@@ -1219,11 +1219,11 @@ export type ConstraintSetGroupSelectResult = {
 /** Constraint set creation and editing parameters */
 export type ConstraintSetInput = {
   /** The cloudExtinction field is required when creating a new instance of ConstraintSet, but optional when editing */
-  cloudExtinction?: InputMaybe<CloudExtinction>;
+  cloudExtinction?: InputMaybe<CloudExtinctionPreset>;
   /** The elevationRange field is required when creating a new instance of ConstraintSet, but optional when editing */
   elevationRange?: InputMaybe<ElevationRangeInput>;
   /** The imageQuality field is required when creating a new instance of ConstraintSet, but optional when editing */
-  imageQuality?: InputMaybe<ImageQuality>;
+  imageQuality?: InputMaybe<ImageQualityPreset>;
   /** The skyBackground field is required when creating a new instance of ConstraintSet, but optional when editing */
   skyBackground?: InputMaybe<SkyBackground>;
   /** The waterVapor field is required when creating a new instance of ConstraintSet, but optional when editing */
@@ -2626,21 +2626,12 @@ export type GmosNorthDynamicInput = {
 /** GMOS North Execution Config */
 export type GmosNorthExecutionConfig = {
   __typename?: 'GmosNorthExecutionConfig';
-  /**
-   * GMOS North acquisition execution sequence.  Pass `true` to (re)start
-   * acquisition from the initial step.
-   */
+  /** GMOS North acquisition execution sequence */
   acquisition?: Maybe<GmosNorthExecutionSequence>;
   /** GMOS North science execution */
   science?: Maybe<GmosNorthExecutionSequence>;
   /** GMOS North static configuration */
   static: GmosNorthStatic;
-};
-
-
-/** GMOS North Execution Config */
-export type GmosNorthExecutionConfigAcquisitionArgs = {
-  reset?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** Next atom to execute and potential future atoms. */
@@ -3082,21 +3073,12 @@ export type GmosSouthDynamicInput = {
 /** GMOS South Execution Config */
 export type GmosSouthExecutionConfig = {
   __typename?: 'GmosSouthExecutionConfig';
-  /**
-   * GMOS South acquisition execution sequence.  Pass `true` to (re)start
-   * acquisition from the initial step.
-   */
+  /** GMOS South acquisition execution sequence. */
   acquisition?: Maybe<GmosSouthExecutionSequence>;
   /** GMOS South science execution */
   science?: Maybe<GmosSouthExecutionSequence>;
   /** GMOS South static configuration */
   static: GmosSouthStatic;
-};
-
-
-/** GMOS South Execution Config */
-export type GmosSouthExecutionConfigAcquisitionArgs = {
-  reset?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** Next atom to execute and potential future atoms. */
@@ -3704,24 +3686,24 @@ export type Ignore =
   | 'IGNORE';
 
 /** Image quality */
-export type ImageQuality =
-  /** ImageQuality OnePointFive */
+export type ImageQualityPreset =
+  /** ImageQualityPreset OnePointFive */
   | 'ONE_POINT_FIVE'
-  /** ImageQuality OnePointZero */
+  /** ImageQualityPreset OnePointZero */
   | 'ONE_POINT_ZERO'
-  /** ImageQuality PointEight */
+  /** ImageQualityPreset PointEight */
   | 'POINT_EIGHT'
-  /** ImageQuality PointFour */
+  /** ImageQualityPreset PointFour */
   | 'POINT_FOUR'
-  /** ImageQuality PointOne */
+  /** ImageQualityPreset PointOne */
   | 'POINT_ONE'
-  /** ImageQuality PointSix */
+  /** ImageQualityPreset PointSix */
   | 'POINT_SIX'
-  /** ImageQuality PointThree */
+  /** ImageQualityPreset PointThree */
   | 'POINT_THREE'
-  /** ImageQuality PointTwo */
+  /** ImageQualityPreset PointTwo */
   | 'POINT_TWO'
-  /** ImageQuality TwoPointZero */
+  /** ImageQualityPreset TwoPointZero */
   | 'TWO_POINT_ZERO';
 
 /** Instrument */
@@ -4003,6 +3985,12 @@ export type Mutation = {
   recordGmosSouthVisit: RecordGmosSouthVisitResult;
   /** Redeem a user invitation. */
   redeemUserInvitation: RedeemUserInvitationResult;
+  /**
+   * Resets the acquisition sequence to start from the initial step regardless of
+   * which acquisition steps may have been executed.  Requires staff (or better)
+   * access.
+   */
+  resetAcquisition: ResetAcquisitionResult;
   /** Revoke a user invitation. */
   revokeUserInvitation: RevokeUserInvitationResult;
   /** Set the allocations for a program. */
@@ -4201,6 +4189,11 @@ export type MutationRecordGmosSouthVisitArgs = {
 
 export type MutationRedeemUserInvitationArgs = {
   input: RedeemUserInvitationInput;
+};
+
+
+export type MutationResetAcquisitionArgs = {
+  input: ResetAcquisitionInput;
 };
 
 
@@ -5746,6 +5739,23 @@ export type RedeemUserInvitationResult = {
   invitation: UserInvitation;
 };
 
+/**
+ * Input parameters for resetting the acquisition sequence so that it executes
+ * from the initial step, regardless of which steps may have previously been
+ * executed.  Select one of `observationId` or `observationReference`.
+ */
+export type ResetAcquisitionInput = {
+  observationId?: InputMaybe<Scalars['ObservationId']['input']>;
+  observationReference?: InputMaybe<Scalars['ObservationReferenceLabel']['input']>;
+};
+
+/** The result of resetting the acquisition sequence. */
+export type ResetAcquisitionResult = {
+  __typename?: 'ResetAcquisitionResult';
+  /** The observation whose acquisition was reset. */
+  observation: Observation;
+};
+
 export type RevokeUserInvitationInput = {
   id: Scalars['UserInvitationId']['input'];
 };
@@ -5901,7 +5911,7 @@ export type SequenceDigest = {
    * the science sequence.
    */
   executionState: ExecutionState;
-  /** ObserveClass of the whole sequence.  */
+  /** ObserveClass of the whole sequence. */
   observeClass: ObserveClass;
   /** Unique offsets that occur in the sequence. */
   offsets: Array<Offset>;
@@ -7952,6 +7962,8 @@ export type Visit = {
   interval?: Maybe<TimestampInterval>;
   /** Observation associated with this visit. */
   observation: Observation;
+  /** Site of the visit. */
+  site: Site;
   /** Time accounting details for this visit. */
   timeChargeInvoice: TimeChargeInvoice;
 };
