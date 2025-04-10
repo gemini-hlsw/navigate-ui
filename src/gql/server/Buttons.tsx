@@ -244,7 +244,7 @@ export function Slew(props: ButtonProps) {
         },
       }),
     },
-    obsId: configuration.obsId,
+    obsId: configuration?.obsId,
   };
 
   return (
