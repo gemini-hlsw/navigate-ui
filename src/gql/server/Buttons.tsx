@@ -154,8 +154,8 @@ export function OiwfsPark(props: ButtonProps) {
 
 // SLEW
 const SLEW_MUTATION = graphql(`
-  mutation runSlew($slewOptions: SlewOptionsInput!, $config: TcsConfigInput!) {
-    slew(slewOptions: $slewOptions, config: $config) {
+  mutation runSlew($slewOptions: SlewOptionsInput!, $config: TcsConfigInput!, $obsId: ObservationId) {
+    slew(slewOptions: $slewOptions, config: $config, obsId: $obsId) {
       result
     }
   }
@@ -244,6 +244,7 @@ export function Slew(props: ButtonProps) {
         },
       }),
     },
+    obsId: configuration?.obsId,
   };
 
   return (
