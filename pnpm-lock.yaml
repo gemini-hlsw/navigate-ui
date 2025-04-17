@@ -90,8 +90,8 @@ importers:
         specifier: 9.1.7
         version: 9.1.7
       jotai:
-        specifier: 2.12.2
-        version: 2.12.2(@types/react@19.1.1)(react@19.1.0)
+        specifier: 2.12.3
+        version: 2.12.3(@types/react@19.1.1)(react@19.1.0)
       lint-staged:
         specifier: 15.5.1
         version: 15.5.1
@@ -2518,8 +2518,8 @@ packages:
   jose@5.10.0:
     resolution: {integrity: sha512-s+3Al/p9g32Iq+oqXxkW//7jk2Vig6FF1CFqzVXoTUXt2qz89YWbL+OwS17NFYEvxC35n0FKeGO2LGYSxeM2Gg==}
 
-  jotai@2.12.2:
-    resolution: {integrity: sha512-oN8715y7MkjXlSrpyjlR887TOuc/NLZMs9gvgtfWH/JP47ChwO0lR2ijSwBvPMYyXRAPT+liIAhuBavluKGgtA==}
+  jotai@2.12.3:
+    resolution: {integrity: sha512-DpoddSkmPGXMFtdfnoIHfueFeGP643nqYUWC6REjUcME+PG2UkAtYnLbffRDw3OURI9ZUTcRWkRGLsOvxuWMCg==}
     engines: {node: '>=12.20.0'}
     peerDependencies:
       '@types/react': '>=17.0.0'
@@ -6460,7 +6460,7 @@ snapshots:
 
   jose@5.10.0: {}
 
-  jotai@2.12.2(@types/react@19.1.1)(react@19.1.0):
+  jotai@2.12.3(@types/react@19.1.1)(react@19.1.0):
     optionalDependencies:
       '@types/react': 19.1.1
       react: 19.1.0
