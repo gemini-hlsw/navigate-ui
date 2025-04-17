@@ -191,20 +191,12 @@
           background-color: var(--surface-1) !important;
         }
 
-        .debug {
-          background-color: rgba(0, 100, 0, 0.2) !important;
-        }
-
-        .warning {
-          background-color: rgba(100, 100, 0, 0.2) !important;
-        }
-
-        .info {
-          background-color: rgba(50, 50, 50, 0.2) !important;
+        .warn {
+          background-color: var(--orange-700);
         }
 
         .error {
-          background-color: rgba(100, 0, 0, 0.2) !important;
+          background-color: var(--red-700);
         }
       }
     }
