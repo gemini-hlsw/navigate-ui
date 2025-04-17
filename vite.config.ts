@@ -2,6 +2,7 @@
 import react from '@vitejs/plugin-react-swc';
 import { execSync } from 'child_process';
 import path from 'path';
+import type { Plugin } from 'vite';
 import { defineConfig } from 'vite';
 import mkcert from 'vite-plugin-mkcert';
 
@@ -19,6 +20,22 @@ function formatDate(date: Date) {
   return `${years}${months.toString().padStart(2, '0')}${days.toString().padStart(2, '0')}`;
 }
 const frontendVersion = `${version}+${formatDate(buildTime)}.${commitHash}`;
+
+/**
+ * Adds a 'version.txt' file with the current version to the build output
+ */
+const buildVersionFile: Plugin = {
+  name: 'build-version-file',
+  apply: 'build',
+  buildStart() {
+    this.emitFile({
+      type: 'asset',
+      fileName: 'version.txt',
+      name: 'version.txt',
+      source: frontendVersion,
+    });
+  },
+};
 
 function fixCssRoot() {
   return {
@@ -91,7 +108,7 @@ export default defineConfig(({ mode }) => ({
       plugins: [fixCssRoot()],
     },
   },
-  plugins: [react({}), mkcert({ hosts: ['localhost', 'local.lucuma.xyz', 'navigate.lucuma.xyz'] })],
+  plugins: [react({}), mkcert({ hosts: ['localhost', 'local.lucuma.xyz', 'navigate.lucuma.xyz'] }), buildVersionFile],
   test: {
     globals: true,
     setupFiles: ['vitest-browser-react'],
