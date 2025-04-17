@@ -8,6 +8,7 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import { Kind, OperationTypeNode } from 'graphql/language';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 
+import { wsIsConnectedAtom } from '@/components/atoms/connection';
 import { odbTokenAtom } from '@/components/atoms/odb';
 import { store } from '@/components/atoms/store';
 import type { Environment } from '@/Helpers/environment';
@@ -65,9 +66,13 @@ export function createClient(env: Environment) {
 
   const odbLink = new HttpLink({ uri: withAbsoluteUri(env.odbURI) });
 
-  const wsLink = new WebSocketLink(
-    new SubscriptionClient(withAbsoluteUri(env.navigateServerWsURI, true), { reconnect: true }),
-  );
+  const subscriptionClient = new SubscriptionClient(withAbsoluteUri(env.navigateServerWsURI, true), {
+    reconnect: true,
+  });
+  subscriptionClient.onConnected(() => store.set(wsIsConnectedAtom, true));
+  subscriptionClient.onDisconnected(() => store.set(wsIsConnectedAtom, false));
+  subscriptionClient.onReconnected(() => store.set(wsIsConnectedAtom, true));
+  const wsLink = new WebSocketLink(subscriptionClient);
 
   return new ApolloClient({
     name: 'navigate-ui',
