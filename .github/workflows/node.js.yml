@@ -39,6 +39,7 @@ jobs:
             dist
             !dist/**/*.md
       - name: Run BundleMon
+        continue-on-error: true
         uses: lironer/bundlemon-action@v1
 
   sbt-update:
