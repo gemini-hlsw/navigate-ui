@@ -15,6 +15,16 @@
     animation: blink 3s infinite;
   }
 
+  .connection-lost {
+    color: var(--yellow-200);
+    background-color: var(--yellow-500);
+    animation: blink 1s infinite;
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+  }
+
   .nav-btn {
     padding-top: 0;
     padding-bottom: 0;

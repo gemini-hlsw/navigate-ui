@@ -13,6 +13,8 @@ import { useOdbTokenValue } from '@/components/atoms/odb';
 import { useTheme } from '@/components/atoms/theme';
 import { ChevronDown, Info, Key, KeySolid, Map, Moon, SignIn, SignOut, Sun, User } from '@/components/Icons';
 
+import { ConnectionLost } from './ConnectionLost';
+
 export default function Navbar() {
   const configuration = useConfiguration().data?.configuration;
   const [theme, toggleTheme] = useTheme();
@@ -87,6 +89,7 @@ export default function Navbar() {
         {configuration?.obsReference && <span className="observation-ref">{configuration.obsReference}</span>}
       </div>
       <div className="right">
+        <ConnectionLost />
         {!odbToken && (
           <Link to="/token" style={{ animation: 'blink 1s infinite' }}>
             <Key />
