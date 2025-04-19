@@ -58,7 +58,7 @@
     "lucuma-core": "0.124.0",
     "lucuma-schemas": "0.130.0",
     "lucuma-ui-css": "0.139.1",
-    "playwright": "1.51.1",
+    "playwright": "1.52.0",
     "prettier": "3.5.3",
     "primereact": "10.9.4",
     "react": "19.1.0",
