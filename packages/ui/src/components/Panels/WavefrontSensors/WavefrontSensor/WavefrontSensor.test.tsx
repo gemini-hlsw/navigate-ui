@@ -43,7 +43,7 @@ describe('WavefrontSensor', () => {
     const freq = 50;
 
     await selectDropdownOption(sut, 'Select frequency', freq.toString());
-    await userEvent.click(sut.getByRole('button', { name: 'Sky' }));
+    await userEvent.click(sut.getByRole('button', { name: 'Take Sky' }));
 
     expect(takeSkyMock.request.variables).toHaveBeenCalledExactlyOnceWith({
       period: { milliseconds: (1 / freq) * 1000 },
