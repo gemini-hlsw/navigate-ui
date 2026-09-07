@@ -21,7 +21,8 @@ describe(TimeAwardsGrid, () => {
     const cell = screen.getByRole('spinbutton').first();
     await userEvent.fill(cell, '0');
     await userEvent.tab();
-    await expect.element(screen.getByText('United States')).toBeInTheDocument();
+    // The row cell reads `<strong>US</strong> United States`.
+    await expect.element(screen.getByText('US United States')).toBeInTheDocument();
   });
 
   it('offers the non-partner categories and adds a Calibration row (sc-9670)', async () => {
@@ -33,6 +34,6 @@ describe(TimeAwardsGrid, () => {
     await userEvent.click(screen.getByText('CAL — Calibration'));
     await userEvent.click(screen.getByRole('button', { name: 'Add', exact: true }));
     // The new row renders with the category's abbreviation and description.
-    await expect.element(screen.getByText('Calibration')).toBeInTheDocument();
+    await expect.element(screen.getByText('CAL Calibration')).toBeInTheDocument();
   });
 });

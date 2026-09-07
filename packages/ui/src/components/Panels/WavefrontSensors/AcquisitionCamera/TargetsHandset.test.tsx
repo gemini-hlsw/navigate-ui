@@ -85,7 +85,7 @@ describe(TargetsHandset, () => {
 
   it('shows align angle input when OIWFS is selected', async () => {
     await selectAlignment('OIWFS');
-    const alignAngleInput = sut.getByLabelText('Align angle');
+    const alignAngleInput = sut.getByLabelText('Align Angle');
 
     await userEvent.type(alignAngleInput, '45{Enter}');
 
@@ -98,7 +98,7 @@ describe(TargetsHandset, () => {
   it('hides align angle input when other than OIWFS is selected', async () => {
     await selectAlignment('Az/El');
 
-    expect(sut.getByLabelText('Align angle')).not.toBeInTheDocument();
+    expect(sut.getByLabelText('Align Angle')).not.toBeInTheDocument();
   });
 
   it.each([
@@ -177,7 +177,7 @@ describe(TargetsHandset, () => {
       },
     ],
   ])('inputs for AC %s matches %s', async (testId, label, expectedInput) => {
-    await userEvent.click(sut.getByLabelText('Open loops'));
+    await userEvent.click(sut.getByLabelText('Open loops while offsetting'));
     await expectDirectionButtonClick<typeof ADJUST_TARGET_MUTATION>(testId, label, adjustTargetMutationMock, {
       target: 'OIWFS',
       openLoops: false,

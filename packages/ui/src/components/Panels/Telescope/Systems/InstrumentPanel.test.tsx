@@ -47,7 +47,7 @@ describe(InstrumentPanel, () => {
 
   it('opens the instrument modal when the import button is clicked', async () => {
     expect(sut.store.get(importInstrumentAtom)).toBe(false);
-    const importInstrumentButton = sut.getByLabelText('Import instrument');
+    const importInstrumentButton = sut.getByLabelText('Import Instrument');
 
     await userEvent.click(importInstrumentButton);
 
