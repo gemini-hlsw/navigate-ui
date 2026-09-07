@@ -1,22 +1,11 @@
-/** @type {import("stylelint").Config} */
-export default {
-  extends: ['stylelint-config-standard'],
+/**
+ * @type {import("stylelint").Config}
+ */
+const styleLintConfig = {
+  extends: ['stylelint-config-standard', '@dreamsicle.io/stylelint-config-tailwindcss'],
   rules: {
     'import-notation': null,
-    'at-rule-no-unknown': [
-      true,
-      {
-        ignoreAtRules: ['theme', 'reference', 'apply'],
-      },
-    ],
-  },
-  languageOptions: {
-    syntax: {
-      atRules: {
-        'custom-variant': {
-          comment: 'Tailwind custom variant',
-        },
-      },
-    },
   },
 };
+
+export default styleLintConfig;
