@@ -54,6 +54,11 @@
         "source.fixAll.stylelint": "explicit",
       },
     },
+    "[tailwindcss]": {
+      "editor.codeActionsOnSave": {
+        "source.fixAll.stylelint": "explicit",
+      },
+    },
     "tailwindCSS.classFunctions": ["cn", "twMerge"],
     "js/ts.tsdk.path": "root/node_modules/typescript/lib",
   },
