@@ -46,6 +46,7 @@ playwright-report/
 blob-report/
 playwright/.cache/
 
-# Vitest browser-mode failure artifacts
+# Vitest artifacts (attachments, failure screenshots, reports)
+.vitest/
 __screenshots__/
 .vitest-attachments/

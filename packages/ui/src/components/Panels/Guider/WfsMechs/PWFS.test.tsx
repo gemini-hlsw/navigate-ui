@@ -16,15 +16,11 @@ import { renderWithContext } from '@/test/render';
 
 import { PWFS1, PWFS2 } from './PWFS';
 
-describe(PWFS1.name, () => {
-  it('should render', async () => {
-    await renderWithContext(<PWFS1 disabled={false} />, { mocks });
-  });
-
+describe(PWFS1, () => {
   it('should render disabled', async () => {
     const sut = await renderWithContext(<PWFS1 disabled={true} />, { mocks });
     await expect.element(sut.getByLabelText('Filter', { exact: true })).toBeDisabled();
-    await expect.element(sut.getByLabelText('Field Stop')).toBeDisabled();
+    await expect.element(sut.getByLabelText('Field stop')).toBeDisabled();
   });
 
   it('should call pwfs1Filter when changing filter', async () => {
@@ -44,15 +40,11 @@ describe(PWFS1.name, () => {
   });
 });
 
-describe(PWFS2.name, () => {
-  it('should render', async () => {
-    await renderWithContext(<PWFS2 disabled={false} />, { mocks });
-  });
-
+describe(PWFS2, () => {
   it('should render disabled', async () => {
     const sut = await renderWithContext(<PWFS2 disabled={true} />, { mocks });
     await expect.element(sut.getByLabelText('Filter', { exact: true })).toBeDisabled();
-    await expect.element(sut.getByLabelText('Field Stop')).toBeDisabled();
+    await expect.element(sut.getByLabelText('Field stop')).toBeDisabled();
   });
 
   it('should call pwfs2Filter when changing filter', async () => {

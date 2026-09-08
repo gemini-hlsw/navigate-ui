@@ -27,7 +27,7 @@ import type { Fpu } from '@/types';
 
 import { TargetSwapButton } from './TargetSwapButton';
 
-describe(TargetSwapButton.name, () => {
+describe(TargetSwapButton, () => {
   let sut: RenderResult;
 
   describe('onSwappedTarget is false', () => {
@@ -48,7 +48,8 @@ describe(TargetSwapButton.name, () => {
     });
 
     it('should render', async () => {
-      await expect.element(sut.getByRole('button')).toHaveTextContent('Point to Guide Star');
+      // The button also names the target, so match on part of the text.
+      await expect.element(sut.getByRole('button')).toMatchTextContent('Point to Guide Star');
       await expect.element(sut.getByRole('button')).not.toHaveClass('p-button-danger');
     });
 
@@ -113,7 +114,8 @@ describe(TargetSwapButton.name, () => {
     });
 
     it('should restore target', async () => {
-      await expect.element(sut.getByRole('button')).toHaveTextContent('Point to Base');
+      // The button also names the target, so match on part of the text.
+      await expect.element(sut.getByRole('button')).toMatchTextContent('Point to Base');
       await expect.element(sut.getByRole('button')).toHaveClass('p-button-danger');
 
       await userEvent.click(sut.getByRole('button'));

@@ -6,12 +6,13 @@ import { renderWithContext } from '@/test/render';
 
 import Layout from './Layout';
 
-describe('Layout', () => {
+describe(Layout, () => {
   it('shows the wordmark, environment pill, and signed-in user', async () => {
     const screen = await renderWithContext(<Layout />, { token: fakeJwt(standardUser('staff')) });
     await expect.element(screen.getByText('ADMIN')).toBeInTheDocument();
     await expect.element(screen.getByText('development')).toBeInTheDocument();
-    await expect.element(screen.getByText('Ada Lovelace')).toBeInTheDocument();
+    // The name shares its element with the role badge, so match on part of the text.
+    await expect.element(screen.getByText('Ada Lovelace', { exact: false })).toBeInTheDocument();
     await expect.element(screen.getByText('STAFF')).toBeInTheDocument();
   });
 

@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 `lucuma-ts` (`@gemini-hlsw/lucuma-ts`) is a pnpm monorepo (`pnpm`, Node + corepack) of TypeScript apps and libs supporting GPP. Individual package names mix `navigate-*`, `lucuma-*`, and `resource-*` prefixes — don't assume a package's name from its folder.
 
-TypeScript runs **directly under Node** (native type stripping) in dev and tests — there's no ts-node and no build step before running. `configs` dev/tests execute `.ts`/`.test.ts` files as-is (`node --watch ./src/index.ts`, `node --test 'src/**/*.test.ts'`).
+TypeScript runs **directly under Node** (native type stripping) in dev — there's no ts-node and no build step before running. `configs` dev executes `.ts` files as-is (`node --watch ./src/index.ts`). All packages run their tests with Vitest.
 
 Packages (under `packages/*`):
 
@@ -35,7 +35,7 @@ pnpm ui test                 # vitest — runs in a real browser (Playwright/chr
 pnpm configs generate        # prisma generate
 pnpm configs codegen         # graphql-codegen
 pnpm configs dev             # node --watch with .env
-pnpm configs test            # node:test integration tests (spins up a Postgres testcontainer)
+pnpm configs test            # vitest integration tests in Node (spins up a Postgres testcontainer)
 
 # resource-ui
 pnpm resource-ui codegen           # regenerate src/gql/gen (gitignored) - needed before test/build on a fresh clone
@@ -57,7 +57,7 @@ pnpm e2e test:e2e            # playwright test
 Run a single test:
 
 - UI/resource-ui (vitest): `pnpm ui test <path-or-name>` or `pnpm ui exec vitest run -t "<test name>" --brower.headless`. Prefer to use `--browser.headless` when running tests.
-- configs (node:test): `pnpm configs exec node --test --enable-source-maps src/integration/<file>.test.ts` (Docker must be running for the Postgres testcontainer).
+- configs (vitest, Node environment — no browser): `pnpm configs exec vitest run src/integration/<file>.test.ts` (Docker must be running for the Postgres testcontainer).
 
 ## Architecture
 
@@ -96,7 +96,7 @@ When writing Vitest tests:
 - **Test behavior, not implementation.** If the internals changed but the output stayed correct, the test shouldn't break. Render real components and drive them through real interactions (`userEvent`, or dispatch real `MouseEvent`/`TouchEvent`) rather than `renderHook` + calling returned handlers with hand-built fake event objects (`{ ... } as unknown as React.MouseEvent` is over-mocking). Assert on observable outcomes (rendered DOM, spy calls), not private state.
 - **Never `sleep` to wait for state** — it's flaky and slow. Wait on the real thing: `await expect.element(locator).toBeVisible()/.toHaveTextContent(...)` or `expect.poll(() => ...)` (these retry on real timers — don't mix them with fake timers). To surface an async React commit for a test to await, reflect it in the DOM and wait on that.
 - **Fake timers only for negative-timing assertions** (e.g. "this timer must _never_ fire"). Scope them to what's needed — `vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })` keeps React's scheduler real — advance with `vi.advanceTimersByTime(...)`, and restore with `vi.useRealTimers()` in `afterEach`.
-- **Name `describe` blocks with `.name`, not a string literal.** When the subject is a function or component, write `describe(useSyncedState.name, ...)` / `describe(TopSubsystems.name, ...)` rather than `describe('useSyncedState', ...)` — a rename then updates the test title automatically instead of leaving it stale.
+- **Name `describe` blocks with the subject itself, not a string or `.name`.** When the subject is a function or component, write `describe(useSyncedState, ...)` / `describe(TopSubsystems, ...)` rather than `describe('useSyncedState', ...)` or `describe(useSyncedState.name, ...)` - the title follows a rename, and an identifier that stops resolving fails the typecheck where a stale string stays silent. `vitest/prefer-describe-function-title` makes both of the other forms an error.
 - **Render helpers:** `render(...)` returns locators + `container` but **no `act`**; `renderHook(...)` returns `{ result, act, unmount }`. Use `sut.act(() => vi.advanceTimersByTime(...))` to flush timer-driven state updates when testing a hook directly.
 - Use `vi.fn()`/`vi.mock()` (never the `jest` equivalents), recreate spies per test in `beforeEach`, and prefer real dependencies over mocks.
 
