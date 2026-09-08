@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import type { CallForProposals } from '../types';
-import { type AdminCfpsResult, cfpPropertiesInput, currentSemester, mapCfps, newCallInput, semesterDates } from './cfp';
+import { type AdminCfpsResult, cfpPropertiesInput, mapCfps, newCallInput, semesterDates } from './cfp';
 
 type RawCfp = AdminCfpsResult['callsForProposals']['matches'][number];
 type RawLimits = NonNullable<RawCfp['keck']>['coordinateLimits'];
@@ -333,19 +333,6 @@ describe(newCallInput, () => {
     expect(input.semester).toMatch(/^\d{4}[AB]$/);
     expect(input.activeStart).toBeDefined();
     expect(input.activeEnd).toBeDefined();
-  });
-});
-
-describe(currentSemester, () => {
-  it('assigns Feb-Jul to A and Aug-Dec to B', () => {
-    expect(currentSemester(new Date('2027-02-01T00:00:00Z'))).toBe('2027A');
-    expect(currentSemester(new Date('2027-07-31T23:59:59Z'))).toBe('2027A');
-    expect(currentSemester(new Date('2027-08-01T00:00:00Z'))).toBe('2027B');
-    expect(currentSemester(new Date('2027-12-31T23:59:59Z'))).toBe('2027B');
-  });
-
-  it("assigns January to the previous year's B semester", () => {
-    expect(currentSemester(new Date('2028-01-15T12:00:00Z'))).toBe('2027B');
   });
 });
 

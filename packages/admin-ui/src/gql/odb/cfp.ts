@@ -10,10 +10,16 @@
 import { useMutation, useQuery } from '@apollo/client/react';
 import { parseNumber } from '@gemini-hlsw/lucuma-common-ui';
 
+import { currentSemester } from '@/lib/semester';
+
 import type { CallForProposals, CfpDetails, Observatory, SiteCoordinateLimits } from '../types';
 import type { DocumentType } from './gen';
 import { graphql } from './gen';
 import type { CallForProposalsItemFragment, CallForProposalsPropertiesInput, SiteLimitFragment } from './gen/graphql';
+
+// Re-exported for callers that already import it from this module (the CfP
+// New-button seed uses it); the implementation lives in lib/semester.
+export { currentSemester };
 
 export const CFP_ITEM_FRAGMENT = graphql(`
   fragment CallForProposalsItem on CallForProposals {
@@ -263,15 +269,6 @@ function coordinateLimitsInput(l: SiteCoordinateLimits) {
     decStart: { degrees: l.decStart },
     decEnd: { degrees: l.decEnd },
   };
-}
-
-/** Gemini semester containing the given moment: A runs Feb–Jul, B runs
- *  Aug–Jan (January belongs to the previous year's B). Seeds newly created
- *  calls. */
-export function currentSemester(now: Date = new Date()): string {
-  const month = now.getUTCMonth() + 1;
-  if (month === 1) return `${String(now.getUTCFullYear() - 1)}B`;
-  return `${String(now.getUTCFullYear())}${month < 8 ? 'A' : 'B'}`;
 }
 
 /** A semester's active date range — the ODB requires activeStart/activeEnd on
