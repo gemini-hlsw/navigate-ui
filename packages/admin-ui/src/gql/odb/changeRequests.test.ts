@@ -165,7 +165,12 @@ describe(observationsByIdFrom, () => {
 });
 
 describe(groupChangeRequestsByProgram, () => {
-  const cr = (id: string, programId: string, status: ChangeRequest['status']): ChangeRequest => ({
+  const cr = (
+    id: string,
+    programId: string,
+    status: ChangeRequest['status'],
+    site: ChangeRequest['site'] = 'SOUTH',
+  ): ChangeRequest => ({
     id,
     programId,
     programReference: programId,
@@ -173,7 +178,7 @@ describe(groupChangeRequestsByProgram, () => {
     pi: 'PI',
     status,
     justification: '',
-    site: 'SOUTH',
+    site,
     ra: '—',
     dec: '—',
     raDeg: null,
@@ -200,5 +205,22 @@ describe(groupChangeRequestsByProgram, () => {
     expect(byProgram.get('p-2')).toBe('Mixed');
     expect(byProgram.get('p-3')).toBe('Open');
     expect(byProgram.get('p-4')).toBe('Denied');
+  });
+
+  it('covers every site its requests span, so a dual-site program matches both filters — sc-9606', () => {
+    // A program with both a GMOS-N and a GMOS-S change request must appear under
+    // the North filter AND the South filter (previously only its first request's
+    // site matched).
+    const [dual] = groupChangeRequestsByProgram([
+      cr('x-1', 'p-dual', 'APPROVED', 'NORTH'),
+      cr('x-2', 'p-dual', 'APPROVED', 'SOUTH'),
+    ]);
+    expect(dual?.sites.has('NORTH')).toBe(true);
+    expect(dual?.sites.has('SOUTH')).toBe(true);
+
+    // A single-site program covers only its own site.
+    const [northOnly] = groupChangeRequestsByProgram([cr('x-3', 'p-north', 'APPROVED', 'NORTH')]);
+    expect(northOnly?.sites.has('NORTH')).toBe(true);
+    expect(northOnly?.sites.has('SOUTH')).toBe(false);
   });
 });

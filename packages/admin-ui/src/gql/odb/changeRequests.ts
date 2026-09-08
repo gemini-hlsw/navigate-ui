@@ -282,7 +282,9 @@ export function groupChangeRequestsByProgram(requests: readonly ChangeRequest[])
       programReference: first.programReference,
       programTitle: first.programTitle,
       pi: first.pi,
-      site: first.site,
+      // The set of sites the program's requests span — not just the first
+      // request's — so the site filter matches a dual-site program at both (sc-9606).
+      sites: new Set(reqs.map((r) => r.site)),
       status,
       requests: reqs,
     };

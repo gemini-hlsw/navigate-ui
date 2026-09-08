@@ -82,7 +82,7 @@ export default function ChangeRequestsPage(): JSX.Element {
       programs.filter(
         (p) =>
           (semester === ALL || semesterOf(p.programReference) === semester) &&
-          (site === ALL || p.site === site) &&
+          (site === ALL || p.sites.has(site)) &&
           (statusFilter === ALL || p.status === statusFilter),
       ),
     [programs, semester, site, statusFilter],
