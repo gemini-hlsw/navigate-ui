@@ -413,7 +413,10 @@ export interface ProgramWithChangeRequests {
   readonly programReference: string;
   readonly programTitle: string;
   readonly pi: string;
-  readonly site: Site;
+  /** Every site the program's change requests span — a program with both a
+   *  GMOS-N and a GMOS-S request covers both, so the site filter matches it at
+   *  either (sc-9606). */
+  readonly sites: ReadonlySet<Site>;
   readonly status: ProgramCrStatus;
   readonly requests: readonly ChangeRequest[];
 }
