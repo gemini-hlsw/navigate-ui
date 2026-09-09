@@ -107,7 +107,7 @@ describe(NightPage, () => {
     });
 
     // Settle on the failure first, so the absences below are read after the query resolved.
-    await expect.element(screen.getByRole('alert')).toHaveTextContent('the Resource service did not answer');
+    await expect.element(screen.getByRole('alert')).toMatchTextContent('the Resource service did not answer');
     await expect.element(screen.getByText('Gemini South Semester 2025B', { exact: false })).toBeVisible();
 
     await expect.element(screen.getByTestId('night-timeline')).not.toBeInTheDocument();

@@ -72,7 +72,7 @@ describe(InstrumentsPage, () => {
 
     // The Not Available window is 6-17 August 2026: twelve nights.
     const runs = screen.getByTestId('instrument-runs');
-    await expect.element(runs.getByRole('row', { name: /Not available/ })).toHaveTextContent('12');
+    await expect.element(runs.getByRole('row', { name: /Not available/ })).toMatchTextContent('12');
   });
 
   it('search narrows across the tag and the published name', async () => {
@@ -104,7 +104,7 @@ describe(InstrumentsPage, () => {
     const screen = await open('/instruments?site=GN&semester=2026B&night=2026-09-26');
     await expect.element(screen.getByText('GNIRS')).toBeVisible();
 
-    await selectDropdownOption(screen, 'Location', 'Not on a port');
+    await selectDropdownOption(screen, 'Location', 'Not on a port (1)');
 
     await expect.element(screen.getByText("'Alopeke").first()).toBeVisible();
     await expect.element(screen.getByText('GNIRS')).not.toBeInTheDocument();
@@ -142,7 +142,7 @@ describe(InstrumentsPage, () => {
   it('filters to a storage place, which is what a stored instrument has instead of a port', async () => {
     const screen = await open('/instruments?site=GS&semester=2025B&night=2025-11-20');
 
-    await selectDropdownOption(screen, 'Location', 'Base facility');
+    await selectDropdownOption(screen, 'Location', 'Base facility (1)');
 
     await expect.element(screen.getByText('GPI')).toBeVisible();
     await expect.element(screen.getByText('GHOST')).not.toBeInTheDocument();

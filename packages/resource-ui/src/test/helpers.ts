@@ -8,7 +8,7 @@ export async function openDropdown(sut: LocatorSelectors, label: string): Promis
   await userEvent.click(wrapper!);
 }
 
-/** The option name matches by substring, so "GMOS" finds "GMOS (12)". */
+/** The option name matches exactly, so pass the full label, count included: "GMOS (36)". */
 export async function selectDropdownOption(sut: LocatorSelectors, label: string, optionLabel: string): Promise<void> {
   await openDropdown(sut, label);
   const option = page.getByRole('listbox').getByRole('option', { name: optionLabel });

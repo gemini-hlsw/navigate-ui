@@ -55,7 +55,7 @@ describe(useOpenNight, () => {
 
     await screen.getByRole('button', { name: 'open 2025-12-24' }).click();
 
-    await expect.element(screen.getByTestId(PROBE_URL_TESTID)).toHaveTextContent('/night');
+    await expect.element(screen.getByTestId(PROBE_URL_TESTID)).toMatchTextContent('/night');
     await expect.element(screen.getByTestId('probe-night')).toHaveTextContent('2025-12-24');
   });
 
@@ -65,9 +65,9 @@ describe(useOpenNight, () => {
     await screen.getByRole('button', { name: 'open 2025-12-24' }).click();
 
     const url = screen.getByTestId(PROBE_URL_TESTID);
-    await expect.element(url).toHaveTextContent('site=GS');
-    await expect.element(url).toHaveTextContent('semester=2025B');
-    await expect.element(url).toHaveTextContent('clock=utc');
+    await expect.element(url).toMatchTextContent('site=GS');
+    await expect.element(url).toMatchTextContent('semester=2025B');
+    await expect.element(url).toMatchTextContent('clock=utc');
   });
 
   it('replaces a night already in the URL rather than appending a second one', async () => {
@@ -76,7 +76,7 @@ describe(useOpenNight, () => {
     await screen.getByRole('button', { name: 'open 2025-12-24' }).click();
 
     await expect.element(screen.getByTestId('probe-night')).toHaveTextContent('2025-12-24');
-    await expect.element(screen.getByTestId(PROBE_URL_TESTID)).not.toHaveTextContent('2025-11-14');
+    await expect.element(screen.getByTestId(PROBE_URL_TESTID)).toHaveTextContent('/night?site=GS&night=2025-12-24');
   });
 
   it('keeps one identity across a URL change, so a chart holding it is not asked to redraw', async () => {
@@ -84,7 +84,7 @@ describe(useOpenNight, () => {
     const before = screen.getByTestId('probe-identity').element().textContent;
 
     await screen.getByRole('button', { name: 'to UTC' }).click();
-    await expect.element(screen.getByTestId(PROBE_URL_TESTID)).toHaveTextContent('clock=utc');
+    await expect.element(screen.getByTestId(PROBE_URL_TESTID)).toMatchTextContent('clock=utc');
 
     await expect.element(screen.getByTestId('probe-identity')).toHaveTextContent(before ?? '');
   });
@@ -94,11 +94,11 @@ describe(useOpenNight, () => {
     const screen = await openProbe('/semester?site=GS&semester=2025B');
 
     await screen.getByRole('button', { name: 'to UTC' }).click();
-    await expect.element(screen.getByTestId(PROBE_URL_TESTID)).toHaveTextContent('clock=utc');
+    await expect.element(screen.getByTestId(PROBE_URL_TESTID)).toMatchTextContent('clock=utc');
 
     await screen.getByRole('button', { name: 'open 2025-12-24' }).click();
 
-    await expect.element(screen.getByTestId(PROBE_URL_TESTID)).toHaveTextContent('clock=utc');
+    await expect.element(screen.getByTestId(PROBE_URL_TESTID)).toMatchTextContent('clock=utc');
     await expect.element(screen.getByTestId('probe-night')).toHaveTextContent('2025-12-24');
   });
 });

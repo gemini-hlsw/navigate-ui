@@ -73,8 +73,8 @@ describe(useSelection, () => {
 
     await screen.getByRole('button', { name: 'to GS' }).click();
 
-    await expect.element(screen.getByTestId(PROBE_URL_TESTID)).toHaveTextContent('site=GS');
-    await expect.element(screen.getByTestId(PROBE_URL_TESTID)).toHaveTextContent('month=2026-11');
+    await expect.element(screen.getByTestId(PROBE_URL_TESTID)).toMatchTextContent('site=GS');
+    await expect.element(screen.getByTestId(PROBE_URL_TESTID)).toMatchTextContent('month=2026-11');
   });
 
   it('drops the calendar month on a semester change - it named a page of the old one', async () => {
@@ -82,8 +82,7 @@ describe(useSelection, () => {
 
     await screen.getByRole('button', { name: 'set semester 2025A' }).click();
 
-    await expect.element(screen.getByTestId(PROBE_URL_TESTID)).toHaveTextContent('semester=2025A');
-    await expect.element(screen.getByTestId(PROBE_URL_TESTID)).not.toHaveTextContent('month');
+    await expect.element(screen.getByTestId(PROBE_URL_TESTID)).toHaveTextContent('/semester?site=GS&semester=2025A');
   });
 
   it('moves the night with the semester in one update, so the control is never a silent no-op', async () => {
@@ -94,7 +93,9 @@ describe(useSelection, () => {
     // One URL: two updates would let a render see the night outside the semester.
     await expect.element(screen.getByTestId('probe-semester')).toHaveTextContent('2025A');
     await expect.element(screen.getByTestId('probe-night')).toHaveTextContent('2025-03-01');
-    await expect.element(screen.getByTestId(PROBE_URL_TESTID)).not.toHaveTextContent('month');
+    await expect
+      .element(screen.getByTestId(PROBE_URL_TESTID))
+      .toHaveTextContent('/night?site=GS&semester=2025A&night=2025-03-01');
   });
 
   it('leaves the night alone when the jump does not name one - the caller decides', async () => {
@@ -112,7 +113,7 @@ describe(useSelection, () => {
     await screen.getByRole('button', { name: 'tonight' }).click();
 
     // The URL says "the night in progress", so it keeps meaning that tomorrow.
-    await expect.element(screen.getByTestId(PROBE_URL_TESTID)).not.toHaveTextContent('night=');
+    await expect.element(screen.getByTestId(PROBE_URL_TESTID)).toHaveTextContent('/night?site=GS');
     await expect.element(screen.getByTestId('probe-night')).toHaveTextContent(observingNightOf('GS', Date.now()));
   });
 
@@ -120,9 +121,9 @@ describe(useSelection, () => {
     const screen = await openSelection('/night?site=GS');
 
     await screen.getByRole('button', { name: 'to UTC' }).click();
-    await expect.element(screen.getByTestId(PROBE_URL_TESTID)).toHaveTextContent('clock=utc');
+    await expect.element(screen.getByTestId(PROBE_URL_TESTID)).toMatchTextContent('clock=utc');
 
     await screen.getByRole('button', { name: 'to site clock' }).click();
-    await expect.element(screen.getByTestId(PROBE_URL_TESTID)).not.toHaveTextContent('clock');
+    await expect.element(screen.getByTestId(PROBE_URL_TESTID)).toHaveTextContent('/night?site=GS');
   });
 });

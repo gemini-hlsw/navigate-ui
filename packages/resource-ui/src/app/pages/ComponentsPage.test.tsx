@@ -21,7 +21,7 @@ describe('ComponentsPage - the finder', () => {
     const screen = await open('/components?site=GS&semester=2025B&night=2025-10-15');
 
     // The g filter rides with GMOS-S, mounted on Port 3 all semester.
-    await expect.element(screen.getByText('Port 3 · GMOS').first()).toBeVisible();
+    await expect.element(screen.getByText('Port 3 · GMOS-S').first()).toBeVisible();
   });
 
   it('names the storage place for a spare', async () => {
@@ -78,7 +78,7 @@ describe('ComponentsPage - the finder', () => {
     const screen = await open('/components?site=GS&semester=2025B&night=2025-09-01');
     await screen.getByLabelText('Search').fill('R400');
 
-    await expect.element(screen.getByText('Port 3 · GMOS')).toBeVisible();
+    await expect.element(screen.getByText('Port 3 · GMOS-S')).toBeVisible();
   });
 
   it('shows the failing piece in the lab after its failure, with the reason on the row', async () => {
@@ -175,7 +175,7 @@ describe('ComponentsPage - the finder', () => {
 
     // The 2025B failure runs 19 Nov 2025 - 31 Jan 2026, both evenings counted.
     const history = screen.getByTestId('component-history');
-    await expect.element(history.getByRole('row', { name: /19 Nov 2025 – 31 Jan 2026/ })).toHaveTextContent('74');
+    await expect.element(history.getByRole('row', { name: /19 Nov 2025 - 31 Jan 2026/ })).toMatchTextContent('74');
   });
 
   it('speaks the row status vocabulary in the history, never the bare enum', async () => {
@@ -195,7 +195,7 @@ describe('ComponentsPage - the finder', () => {
     // Both F2 and GSAOI carry a K-short; the instrument filter clears them all.
     await expect.element(screen.getByText('K-short').first()).toBeVisible();
 
-    await selectDropdownOption(screen, 'Instrument', 'GMOS');
+    await selectDropdownOption(screen, 'Instrument', 'GMOS (36)');
 
     await expect.element(screen.getByText('K-short')).not.toBeInTheDocument();
     await expect.element(screen.getByText('B1200').first()).toBeVisible();
@@ -205,7 +205,7 @@ describe('ComponentsPage - the finder', () => {
     const screen = await open('/components?site=GS&semester=2025B&night=2025-10-15');
     await expect.element(screen.getByText('Mask GS2026B-011')).toBeVisible();
 
-    await selectDropdownOption(screen, 'Type', 'Disperser');
+    await selectDropdownOption(screen, 'Type', 'Disperser (10)');
 
     // Masks are FPUs and clear out; the gratings stay.
     await expect.element(screen.getByText('Mask GS2026B-011')).not.toBeInTheDocument();

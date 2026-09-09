@@ -13,12 +13,13 @@ describe('the ENDPOINTS.md examples', () => {
     expect(examples.length).toBeGreaterThanOrEqual(8);
   });
 
-  it('executes every documented query against the schema the mock serves', async () => {
-    const { schema } = buildMockSchema(sdl);
-    for (const source of examples) {
+  const { schema } = buildMockSchema(sdl);
+  it.each(examples.map((source) => [source.trim().split('\n')[1]?.trim() ?? source, source] as const))(
+    'executes documented example %# (%s) against the schema the mock serves',
+    async (_selection, source) => {
       const result = await graphql({ schema, source });
-      expect.soft(result.errors, source).toBeUndefined();
-      expect.soft(result.data, source).toBeTruthy();
-    }
-  });
+      expect(result.errors).toBeUndefined();
+      expect(result.data).toBeTruthy();
+    },
+  );
 });

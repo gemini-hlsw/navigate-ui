@@ -149,7 +149,7 @@ describe(Navbar, () => {
     const screen = await renderNavbar();
 
     const account = screen.getByTestId('account-control');
-    await expect.element(account).toHaveTextContent('Guest');
+    await expect.element(account).toHaveTextContent('Guest User');
     await expect
       .element(account)
       .toHaveAttribute('title', 'Authentication is not implemented yet - the mock allows everything.');

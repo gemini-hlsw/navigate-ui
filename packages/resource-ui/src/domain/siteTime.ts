@@ -81,6 +81,5 @@ export const eveningLabel = (eveningDate: string, style: EveningStyle = 'dayMont
   return formatter.format(new Date(`${eveningDate}T12:00:00Z`));
 };
 
-/** An en dash with spaces, the same one in every table that prints a record's extent. */
 export const eveningRange = (site: Site, interval: Interval, style: EveningStyle = 'dayMonthYear'): string =>
-  `${eveningLabel(firstEveningDate(site, interval), style)} – ${eveningLabel(lastEveningDate(site, interval), style)}`;
+  `${eveningLabel(firstEveningDate(site, interval), style)} - ${eveningLabel(lastEveningDate(site, interval), style)}`;
