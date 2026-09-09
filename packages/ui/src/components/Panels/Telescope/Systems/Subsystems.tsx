@@ -238,46 +238,9 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
           shuttersOff ? 'Press Set to enable the shutters' : 'Selected mode is not applied',
         )}
       />
-      <EcsCloseWestVentGate
-        disabled={!canEdit}
-        style={{ gridArea: 'g61' }}
-        label="Close"
-        className={cn(BTN_CLASSES[state.wVGateClose])}
-        data-testid="close-west-vent-gate"
-      />
-      <NumberInput
-        inputId="west-vent-gate"
-        aria-label="West vent gate"
-        disabled={!canEdit}
-        style={{ gridArea: 'g62' }}
-        value={WVGate}
-        onValueChange={(e) => setWVGate(e.value ?? null)}
-        mode="decimal"
-        suffix="%"
-        {...VENT_GATE_RANGE}
-        minFractionDigits={0}
-        maxFractionDigits={0}
-      />
-      <Slider
-        disabled={!canEdit || isNullish(WVGate)}
-        style={{ gridArea: 'g63', marginTop: '10px' }}
-        value={WVGate ?? VENT_GATE_RANGE.min}
-        onChange={(e) => setWVGate(e.value as number)}
-        {...VENT_GATE_RANGE}
-      />
-      <EcsMoveWestVentGate
-        position={WVGate}
-        disabled={!canEdit || !westVentGateDirty}
-        style={{ gridArea: 'g66' }}
-        label="Move"
-        data-testid="move-west-vent-gate"
-        icon={westVentGateDirty ? dirtyButtonIcon : undefined}
-        className={westVentGateDirty ? BTN_CLASSES.ACTIVE : undefined}
-        tooltip={westVentGateDirty ? 'Selected position is not applied' : undefined}
-      />
       <EcsCloseEastVentGate
         disabled={!canEdit}
-        style={{ gridArea: 'g71' }}
+        style={{ gridArea: 'g61' }}
         label="Close"
         className={cn(BTN_CLASSES[state.eVGateClose])}
         data-testid="close-east-vent-gate"
@@ -286,7 +249,7 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         inputId="east-vent-gate"
         aria-label="East vent gate"
         disabled={!canEdit}
-        style={{ gridArea: 'g72' }}
+        style={{ gridArea: 'g62' }}
         value={EVGate}
         onValueChange={(e) => setEVGate(e.value ?? null)}
         mode="decimal"
@@ -297,7 +260,7 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
       />
       <Slider
         disabled={!canEdit || isNullish(EVGate)}
-        style={{ gridArea: 'g73', marginTop: '10px' }}
+        style={{ gridArea: 'g63', marginTop: '10px' }}
         value={EVGate ?? VENT_GATE_RANGE.min}
         onChange={(e) => setEVGate(e.value as number)}
         {...VENT_GATE_RANGE}
@@ -305,12 +268,49 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
       <EcsMoveEastVentGate
         position={EVGate}
         disabled={!canEdit || !eastVentGateDirty}
-        style={{ gridArea: 'g76' }}
+        style={{ gridArea: 'g66' }}
         label="Move"
         data-testid="move-east-vent-gate"
         icon={eastVentGateDirty ? dirtyButtonIcon : undefined}
         className={eastVentGateDirty ? BTN_CLASSES.ACTIVE : undefined}
         tooltip={eastVentGateDirty ? 'Selected position is not applied' : undefined}
+      />
+      <EcsCloseWestVentGate
+        disabled={!canEdit}
+        style={{ gridArea: 'g71' }}
+        label="Close"
+        className={cn(BTN_CLASSES[state.wVGateClose])}
+        data-testid="close-west-vent-gate"
+      />
+      <NumberInput
+        inputId="west-vent-gate"
+        aria-label="West vent gate"
+        disabled={!canEdit}
+        style={{ gridArea: 'g72' }}
+        value={WVGate}
+        onValueChange={(e) => setWVGate(e.value ?? null)}
+        mode="decimal"
+        suffix="%"
+        {...VENT_GATE_RANGE}
+        minFractionDigits={0}
+        maxFractionDigits={0}
+      />
+      <Slider
+        disabled={!canEdit || isNullish(WVGate)}
+        style={{ gridArea: 'g73', marginTop: '10px' }}
+        value={WVGate ?? VENT_GATE_RANGE.min}
+        onChange={(e) => setWVGate(e.value as number)}
+        {...VENT_GATE_RANGE}
+      />
+      <EcsMoveWestVentGate
+        position={WVGate}
+        disabled={!canEdit || !westVentGateDirty}
+        style={{ gridArea: 'g76' }}
+        label="Move"
+        data-testid="move-west-vent-gate"
+        icon={westVentGateDirty ? dirtyButtonIcon : undefined}
+        className={westVentGateDirty ? BTN_CLASSES.ACTIVE : undefined}
+        tooltip={westVentGateDirty ? 'Selected position is not applied' : undefined}
       />
     </div>
   );
