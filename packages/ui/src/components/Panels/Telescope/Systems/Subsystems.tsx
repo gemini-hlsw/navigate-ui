@@ -64,7 +64,28 @@ const SHUTTER_MODE: Labelled<ShutterControlMode>[] = [
   { label: 'Fully Open', value: 'FULLY_OPEN' },
 ];
 
-const APERTURE_RANGE = { min: 0, max: 100, step: 1 };
+/** Mode shown while the dome reports no mode of its own. */
+const DEFAULT_DOME_MODE: DomeMode = 'BASIC';
+
+/** Mode shown while the shutters report no mode of their own. */
+const DEFAULT_SHUTTER_MODE: ShutterControlMode = 'FULLY_OPEN';
+
+const VENT_GATE_RANGE = { min: 0, max: 100, step: 1 };
+
+/** Limits of the shutter aperture, in meters. The minimum is also the default. */
+const SHUTTER_APERTURE_RANGE = { min: 9.32, max: 19.999, step: 0.01 };
+
+/** Largest difference between two apertures that still counts as the same aperture, in meters. */
+const APERTURE_TOLERANCE = 0.001;
+
+/**
+ * Compare two apertures. The server can report an aperture with more decimals than the
+ * input shows, so a difference below the tolerance is not an edit.
+ */
+function sameAperture(one: number | null, other: number | null): boolean {
+  if (isNullish(one) || isNullish(other)) return one === other;
+  return Math.abs(one - other) < APERTURE_TOLERANCE;
+}
 
 export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
   const { data, loading: mechanismLoading } = useMechanism();
@@ -77,9 +98,9 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
   const westVentGateState = enclosure?.westVentGateAperture ?? null;
   const eastVentGateState = enclosure?.eastVentGateAperture ?? null;
 
-  const [domeMode, setDomeMode] = useSyncedState(domeStateMode, null);
-  const [shutterMode, setShutterMode] = useSyncedState(shutterStateMode, null);
-  const [aperture, setAperture] = useSyncedState(shutterStateAperture, null);
+  const [domeMode, setDomeMode] = useSyncedState(domeStateMode, DEFAULT_DOME_MODE);
+  const [shutterMode, setShutterMode] = useSyncedState(shutterStateMode, DEFAULT_SHUTTER_MODE);
+  const [aperture, setAperture] = useSyncedState<number | null>(shutterStateAperture, null);
   const [WVGate, setWVGate] = useSyncedState<number | null>(westVentGateState, null);
   const [EVGate, setEVGate] = useSyncedState<number | null>(eastVentGateState, null);
 
@@ -87,11 +108,14 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
 
   const loading = mechanismLoading || telescopeLoading;
 
+  // The enclosure state tells which mode is applied. Command nothing before it arrives.
+  const enclosureKnown = isNotNullish(enclosure);
   const domeOff = !enclosure?.domeEnabled;
   const shuttersOff = !enclosure?.shuttersEnabled;
-  const domeModeDirty = isNotNullish(domeMode) && (domeOff || domeMode !== domeStateMode);
-  const shutterModeDirty =
-    isNotNullish(shutterMode) && (shuttersOff || shutterMode !== shutterStateMode || aperture !== shutterStateAperture);
+  const domeModeDirty = enclosureKnown && (domeOff || domeMode !== domeStateMode);
+  // The aperture applies to the tracking mode only.
+  const apertureDirty = shutterMode === 'TRACKING' && !sameAperture(aperture, shutterStateAperture);
+  const shutterModeDirty = enclosureKnown && (shuttersOff || shutterMode !== shutterStateMode || apertureDirty);
   const westVentGateDirty = isNotNullish(westVentGateState) && WVGate !== westVentGateState;
   const eastVentGateDirty = isNotNullish(eastVentGateState) && EVGate !== eastVentGateState;
 
@@ -133,12 +157,12 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
       </label>
       <Dropdown
         inputId="dome-mode"
+        data-testid="dome-mode"
         disabled={!canEdit}
         style={{ gridArea: 'g43' }}
         value={domeMode}
         options={DOME_MODE}
         onChange={(e) => setDomeMode(e.value as DomeMode)}
-        placeholder="Select a Dome Mode"
       />
       <EcsEnableDome
         mode={domeMode}
@@ -155,7 +179,6 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         loading={loading}
         style={{ gridArea: 'g51' }}
         label="Park"
-        className={cn(BTN_CLASSES[state.shuttersPark])}
         data-testid="park-shutters"
       />
       <label
@@ -170,12 +193,16 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
       </label>
       <Dropdown
         inputId="shutter-mode"
+        data-testid="shutter-mode"
         disabled={!canEdit}
         style={{ gridArea: 'g53' }}
         value={shutterMode}
         options={SHUTTER_MODE}
-        onChange={(e) => setShutterMode(e.value as ShutterControlMode)}
-        placeholder="Select a Shutter Mode"
+        onChange={(e) => {
+          const mode = e.value as ShutterControlMode;
+          setShutterMode(mode);
+          if (mode === 'TRACKING' && isNullish(aperture)) setAperture(SHUTTER_APERTURE_RANGE.min);
+        }}
       />
       <label
         htmlFor="aperture"
@@ -194,8 +221,9 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         value={aperture}
         onValueChange={(e) => setAperture(e.value ?? null)}
         suffix="m"
+        {...SHUTTER_APERTURE_RANGE}
         minFractionDigits={2}
-        maxFractionDigits={2}
+        maxFractionDigits={3}
       />
       <EcsEnableShutters
         mode={shutterMode}
@@ -225,16 +253,17 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         value={WVGate}
         onValueChange={(e) => setWVGate(e.value ?? null)}
         mode="decimal"
-        {...APERTURE_RANGE}
+        suffix="%"
+        {...VENT_GATE_RANGE}
         minFractionDigits={0}
         maxFractionDigits={0}
       />
       <Slider
         disabled={!canEdit || isNullish(WVGate)}
         style={{ gridArea: 'g63', marginTop: '10px' }}
-        value={WVGate ?? APERTURE_RANGE.min}
+        value={WVGate ?? VENT_GATE_RANGE.min}
         onChange={(e) => setWVGate(e.value as number)}
-        {...APERTURE_RANGE}
+        {...VENT_GATE_RANGE}
       />
       <EcsMoveWestVentGate
         position={WVGate}
@@ -261,16 +290,17 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         value={EVGate}
         onValueChange={(e) => setEVGate(e.value ?? null)}
         mode="decimal"
-        {...APERTURE_RANGE}
+        suffix="%"
+        {...VENT_GATE_RANGE}
         minFractionDigits={0}
         maxFractionDigits={0}
       />
       <Slider
         disabled={!canEdit || isNullish(EVGate)}
         style={{ gridArea: 'g73', marginTop: '10px' }}
-        value={EVGate ?? APERTURE_RANGE.min}
+        value={EVGate ?? VENT_GATE_RANGE.min}
         onChange={(e) => setEVGate(e.value as number)}
-        {...APERTURE_RANGE}
+        {...VENT_GATE_RANGE}
       />
       <EcsMoveEastVentGate
         position={EVGate}

@@ -301,20 +301,34 @@ export function AgAllPark(props: ButtonProps) {
 }
 
 // ECS
-export function EcsDome({ enclosure, ...props }: ButtonProps & { enclosure?: EnclosureState }) {
+export function EcsDome({ enclosure, className, ...props }: ButtonProps & { enclosure?: EnclosureState }) {
   if (!enclosure?.domeEnabled) {
-    return <Button {...props} disabled title="Select a dome mode and press Set to enable the dome" />;
+    return (
+      <Button
+        {...props}
+        disabled
+        className={cn(className, BTN_CLASSES.ACTIVE)}
+        title="Select a dome mode and press Set to enable the dome"
+      />
+    );
   }
 
-  return <EcsDisableDome {...props} />;
+  return <EcsDisableDome {...props} className={className} />;
 }
 
-export function EcsShutters({ enclosure, ...props }: ButtonProps & { enclosure?: EnclosureState }) {
+export function EcsShutters({ enclosure, className, ...props }: ButtonProps & { enclosure?: EnclosureState }) {
   if (!enclosure?.shuttersEnabled) {
-    return <Button {...props} disabled title="Select a shutter mode and press Set to enable the shutters" />;
+    return (
+      <Button
+        {...props}
+        disabled
+        className={cn(className, BTN_CLASSES.ACTIVE)}
+        title="Select a shutter mode and press Set to enable the shutters"
+      />
+    );
   }
 
-  return <EcsDisableShutters {...props} />;
+  return <EcsDisableShutters {...props} className={className} />;
 }
 
 export function EcsEnableDome({ mode, ...props }: ButtonProps & { mode: DomeMode | null }) {
@@ -367,7 +381,7 @@ export function EcsEnableShutters({
   aperture,
   ...props
 }: ButtonProps & { mode: ShutterControlMode | null; aperture: number | null }) {
-  if (isNullish(mode)) return <Button {...props} disabled />;
+  if (isNullish(mode) || (mode === 'TRACKING' && isNullish(aperture))) return <Button {...props} disabled />;
 
   const input: ShutterModeInput = {
     mode,
