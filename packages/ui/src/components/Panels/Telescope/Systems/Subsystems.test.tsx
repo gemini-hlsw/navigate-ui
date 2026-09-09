@@ -97,7 +97,7 @@ describe(BotSubsystems, () => {
       mocks: enclosureMocks(enclosure),
     });
     // The dome mode dropdown only shows a value once the enclosure state has arrived
-    await expect.element(sut.getByLabelText('West vent gate')).toHaveValue('50');
+    await expect.element(sut.getByLabelText('West vent gate')).toHaveValue('50%');
   }
 
   it('does not command anything while the enclosure state has not arrived', async () => {
@@ -133,7 +133,7 @@ describe(BotSubsystems, () => {
   it('sets the selected dome mode', async () => {
     await renderBotSubsystems();
 
-    await selectDropdownOption(sut, 'Select a Dome Mode', 'Min Scatter');
+    await selectDropdownOption(sut, sut.getByTestId('dome-mode'), 'Min Scatter');
 
     const setButton = sut.getByTestId('set-dome-mode');
     await expect.element(setButton).toBeEnabled();
@@ -145,22 +145,43 @@ describe(BotSubsystems, () => {
   it('sets the shutter mode with the selected aperture', async () => {
     await renderBotSubsystems();
 
-    await typeInto(sut.getByLabelText('Aperture', { exact: true }), '0.75');
+    await typeInto(sut.getByLabelText('Aperture', { exact: true }), '12.75');
 
     const setButton = sut.getByTestId('set-shutter-mode');
     await expect.element(setButton).toBeEnabled();
     await userEvent.click(setButton);
 
     expect(enableShuttersMock.request.variables).toHaveBeenCalledExactlyOnceWith({
-      mode: { mode: 'TRACKING', aperture: { meters: 0.75 } },
+      mode: { mode: 'TRACKING', aperture: { meters: 12.75 } },
     });
   });
 
-  it('enables the dome with the selected mode while the dome is off', async () => {
-    await renderBotSubsystems({ domeEnabled: false, domeMode: null });
+  it('keeps the aperture inside the limits of the shutters', async () => {
+    await renderBotSubsystems();
 
-    await expect.element(sut.getByTestId('set-dome-mode')).toBeDisabled();
-    await selectDropdownOption(sut, 'Select a Dome Mode', 'Basic');
+    await typeInto(sut.getByLabelText('Aperture', { exact: true }), '3.01');
+
+    await expect.element(sut.getByLabelText('Aperture', { exact: true })).toHaveValue('9.32m');
+  });
+
+  it('offers the default aperture with the tracking mode', async () => {
+    await renderBotSubsystems({
+      shuttersMode: { __typename: 'ShutterMode', mode: 'FULLY_OPEN', aperture: null },
+    });
+
+    await selectDropdownOption(sut, sut.getByTestId('shutter-mode'), 'Tracking');
+
+    const setButton = sut.getByTestId('set-shutter-mode');
+    await expect.element(setButton).toBeEnabled();
+    await userEvent.click(setButton);
+
+    expect(enableShuttersMock.request.variables).toHaveBeenCalledExactlyOnceWith({
+      mode: { mode: 'TRACKING', aperture: { meters: 9.32 } },
+    });
+  });
+
+  it('enables the dome with the default mode while the dome is off', async () => {
+    await renderBotSubsystems({ domeEnabled: false, domeMode: null });
 
     const setButton = sut.getByTestId('set-dome-mode');
     await expect.element(setButton).toBeEnabled();
@@ -169,11 +190,8 @@ describe(BotSubsystems, () => {
     expect(enableDomeMock.request.variables).toHaveBeenCalledExactlyOnceWith({ mode: 'BASIC' });
   });
 
-  it('enables the shutters without an aperture while the shutters are off', async () => {
+  it('enables the shutters with the default mode while the shutters are off', async () => {
     await renderBotSubsystems({ shuttersEnabled: false, shuttersMode: null });
-
-    await expect.element(sut.getByTestId('set-shutter-mode')).toBeDisabled();
-    await selectDropdownOption(sut, 'Select a Shutter Mode', 'Fully Open');
 
     const setButton = sut.getByTestId('set-shutter-mode');
     await expect.element(setButton).toBeEnabled();
@@ -190,7 +208,7 @@ describe(BotSubsystems, () => {
     });
 
     await expect.element(sut.getByTestId('set-shutter-mode')).toBeDisabled();
-    await selectDropdownOption(sut, 'Select a Shutter Mode', 'Fully Open');
+    await selectDropdownOption(sut, sut.getByTestId('shutter-mode'), 'Fully Open');
 
     const setButton = sut.getByTestId('set-shutter-mode');
     await expect.element(setButton).toBeEnabled();

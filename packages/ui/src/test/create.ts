@@ -304,7 +304,7 @@ export function createEnclosureState(overrides?: OverridePartial<EnclosureState>
     shuttersMode: {
       __typename: 'ShutterMode',
       mode: 'TRACKING',
-      aperture: { __typename: 'Distance', meters: 0.5 },
+      aperture: { __typename: 'Distance', meters: 15.5 },
     },
     eastVentGateAperture: 50,
     westVentGateAperture: 50,
