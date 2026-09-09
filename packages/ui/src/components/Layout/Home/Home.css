@@ -84,7 +84,7 @@
 /* Scroll rather than overflow when the content is taller than the shortened panel. */
 .panel.wavefront-sensors > .wavefront-sensors > .body,
 .panel.guider > .guider > .body {
-  overflow-y: auto;
+  overflow: hidden auto;
 }
 
 .panel.wavefront-sensors > .wavefront-sensors,
