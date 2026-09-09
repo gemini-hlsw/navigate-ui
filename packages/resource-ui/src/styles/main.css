@@ -1,4 +1,8 @@
 @import url('./lucuma-ui.scss');
+@import url('./shell.css');
+
+/* Last, so it overrides Highcharts' own rules. */
+@import url('./chartOverlays.css');
 
 html,
 body,

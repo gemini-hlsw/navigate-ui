@@ -1,17 +1,203 @@
 @import 'tailwindcss';
 
 @theme {
-  /* GPP brand accent */
-  --color-gpp: hsl(120deg 73.4% 74.9% / 80%);
-  --color-gpp-dark: hsl(120deg 73.4% 69.9% / 80%);
-  --color-gpp-light: hsl(120deg 73.4% 79.9% / 80%);
+  /* Measured from explore-dev.lucuma.xyz; re-measure against Explore before changing one. */
 
-  /* Dark theme foundation */
-  --color-canvas: var(--color-neutral-950);
-  --color-surface: var(--color-neutral-900);
-  --color-surface-raised: var(--color-neutral-800);
-  --color-subtle: var(--color-neutral-700);
-  --color-foreground: var(--color-neutral-100);
-  --color-foreground-secondary: var(--color-neutral-400);
-  --color-foreground-muted: var(--color-neutral-500);
+  /* Explore's "Add an observation" button, mapped onto PrimeReact's --primary-color in shell.css. */
+  --color-gpp: hsl(122deg 39% 49%);
+  --color-gpp-dark: hsl(122deg 39% 43%);
+  --color-gpp-light: hsl(122deg 39% 55%);
+
+  /* An identity accent, never an action: actions stay --color-gpp. */
+  --color-gpp-accent: rgb(144 238 144 / 80%);
+
+  /* For controls that must not read as the primary action. */
+  --color-action-info: rgb(33 108 165);
+  --color-action-secondary: rgb(106 115 124);
+
+  /* Explore's exact layering, canvas to raised. Climb it in order; do not invent intermediate greys. */
+  --color-canvas: #000;
+  --color-surface: #1e1e1e;
+  --color-panel: #262626;
+  --color-panel-header: #313131;
+  --color-surface-raised: #414141;
+  --color-subtle: #454545;
+
+  /* Text: Explore's white-opacity ladder (Material dark), not a grey ramp. */
+  --color-foreground: rgb(255 255 255 / 87%);
+  --color-foreground-secondary: rgb(255 255 255 / 60%);
+  --color-foreground-muted: rgb(255 255 255 / 38%);
+}
+
+/* One source of truth for every chart colour; components never hard-code one. */
+:root {
+  --timeline-text: var(--color-foreground);
+  --timeline-muted-text: var(--color-foreground-secondary);
+  --timeline-grid: var(--color-neutral-800);
+  --timeline-axis: var(--color-foreground-muted);
+  --timeline-block-border: rgb(255 255 255 / 12%);
+  --timeline-now: var(--color-gpp);
+  --timeline-tooltip-bg: var(--color-neutral-900);
+  --timeline-tooltip-border: var(--color-neutral-700);
+
+  /* Monochrome on purpose: hue means instrument identity and nothing else. */
+  --state-routine: #737373; /* neutral-500 */
+  --state-notable: #d4d4d4; /* neutral-300 */
+
+  /* Optimised over the pairs that can actually share a chart, never over all fourteen at once. */
+  --instrument-alopeke: #ffdf20; /* yellow-300 */
+  --instrument-altair: #ec003f; /* rose-600 */
+  --instrument-cal-zorro: #ffb900; /* amber-400 */
+  --instrument-canopus: #155dfc; /* blue-600 */
+  --instrument-engineering: #51a2ff; /* blue-400 */
+  --instrument-f2: #f54900; /* orange-600 */
+  --instrument-gcal: #c27aff; /* purple-400 */
+  --instrument-ghost: #009689; /* teal-600 */
+  --instrument-gmos: #53eafd; /* cyan-300 */
+  --instrument-gnirs: #ff8904; /* orange-400 */
+  --instrument-gsaoi: #bbf451; /* lime-300 */
+  --instrument-igrins2: #00bba7; /* teal-500 */
+  --instrument-iqueye: #00d492; /* emerald-400 */
+  --instrument-maroon-x: #4f39f6; /* indigo-600 */
+
+  /* Outside the two measured site sets: these never draw a bar. */
+  --instrument-acq-cam: #94a3b8; /* slate-400 */
+  --instrument-gpi: #f472b6; /* pink-400 */
+  --instrument-niri: #a78bfa; /* violet-400 */
+  --instrument-scorpio: #fb923c; /* orange-400 */
+
+  /* A reserved neutral outside the validated sets: it must read as "identity unresolved". */
+  --instrument-unknown: #a1a1aa; /* zinc-400 */
+
+  /* Whichever of light or dark clears 4.5:1 on the fill. */
+  --instrument-ink-light: #fff;
+  --instrument-ink-dark: #0a0a0a;
+
+  /* An absence is drawn hollow, not as a fourteenth colour. */
+  --schedule-ghost-fill: rgb(148 163 184 / 7%);
+  --schedule-ghost-edge: rgb(148 163 184 / 45%);
+
+  /* One wash across every row, so the reason is read once rather than a word per row. */
+  --schedule-band: rgb(231 0 11 / 22%);
+  --schedule-band-edge: rgb(231 0 11 / 70%);
+  --schedule-closed: #b91c1c;
+
+  /* Over the bars, not behind: a bar covers the whole night, so a band behind it is invisible. */
+  --night-daylight-wash: rgb(255 190 90 / 28%);
+  --night-twilight-wash: rgb(255 190 90 / 11%);
+
+  /* A hole in the record: a dark veil, deliberately nothing like the sun's golden wash. */
+  --schedule-no-data: rgb(10 10 10 / 78%);
+
+  /* Night lines are faint on purpose: at thirty a month they are a texture, not a grid. */
+  --schedule-weekend: rgb(148 163 184 / 13%);
+  --schedule-night-line: rgb(255 255 255 / 7%);
+  --schedule-week-line: rgb(255 255 255 / 20%);
+  --schedule-today: var(--color-gpp);
+}
+
+/* Highcharts paints the point rect itself, so the hollow block is a stroke override on the SVG. */
+.highcharts-point.schedule-ghost {
+  fill: var(--schedule-ghost-fill);
+  stroke: var(--schedule-ghost-edge);
+  stroke-dasharray: 3 3;
+  stroke-width: 1;
+}
+
+/* react-big-calendar ships a light theme in plain selectors; every rule here is scoped to it. */
+.resource-calendar {
+  color: var(--color-foreground);
+  font-size: 0.75rem;
+}
+
+.resource-calendar .rbc-calendar {
+  font-family: inherit;
+}
+
+.resource-calendar .rbc-month-view {
+  border-color: var(--timeline-grid);
+  border-radius: 4px;
+  background: transparent;
+}
+
+.resource-calendar .rbc-header {
+  padding: 0.3rem 0;
+  border-color: var(--timeline-grid);
+  color: var(--color-foreground-secondary);
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.resource-calendar .rbc-month-row {
+  border-color: var(--timeline-grid);
+}
+
+.resource-calendar .rbc-day-bg {
+  border-color: var(--timeline-grid);
+}
+
+.resource-calendar .rbc-day-bg.night-clickable {
+  cursor: pointer;
+}
+
+/* A day the semester does not cover, kept only so the week stays seven wide. */
+.resource-calendar .rbc-off-range-bg {
+  background: transparent;
+}
+
+.resource-calendar .rbc-off-range {
+  opacity: 0.35;
+}
+
+.resource-calendar .rbc-today {
+  background: rgb(45 212 191 / 8%);
+}
+
+/* The date header owns the top of the square: number, moon, dark hours. */
+.resource-calendar .rbc-date-cell {
+  padding: 0;
+  text-align: left;
+}
+
+/* Phase only: a reading aid, not a scheduling input (domain/calendarNights.ts). */
+.resource-calendar .rbc-day-bg.night-dark {
+  background: rgb(2 6 23 / 55%);
+}
+
+.resource-calendar .rbc-day-bg.night-grey {
+  background: rgb(100 116 139 / 10%);
+}
+
+.resource-calendar .rbc-day-bg.night-bright {
+  background: rgb(226 232 240 / 15%);
+}
+
+/* Amber is "unknown/warning" here, so it reads as "treat this night differently". */
+.resource-calendar .rbc-day-bg.night-holiday {
+  box-shadow: inset 0 2px 0 0 var(--color-amber-400);
+}
+
+/* A telescope-wide closure, using the band colour the other two views use. */
+.resource-calendar .rbc-day-bg.night-closed {
+  background: var(--schedule-band);
+}
+
+/* Kept tight so a week row holds all five ports without scrolling. */
+.resource-calendar .rbc-event {
+  padding: 0 4px;
+  border: none;
+  border-radius: 2px;
+  font-size: 0.64rem;
+  line-height: 1rem;
+}
+
+.resource-calendar .rbc-row-segment {
+  padding: 0 1px 1px;
+}
+
+.resource-calendar .rbc-event:focus-visible {
+  outline: 2px solid var(--color-gpp);
+  outline-offset: 1px;
 }

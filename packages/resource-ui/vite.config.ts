@@ -20,7 +20,6 @@ function formatDate(date: Date) {
 }
 const frontendVersion = `${version}+${formatDate(buildTime)}.${commitHash}`;
 
-// https://vite.dev/config/
 export default defineConfig({
   define: {
     'import.meta.env.FRONTEND_VERSION': JSON.stringify(frontendVersion),
@@ -30,7 +29,7 @@ export default defineConfig({
     lightningcss: {
       visitor: {
         Selector(selector) {
-          // Filter out :root selectors that are not the first rule
+          // Sass nests the themes' `:root` into `.dark :root`, which matches nothing; drop the trailing `:root`.
           if (selector.find((v, i) => v.type === 'pseudo-class' && v.kind === 'root' && i > 0)) {
             return selector.filter((v, i) => i < 1 || !(v.type === 'pseudo-class' && v.kind === 'root'));
           }
@@ -49,16 +48,23 @@ export default defineConfig({
   server: {
     allowedHosts: ['localhost', '.lucuma.xyz', '.gemini.edu'],
     proxy: {
-      '/resource/graphql': {
-        target: 'https://lucuma-resource-dev.lucuma.xyz',
-        changeOrigin: true,
-        secure: true,
-      },
+      /* The real service by default; `RESOURCE_API=mock` swaps the proxy target, never the app. */
+      '/resource/graphql':
+        process.env.RESOURCE_API === 'mock'
+          ? {
+              // Yoga serves `/graphql`; the app asks for `/resource/graphql`.
+              target: 'http://localhost:4000',
+              changeOrigin: true,
+              rewrite: (path: string) => path.replace(/^\/resource\/graphql/, '/graphql'),
+            }
+          : { target: 'https://lucuma-resource-dev.lucuma.xyz', changeOrigin: true },
     },
   },
   test: {
     clearMocks: true,
     globals: true,
+    exclude: ['**/node_modules/**', '**/dist/**'],
+    // No app stylesheet: a test that needs styling to pass is testing the stylesheet.
     setupFiles: [
       '@gemini-hlsw/lucuma-common-ui/test/setup.ts',
       '@gemini-hlsw/lucuma-common-ui/test/disable-animations.css',
@@ -68,7 +74,6 @@ export default defineConfig({
       provider: playwright({
         actionTimeout: 10_000,
         contextOptions: {
-          // Disable animations in tests to speed them up
           reducedMotion: 'reduce',
         },
       }),

@@ -1,0 +1,7 @@
+/* An overlay that catches the pointer swallows the hover under it. */
+.highcharts-plot-band,
+.highcharts-plot-line,
+.highcharts-plot-band-label,
+.highcharts-plot-line-label {
+  pointer-events: none;
+}

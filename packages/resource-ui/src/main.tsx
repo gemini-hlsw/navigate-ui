@@ -8,6 +8,9 @@ import { createRoot, type Root } from 'react-dom/client';
 import App from './app/App';
 import { client } from './gql/ApolloConfigs';
 
+// The lucuma-ui PrimeReact theme is scoped under `.dark`, and dialogs portal to <body>.
+document.documentElement.classList.add('dark');
+
 const rootElement: HTMLElement | null = document.getElementById('root');
 if (!rootElement) {
   throw new Error('Root element not found');

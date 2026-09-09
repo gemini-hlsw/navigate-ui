@@ -1,85 +1,39 @@
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { faCalendarDays, faMoonStars, faWrench } from '@fortawesome/pro-regular-svg-icons';
+import {
+  faBoxesStacked,
+  faCalendarDays,
+  faCalendarWeek,
+  faMoon,
+  faTelescope,
+} from '@fortawesome/pro-regular-svg-icons';
 
-/**
- * A single sidebar menu item.
- */
 export interface SidebarMenuItem {
-  /**
-   * Human-readable label shown in the sidebar.
-   */
   label: string;
-
-  /**
-   * Route path for the navigation item.
-   */
   to: string;
-
-  /**
-   * Optional Font Awesome icon displayed to the left of the label.
-   */
   icon?: IconDefinition;
-
-  /**
-   * Whether the navigation item is disabled.
-   */
   disabled?: boolean;
 }
 
-/**
- * A sidebar menu section.
- */
-export interface SidebarMenuSection {
-  /**
-   * Section label shown above the items.
-   */
+interface SidebarMenuSection {
   label: string;
-
-  /**
-   * Items rendered under the section.
-   */
   items: SidebarMenuItem[];
 }
 
-/**
- * Sidebar menu configuration for the Resource UI.
- *
- * This is the single source of truth for sidebar structure.
- */
+/** Nothing is gated: gating on whether a schedule exists strands the reader on one view. */
 export const SIDEBAR_MENU_SECTIONS: SidebarMenuSection[] = [
   {
-    label: 'Overview',
+    label: 'Schedule',
     items: [
-      {
-        label: 'Tonight',
-        to: '/tonight',
-        icon: faMoonStars,
-        disabled: false,
-      },
+      { label: 'Semester', to: '/semester', icon: faCalendarDays },
+      { label: 'Week', to: '/week', icon: faCalendarWeek },
+      { label: 'Night', to: '/night', icon: faMoon },
     ],
   },
   {
-    label: 'Telescope',
+    label: 'Inventory',
     items: [
-      {
-        label: 'Schedule',
-        to: '/telescope-schedule',
-        icon: faCalendarDays,
-      },
-      {
-        label: 'Test',
-        to: '/test',
-        icon: faWrench,
-        disabled: true,
-      },
+      { label: 'Instruments', to: '/instruments', icon: faTelescope },
+      { label: 'Components', to: '/components', icon: faBoxesStacked },
     ],
-  },
-  {
-    label: 'Instruments',
-    items: [],
-  },
-  {
-    label: 'Staff & Roles',
-    items: [],
   },
 ];
