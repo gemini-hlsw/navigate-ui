@@ -14,6 +14,7 @@ import type {
   ScienceBand,
   ScienceSubtype,
   TimeAccountingCategory,
+  TimingWindowInclusion,
   TooActivation,
 } from './odb/gen/graphql';
 
@@ -26,6 +27,7 @@ export type {
   ScienceBand,
   ScienceSubtype,
   TimeAccountingCategory,
+  TimingWindowInclusion,
   TooActivation,
 };
 
@@ -258,6 +260,15 @@ export const SPECIAL_PROPOSAL_TYPE_LABEL: Record<SpecialProposalType, string> = 
   POOR_WEATHER: 'Poor Weather',
 };
 
+/** One scheduling window for an observation (sc-9621), pre-formatted for
+ *  display: "Include 2024-01-30 14:55 UTC through 2024-02-01 00:00 UTC",
+ *  "Exclude … forever", or "Include … for 12 h". `inclusion` is kept so the
+ *  view can style exclusions distinctly. */
+export interface TimingWindowRow {
+  readonly inclusion: TimingWindowInclusion;
+  readonly label: string;
+}
+
 /** One observation row in a proposal/change-request detail table. */
 export interface ObservationRow {
   readonly id: string;
@@ -278,6 +289,8 @@ export interface ObservationRow {
   /** Compact conditions, e.g. "IQ<0.8″ / CC70 / SB80 / WV80". */
   readonly conditions: string;
   readonly hours: number;
+  /** Scheduling windows for this observation; empty = no timing constraints. */
+  readonly windows: readonly TimingWindowRow[];
 }
 
 export interface Proposal {
