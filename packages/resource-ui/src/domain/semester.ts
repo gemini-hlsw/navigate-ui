@@ -13,7 +13,6 @@ export const isWeekendDate = (isoDate: string): boolean => {
   return day === 0 || day === 6;
 };
 
-/** Adds a whole number of days to an ISO calendar date. */
 export const addDays = (iso: string, days: number): string => {
   const date = fromIsoDate(iso);
   date.setUTCDate(date.getUTCDate() + days);

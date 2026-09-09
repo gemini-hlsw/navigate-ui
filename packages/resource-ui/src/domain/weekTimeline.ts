@@ -37,7 +37,6 @@ export interface BuildWeekTimelineOptions {
   readonly nightsWithData: ReadonlySet<string> | undefined;
 }
 
-/** The seven observing-night labels a week window covers. */
 export const weekNightLabels = (firstNight: string): readonly string[] =>
   Array.from({ length: WEEK_NIGHTS }, (_, index) => addDays(firstNight, index));
 

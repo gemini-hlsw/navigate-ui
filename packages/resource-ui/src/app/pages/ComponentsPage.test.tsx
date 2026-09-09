@@ -6,7 +6,6 @@ import { renderApp } from '@/test/renderApp';
 
 import ComponentsPage from './ComponentsPage';
 
-/** The night is pinned in the route: the R400 fails in late November 2025. */
 const open = async (route: string) => renderApp({ element: <ComponentsPage />, route });
 
 describe('ComponentsPage - the finder', () => {
@@ -99,7 +98,6 @@ describe('ComponentsPage - the finder', () => {
     await expect.element(table.getByRole('columnheader', { name: 'Note' })).toBeVisible();
     await expect.element(table.getByText('Failed; removed for repair')).toBeVisible();
 
-    // Its own cell is what makes the note scannable, under a heading of its own.
     const status = table.getByText('Unavailable').element().closest('td');
     const note = table.getByText('Failed; removed for repair').element().closest('td');
     expect(note).not.toBe(status);
@@ -117,7 +115,6 @@ describe('ComponentsPage - the finder', () => {
   it('groups the catalog by instrument instead of repeating an Instrument column', async () => {
     const screen = await open('/components?site=GS&semester=2025B&night=2025-10-15');
 
-    // Each group leads with its one-line answer, so no Instrument column repeats "GMOS".
     await expect.element(screen.getByText('pieces', { exact: false }).first()).toBeVisible();
     await expect.element(screen.getByText('on telescope', { exact: false }).first()).toBeVisible();
     await expect.element(screen.getByRole('columnheader', { name: 'Instrument' })).not.toBeInTheDocument();
@@ -183,7 +180,6 @@ describe('ComponentsPage - the finder', () => {
     await screen.getByLabelText('Search').fill('R400');
     await screen.getByRole('button', { name: /expand k-gs-R400_G5325/i }).click();
 
-    // "Unavailable" is the word the row above wears, not the enum's UNAVAILABLE.
     const history = screen.getByTestId('component-history');
     await expect.element(history.getByText('Unavailable').first()).toBeVisible();
     await expect.element(history.getByText('Science').first()).toBeVisible();

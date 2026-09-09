@@ -2,9 +2,7 @@ import { type JSX, type ReactNode, useId } from 'react';
 
 interface LabelledControlProps {
   label: string;
-  /** Layout for the caption-and-control pair; the caller owns how it reads. */
   className?: string;
-  /** Extra classes for the caption itself, where it is styled apart. */
   labelClassName?: string;
   children: (id: string) => ReactNode;
 }

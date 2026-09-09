@@ -105,7 +105,6 @@ export const instrumentColor = (instrument: Instrument): string => INSTRUMENT_CO
 
 export const instrumentInk = (instrument: Instrument): string => INSTRUMENT_INK[instrument];
 
-/** The one name an absence has, everywhere. */
 export const UNSCHEDULED_LABEL = 'No instrument scheduled';
 /** The one name a closure has everywhere; the reason rides on the record, never on the key. */
 export const CLOSURE_LABEL = 'Closed';
@@ -133,7 +132,6 @@ export const telescopeLegendExtras = (closures: readonly Closure[]): LegendExtra
     ? [{ key: 'telescope-open', label: 'Open', swatch: { backgroundColor: stateFill(false) } }]
     : [];
 
-/** Joins the Telescope legend section. */
 export const modeLegendExtras = (modeBlocks: readonly ModeBlock[]): LegendExtra[] =>
   [...new Set(modeBlocks.map((block) => block.mode))].map((mode) => ({
     key: `mode-${mode}`,
@@ -154,7 +152,6 @@ export const skyLegendExtras = (): LegendExtra[] => [
   { key: 'twilight', label: 'Twilight', swatch: { backgroundColor: 'var(--night-twilight-wash)' } },
 ];
 
-/** What the calendar chrome marks: weekends, the moment now, un-entered nights. */
 export const calendarLegendExtras = (options: {
   readonly weekend?: boolean;
   readonly now?: string | false;
@@ -218,7 +215,6 @@ const blockColor = (block: TimelineBlock): string | PatternObject => {
   return INSTRUMENT_COLOR[block.instrument];
 };
 
-/** The outline an unavailable instrument's hollow block keeps its hue on. */
 const blockBorder = (block: TimelineBlock): string | null =>
   block.state === 'MOUNTED' && block.instrument !== null && block.usage === 'UNAVAILABLE'
     ? INSTRUMENT_COLOR[block.instrument]
@@ -263,7 +259,6 @@ export interface TimelinePoint extends XrangePointOptionsObject {
 /** Rough advance of the label font (0.68rem, semibold), for the fit test. */
 const LABEL_CHAR_WIDTH = 6.2;
 
-/** Breathing room a data label keeps at each end of the shape it sits in. */
 const LABEL_PADDING = 4;
 
 /** The same advance normalised per rem, for labels set at other sizes. */
@@ -354,7 +349,6 @@ const toPoint = (block: TimelineBlock, rowIndex: number, describe: BlockDescribe
       rowLabel: block.rowLabel,
       label: block.label === '' ? UNSCHEDULED_LABEL : block.label,
       state: block.state,
-      // Stated only when it is not the ordinary science use.
       usageLabel: block.usage !== null && block.usage !== 'SCIENCE' ? USAGE_LABEL[block.usage] : null,
       rangeLabel: describe.range(block),
       lengthLabel: describe.length(block),
@@ -385,13 +379,11 @@ interface TimelineChartModel {
 
 const TOP_MARGIN = 8;
 
-/** How much of a row's height its bar leaves free. */
 const BAR_INSET = 8;
 
 /** How the y axis lays grouped rows out: heading rows over each group. */
 interface GroupedRowLayout {
   readonly categories: readonly string[];
-  /** Category indices that are headings, for the label formatter. */
   readonly headingPositions: ReadonlySet<number>;
   /** The category index a data row lands on, past the headings. */
   readonly offsetFor: (rowIndex: number) => number;
@@ -439,7 +431,6 @@ const groupedRowLayout = (labels: readonly string[], headerRows: number): Groupe
 const headingLabelHtml = (value: string): string =>
   `<span style="color: var(--timeline-muted-text); font-size: 0.55rem; font-weight: 700; letter-spacing: 1px;">${value.toUpperCase()}</span>`;
 
-/** Builds the Highcharts options every timeline view shares. */
 export const buildTimelineChart = ({
   rows,
   site,
@@ -507,7 +498,6 @@ export const buildTimelineChart = ({
       tickLength: 0,
       labels: {
         style: { color: 'var(--timeline-text)', fontSize: '0.72rem', fontWeight: '600' },
-        // Headings read as headings; every data row keeps the full-strength label.
         formatter(this: AxisLabelsFormatterContextObject) {
           return headingPositions.has(this.pos) ? headingLabelHtml(String(this.value)) : String(this.value);
         },

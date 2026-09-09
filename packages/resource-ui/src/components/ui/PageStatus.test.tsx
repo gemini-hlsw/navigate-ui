@@ -1,4 +1,3 @@
-/** The failure path no page test reaches: every page test runs against a mock that answers. */
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
 
@@ -26,7 +25,7 @@ describe(Loading, () => {
 
 describe(EmptyPanel, () => {
   it('states an absence without announcing it as a failure', async () => {
-    // I4 in the chrome: "nothing is recorded" is an answer, so no alert role and no red.
+    // I4 in the chrome: an absence must never carry the alert role.
     const screen = await render(<EmptyPanel>Nothing is recorded for this night.</EmptyPanel>);
 
     await expect.element(screen.getByText('Nothing is recorded for this night.')).toBeVisible();

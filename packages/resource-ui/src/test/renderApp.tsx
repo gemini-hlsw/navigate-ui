@@ -12,7 +12,6 @@ export type RenderedApp = Awaited<ReturnType<typeof render>> & {
 };
 
 interface RenderOptions {
-  /** Route element to mount at the initial path. */
   element: ReactElement;
   /** Initial URL including query string, e.g. "/night?site=GN&night=2026-08-01". */
   route: string;

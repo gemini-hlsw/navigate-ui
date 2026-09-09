@@ -50,7 +50,6 @@ describe(Navbar, () => {
   });
 
   it('shows the nearest semester when the night is beyond every one - Tonight past the edge', async () => {
-    // Past the workbook's edge the control keeps offering the closest real semester.
     const screen = await renderNavbar('/night?site=GS&night=2030-01-01');
 
     const wrapper = screen.getByLabelText('Semester', { exact: true }).element().closest('.p-dropdown');

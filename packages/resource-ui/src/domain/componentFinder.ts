@@ -27,7 +27,6 @@ export interface FinderRow {
   /** Null exactly when nothing is recorded for the night. */
   readonly usage: ComponentUsage | null;
   readonly note: string | null;
-  /** True when the piece's state changes during this night. */
   readonly changesTonight: boolean;
   /** A gap contributes both edges: the record ending and the next beginning are each a change. */
   readonly transitions: readonly number[];
@@ -60,7 +59,6 @@ export interface BuildFinderRowsOptions {
   readonly components: readonly ComponentRecord[];
   readonly blocks: readonly ComponentBlock[];
   readonly mountings: readonly Mounting[];
-  /** The observing night being asked about. */
   readonly night: Interval;
 }
 

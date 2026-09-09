@@ -19,11 +19,10 @@ const HOUR_MS = 3_600_000;
 
 const clockFormat = zoneFormatters('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false });
 
-/** Clock time as "18:00", in the masthead's chosen clock - site local or UT. */
 export const clockLabel = (epochMillis: number, site: Site, display: TimeDisplay): string =>
   clockFormat(displayTimeZone(site, display)).format(new Date(epochMillis));
 
-/** "12 h 15 m", or "45 m" under the hour. Whole minutes; a night is not precise. */
+/** Whole minutes: a night's schedule is not precise enough to need seconds. */
 export const durationLabel = (millis: number): string => {
   const minutes = Math.round(millis / 60_000);
   const hours = Math.floor(minutes / 60);
@@ -103,13 +102,10 @@ export const buildTransitionLines = (transitions: readonly number[]): XAxisPlotL
 interface NightChartModel {
   readonly night: NightTimeline;
   readonly site: Site;
-  /** Epoch millis of "now", drawn as a marker when it falls inside the night. */
   readonly now: number | null;
-  /** The masthead's clock choice - the axis and tooltips render in it. */
   readonly timeDisplay: TimeDisplay;
 }
 
-/** Builds the Highcharts options for the night timeline. */
 export const buildNightChartOptions = ({ night, site, now, timeDisplay }: NightChartModel): Options => {
   const showsNow = now !== null && now >= night.interval.start && now < night.interval.end;
 

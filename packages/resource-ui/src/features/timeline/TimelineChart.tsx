@@ -24,17 +24,14 @@ import {
 
 interface TimelineChartProps {
   readonly options: Options;
-  /** How this window says a block reaches past its edge. */
   readonly continuesLabel: string;
   readonly label: string;
   readonly testId: string;
-  /** Rendered above the chart, inside the labelled region. */
   readonly heading?: JSX.Element;
   /** Called with the axis instant under a click: the target is the night, not the block. */
   readonly onInstantClick?: (instant: number) => void;
 }
 
-/** One timeline chart, with the shared tooltip wired in. */
 export function TimelineChart({
   options,
   continuesLabel,
@@ -51,7 +48,7 @@ export function TimelineChart({
           chart: {
             ...options.chart,
             events: {
-              // Spread first: the builder wires `render` (band-label fitting), and replacing it would drop that.
+              // Must spread the existing chart.events, or the builder's render handler (band-label fitting) is lost.
               ...options.chart?.events,
               // Declared over the plain pointer event, but a chart click always carries the axis coordinates.
               click(event: PointerEventObject) {
@@ -105,7 +102,6 @@ export function TimelineChart({
 
 const SWATCH = 'inline-block h-3 w-4 rounded-[2px]';
 
-/** One labelled group of keys. Renders nothing when it has no entries. */
 function LegendSection({ label, entries }: { label: string; entries: readonly LegendExtra[] }): JSX.Element | null {
   if (entries.length === 0) {
     return null;
@@ -135,15 +131,10 @@ export function TimelineLegendBar({
   calendar = [],
 }: {
   legend: TimelineLegend;
-  /** The Telescope section's keys ahead of the shared closure key. */
   telescope?: readonly LegendExtra[];
-  /** The Mode section's keys (`modeLegendExtras`). */
   mode?: readonly LegendExtra[];
-  /** The ToO section's keys (`tooLegendExtras`). */
   too?: readonly LegendExtra[];
-  /** The Sky section's keys - the daylight and twilight washes. */
   sky?: readonly LegendExtra[];
-  /** The Calendar section's keys - weekends, now, un-entered nights. */
   calendar?: readonly LegendExtra[];
 }): JSX.Element {
   const closureKey: LegendExtra = {

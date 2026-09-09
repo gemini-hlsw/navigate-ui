@@ -39,7 +39,6 @@ const Timestamp = new GraphQLScalarType<string, string>({
   parseValue: (value) => String(value),
 });
 
-/** Observing nights from `start` inclusive to `end` exclusive. */
 const nightsBetween = (start: string, end: string): readonly string[] => {
   const nights: string[] = [];
   for (let night = start; night < end; night = addDaysIso(night, 1)) {
@@ -129,7 +128,6 @@ const componentBlock = (store: MockStore, block: SynthesizedComponentBlock, inte
   };
 };
 
-/** Case-insensitive match on any of a piece's published identities. */
 const matchesSearch = (component: CatalogComponent, search: string): boolean => {
   const needle = search.toLowerCase();
   return [component.name, component.code, component.barcode ?? '', ...component.aliases].some((identity) =>
@@ -178,7 +176,6 @@ const subsystemBlock = (record: StoredSubsystem, interval: MockInterval): unknow
   powerSource: null,
 });
 
-/** Clips every record touching `bounds` to it, dropping those that miss. */
 const clipAll = <T extends { start: string; end: string }>(
   records: readonly T[],
   bounds: MockInterval,
@@ -205,7 +202,6 @@ const nightProjection = (store: MockStore, site: ImportSite, observingNight: str
     // False means nothing is recorded, never "everything is unavailable"; synthetic data never decides it.
     dataAvailable:
       mountings.length > 0 || closures.length > 0 || tooSupport.length > 0 || modes.length > 0 || subsystems.length > 0,
-    // Stored instruments never count towards dataAvailable, being synthetic.
     instrumentAvailability: [
       ...mountings.map(({ record, interval: clipped }) => instrumentBlock(record, clipped)),
       ...stored.map(({ record, interval: clipped }) => storedInstrumentBlock(record, clipped)),

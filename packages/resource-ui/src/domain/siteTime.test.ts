@@ -89,7 +89,6 @@ describe('naming the evenings an interval covers', () => {
   });
 });
 
-/** Counted over evening dates, because a night is not a fixed number of hours. */
 describe('counting the nights an interval covers', () => {
   const spanning = (site: 'GN' | 'GS', first: string, last: string) => ({
     start: observingNightInterval(site, first).start,

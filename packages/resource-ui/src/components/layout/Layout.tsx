@@ -5,7 +5,6 @@ import { LiveFailureBanner } from './LiveFailureBanner';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 
-/** `row-start-2` is load bearing: auto-placement sizes the body to content and leaves 1fr empty. */
 export default function Layout(): JSX.Element {
   return (
     <div className="grid h-screen grid-rows-[auto_1fr] overflow-hidden print:block print:h-auto print:overflow-visible">

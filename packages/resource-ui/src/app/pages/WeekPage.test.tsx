@@ -40,7 +40,6 @@ describe(WeekPage, () => {
   it('heads the chart with the telescope-state rows, their values keyed in sections', async () => {
     const screen = await openWeek('/week?site=GS&night=2025-11-14');
 
-    // Each legend section keys its own recorded values in the words the blocks print.
     await expect.element(screen.getByRole('group', { name: 'Telescope' }).getByText('Open')).toBeVisible();
     await expect.element(screen.getByRole('group', { name: 'Mode' }).getByText('Queue')).toBeVisible();
     await expect.element(screen.getByRole('group', { name: 'ToO' }).getByText('Standard ToOs')).toBeVisible();

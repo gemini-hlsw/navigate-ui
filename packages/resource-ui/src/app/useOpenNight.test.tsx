@@ -21,7 +21,7 @@ function NightProbe(): JSX.Element {
   );
 }
 
-/** A per-value counter: a changed number is exactly the `update()` that redraws the chart. */
+/** A per-value counter, so the readout shows whether openNight's reference changed across a rerender. */
 const identities = new Map<unknown, number>();
 const identityOf = (value: unknown): string => {
   const seen = identities.get(value);

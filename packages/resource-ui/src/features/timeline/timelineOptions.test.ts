@@ -4,7 +4,6 @@ import type { TimelineBand } from '@/domain/timeline';
 
 import { type BandFitChart, closureBandPlotBand, fitBandLabels } from './timelineOptions';
 
-/** A rendered band the fit pass can read, recording show/hide calls. */
 const band = (from: number, to: number, text: string, fontSize = '0.68rem') => {
   const calls: string[] = [];
   return {
@@ -31,7 +30,6 @@ const chartOf = (...bands: ReturnType<typeof band>[]): BandFitChart => ({
 
 describe(fitBandLabels, () => {
   it('keeps the label of a closure wide enough to wrap it', () => {
-    // Six nights hold "Maintenance" per wrapped line, the treatment the wide closures rely on.
     const wide = band(0, 200, 'Telescope Shutdown A&G Maintenance');
 
     fitBandLabels(chartOf(wide));
@@ -40,7 +38,6 @@ describe(fitBandLabels, () => {
   });
 
   it('drops the label of a closure narrower than its longest piece', () => {
-    // "In-Situ Wash" over one night wraps at the hyphen and clips to "In-", which names nothing.
     const narrow = band(0, 17, 'In-Situ Wash');
 
     fitBandLabels(chartOf(narrow));

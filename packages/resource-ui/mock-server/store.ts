@@ -43,7 +43,6 @@ export interface StoredSchedule extends ImportedSchedule {
   readonly nights: { readonly start: string; readonly end: string };
 }
 
-/** Every observing night the schedule's own records name, in order. */
 const observingNightsOf = (schedule: ImportedSchedule): readonly string[] =>
   [
     ...schedule.blocks.flatMap((block) => [block.firstObservingNight, block.lastObservingNight]),
@@ -52,7 +51,6 @@ const observingNightsOf = (schedule: ImportedSchedule): readonly string[] =>
 
 export class MockStore {
   readonly state: MockState;
-  /** The seeded schedules, each with the nights its records cover. */
   readonly schedules: readonly StoredSchedule[];
   readonly blocks: readonly StoredBlock[];
   readonly closures: readonly StoredClosure[];

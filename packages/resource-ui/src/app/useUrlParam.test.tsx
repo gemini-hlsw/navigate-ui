@@ -87,7 +87,6 @@ describe(useUrlParam, () => {
 
     await screen.router.navigate(-1);
 
-    // The write replaces the history entry, so back does not step through every value.
     await expect.element(screen.getByTestId(PROBE_URL_TESTID)).toMatchTextContent('view=calendar');
   });
 });

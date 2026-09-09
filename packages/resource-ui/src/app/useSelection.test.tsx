@@ -112,7 +112,6 @@ describe(useSelection, () => {
 
     await screen.getByRole('button', { name: 'tonight' }).click();
 
-    // The URL says "the night in progress", so it keeps meaning that tomorrow.
     await expect.element(screen.getByTestId(PROBE_URL_TESTID)).toHaveTextContent('/night?site=GS');
     await expect.element(screen.getByTestId('probe-night')).toHaveTextContent(observingNightOf('GS', Date.now()));
   });

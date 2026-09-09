@@ -6,7 +6,6 @@ import { usePublishedSemesters } from '@/gql/hooks';
 interface ResolvedSemester {
   /** The semester to show. Null only while the list is loading or empty. */
   readonly semester: PublishedSemester | null;
-  /** For the masthead's options. */
   readonly semestersForSite: readonly PublishedSemester[];
   readonly loading: boolean;
   readonly error: Error | undefined;

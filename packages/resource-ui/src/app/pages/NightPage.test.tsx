@@ -42,7 +42,6 @@ describe('NightPage - the telescope-state rows the workbook records', () => {
   });
 
   it('heads a visitor night with the Telescope and Mode rows, their values keyed in sections', async () => {
-    // The legend keys the recorded values in the words the blocks print.
     const screen = await openNight('/night?site=GN&night=2026-08-27');
 
     await expect.element(screen.getByText('Priority visitor').first()).toBeVisible();
@@ -95,8 +94,6 @@ describe(NightPage, () => {
     await expect.element(screen.getByText('Night of 2026-08-01')).toBeVisible();
     await expect.element(screen.getByTestId('night-timeline')).toBeVisible();
   });
-
-  // A night the workbook never filled in is unreachable from its data; pinned at the API instead.
 
   it('draws no timeline when the night query fails, rather than an empty one beside the alert', async () => {
     // The page knows 2025B holds this night while knowing nothing about the night itself.

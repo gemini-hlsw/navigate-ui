@@ -187,7 +187,6 @@ describe('the chart', () => {
 });
 
 describe('the telescope-state header band', () => {
-  // A visitor night with both state rows recorded, over one mounted port.
   const stateNight = buildNightTimeline({
     site: 'GS',
     observingNight: NIGHT,

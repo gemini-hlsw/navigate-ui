@@ -1,4 +1,3 @@
-/** Shared interval helpers for night-scoped block math. */
 import type { Interval } from './types';
 
 /** Both finders ask this of their own record type, so it is generic over anything with an interval. */

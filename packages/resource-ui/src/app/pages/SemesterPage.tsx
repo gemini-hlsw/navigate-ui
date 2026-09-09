@@ -35,7 +35,6 @@ const NOW_TICK_MS = 5 * 60_000;
 export default function SemesterPage(): JSX.Element {
   const { site } = useSelection();
   const { semester: selected, loading: loadingSets, error: setsError } = useSemester();
-  // In the URL, so "look at the calendar" is a sendable link.
   const [viewParam, setView] = useUrlParam('view', 'chart', { clears: ['month'] });
   const view: View = viewParam === 'calendar' ? viewParam : 'chart';
   const now = useNow(NOW_TICK_MS);
@@ -67,7 +66,6 @@ export default function SemesterPage(): JSX.Element {
           modeBlocks,
         });
 
-  // The state values on the chart's legend, in the words the blocks print.
   const telescopeExtras = telescopeLegendExtras(closures);
   const modeExtras = modeLegendExtras(modeBlocks);
   const tooExtras = tooLegendExtras(tooBlocks);

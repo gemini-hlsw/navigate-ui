@@ -18,7 +18,7 @@ export const LOCATION_LABEL = {
   UNKNOWN: 'Unknown',
 } as const;
 
-/** "Port 3 · GMOS", or the instrument alone when its own record names no port. */
+/** "Port 3 · GMOS", or "On telescope · GMOS" when the installed record names no port. */
 export const whereLabel = (where: ComponentWhere): string => {
   switch (where.kind) {
     case 'INSTALLED':
@@ -32,7 +32,6 @@ export const whereLabel = (where: ComponentWhere): string => {
   }
 };
 
-/** `changesTag` is the caller's: a browser row says it changes, the night view names when. */
 export const componentWhere = (row: FinderRow, changesTag = 'changes tonight'): WhereReading => ({
   presence:
     row.where.kind === 'INSTALLED' ? 'ON_TELESCOPE' : row.where.kind === 'STORED' ? 'OFF_TELESCOPE' : 'NOT_RECORDED',

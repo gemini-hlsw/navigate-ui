@@ -46,7 +46,6 @@ export interface Mounting {
   readonly instrument: Instrument;
   /** The name exactly as the schedule prints it, e.g. "cal/ZORRO". */
   readonly publishedName: string;
-  /** What the mounted instrument can be used for over this span. */
   readonly usage: ResourceUsage;
   /** Null when not on a port. This alone says which schedule row the run draws on (domain/ports.ts). */
   readonly port: number | null;
@@ -95,7 +94,6 @@ export interface SubsystemBlock {
   readonly note: string | null;
 }
 
-/** A site + semester Resource holds a schedule for. */
 export interface PublishedSemester {
   readonly site: Site;
   readonly semester: string;

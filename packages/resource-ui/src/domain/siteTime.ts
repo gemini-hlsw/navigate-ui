@@ -14,7 +14,6 @@ export type TimeDisplay = 'site' | 'utc';
 export const displayTimeZone = (site: Site, display: TimeDisplay): string =>
   display === 'utc' ? 'UTC' : SITE_TIME_ZONES[site];
 
-/** The UTC epoch-millis instant of `hour:minute` local time on the given ISO date. */
 /** The [start, end) UTC interval (epoch millis) of the observing night ending on `isoDate`. */
 export const observingNightInterval = (site: Site, isoDate: string): Interval => ({
   start: localDateTimeToUtc(addDays(isoDate, -1), 14, 0, SITE_TIME_ZONES[site]),

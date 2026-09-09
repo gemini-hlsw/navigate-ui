@@ -30,7 +30,6 @@ const offsetParts = zoneFormatters('en-US', {
   second: '2-digit',
 });
 
-/** Minutes that `timeZone` is offset from UTC at the given instant. */
 export const offsetMinutes = (instant: Date, timeZone: string): number => {
   const parts = offsetParts(timeZone).formatToParts(instant);
   const field = (type: string): number => Number(parts.find((part) => part.type === type)?.value);

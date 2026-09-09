@@ -138,7 +138,6 @@
   border-color: var(--timeline-grid);
 }
 
-/* Whole-square click-through: the cell background navigates, so say so. */
 .resource-calendar .rbc-day-bg.night-clickable {
   cursor: pointer;
 }

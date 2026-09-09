@@ -144,7 +144,6 @@ describe('SemesterPage - the calendar', () => {
     const screen = await openSemester('/semester?site=GS&semester=2025B');
     await showCalendar(screen);
 
-    // The night squares are the assertion: the printed title also exists as a hidden native <option>.
     await expect.element(screen.getByRole('button', { name: 'Open night beginning 2025-08-14' })).toBeVisible();
   });
 
@@ -186,7 +185,7 @@ describe('SemesterPage - the calendar', () => {
   });
 
   it('reads an unknown month parameter as the first month, never an empty grid', async () => {
-    // A stale month from another semester must not strand the reader outside it (I4).
+    // A stale month from another semester must not strand the reader outside it.
     const screen = await openSemester('/semester?site=GS&semester=2025B&view=calendar&month=1999-01');
 
     await expect.element(screen.getByRole('button', { name: 'Open night beginning 2025-08-14' })).toBeVisible();
@@ -206,7 +205,6 @@ describe('SemesterPage - the calendar', () => {
     const screen = await openSemester('/semester?site=GS&semester=2025B');
     await showCalendar(screen);
 
-    // Per-night facts are why the calendar exists beside two run views; the moon is computed.
     await expect.element(screen.getByTestId('moon-disc').first()).toBeVisible();
     await expect.element(screen.getByText(/^\d+\.\d h$/).first()).toBeVisible();
   });
@@ -222,7 +220,7 @@ describe('SemesterPage - the calendar', () => {
   });
 
   it('chips a usability change by the new usage - the restriction is the news', async () => {
-    // GNIRS is recorded Not Available 6-17 August 2026: one chip when it fails, one when it returns.
+    // GNIRS records a Not Available spell starting and ending inside the semester: one chip for each edge.
     const screen = await openSemester('/semester?site=GN&semester=2026B&view=calendar');
     const calendar = screen.getByTestId('semester-calendar');
 
@@ -244,7 +242,6 @@ describe('SemesterPage - the calendar', () => {
     const screen = await openSemester('/semester?site=GS&semester=2025B');
     await showCalendar(screen);
 
-    // August is the first month the semester covers, so there is nothing before it.
     await expect.element(screen.getByRole('button', { name: 'Previous month' })).toBeDisabled();
   });
 

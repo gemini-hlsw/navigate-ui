@@ -29,7 +29,6 @@ export const intervalsOverlap = (aStart: string, aEnd: string | null, bStart: st
   return Date.parse(aStart) < Date.parse(bEnd) && aEndMs > Date.parse(bStart);
 };
 
-/** Clips [start, end) to the bounds, returning null when there is no overlap. */
 export const clipInterval = (interval: MockInterval, bounds: MockInterval): MockInterval | null => {
   const start = Math.max(Date.parse(interval.start), Date.parse(bounds.start));
   const end = Math.min(Date.parse(interval.end), Date.parse(bounds.end));

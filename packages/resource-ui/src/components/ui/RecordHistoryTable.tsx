@@ -28,7 +28,6 @@ interface RecordHistoryTableProps {
   /** Named for assistive readers, since the table has no visible caption. */
   readonly ariaLabel: string;
   readonly testId: string;
-  /** What to say when the window holds no record at all. */
   readonly emptyMessage: string;
 }
 

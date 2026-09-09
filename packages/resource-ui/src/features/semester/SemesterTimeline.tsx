@@ -13,7 +13,6 @@ export { TimelineLegendBar as SemesterTimelineLegend } from '@/features/timeline
 function MonthChart({ month, site, now }: { month: TimelineMonth; site: Site; now: number | null }): JSX.Element {
   const options = buildSemesterMonthOptions({ month, site, now });
 
-  // A click anywhere on the month opens the night under the cursor, as a calendar square does.
   const openNight = useOpenNight();
   const openNightAt = (instant: number): void => {
     const night = nightAt(month.nights, instant);

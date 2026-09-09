@@ -1,4 +1,3 @@
-/** Each card is also the way into its night, as the calendar squares are. */
 import { cn, when } from '@gemini-hlsw/lucuma-common-ui';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';

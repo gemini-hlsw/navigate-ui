@@ -69,7 +69,6 @@ export const buildWeekBands = (week: WeekTimeline, site: Site): XAxisPlotBandsOp
   ...week.bands.map((band) => closureBandPlotBand(band, 14)),
 ];
 
-/** One line per night boundary, so the seven nights are countable. */
 export const buildWeekLines = (week: WeekTimeline): XAxisPlotLinesOptions[] =>
   week.nights.map((night) => ({
     value: night.interval.start,
@@ -86,7 +85,6 @@ interface WeekChartModel {
   readonly now: number | null;
 }
 
-/** Builds the Highcharts options for the week timeline. */
 export const buildWeekChartOptions = ({ week, site, now }: WeekChartModel): Options => {
   const showsNow = now !== null && now >= week.interval.start && now < week.interval.end;
 

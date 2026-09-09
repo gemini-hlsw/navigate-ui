@@ -4,7 +4,6 @@ import { portRowLabel } from './ports';
 import type { Instrument, Interval, Mounting, OffPortPlace, ResourceUsage } from './types';
 
 export type InstrumentWhere =
-  /** Mounted on a port over the night. */
   | { readonly kind: 'PORT'; readonly port: number }
   /** Recorded usable but on no port. The workbook does not say where, so the place is usually UNKNOWN. */
   | { readonly kind: 'OFF_PORT'; readonly place: OffPortPlace }
@@ -21,7 +20,6 @@ export interface InstrumentRow {
   readonly note: string | null;
   /** The run covering the night, at its own full extent - null when none does. */
   readonly run: Interval | null;
-  /** True when the instrument's record changes during this night. */
   readonly changesTonight: boolean;
   /** The instants the record changes during the night, in order. */
   readonly transitions: readonly number[];
@@ -36,7 +34,6 @@ const whereOf = (mounting: Mounting): InstrumentWhere =>
 export interface BuildInstrumentRowsOptions {
   /** Every mounting over the window - the browser's whole subject. */
   readonly mountings: readonly Mounting[];
-  /** The observing night being asked about. */
   readonly night: Interval;
 }
 

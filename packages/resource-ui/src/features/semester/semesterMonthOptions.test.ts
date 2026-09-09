@@ -14,7 +14,6 @@ import {
   widthForEveryNight,
 } from './semesterMonthOptions';
 
-/** The month's points, built the way buildSemesterMonthOptions builds them. */
 const buildMonthPoints = (month: TimelineMonth, site: Site) => buildTimelinePoints(month.rows, eveningDescriber(site));
 
 const night = (label: string) => observingNightInterval('GS', label);
@@ -70,7 +69,6 @@ describe('points', () => {
   });
 
   it('draws an absence as a hollow block rather than a fourth fill', () => {
-    // No recessive fill clears the normal-vision separation floor against the nominal.
     const point = buildMonthPoints(august, 'GS').find((entry) => entry.custom.label === 'A&G');
 
     expect(point?.className).toBe('schedule-ghost');
@@ -82,12 +80,10 @@ describe('points', () => {
     const ghost = points.find((entry) => entry.custom.label === 'GHOST');
 
     expect(ghost?.color).toBe('var(--instrument-ghost)');
-    // GHOST's teal leaves white at 3.67:1, so its blocks take dark ink.
     expect(ghost?.dataLabels).toEqual({ style: { color: 'var(--instrument-ink-dark)' } });
   });
 
   it('keeps colour tied to the instrument, not to its position in the data', () => {
-    // A semester missing an instrument must not repaint the ones that remain.
     const withoutGhost = buildSemesterTimeline({
       site: 'GS',
       firstNight: '2026-08-02',

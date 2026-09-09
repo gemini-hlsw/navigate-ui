@@ -57,11 +57,9 @@ const catalog = (site: ImportSite, entries: readonly Entry[]): readonly CatalogC
 
 /** GMOS-S and F2 carry the [REQ] v1 depth; the rest hold a real handful each. */
 const GS_CATALOG = catalog('GS', [
-  // B600_G5323 is the retired grating the B480 replaced, boxed at the base facility.
   { instrument: 'GMOS', componentType: 'DISPERSER', code: 'B1200_G5321', name: 'B1200' },
   { instrument: 'GMOS', componentType: 'DISPERSER', code: 'R831_G5322', name: 'R831', pattern: 'SPARE_IN_LAB' },
   { instrument: 'GMOS', componentType: 'DISPERSER', code: 'R600_G5324', name: 'R600', pattern: 'SPARE_IN_LAB' },
-  // Soft-deleted: the catalog remembers it, the finder does not offer it.
   {
     instrument: 'GMOS',
     componentType: 'FPU',
@@ -81,6 +79,7 @@ const GS_CATALOG = catalog('GS', [
   },
   { instrument: 'GMOS', componentType: 'DISPERSER', code: 'R150_G5326', name: 'R150', pattern: 'STORED_AT_BASE' },
   { instrument: 'GMOS', componentType: 'DISPERSER', code: 'B480_G5327', name: 'B480' },
+  // B600_G5323 is the retired grating the B480 replaced, boxed at the base facility.
   { instrument: 'GMOS', componentType: 'DISPERSER', code: 'B600_G5323', name: 'B600', pattern: 'STORED_AT_BASE' },
   // GMOS-S filters (GmosSouthFilter).
   { instrument: 'GMOS', componentType: 'FILTER', code: 'u_G0332', name: "u'", pattern: 'SPARE_IN_LAB' },
@@ -97,7 +96,7 @@ const GS_CATALOG = catalog('GS', [
   { instrument: 'GMOS', componentType: 'FILTER', code: 'SII_G0335', name: 'SII' },
   { instrument: 'GMOS', componentType: 'FILTER', code: 'OIII_G0338', name: 'OIII' },
   { instrument: 'GMOS', componentType: 'FILTER', code: 'HeII_G0340', name: 'HeII', pattern: 'SPARE_IN_LAB' },
-  // GMOS-S FPUs (GmosSouthFpu): longslits, the nod-and-shuffle slit, the IFU trio, and MOS masks.
+  // GMOS-S FPUs (GmosSouthFpu).
   { instrument: 'GMOS', componentType: 'FPU', code: 'LongSlit_0_25', name: '0.25" longslit' },
   { instrument: 'GMOS', componentType: 'FPU', code: 'LongSlit_0_50', name: '0.5" longslit' },
   { instrument: 'GMOS', componentType: 'FPU', code: 'LongSlit_0_75', name: '0.75" longslit' },
@@ -135,7 +134,6 @@ const GS_CATALOG = catalog('GS', [
     pattern: 'SPARE_IN_LAB',
   },
   { instrument: 'GMOS', componentType: 'WFS', code: 'GMOS_S_OIWFS', name: 'GMOS-S OIWFS' },
-  // Flamingos-2: grisms, filters, pixel-width longslits, and the f/16 Lyot stop.
   { instrument: 'F2', componentType: 'DISPERSER', code: 'R1200JH', name: 'R1200 JH grism' },
   { instrument: 'F2', componentType: 'DISPERSER', code: 'R1200HK', name: 'R1200 HK grism' },
   { instrument: 'F2', componentType: 'DISPERSER', code: 'R3000', name: 'R3000 grism', pattern: 'SPARE_IN_LAB' },
@@ -157,7 +155,6 @@ const GS_CATALOG = catalog('GS', [
   { instrument: 'F2', componentType: 'FPU', code: 'Pinhole', name: 'Pinhole grid', pattern: 'SPARE_IN_LAB' },
   { instrument: 'F2', componentType: 'OTHER', code: 'F2_LYOT_F16', name: 'f/16 Lyot stop' },
   { instrument: 'F2', componentType: 'WFS', code: 'F2_OIWFS', name: 'F2 OIWFS' },
-  // GHOST is fibre-fed: the IFU positioners at the focal station, the spectrograph in the pier lab.
   { instrument: 'GHOST', componentType: 'FPU', code: 'GHOST_IFU1', name: 'Standard-resolution IFU (IFU-1)' },
   { instrument: 'GHOST', componentType: 'FPU', code: 'GHOST_IFU2', name: 'High-resolution IFU (IFU-2)' },
   { instrument: 'GHOST', componentType: 'OTHER', code: 'GHOST_CAM_BLUE', name: 'Blue spectrograph camera' },
@@ -170,7 +167,6 @@ const GS_CATALOG = catalog('GS', [
     name: 'Th-Xe calibration lamp',
     pattern: 'SPARE_IN_LAB',
   },
-  // Cal/ZORRO: dual-channel speckle imager - one EMCCD per arm of the dichroic.
   { instrument: 'CAL_ZORRO', componentType: 'OTHER', code: 'ZORRO_EMCCD_B', name: 'Blue EMCCD camera (562 nm)' },
   { instrument: 'CAL_ZORRO', componentType: 'OTHER', code: 'ZORRO_EMCCD_R', name: 'Red EMCCD camera (832 nm)' },
   { instrument: 'CAL_ZORRO', componentType: 'OTHER', code: 'ZORRO_DICHROIC', name: 'Dichroic beamsplitter' },
@@ -216,7 +212,7 @@ const GN_CATALOG = catalog('GN', [
   { instrument: 'GMOS', componentType: 'FILTER', code: 'Ha_G0310', name: 'H-alpha', pattern: 'FAILS_MID_SEMESTER' },
   { instrument: 'GMOS', componentType: 'FILTER', code: 'DS920_G0312', name: 'DS920', pattern: 'SPARE_IN_LAB' },
   { instrument: 'GMOS', componentType: 'FILTER', code: 'HeII_G0320', name: 'HeII' },
-  // GMOS-N FPUs (GmosNorthFpu) and MOS masks.
+  // GMOS-N FPUs (GmosNorthFpu).
   { instrument: 'GMOS', componentType: 'FPU', code: 'LongSlit_0_50', name: '0.5" longslit' },
   { instrument: 'GMOS', componentType: 'FPU', code: 'LongSlit_0_75', name: '0.75" longslit' },
   { instrument: 'GMOS', componentType: 'FPU', code: 'LongSlit_1_00', name: '1.0" longslit' },
@@ -270,15 +266,12 @@ const GN_CATALOG = catalog('GN', [
   { instrument: 'GNIRS', componentType: 'FPU', code: 'LongSlit_0_30', name: '0.30" slit' },
   { instrument: 'GNIRS', componentType: 'FPU', code: 'LongSlit_0_45', name: '0.45" slit' },
   { instrument: 'GNIRS', componentType: 'FPU', code: 'LongSlit_0_675', name: '0.675" slit' },
-  // Altair: the AO bench's swappable optics.
   { instrument: 'ALTAIR', componentType: 'OTHER', code: 'ALTAIR_BS_NGS', name: 'NGS beamsplitter' },
   { instrument: 'ALTAIR', componentType: 'OTHER', code: 'ALTAIR_BS_LGS', name: 'LGS dichroic' },
   { instrument: 'ALTAIR', componentType: 'OTHER', code: 'ALTAIR_FL', name: 'Field lens', pattern: 'SPARE_IN_LAB' },
-  // IGRINS-2: fixed-format - the immersion grating and its two detectors.
   { instrument: 'IGRINS2', componentType: 'DISPERSER', code: 'IGRINS2_IMM', name: 'Silicon immersion grating' },
   { instrument: 'IGRINS2', componentType: 'OTHER', code: 'IGRINS2_DET_H', name: 'H-band detector' },
   { instrument: 'IGRINS2', componentType: 'OTHER', code: 'IGRINS2_DET_K', name: 'K-band detector' },
-  // Visitors: MAROON-X rides the Visiting row; 'Alopeke is the twin of ZORRO.
   { instrument: 'MAROON_X', componentType: 'OTHER', code: 'MAROONX_FIU', name: 'Fiber injection unit' },
   { instrument: 'MAROON_X', componentType: 'OTHER', code: 'MAROONX_ETALON', name: 'Etalon calibrator' },
   { instrument: 'ALOPEKE', componentType: 'OTHER', code: 'ALOPEKE_EMCCD_B', name: 'Blue EMCCD camera (562 nm)' },
@@ -310,7 +303,6 @@ const iso = (millis: number): string => new Date(millis).toISOString();
 const within = (span: Span, fraction: number): number =>
   Math.round((span.start + (span.end - span.start) * fraction) / 3_600_000) * 3_600_000;
 
-/** The mounted intervals of one instrument in one schedule, in order. */
 const mountingsOf = (schedule: ImportedSchedule, instrument: Instrument): readonly Span[] =>
   schedule.blocks
     .filter((block): block is ImportedBlock => block.kind === 'MOUNTED' && block.instrument === instrument)
@@ -349,7 +341,6 @@ const installed = (span: Span, note: string | null = null): Piece => ({
   note,
 });
 
-/** One semester's pieces for one component, per its declared pattern. */
 const piecesFor = (component: CatalogComponent, semester: Span, mountings: readonly Span[]): readonly Piece[] => {
   switch (component.pattern) {
     case 'SPARE_IN_LAB':

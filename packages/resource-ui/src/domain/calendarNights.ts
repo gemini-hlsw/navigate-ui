@@ -27,7 +27,6 @@ export interface CalendarNight {
   readonly darkHours: number | null;
   /** True when a telescope-wide closure covers the night. */
   readonly closed: boolean;
-  /** The closure's printed reason, when there is one. */
   readonly closureReason: string | null;
 }
 

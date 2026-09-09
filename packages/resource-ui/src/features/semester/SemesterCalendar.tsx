@@ -27,7 +27,7 @@ import type { Closure, Mounting, PublishedSemester, Site } from '@/domain/types'
 import { MoonDisc } from '@/features/calendar/MoonDisc';
 import { instrumentColor, instrumentInk, stateFill, stateFillInk } from '@/features/timeline/timelineOptions';
 
-// The calendar's key is instruments, unscheduled and closure - never per-night cell states.
+// The calendar's key is instruments and the closure only - never per-night cell states.
 export { TimelineLegendBar as SemesterCalendarLegend } from '@/features/timeline/TimelineChart';
 
 const localizer = dateFnsLocalizer({
@@ -69,7 +69,6 @@ const isoOf = (date: Date): string =>
 /** The month a date falls in, as the URL spells it: "2026-11". */
 const monthKeyOf = (date: Date): string => `${String(date.getFullYear()).padStart(4, '0')}-${pad(date.getMonth() + 1)}`;
 
-/** The semester's critical events as single-evening chips. */
 // Mutable return: react-big-calendar's `events` prop rejects readonly arrays.
 const buildEvents = (
   nights: readonly TimelineNight[],
@@ -99,7 +98,6 @@ const buildEvents = (
           : instrumentInk(item.instrument),
   }));
 
-/** A night's full sentence, for the square's tooltip and assistive tech. */
 const describeNight = (night: CalendarNight): string => {
   const parts = [
     `Night beginning ${night.eveningDate}`,
@@ -219,7 +217,6 @@ function MonthCalendar({
     openNight(isoOf(value));
   };
 
-  // The title is the picker: every month is one jump away, not a chain of prev-clicks.
   const monthOptions = timeline.months.map((month) => ({
     label: month.label,
     value: `${month.year}-${pad(month.month)}`,

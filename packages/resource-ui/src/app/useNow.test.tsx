@@ -1,4 +1,3 @@
-/** The clock has to advance, and has to stop advancing when the component goes. */
 import { describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-react';
 

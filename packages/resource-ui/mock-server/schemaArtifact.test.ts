@@ -12,7 +12,6 @@ const importedTypes = (/^#import (.+) from /.exec(source)?.[1] ?? '')
   .map((name) => name.trim())
   .filter(Boolean);
 
-/** Every type the source documents with a docstring. */
 const documentedTypes = parse(source)
   .definitions.filter(isTypeDefinitionNode)
   .filter((definition) => definition.description)

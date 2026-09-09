@@ -52,7 +52,6 @@ describe(buildBlockRows, () => {
   });
 
   it('keeps a run that crosses a month boundary as one row', () => {
-    // The records merge GHOST across month blocks, or a reader gets six rows for one fact.
     const rows = build({
       firstNight: '2026-08-08',
       lastNight: '2026-10-14',

@@ -15,7 +15,6 @@ const block = (location: Block['location'], publishedName = 'GMOS-S'): Block => 
   location,
 });
 
-/** `toMountings` is where the wire's port/place promise is checked; these are its three outcomes. */
 describe(toMountings, () => {
   let warn: MockInstance<typeof console.warn>;
 
@@ -76,7 +75,6 @@ const semesterEntry = (nights: SemesterEntry['nights']): SemesterEntry => ({
   moonEvents: [],
 });
 
-/** The one place the API's half-open `nights` becomes the domain's inclusive first/last night. */
 describe(toPublishedSemesters, () => {
   it('reads the exclusive nights end as the last night before it', () => {
     // The exclusive end names the first uncovered date; passing it through adds a night that was never scheduled.

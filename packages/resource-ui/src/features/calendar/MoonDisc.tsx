@@ -5,7 +5,6 @@ import { type MoonPhase, moonPhaseLabel } from '@/domain/moon';
 
 interface MoonDiscProps {
   phase: MoonPhase;
-  /** Rendered size in pixels. */
   size?: number;
   className?: string;
 }

@@ -191,7 +191,6 @@ export default function ComponentsPage(): JSX.Element {
       {(loadingSets || loading) && <Loading what="the catalog" />}
 
       {!loading && !loadingSets && (
-        // Grouped by instrument, so the subheader replaces a column printing "GMOS" two dozen times.
         <DataTable
           value={[...visible]}
           dataKey="component.id"

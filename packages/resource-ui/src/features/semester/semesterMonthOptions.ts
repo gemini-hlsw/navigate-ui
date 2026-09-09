@@ -31,7 +31,6 @@ const widthForEveryOtherNight = (nightCount: number): number => nightCount * PX_
 export const dayTickPositions = (month: TimelineMonth, step: number): number[] =>
   month.nights.filter((_, index) => index % step === 0).map((night) => midpoint(night.interval));
 
-/** Weekend nights, shaded, plus the wash under a telescope-wide closure. */
 export const buildMonthBands = (month: TimelineMonth): XAxisPlotBandsOptions[] => [
   ...month.nights
     .filter((night) => night.isWeekend)
@@ -63,7 +62,6 @@ interface SemesterMonthModel {
   readonly now: number | null;
 }
 
-/** Builds the Highcharts options for one month block of the semester timeline. */
 export const buildSemesterMonthOptions = ({ month, site, now }: SemesterMonthModel): Options => {
   const showsNow = now !== null && now >= month.interval.start && now < month.interval.end;
 
@@ -86,7 +84,7 @@ export const buildSemesterMonthOptions = ({ month, site, now }: SemesterMonthMod
       gridLineWidth: 0,
       lineColor: 'var(--timeline-grid)',
       labels: {
-        // Highcharts reserves padding per label and blanks any whose box overlaps, so a two-digit day vanished.
+        // Highcharts reserves padding per label and blanks any whose box overlaps, so a two-digit day would otherwise vanish.
         padding: 0,
         formatter() {
           const night = month.nights.find((candidate) => midpoint(candidate.interval) === Number(this.value));

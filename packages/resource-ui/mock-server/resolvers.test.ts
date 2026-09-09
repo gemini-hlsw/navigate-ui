@@ -13,7 +13,6 @@ const run = async (source: string, variableValues?: Record<string, unknown>): Pr
   return result.data ?? {};
 };
 
-/** `run`'s counterpart for the designed errors: the message, not the data. */
 const runExpectingError = async (source: string, variableValues?: Record<string, unknown>): Promise<string> => {
   const result = await graphql({ schema, source, variableValues });
   const [error] = result.errors ?? [];
@@ -27,7 +26,6 @@ interface BlockLocation {
   readonly port: number | null;
 }
 
-/** The selection every location assertion below shares. */
 const LOCATION = 'location { place port }';
 
 describe('TimestampInterval - the type the ODB schema shares', () => {
@@ -339,7 +337,6 @@ describe('instrumentAvailability', () => {
     }`;
 
   it('states where each run is: the port for a mounting, UNKNOWN for an off-port run', async () => {
-    // The 'Alopeke visitor run is usable with no port recorded.
     const data = await run(RANGE, {
       site: 'GN',
       start: '2026-09-24T00:00:00.000Z',
@@ -405,7 +402,6 @@ describe('instrumentAvailability', () => {
   }
 
   it('serves Zorro displacing GCAL on Port 2 for a visitor run', async () => {
-    // GCAL holds Port 2 until the speckle imager's visitor run takes it over.
     const data = await run(NAMED_RANGE, {
       site: 'GS',
       start: '2024-09-17T00:00:00.000Z',
@@ -457,7 +453,6 @@ describe('instrumentAvailability', () => {
   });
 });
 
-/** Components are live and never schedule-owned: top-level, unpaged, one search argument. */
 describe('components', () => {
   const COMPONENTS = `
     query ($site: Site!, $instruments: [Instrument!], $types: [InstrumentComponentType!], $search: NonEmptyString) {
@@ -634,7 +629,6 @@ describe('tooSupport and telescopeMode - the telescope-state blocks', () => {
   it('serves the workbook ToOs and Mode/Program columns as blocks', async () => {
     const data = await run(RANGE, { site: 'GS', interval: SEMESTER, clip: false });
 
-    // The ToOs column is blank on every night; the import serves standard support as the assumption.
     expect(data.tooSupport as { tooSupport: string; note: string | null }[]).toMatchObject([
       { tooSupport: 'STANDARD', note: 'Assumed: the workbook does not record ToO support' },
     ]);
@@ -668,7 +662,6 @@ describe('tooSupport and telescopeMode - the telescope-state blocks', () => {
   });
 
   it('leaves the mode unrecorded during a shutdown, while the assumed ToO support spans it', async () => {
-    // During the shutdown the Mode row has a gap; the assumed Standard ToO support survives it.
     const data = await run(
       `query ($site: Site!, $night: Date!) {
         telescopeNight(site: $site, observingNight: $night) {

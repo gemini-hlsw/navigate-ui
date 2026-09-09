@@ -36,9 +36,7 @@ export interface NightSunTimes {
   readonly sunset: number | null;
   /** Astronomical darkness begins (sun below -18 deg). */
   readonly duskAstronomical: number | null;
-  /** Astronomical darkness ends. */
   readonly dawnAstronomical: number | null;
-  /** Sun crosses the horizon going up. */
   readonly sunrise: number | null;
 }
 

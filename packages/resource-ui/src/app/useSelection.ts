@@ -39,7 +39,6 @@ export function useSelection(): SelectionControls {
     semester: params.get('semester'),
     // A fixed default date would silently open some unrelated night.
     observingNight: params.get('night') ?? observingNightOf(site, now),
-    // Anything but the explicit 'utc' degrades to the reading the site works in.
     timeDisplay: params.get('clock') === 'utc' ? 'utc' : 'site',
   };
 

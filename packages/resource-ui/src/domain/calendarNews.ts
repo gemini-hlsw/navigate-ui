@@ -3,13 +3,8 @@ import type { TimelineNight } from './timeline';
 import { nightAt, USAGE_LABEL } from './timeline';
 import type { Closure, Instrument, Mounting } from './types';
 
-export type CalendarNewsKind =
-  /** An instrument (or its usability) changes on a row this evening. */
-  | 'INSTRUMENT'
-  /** The telescope closes this evening. */
-  | 'CLOSED'
-  /** The telescope reopens this evening. */
-  | 'OPEN';
+/** INSTRUMENT also covers a usability change, not only an instrument swap. */
+export type CalendarNewsKind = 'INSTRUMENT' | 'CLOSED' | 'OPEN';
 
 export interface CalendarNewsItem {
   /** The evening the change takes effect - the square it belongs on. */

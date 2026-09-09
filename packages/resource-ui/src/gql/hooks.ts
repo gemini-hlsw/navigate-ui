@@ -79,7 +79,6 @@ export interface ApiInterval {
   readonly end: string;
 }
 
-/** The API's interval input, from the domain's epoch-millis one. */
 export const toApiInterval = (interval: Interval): ApiInterval => ({
   start: new Date(interval.start).toISOString(),
   end: new Date(interval.end).toISOString(),
@@ -131,7 +130,6 @@ export const useNightSchedule = (site: Site, observingNight: string, bounds: Api
 };
 
 export interface WeekScheduleResult extends ScheduleResult {
-  /** Which of the week's nights Resource holds anything for. */
   readonly nightsWithData: ReadonlySet<string>;
   /** Whether the answer has arrived, so an empty set is not read as "none". */
   readonly nightsResolved: boolean;

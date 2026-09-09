@@ -10,7 +10,6 @@ interface InstrumentSwatchProps {
   readonly instrument: Instrument;
   /** Shown small beside it, so "GMOS GMOS-N" reads as one instrument with two names. */
   readonly publishedName?: string;
-  /** Anything the page adds after the name - a count, a summary. */
   readonly children?: JSX.Element | string | false;
   /** Spacing the surrounding row wants; the layout itself is not negotiable. */
   readonly className?: string;

@@ -10,7 +10,7 @@ export type StoredPattern =
   | 'IN_LAB'
   /** Lab, then wheeled onto the dome floor for a fit check, then back. */
   | 'LAB_FLOOR_LAB'
-  /** At the base facility, then up to the summit lab for commissioning. */
+  /** At the base facility, then up to the summit lab for rework. */
   | 'BASE_THEN_LAB'
   /** On the dome floor being commissioned, then in the lab. */
   | 'COMMISSIONING';

@@ -1,7 +1,6 @@
 import { expect } from 'vitest';
 import { type LocatorSelectors, page, userEvent } from 'vitest/browser';
 
-/** Opens the PrimeReact Dropdown accessibly named `label`. */
 export async function openDropdown(sut: LocatorSelectors, label: string): Promise<void> {
   const wrapper = sut.getByLabelText(label, { exact: true }).element().closest('.p-dropdown');
   expect(wrapper).not.toBeNull();

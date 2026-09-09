@@ -46,7 +46,6 @@ describe('the synthetic blocks', () => {
   });
 
   it('anchors a riding piece to its instrument: installed exactly while mounted', () => {
-    // Every INSTALLED span must be covered by the union of GMOS mountings - the anchoring rule.
     const spans = schedules
       .filter((schedule) => schedule.site === 'GS')
       .flatMap((schedule) =>
@@ -105,7 +104,6 @@ describe('the synthetic blocks', () => {
     for (const component of COMPONENT_CATALOG) {
       const spans = blocksOf(component.id);
       for (let index = 1; index < spans.length; index += 1) {
-        // Sorted; each next block starts at or after the previous ends, and within a semester exactly at it.
         expect(spans[index]!.start >= spans[index - 1]!.end).toBe(true);
       }
     }
