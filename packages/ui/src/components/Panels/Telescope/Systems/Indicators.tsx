@@ -23,8 +23,8 @@ export function Indicators({ canEdit }: { canEdit: boolean }) {
       <AOWFS label="AOWFS" loading={loading} disabled={!canEdit} />
       <EcsDome label="Dome" enclosure={data?.enclosure} {...buttonProps} />
       <EcsShutters label="Shutters" enclosure={data?.enclosure} {...buttonProps} />
-      <Button className="under-construction" loading={loading} disabled={!canEdit} label="W VGate" />
       <Button className="under-construction" loading={loading} disabled={!canEdit} label="E VGate" />
+      <Button className="under-construction" loading={loading} disabled={!canEdit} label="W VGate" />
     </div>
   );
 }
