@@ -92,8 +92,14 @@ export function ReviewView<T extends ReviewItem>(props: ReviewViewProps<T>): JSX
 
   const nounTitle = `${noun[0]!.toUpperCase()}${noun.slice(1)}`;
   const visible = items;
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const selected = visible.find((i) => i.id === selectedId) ?? visible[0] ?? null;
+  // Three-state selection so a deliberate deselect is honoured (sc-10137):
+  //  - `undefined` — untouched: default to the first row so the detail panel is
+  //    populated on load, and keep defaulting when a filter change drops the
+  //    selected row (fall back to the first surviving row, not an empty panel);
+  //  - a row id — that row when it's visible, else the first surviving row;
+  //  - `null` — an explicit deselect: leave nothing selected (no snap back).
+  const [selectedId, setSelectedId] = useState<string | null | undefined>(undefined);
+  const selected = selectedId === null ? null : (visible.find((i) => i.id === selectedId) ?? visible[0] ?? null);
 
   const [decision, setDecision] = useState<Decision | null>(null);
   const [response, setResponse] = useState('');

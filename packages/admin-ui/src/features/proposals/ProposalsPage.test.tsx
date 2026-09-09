@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { userEvent } from 'vitest/browser';
 
 import { PROPOSALS_QUERY } from '@/gql/odb/proposals';
 import { fakeJwt, standardUser } from '@/test/factories';
@@ -62,5 +63,22 @@ describe(ProposalsPage, () => {
     await expect.element(screen.getByText('All types').first()).toBeInTheDocument();
     await expect.element(screen.getByText('All semesters').first()).toBeInTheDocument();
     await expect.element(screen.getByText('Unresolved')).not.toBeInTheDocument();
+  });
+
+  it('leaves nothing selected when the selected row is deselected — sc-10137', async () => {
+    const screen = await renderWithContext(<ProposalsPage />, { token: STAFF_TOKEN, mocks: [proposalsMock()] });
+    const row = screen.getByRole('cell', { name: 'G-2027B-0042' });
+    await expect.element(row).toBeInTheDocument();
+
+    // The first row auto-selects on load, so the detail tile shows its title.
+    const detail = screen.getByText('G-2027B-0042 · Grace Hopper');
+    await expect.element(detail).toBeInTheDocument();
+
+    // Clicking the selected row again deselects it (PrimeReact DataTable
+    // defaults to metaKeySelection=false, so a plain re-click toggles the row
+    // off); the detail panel must go away rather than snapping back to the
+    // first row.
+    await userEvent.click(row);
+    await expect.element(detail).not.toBeInTheDocument();
   });
 });
