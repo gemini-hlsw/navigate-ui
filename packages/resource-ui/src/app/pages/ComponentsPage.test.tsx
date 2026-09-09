@@ -77,17 +77,18 @@ describe('ComponentsPage - the finder', () => {
     const screen = await open('/components?site=GS&semester=2025B&night=2025-09-01');
     await screen.getByLabelText('Search').fill('R400');
 
-    await expect.element(screen.getByText('Port 3 · GMOS-S')).toBeVisible();
+    await expect.element(screen.getByRole('row', { name: /R400/ }).getByText('Port 3 · GMOS-S')).toBeVisible();
   });
 
   it('shows the failing piece in the lab after its failure, with the reason on the row', async () => {
     const screen = await open('/components?site=GS&semester=2025B&night=2025-12-15');
     await screen.getByLabelText('Search').fill('R400');
 
-    await expect.element(screen.getByText('Summit lab')).toBeVisible();
+    const row = screen.getByRole('row', { name: /R400/ });
+    await expect.element(row.getByText('Summit lab')).toBeVisible();
     // Red is reserved for a piece actually out of service, and the record's own words say why.
-    await expect.element(screen.getByText('Unavailable')).toBeVisible();
-    await expect.element(screen.getByText('Failed; removed for repair')).toBeVisible();
+    await expect.element(row.getByText('Unavailable')).toBeVisible();
+    await expect.element(row.getByText('Failed; removed for repair')).toBeVisible();
   });
 
   it('gives the record its own Note column rather than tucking it under the status', async () => {
@@ -108,8 +109,9 @@ describe('ComponentsPage - the finder', () => {
     const screen = await open('/components?site=GS&semester=2025B&night=2025-12-15');
     await screen.getByLabelText('Search').fill('R831');
 
-    await expect.element(screen.getByText('Spare')).toBeVisible();
-    await expect.element(screen.getByText('Unavailable')).not.toBeInTheDocument();
+    const row = screen.getByRole('row', { name: /R831/ });
+    await expect.element(row.getByText('Spare')).toBeVisible();
+    await expect.element(row.getByText('Unavailable')).not.toBeInTheDocument();
   });
 
   it('groups the catalog by instrument instead of repeating an Instrument column', async () => {
