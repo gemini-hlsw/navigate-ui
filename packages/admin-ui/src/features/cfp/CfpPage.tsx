@@ -3,10 +3,11 @@ import './CfpPage.css';
 import { NumberInput } from '@gemini-hlsw/lucuma-common-ui';
 import { Button } from 'primereact/button';
 import { Checkbox } from 'primereact/checkbox';
-import { Column } from 'primereact/column';
+import { Column, type ColumnSortEvent } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { Dropdown } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
+import { SplitButton } from 'primereact/splitbutton';
 import { type JSX, useMemo, useState } from 'react';
 
 import { DataSourceBadge } from '@/components/DataSourceBadge';
@@ -14,27 +15,31 @@ import { CircleCheck, CircleXMark, Copy, Plus, Upload, XMark } from '@/component
 import { Tile } from '@/components/Tile';
 import { useToast } from '@/components/toastContext';
 import { friendlyError } from '@/gql/errors';
-import {
-  cfpPropertiesInput,
-  currentSemester,
-  mapCfps,
-  semesterDates,
-  useCfps,
-  useCreateCfp,
-  useUpdateCfp,
-} from '@/gql/odb/cfp';
+import { cfpPropertiesInput, mapCfps, newCallInput, useCfps, useCreateCfp, useUpdateCfp } from '@/gql/odb/cfp';
 import type { CallForProposalsPropertiesInput } from '@/gql/odb/gen/graphql';
 import { type Partner, PARTNER_NAME, PARTNERS } from '@/gql/sso/roster';
 import {
   type CallForProposals,
   CFP_TYPE_LABEL,
+  type CfpDetails,
   type CfpType,
+  cfpTypeLabel,
   INSTRUMENT_LABEL,
   INSTRUMENTS,
+  KECK_INSTRUMENT_LABEL,
+  KECK_INSTRUMENTS,
+  type Observatory,
+  OBSERVATORY_LABEL,
   type SiteCoordinateLimits,
+  SUBARU_CFP_TYPE_LABEL,
+  SUBARU_INSTRUMENT_LABEL,
+  SUBARU_INSTRUMENTS,
+  type SubaruCallForProposalsType,
 } from '@/gql/types';
 
 const CFP_TYPES = Object.keys(CFP_TYPE_LABEL) as CfpType[];
+const SUBARU_CFP_TYPES = Object.keys(SUBARU_CFP_TYPE_LABEL) as SubaruCallForProposalsType[];
+const OBSERVATORIES = Object.keys(OBSERVATORY_LABEL) as Observatory[];
 const EMPTY_CFPS: CallForProposals[] = [];
 
 /** Facet options: All / Open / Closed show visible calls; Invisible shows the
@@ -46,6 +51,17 @@ const OPEN_FILTER_OPTIONS = [
   { label: 'Invisible', value: 'invisible' },
 ] as const;
 type OpenFilter = (typeof OPEN_FILTER_OPTIONS)[number]['value'];
+
+/** A DataTable `sortFunction` that orders rows by a rendered label rather than
+ *  a raw field — the Observatory and Type columns show computed labels, so
+ *  sorting must use the same text the cell displays. PrimeReact only invokes a
+ *  `sortFunction` when the column also declares a (non-empty) `sortField`. */
+function sortByLabel(label: (c: CallForProposals) => string) {
+  return (e: ColumnSortEvent): CallForProposals[] => {
+    const dir = e.order ?? 1;
+    return [...(e.data as CallForProposals[])].sort((a, b) => dir * label(a).localeCompare(label(b)));
+  };
+}
 
 /**
  * Calls for Proposals view (sc-9098). Layout follows the mockup: a Calls table
@@ -62,19 +78,19 @@ export default function CfpPage(): JSX.Element {
   const [createCfp, { loading: creating }] = useCreateCfp();
   const saving = updating || creating;
 
-  const [typeFilter, setTypeFilter] = useState<CfpType | 'all'>('all');
+  const [observatoryFilter, setObservatoryFilter] = useState<Observatory | 'all'>('all');
   const [openFilter, setOpenFilter] = useState<OpenFilter>('all');
   const visibleCfps = useMemo(
     () =>
       cfps.filter((c) => {
-        if (typeFilter !== 'all' && c.type !== typeFilter) return false;
+        if (observatoryFilter !== 'all' && c.details.observatory !== observatoryFilter) return false;
         // "Invisible" shows only soft-deleted calls; every other facet shows
         // visible calls and additionally narrows by open status (sc-9612).
         if (openFilter === 'invisible') return !c.visible;
         if (!c.visible) return false;
         return openFilter === 'all' || c.active === (openFilter === 'open');
       }),
-    [cfps, typeFilter, openFilter],
+    [cfps, observatoryFilter, openFilter],
   );
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -120,13 +136,13 @@ export default function CfpPage(): JSX.Element {
               className="cfp-facet"
             />
             <Dropdown
-              value={typeFilter}
+              value={observatoryFilter}
               options={[
-                { label: 'All types', value: 'all' },
-                ...CFP_TYPES.map((t) => ({ label: CFP_TYPE_LABEL[t], value: t })),
+                { label: 'All observatories', value: 'all' },
+                ...OBSERVATORIES.map((o) => ({ label: OBSERVATORY_LABEL[o], value: o })),
               ]}
-              onChange={(e) => setTypeFilter(e.value as CfpType | 'all')}
-              tooltip="Show only calls of one type, or all."
+              onChange={(e) => setObservatoryFilter(e.value as Observatory | 'all')}
+              tooltip="Show only calls for one observatory (Gemini, or the Keck / Subaru exchange calls), or all."
               tooltipOptions={{ position: 'bottom' }}
               className="cfp-facet"
             />
@@ -142,23 +158,20 @@ export default function CfpPage(): JSX.Element {
                 void create({ ...cfpPropertiesInput(original), title: `${original.title} (copy)` }, 'copied');
               }}
             />
-            <Button
+            <SplitButton
               text
               label="New"
               icon={<Plus />}
               disabled={saving}
-              tooltip="Create a brand-new Call for Proposals from scratch (ODB createCallForProposals)."
+              // The default click creates a Gemini call; the menu creates a call
+              // for a specific observatory (each seeds its own properties block).
+              onClick={() => void create(newCallInput('GEMINI'), 'created')}
+              model={OBSERVATORIES.map((o) => ({
+                label: `${OBSERVATORY_LABEL[o]} call`,
+                command: () => void create(newCallInput(o), 'created'),
+              }))}
+              tooltip="Create a brand-new Call for Proposals — click for a Gemini call, or pick an observatory."
               tooltipOptions={{ position: 'bottom' }}
-              onClick={() =>
-                void create(
-                  {
-                    semester: currentSemester(),
-                    ...semesterDates(currentSemester()),
-                    gemini: { type: 'REGULAR_SEMESTER' },
-                  },
-                  'created',
-                )
-              }
             />
           </>
         }
@@ -203,11 +216,23 @@ export default function CfpPage(): JSX.Element {
             headerTooltip="The call's display title. Click a row to edit it below; click the header to sort."
           />
           <Column
-            field="type"
+            header="Observatory"
+            sortable
+            // sortField activates PrimeReact's sort; sortFunction orders by the
+            // displayed label so the order can't drift from the rendered cell.
+            sortField="details.observatory"
+            sortFunction={sortByLabel((c) => OBSERVATORY_LABEL[c.details.observatory])}
+            headerTooltip="Which observatory the call solicits time for — Gemini, or a Keck / Subaru exchange call."
+            style={{ width: '9rem' }}
+            body={(c: CallForProposals) => OBSERVATORY_LABEL[c.details.observatory]}
+          />
+          <Column
             header="Type"
             sortable
-            headerTooltip="Call type — Regular Semester, Fast Turnaround, Large Program, Director's Time, or Poor Weather."
-            body={(c: CallForProposals) => CFP_TYPE_LABEL[c.type]}
+            sortField="details.observatory"
+            sortFunction={sortByLabel(cfpTypeLabel)}
+            headerTooltip="Call type — the Gemini or Subaru call type, or the observatory name for Keck (which has no call type)."
+            body={cfpTypeLabel}
           />
           <Column
             field="semester"
@@ -257,18 +282,16 @@ function CfpEditor({
 }): JSX.Element {
   const [draft, setDraft] = useState<CallForProposals>(original);
   const dirty = JSON.stringify(draft) !== JSON.stringify(original);
+  const details = draft.details;
 
   function set<K extends keyof CallForProposals>(key: K, value: CallForProposals[K]): void {
     setDraft((d) => ({ ...d, [key]: value }));
   }
-  function setLimit(site: 'north' | 'south', key: keyof SiteCoordinateLimits, value: number): void {
-    setDraft((d) => ({ ...d, [site]: { ...d[site], [key]: value } }));
-  }
-  function toggleInstrument(name: string): void {
-    setDraft((d) => ({
-      ...d,
-      instruments: d.instruments.includes(name) ? d.instruments.filter((i) => i !== name) : [...d.instruments, name],
-    }));
+  /** Patch the observatory-specific block. Generic over the current variant, so
+   *  the patch is type-checked against the observatory the caller has narrowed
+   *  to (`current`) — merging two `D`s yields a `D`, no cast needed. */
+  function setDetails<D extends CfpDetails>(current: D, patch: Partial<D>): void {
+    setDraft((d) => ({ ...d, details: { ...current, ...patch } }));
   }
   function partnerEnabled(p: Partner): boolean {
     return draft.partners.some((x) => x.partner === p);
@@ -287,7 +310,7 @@ function CfpEditor({
   }
 
   return (
-    <Tile title={`Selected Call · ${draft.id}`}>
+    <Tile title={`Selected Call · ${draft.id} · ${OBSERVATORY_LABEL[details.observatory]}`}>
       <div className="cfp-editor">
         {/* Left column — parameters + coordinate limits */}
         <div className="cfp-col">
@@ -295,23 +318,45 @@ function CfpEditor({
             <label title="The call's ODB identifier — assigned by the system and not editable.">Id</label>
             <span className="cfp-readonly">{draft.id}</span>
 
+            <label title="Which observatory the call solicits time for — set when the call is created and not editable afterward.">
+              Observatory
+            </label>
+            <span className="cfp-readonly">{OBSERVATORY_LABEL[details.observatory]}</span>
+
             <label htmlFor="cfp-title" title="The call's display title (e.g. “2027B Regular Semester”).">
               Title
             </label>
             <InputText id="cfp-title" value={draft.title} onChange={(e) => set('title', e.target.value)} />
 
-            <label
-              htmlFor="cfp-type"
-              title="The kind of call — drives deadlines, review, and which proposal types are allowed."
-            >
-              Type
-            </label>
-            <Dropdown
-              inputId="cfp-type"
-              value={draft.type}
-              options={CFP_TYPES.map((t) => ({ label: CFP_TYPE_LABEL[t], value: t }))}
-              onChange={(e) => set('type', e.value as CfpType)}
-            />
+            {details.observatory === 'GEMINI' && (
+              <>
+                <label
+                  htmlFor="cfp-type"
+                  title="The kind of call — drives deadlines, review, and which proposal types are allowed."
+                >
+                  Type
+                </label>
+                <Dropdown
+                  inputId="cfp-type"
+                  value={details.type}
+                  options={CFP_TYPES.map((t) => ({ label: CFP_TYPE_LABEL[t], value: t }))}
+                  onChange={(e) => setDetails(details, { type: e.value as CfpType })}
+                />
+              </>
+            )}
+            {details.observatory === 'SUBARU' && (
+              <>
+                <label htmlFor="cfp-type" title="The Subaru proposal type.">
+                  Type
+                </label>
+                <Dropdown
+                  inputId="cfp-type"
+                  value={details.type}
+                  options={SUBARU_CFP_TYPES.map((t) => ({ label: SUBARU_CFP_TYPE_LABEL[t], value: t }))}
+                  onChange={(e) => setDetails(details, { type: e.value as SubaruCallForProposalsType })}
+                />
+              </>
+            )}
 
             <label htmlFor="cfp-sem" title="The semester this call is for (e.g. 2027B).">
               Semester
@@ -338,27 +383,31 @@ function CfpEditor({
               onChange={(e) => set('activeEnd', e.target.value)}
             />
 
-            <label title="Whether PIs not affiliated with a partner country may submit — derived by the ODB from the call type, so not directly editable.">
-              Allow non-Partner PI
-            </label>
-            <span className="cfp-readonly">{draft.allowsNonPartnerPi ? 'Yes' : 'No'}</span>
+            {details.observatory === 'GEMINI' && (
+              <>
+                <label title="Whether PIs not affiliated with a partner country may submit — derived by the ODB from the call type, so not directly editable.">
+                  Allow non-Partner PI
+                </label>
+                <span className="cfp-readonly">{details.allowsNonPartnerPi ? 'Yes' : 'No'}</span>
 
-            <label
-              htmlFor="cfp-prop"
-              title="Default months data stay proprietary for programs awarded under this call."
-            >
-              Proprietary Period
-            </label>
-            <div className="cfp-suffixed">
-              <NumberInput
-                inputId="cfp-prop"
-                value={draft.proprietaryMonths}
-                min={0}
-                max={36}
-                onValueChange={(e) => set('proprietaryMonths', e.value ?? 0)}
-              />
-              <span className="cfp-suffix">months</span>
-            </div>
+                <label
+                  htmlFor="cfp-prop"
+                  title="Default months data stay proprietary for programs awarded under this call."
+                >
+                  Proprietary Period
+                </label>
+                <div className="cfp-suffixed">
+                  <NumberInput
+                    inputId="cfp-prop"
+                    value={details.proprietaryMonths}
+                    min={0}
+                    max={36}
+                    onValueChange={(e) => setDetails(details, { proprietaryMonths: e.value ?? 0 })}
+                  />
+                  <span className="cfp-suffix">months</span>
+                </div>
+              </>
+            )}
 
             <label
               htmlFor="cfp-visible"
@@ -373,59 +422,7 @@ function CfpEditor({
             />
           </div>
 
-          <table
-            className="cfp-coords"
-            title="RA/Dec windows that bound where targets may lie for each Gemini site under this call (SiteCoordinateLimits)."
-          >
-            <tbody>
-              {(['north', 'south'] as const).map((site) => (
-                <tr key={site}>
-                  <td
-                    className="cfp-site"
-                    title={`RA (hours) and Dec (degrees) limits for Gemini ${site === 'north' ? 'North (Maunakea)' : 'South (Cerro Pachón)'}.`}
-                  >
-                    Gemini {site === 'north' ? 'North' : 'South'}
-                  </td>
-                  <td>
-                    <NumberInput
-                      value={draft[site].raStart}
-                      suffix=" h"
-                      maxFractionDigits={1}
-                      onValueChange={(e) => setLimit(site, 'raStart', e.value ?? 0)}
-                      inputClassName="cfp-coord-input"
-                    />
-                  </td>
-                  <td className="cfp-le">≤ RA ≤</td>
-                  <td>
-                    <NumberInput
-                      value={draft[site].raEnd}
-                      suffix=" h"
-                      maxFractionDigits={1}
-                      onValueChange={(e) => setLimit(site, 'raEnd', e.value ?? 0)}
-                      inputClassName="cfp-coord-input"
-                    />
-                  </td>
-                  <td>
-                    <NumberInput
-                      value={draft[site].decStart}
-                      suffix="°"
-                      onValueChange={(e) => setLimit(site, 'decStart', e.value ?? 0)}
-                      inputClassName="cfp-coord-input"
-                    />
-                  </td>
-                  <td className="cfp-le">≤ Dec ≤</td>
-                  <td>
-                    <NumberInput
-                      value={draft[site].decEnd}
-                      suffix="°"
-                      onValueChange={(e) => setLimit(site, 'decEnd', e.value ?? 0)}
-                      inputClassName="cfp-coord-input"
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <CoordinateLimits details={details} onChange={(next) => set('details', next)} />
         </div>
 
         {/* Middle column — Partners & Deadlines */}
@@ -484,7 +481,7 @@ function CfpEditor({
           </table>
         </div>
 
-        {/* Right column — Instruments */}
+        {/* Right column — Instruments (each observatory has its own set) */}
         <div className="cfp-col">
           <h3
             className="cfp-col-title"
@@ -492,14 +489,7 @@ function CfpEditor({
           >
             Instruments
           </h3>
-          <div className="cfp-instruments">
-            {INSTRUMENTS.map((name) => (
-              <label key={name} className="cfp-instrument" title={`Offer ${INSTRUMENT_LABEL[name]} in this call.`}>
-                <Checkbox checked={draft.instruments.includes(name)} onChange={() => toggleInstrument(name)} />
-                <span>{INSTRUMENT_LABEL[name]}</span>
-              </label>
-            ))}
-          </div>
+          <Instruments details={details} onChange={(next) => set('details', next)} />
         </div>
       </div>
 
@@ -530,4 +520,132 @@ function CfpEditor({
       </div>
     </Tile>
   );
+}
+
+/** Coordinate-limit editor: Gemini has per-site (North/South) windows; Keck and
+ *  Subaru have a single window. Each row edits one site's RA/Dec limits. */
+function CoordinateLimits({
+  details,
+  onChange,
+}: {
+  readonly details: CfpDetails;
+  readonly onChange: (next: CfpDetails) => void;
+}): JSX.Element {
+  // One row per site: its label, current limits, and how to write them back —
+  // each `update` rebuilds the whole (narrowed) variant, so no cast is needed.
+  const sites: { label: string; limits: SiteCoordinateLimits; update: (limits: SiteCoordinateLimits) => void }[] =
+    details.observatory === 'GEMINI'
+      ? [
+          { label: 'Gemini North', limits: details.north, update: (north) => onChange({ ...details, north }) },
+          { label: 'Gemini South', limits: details.south, update: (south) => onChange({ ...details, south }) },
+        ]
+      : [
+          {
+            label: OBSERVATORY_LABEL[details.observatory],
+            limits: details.limits,
+            update: (limits) => onChange({ ...details, limits }),
+          },
+        ];
+
+  return (
+    <table
+      className="cfp-coords"
+      title="RA/Dec windows that bound where targets may lie under this call (CoordinateLimits)."
+    >
+      <tbody>
+        {sites.map(({ label, limits, update }) => (
+          <tr key={label}>
+            <td className="cfp-site" title={`RA (hours) and Dec (degrees) limits for ${label}.`}>
+              {label}
+            </td>
+            <td>
+              <NumberInput
+                value={limits.raStart}
+                suffix=" h"
+                maxFractionDigits={1}
+                onValueChange={(e) => update({ ...limits, raStart: e.value ?? 0 })}
+                inputClassName="cfp-coord-input"
+              />
+            </td>
+            <td className="cfp-le">≤ RA ≤</td>
+            <td>
+              <NumberInput
+                value={limits.raEnd}
+                suffix=" h"
+                maxFractionDigits={1}
+                onValueChange={(e) => update({ ...limits, raEnd: e.value ?? 0 })}
+                inputClassName="cfp-coord-input"
+              />
+            </td>
+            <td>
+              <NumberInput
+                value={limits.decStart}
+                suffix="°"
+                onValueChange={(e) => update({ ...limits, decStart: e.value ?? 0 })}
+                inputClassName="cfp-coord-input"
+              />
+            </td>
+            <td className="cfp-le">≤ Dec ≤</td>
+            <td>
+              <NumberInput
+                value={limits.decEnd}
+                suffix="°"
+                onValueChange={(e) => update({ ...limits, decEnd: e.value ?? 0 })}
+                inputClassName="cfp-coord-input"
+              />
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
+/** Instrument checklist for the call's observatory — each observatory offers a
+ *  different set of instruments (sc-9608). Toggling adds/removes the enum value. */
+function Instruments({
+  details,
+  onChange,
+}: {
+  readonly details: CfpDetails;
+  readonly onChange: (next: CfpDetails) => void;
+}): JSX.Element {
+  // Each observatory offers a different instrument enum. A per-variant row
+  // (label + selected + toggle) keeps every value typed to its own enum, so
+  // flipping one rebuilds the narrowed variant with no cast.
+  const rows =
+    details.observatory === 'GEMINI'
+      ? INSTRUMENTS.map((i) => ({
+          label: INSTRUMENT_LABEL[i],
+          selected: details.instruments.includes(i),
+          toggle: () => onChange({ ...details, instruments: toggled(details.instruments, i) }),
+        }))
+      : details.observatory === 'KECK'
+        ? KECK_INSTRUMENTS.map((i) => ({
+            label: KECK_INSTRUMENT_LABEL[i],
+            selected: details.instruments.includes(i),
+            toggle: () => onChange({ ...details, instruments: toggled(details.instruments, i) }),
+          }))
+        : SUBARU_INSTRUMENTS.map((i) => ({
+            label: SUBARU_INSTRUMENT_LABEL[i],
+            selected: details.instruments.includes(i),
+            toggle: () => onChange({ ...details, instruments: toggled(details.instruments, i) }),
+          }));
+
+  return (
+    <div className="cfp-instruments">
+      {rows.map(({ label, selected, toggle }) => (
+        <label key={label} className="cfp-instrument" title={`Offer ${label} in this call.`}>
+          <Checkbox checked={selected} onChange={toggle} />
+          <span>{label}</span>
+        </label>
+      ))}
+    </div>
+  );
+}
+
+/** Add `value` to `list` if absent, remove it if present — preserving the
+ *  list's element type so it stays a valid instrument list for its observatory. */
+function toggled<T>(list: readonly T[], value: T): T[] {
+  return list.includes(value) ? list.filter((i) => i !== value) : [...list, value];
 }

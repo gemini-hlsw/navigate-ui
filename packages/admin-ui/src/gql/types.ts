@@ -10,9 +10,13 @@ import type {
   ConfigurationRequestStatus,
   GeminiCallForProposalsType,
   Instrument,
+  KeckInstrument,
+  Observatory,
   ProposalStatus,
   ScienceBand,
   ScienceSubtype,
+  SubaruCallForProposalsType,
+  SubaruInstrument,
   TimeAccountingCategory,
   TooActivation,
 } from './odb/gen/graphql';
@@ -22,9 +26,13 @@ import type {
 export type {
   ConfigurationRequestStatus,
   Instrument,
+  KeckInstrument,
+  Observatory,
   ProposalStatus,
   ScienceBand,
   ScienceSubtype,
+  SubaruCallForProposalsType,
+  SubaruInstrument,
   TimeAccountingCategory,
   TooActivation,
 };
@@ -51,7 +59,42 @@ export const CFP_TYPE_LABEL = {
 
 export type CfpType = GeminiCallForProposalsType;
 
-/** RA/Dec window for one Gemini site. */
+/** SubaruCallForProposalsType → display label. */
+export const SUBARU_CFP_TYPE_LABEL = {
+  NORMAL: 'Normal',
+  INTENSIVE: 'Intensive',
+} as const satisfies Record<SubaruCallForProposalsType, string>;
+
+/** Observatory → display label, used for the Type column of Keck/exchange
+ *  calls (Keck has no call type) and the observatory picker. */
+export const OBSERVATORY_LABEL = {
+  GEMINI: 'Gemini',
+  KECK: 'Keck',
+  SUBARU: 'Subaru',
+} as const satisfies Record<Observatory, string>;
+
+/** KeckInstrument → display label. */
+export const KECK_INSTRUMENT_LABEL = {
+  HIRES: 'HIRES',
+  OTHER: 'Other',
+} as const satisfies Record<KeckInstrument, string>;
+
+export const KECK_INSTRUMENTS = Object.keys(KECK_INSTRUMENT_LABEL) as KeckInstrument[];
+
+/** SubaruInstrument → display label. */
+export const SUBARU_INSTRUMENT_LABEL = {
+  FOCAS: 'FOCAS',
+  HDS: 'HDS',
+  HSC: 'HSC',
+  IRCS: 'IRCS',
+  MOIRCS: 'MOIRCS',
+  PFS: 'PFS',
+  VISITOR: 'Visitor',
+} as const satisfies Record<SubaruInstrument, string>;
+
+export const SUBARU_INSTRUMENTS = Object.keys(SUBARU_INSTRUMENT_LABEL) as SubaruInstrument[];
+
+/** RA/Dec window for one site. */
 export interface SiteCoordinateLimits {
   readonly raStart: number; // hours, 0–24
   readonly raEnd: number;
@@ -65,6 +108,37 @@ export interface CfpPartner {
   readonly deadlineOverride?: string; // ISO date; falls back to the CfP default
 }
 
+/** Observatory-specific properties of a call. Exactly one variant applies,
+ *  matching the ODB's guarantee that exactly one of `gemini`/`keck`/`subaru`
+ *  is non-null (sc-9608). The `observatory` tag discriminates the union. */
+export type CfpDetails =
+  | {
+      readonly observatory: 'GEMINI';
+      readonly type: CfpType;
+      readonly proprietaryMonths: number;
+      readonly allowsNonPartnerPi: boolean;
+      readonly instruments: readonly Instrument[];
+      /** Gemini uses per-site (north/south) coordinate limits. */
+      readonly north: SiteCoordinateLimits;
+      readonly south: SiteCoordinateLimits;
+    }
+  | {
+      readonly observatory: 'KECK';
+      readonly instruments: readonly KeckInstrument[];
+      /** Keck (single-site) coordinate limits. */
+      readonly limits: SiteCoordinateLimits;
+    }
+  | {
+      readonly observatory: 'SUBARU';
+      readonly type: SubaruCallForProposalsType;
+      readonly instruments: readonly SubaruInstrument[];
+      /** Subaru (single-site) coordinate limits. */
+      readonly limits: SiteCoordinateLimits;
+    };
+
+/** A Call for Proposals as the view renders it. The fields common to every
+ *  observatory live at the top level; `details` carries the observatory-specific
+ *  properties as a discriminated union (sc-9608). */
 export interface CallForProposals {
   readonly id: string;
   /** Whether the call is visible (ODB existence = PRESENT). Unchecking it
@@ -72,18 +146,26 @@ export interface CallForProposals {
    *  "Invisible" facet (sc-9612). */
   readonly visible: boolean;
   readonly title: string;
-  readonly type: CfpType;
   readonly semester: string; // e.g. "2027B"
   readonly activeStart: string; // ISO date
   readonly activeEnd: string;
   readonly active: boolean;
-  readonly allowsNonPartnerPi: boolean;
-  readonly proprietaryMonths: number;
   readonly defaultDeadline: string; // ISO date
-  readonly north: SiteCoordinateLimits;
-  readonly south: SiteCoordinateLimits;
-  readonly instruments: readonly string[];
   readonly partners: readonly CfpPartner[];
+  readonly details: CfpDetails;
+}
+
+/** The Type column / facet value for a call: the Gemini or Subaru call type
+ *  label, or the observatory name for Keck (which has no call type). */
+export function cfpTypeLabel(c: CallForProposals): string {
+  switch (c.details.observatory) {
+    case 'GEMINI':
+      return CFP_TYPE_LABEL[c.details.type];
+    case 'SUBARU':
+      return SUBARU_CFP_TYPE_LABEL[c.details.type];
+    case 'KECK':
+      return OBSERVATORY_LABEL.KECK;
+  }
 }
 
 /** ODB `Instrument` enum → display label. Keys are the complete enum
