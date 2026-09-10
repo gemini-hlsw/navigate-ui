@@ -31,7 +31,7 @@
     "@gemini-hlsw/lucuma-ui-css": "0.176.0",
     "@highcharts/react": "5.2.2",
     "date-fns": "4.4.0",
-    "highcharts": "12.6.0",
+    "highcharts": "13.0.2",
     "primereact": "10.9.9",
     "react": "19.2.8",
     "react-big-calendar": "1.20.0",
