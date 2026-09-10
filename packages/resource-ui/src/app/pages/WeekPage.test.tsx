@@ -56,6 +56,27 @@ describe(WeekPage, () => {
     await expect.element(screen.getByText('Nights beginning 2025-11-13 to 2025-11-19')).toBeVisible();
   });
 
+  it('steps a week away and back, redrawing the cached week in place', async () => {
+    // The shutdown ends inside this week - not the usual fixture, but the one whose two windows differ.
+    const screen = await openWeek('/week?site=GS&night=2024-08-12');
+    const bars = () =>
+      [...document.querySelectorAll('[data-testid="week-timeline"] path.highcharts-point')]
+        .map((point) => `${point.getAttribute('d') ?? ''}#${point.getAttribute('fill') ?? ''}`)
+        .join('|');
+    await expect.poll(() => bars().length).toBeGreaterThan(0);
+    const homeBars = bars();
+
+    await screen.getByRole('button', { name: 'Next week' }).click();
+    await expect.element(screen.getByText('Nights beginning 2024-08-18 to 2024-08-24')).toBeVisible();
+    // Changed before non-empty: a blank chart also passes "changed".
+    await expect.poll(bars).not.toBe(homeBars);
+    await expect.poll(() => bars().length).toBeGreaterThan(0);
+
+    await screen.getByRole('button', { name: 'Previous week' }).click();
+    await expect.element(screen.getByText('Nights beginning 2024-08-11 to 2024-08-17')).toBeVisible();
+    await expect.poll(bars).toBe(homeBars);
+  });
+
   it('links the semester it belongs to - the reverse of the calendar click-through', async () => {
     const screen = await openWeek('/week?site=GS&night=2025-11-14');
 

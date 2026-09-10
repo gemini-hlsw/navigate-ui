@@ -115,6 +115,55 @@ describe('SemesterPage - the chart', () => {
     await expect.poll(shapes).toBe(before);
   });
 
+  it('moves the chart to the semester picked in the masthead, every month drawn', async () => {
+    // The largest window swing the app has, and the only one driven through the control.
+    const screen = await renderApp({
+      element: <Layout />,
+      route: '/semester?site=GS&semester=2025B',
+      path: '/',
+      childRoutes: [{ path: 'semester', element: <SemesterPage /> }],
+    });
+    await expect.element(screen.getByRole('region', { name: 'August 2025' })).toBeVisible();
+    const bars = () => document.querySelectorAll('[data-testid^="semester-month-"] path.highcharts-point').length;
+    await expect.poll(bars).toBeGreaterThan(0);
+
+    // Semester A's evenings run February to July, so February is its first region.
+    await selectDropdownOption(screen, 'Semester', '2025A');
+    await expect.element(screen.getByRole('region', { name: 'February 2025' })).toBeVisible();
+    await expect.poll(bars).toBeGreaterThan(0);
+
+    await selectDropdownOption(screen, 'Semester', '2025B');
+    await expect.element(screen.getByRole('region', { name: 'August 2025' })).toBeVisible();
+    await expect.poll(bars).toBeGreaterThan(0);
+  });
+
+  it('redraws the cached semester when the site switches back, never an empty chart', async () => {
+    // Both sites share the month keys, so the switch back updates mounted charts rather than remounting.
+    const screen = await renderApp({
+      element: <Layout />,
+      route: '/semester?site=GS&semester=2025B',
+      path: '/',
+      childRoutes: [{ path: 'semester', element: <SemesterPage /> }],
+    });
+    await expect.element(screen.getByText('Gemini South Semester 2025B', { exact: false })).toBeVisible();
+    const bars = () =>
+      [...document.querySelectorAll('[data-testid^="semester-month-"] path.highcharts-point')]
+        .map((point) => `${point.getAttribute('d') ?? ''}#${point.getAttribute('fill') ?? ''}`)
+        .join('|');
+    await expect.poll(() => bars().length).toBeGreaterThan(0);
+    const southBars = bars();
+
+    await selectDropdownOption(screen, 'Site', 'GN');
+    await expect.element(screen.getByText('Gemini North Semester 2025B', { exact: false })).toBeVisible();
+    // Changed before non-empty: a blank chart also passes "changed".
+    await expect.poll(bars).not.toBe(southBars);
+    await expect.poll(() => bars().length).toBeGreaterThan(0);
+
+    await selectDropdownOption(screen, 'Site', 'GS');
+    await expect.element(screen.getByText('Gemini South Semester 2025B', { exact: false })).toBeVisible();
+    await expect.poll(bars).toBe(southBars);
+  });
+
   it('opens the night view when a bar is clicked', async () => {
     const screen = await renderApp({
       element: <SemesterPage />,

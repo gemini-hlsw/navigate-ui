@@ -87,15 +87,11 @@ export function TimelineChart({
     },
   };
 
-  // A per-window key: Highcharts 12 answers an extremes-plus-data update with an empty xrange.
-  const axis = Array.isArray(options.xAxis) ? options.xAxis[0] : options.xAxis;
-  const windowKey = `${String(axis?.min)}:${String(axis?.max)}`;
-
   return (
     // Highcharts observes its own render target, so nothing here drives the reflow.
     <section className="min-w-0" aria-label={label} data-testid={testId}>
       {heading}
-      <Chart key={windowKey} options={withTooltip} />
+      <Chart options={withTooltip} />
     </section>
   );
 }

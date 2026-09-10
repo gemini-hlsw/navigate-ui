@@ -155,6 +155,27 @@ describe(NightPage, () => {
     await expect.element(screen.getByTestId('night-timeline')).toBeVisible();
   });
 
+  it('steps a night away and back, redrawing the cached night in place', async () => {
+    // The shutdown's last night, bordering an open one, so the two windows draw different bars.
+    const screen = await openNight('/night?site=GS&night=2024-08-16');
+    const bars = () =>
+      [...document.querySelectorAll('[data-testid="night-timeline"] path.highcharts-point')]
+        .map((point) => `${point.getAttribute('d') ?? ''}#${point.getAttribute('fill') ?? ''}`)
+        .join('|');
+    await expect.poll(() => bars().length).toBeGreaterThan(0);
+    const homeBars = bars();
+
+    await screen.getByRole('button', { name: 'Next night' }).click();
+    await expect.element(screen.getByText('Night of 2024-08-17')).toBeVisible();
+    // Changed before non-empty: a blank chart also passes "changed".
+    await expect.poll(bars).not.toBe(homeBars);
+    await expect.poll(() => bars().length).toBeGreaterThan(0);
+
+    await screen.getByRole('button', { name: 'Previous night' }).click();
+    await expect.element(screen.getByText('Night of 2024-08-16')).toBeVisible();
+    await expect.poll(bars).toBe(homeBars);
+  });
+
   it('keeps a revisited night intact - one window must not poison another', async () => {
     // Blocks carry no id and every range query asks clip: false, so one night cannot overwrite another.
     const screen = await openNight('/night?site=GS&night=2025-11-14');

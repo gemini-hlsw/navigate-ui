@@ -153,7 +153,7 @@ component cell, so no two views can disagree about a closure.
 
 ## Gotchas that cost real debugging
 
-Both fixed structurally - do not undo them.
+Fixed structurally - do not undo it.
 
 - **Availability blocks are contextual values, never cache entities.** The same block type comes back
   clipped from the night projection and unclipped from the range queries (`clip: false` on every one), so a
@@ -163,9 +163,6 @@ Both fixed structurally - do not undo them.
   response position; `src/gql/cache.ts` sets `keyFields: false` on every implementor as the second lock, and
   `cache.test.ts` reads the SDL so a new implementor cannot quietly miss the list. `InstrumentComponent`
   keeps its id and stays normalized, being identity-only.
-- **`TimelineChart` keys its Highcharts chart by the axis window.** Highcharts 12 answers an update that
-  swaps axis extremes and xrange data together with an empty series, so a window change is a fresh chart
-  while same-window updates (data arriving, the "now" marker) update in place.
 
 ## Still open with operations
 
