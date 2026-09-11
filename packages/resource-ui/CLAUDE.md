@@ -1,8 +1,12 @@
 # CLAUDE.md - resource-ui
 
-Working guide and design record for `@gemini-hlsw/resource-ui`, the web UI for the GPP
-**Resource** service. The package is unpublished and pre-v1: what is written here are live
-constraints, not history. When something is removed, it leaves this file with it.
+Working guide for `@gemini-hlsw/resource-ui`, the web UI for the GPP **Resource** service.
+This file carries **engineering mechanics only**. Product truth lives in
+[PRODUCT.md](PRODUCT.md); every visual and interface decision lives in [DESIGN.md](DESIGN.md).
+When a change touches what the app looks like or how it behaves for a reader, those two files
+are the authorities - do not record such decisions here. The package is unpublished and
+pre-v1: what is written here are live constraints, not history. When something is removed, it
+leaves this file with it.
 
 ## State of the package
 
@@ -27,27 +31,22 @@ control, no second link, no schema in the bundle.
 `mock-server/` is what the browser tests execute against, what codegen reads, and what :4000
 serves. The app is not a consumer of it.
 
-## Navigation and selection
+## Selection and URL state
 
-- **Tonight is the front door.** The index route lands on `/night`; no `night` in the URL means
-  the night in progress. The wordmark links home to it, and the night and week pages carry a
-  Tonight button.
-- **Site and semester are masthead chrome, not page controls.** Choosing a semester whose nights
-  do not hold the current one also moves the night to that semester's first night, so the control
-  is never a silent no-op.
-- **The Clock toggle** (Site | UTC, `clock=utc`, via `app/useSelection.ts`) picks the zone every
-  clock time renders in. `displayTimeZone` in `domain/siteTime.ts` is the one resolver, threaded
-  as a required parameter so no formatter can silently stay site-local. Observing-night labels and
-  evening dates are the site's calendar and never move with it.
-- **Every night-shaped thing opens its night view** - calendar squares, week cards, chart bars -
-  through `app/useOpenNight.ts`.
-- **Page-scoped parameters go through `app/useUrlParam.ts`.** Defaults are deleted from the URL,
-  not written, and subordinate parameters drop in the same update: the calendar's month belongs to
-  the calendar alone, so switching view or semester drops it.
+The interaction rules for selection (masthead vs page controls, Tonight as the front door,
+the clock toggle, finder scoping) are DESIGN.md's. The mechanics:
+
+- Site, semester and clock (`clock=utc`) ride the URL through `app/useSelection.ts`;
+  `displayTimeZone` in `domain/siteTime.ts` is the one zone resolver, threaded as a required
+  parameter so no formatter can silently stay site-local.
+- **Every night-shaped thing opens its night view through `app/useOpenNight.ts`** - calendar
+  squares, week cards, chart bars all route through the one hook.
+- **Page-scoped parameters go through `app/useUrlParam.ts`.** Defaults are deleted from the
+  URL, not written, and subordinate parameters drop in the same update: the calendar's month
+  belongs to the calendar alone, so switching view or semester drops it.
+- Site scoping for the finder pages comes from `app/useSiteSpan.ts`.
 
 ## The views
-
-Five destinations draw the one record. `/semester` carries a **Chart | Calendar** toggle.
 
 **Do not give a view its own path from records to pixels.** Every view projects from the placed rows
 `domain/timeline.ts` produced, never from a `Mounting`, and both charts build on `domain/timeline.ts`
@@ -58,31 +57,25 @@ reads raw records because its subject is the records' own boundaries rather than
 
 | View              | What it draws                                                                                             | Its module                                    |
 | ----------------- | --------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
-| Night             | the chart alone, deliberately bare, plus PWFS1/PWFS2/LGS subsystem rows no other view shows               | `features/night/`                             |
+| Night             | the chart alone, plus PWFS1/PWFS2/LGS subsystem rows no other view shows                                  | `features/night/`                             |
 | Week              | the run chart, plus `WeekNightStrip` (a card per night, each one a button onto it) and `WeekChangesTable` | `domain/weekBriefing.ts`                      |
 | Semester chart    | an xrange per month: how long a run lasts                                                                 | `features/semester/`                          |
 | Semester calendar | night chrome plus single-evening critical-event chips                                                     | `domain/calendarNews.ts`, `calendarNights.ts` |
 | `/instruments`    | a row per instrument the site's records name, expanding into its runs                                     | `domain/instrumentFinder.ts`                  |
 | `/components`     | the ICTD half: the piece catalog grouped by instrument, expanding into its history                        | `domain/componentFinder.ts`                   |
 
-Rules the code does not state for itself:
+What each view may draw and how (calendar chips, change-feed rules, subsystem rows, legend
+order, colour and treatment) is specified in DESIGN.md. Structural rules the code does not
+state for itself:
 
-- **The calendar draws no run bars, ever** - single-evening chips only, for the critical events (an
-  instrument changing on a port, the telescope closing with its reason, reopening). A window-edge
-  boundary is furniture, not news. More news kinds are expected as the semester query carries them.
-- **A boundary on the window's edge is not a change**, in the week's changes table or the calendar's
-  news. Both read **ports only**: a shelf change is inventory, not a night's headline.
-- **Subsystem rows are the night view's alone.** They carry no legend section - every span draws in the
-  one quiet neutral and prints its state in words, so a colour key would key no distinction. Three
-  semester-constant rows per month would bury the runs on the wide views.
-- **Both finders are site-scoped, never semester-scoped** (`app/useSiteSpan.ts`). "Where is Zorro" is not
-  a semester question, and a piece's history does not restart in February. The masthead's semester
-  control moves the **night** these pages report for; it does not decide what they can see.
+- **Every schedule view heads itself with the Telescope, Mode and ToO rows** when records
+  reach its window, through `collectStateRows` in `domain/timeline.ts`
+  (`NOTABLE_MODE`/`NOTABLE_TOO` mark the states DESIGN.md calls notable). All chart layout is
+  derived from the rows inside the shared builders - no view passes categories or header
+  counts alongside its data.
 - **The two browser pages are deliberately not shared.** The shapes diverge - grouped subheaders against
   a flat list, two filters against one, different expansions - and a `FinderPage` taking a dozen props
-  would hide nothing. Both open a row into `components/ui/RecordHistoryTable.tsx`, which is a plain
-  `<table>` rather than a nested DataTable, keeps its columns even when empty, and puts a note in a
-  column that wraps rather than a second line that truncates.
+  would hide nothing. Both open a row into `components/ui/RecordHistoryTable.tsx`.
 - **A night no semester covers says what is covered** (`domain/coverage.ts`), and offers the nearest
   covered night. A demo semester never merges with a real one.
 - **Both quarantine boundaries are one file each** - `mock-server/storedInstruments.ts` for instruments
@@ -98,58 +91,24 @@ Three traps in the calendar, each of which has cost real time:
 - The calendar's height is **inline in the component**, not in `global.css` - the browser tests do not
   load the app stylesheet, and the height decides the week-row geometry.
 
-## Chart rows, colour and treatment
-
-**Every schedule view heads itself with the Telescope, Mode and ToO rows** when records reach its window,
-through `collectStateRows` in `domain/timeline.ts`. All of the layout below is derived from the rows
-inside the shared builders - no view passes categories or header counts alongside its data.
-
-- **State rows are monochrome and draw as a header band.** The ordinary state (Open, Queue, Standard
-  ToOs) is the quiet neutral; a state worth noticing (`NOTABLE_MODE`/`NOTABLE_TOO`) the bright one.
-  **Do not give a state a hue** - a new state kind joins the two neutrals or the closure red. The
-  calendar draws only the notable spans; routine values every week would bury the runs.
-- **One colour per instrument, keyed by the enum**, in `features/timeline/timelineOptions.ts` as
-  `satisfies Record<Instrument, string>`, so a new instrument fails to compile until it has a colour.
-  Colour follows the instrument, never its position in a list, and **identity never rides on colour
-  alone** - every block carries its published name.
-- **Red is the telescope's alone.** A shutdown is said once: the Telescope row's solid red block
-  (`--schedule-closed`), a translucent `--schedule-band` wash over the subject rows, the reason printed
-  once on the band, one legend key. Never per-row red painting - the ports are not each closed.
-- **Absence is drawn hollow, not as a fourteenth colour** (`schedule-ghost`). What a port closure means
-  for availability is still open with operations, and no view may claim a failure it cannot evidence.
-- **Unknown is a reserved neutral** - zinc grey, outside the validated hue sets. Where an unknown run
-  coincides with a named one, the named run wins the shared span.
-- **Usability is a treatment over the identity hue, never a second palette.** Science is the plain bar;
-  Engineering-use the same hue hatched; Not-available hollow with the hue on the outline and a muted
-  label, distinct from the ghost and never red.
-- **The legend has one section per state row**, then Instruments, then Sky and Calendar where a view
-  supplies them - six, in that order, in `TimelineLegendBar`. The neutrals repeat across rows, so a
-  repeated grey must be keyed under the row it belongs to. A section with no keys does not render.
-- **Group headings, not axis breaks.** Small-caps "Telescope" and "Instruments" heading rows name the
-  groups in the gutter and double as the band's breathing room. An axis break drops the adjacent gutter
-  label out of line with its bar; heading type is sized to fit the narrowest 92px gutter.
-
-**The palette was measured per site, not chosen.** No chart shows all fourteen hues, so the assignment is
-optimised over the pairs that can actually share a chart (six subjects at GS, seven at GN). Re-run **the
-two site sets, not all fourteen at once**, before changing any of them. The tokens themselves are in
-`src/styles/global.css`.
-
-## Shared pixels, page-owned words
+## Shared modules
 
 A thing drawn in two places is drawn from one module, taking a presentation shape rather than either page's
-domain row. This is the rule the whole of `components/ui/` follows; `componentCells.tsx` holds the one copy of each
-component cell, so no two views can disagree about a closure.
+domain row. This is the rule the whole of `components/ui/` follows;
+`src/features/components/componentCells.tsx` holds the one copy of each component cell, so no
+two views can disagree about a closure. The visual and state rules for
+these components are DESIGN.md's; this table is the ownership map.
 
-| Module                                   | What it owns                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `WhereCell`                              | A `WhereReading`: coarse presence (on the telescope / off it / not recorded), the place in words, and the change tag. `componentLabels.componentWhere` and `InstrumentsPage.instrumentWhere` map onto it, one line each.                                                                                                                                                                                                                                      |
-| `PageHeader`                             | Every destination's title, synthetic flag, subtitle and right-hand controls slot.                                                                                                                                                                                                                                                                                                                                                                             |
-| `PageStatus`                             | The three states a page shows instead of content: `ErrorAlert` (reserved red, `role="alert"`, the error's own message verbatim), `Loading`, `EmptyPanel`. Never red and never a warning for an empty panel - a gap means "not recorded" (I4). Three components, not one that decides: the night view alone has three distinct empty states and one carries a button.                                                                                          |
-| `NightStepper`                           | The Tonight / arrows / date toolbar, its chrome, aria labels and cleared-input guard. The page owns the date vocabulary.                                                                                                                                                                                                                                                                                                                                      |
-| `LabelledControl`                        | Binds a caption to its control **by id**, as a render prop, so the caller decides which prop carries it (`id` on an input, `inputId` on a PrimeReact Dropdown). It must not wrap the control: implicit labelling only reaches a labelable element, and a label wrapping a Dropdown named nothing and swallowed the control's words into the name ("Instrument All All"). The caption is the control's only name - no call site repeats it as an `aria-label`. |
-| `FilterField`                            | The finder bar's layout over `LabelledControl`. `filterOptions.countedOption` is the "(12)" suffix.                                                                                                                                                                                                                                                                                                                                                           |
-| `InstrumentSwatch`                       | Colour square plus name (in `features/timeline/`, beside the palette it reads).                                                                                                                                                                                                                                                                                                                                                                               |
-| `siteTime.eveningLabel` / `eveningRange` | The one evening formatter. Style is a parameter (`dayMonth`, `dayMonthYear`, `weekdayDayMonth`) because that choice is about what the page already says, never about what the date means.                                                                                                                                                                                                                                                                     |
+| Module                                   | What it owns                                                                                                                                                                                                                                                                                                                                                             |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `WhereCell`                              | A `WhereReading`: coarse presence (on the telescope / off it / not recorded), the place in words, and the change tag. `componentLabels.componentWhere` and `InstrumentsPage.instrumentWhere` map onto it, one line each.                                                                                                                                                 |
+| `PageHeader`                             | Every destination's title, synthetic flag, subtitle and right-hand controls slot.                                                                                                                                                                                                                                                                                        |
+| `PageStatus`                             | The three page-state components (`ErrorAlert`, `Loading`, `EmptyPanel`); which state may look like what is DESIGN.md's.                                                                                                                                                                                                                                                  |
+| `NightStepper`                           | The Tonight / arrows / date toolbar, its chrome, aria labels and cleared-input guard. The page owns the date vocabulary.                                                                                                                                                                                                                                                 |
+| `LabelledControl`                        | Binds a caption to its control **by id**, as a render prop, so the caller decides which prop carries it (`id` on an input, `inputId` on a PrimeReact Dropdown). It must not wrap the control: implicit labelling only reaches a labelable element, and a label wrapping a Dropdown named nothing and swallowed the control's words into the name ("Instrument All All"). |
+| `FilterField`                            | The finder bar's layout over `LabelledControl`. `filterOptions.countedOption` is the "(12)" suffix.                                                                                                                                                                                                                                                                      |
+| `InstrumentSwatch`                       | Colour square plus name (in `features/timeline/`, beside the palette it reads).                                                                                                                                                                                                                                                                                          |
+| `siteTime.eveningLabel` / `eveningRange` | The one evening formatter. Style is a parameter (`dayMonth`, `dayMonthYear`, `weekdayDayMonth`) because that choice is about what the page already says, never about what the date means.                                                                                                                                                                                |
 
 ## Gotchas that cost real debugging
 
@@ -164,27 +123,6 @@ Fixed structurally - do not undo it.
   `cache.test.ts` reads the SDL so a new implementor cannot quietly miss the list. `InstrumentComponent`
   keeps its id and stays normalized, being identity-only.
 
-## Still open with operations
-
-Questions the code wears an assumption for rather than silently inventing an answer:
-
-| Question                                         | The assumption in code                                                                                                                                                                                                                                                                                       |
-| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| What "A&G" on GS Port 4 means                    | Free text on a port-scoped closure, stored unparsed; drawn as a hollow absence, never a failure.                                                                                                                                                                                                             |
-| Mapping the schedule vocabulary onto lucuma-core | Every name the workbook mounts is a Resource `Instrument`, including the AO subsystems (Altair, Canopus) and Engineering.                                                                                                                                                                                    |
-| Unidentified runs                                | A name the instrument list does not hold is served as `UNKNOWN` with its text in `note` - a lookup question, not an error.                                                                                                                                                                                   |
-| What the LGS column means                        | Constant per site in this export (GN "Yes" on all 915 nights, GS "No" on all 730), so it may record capability rather than a nightly state. Recorded as spans either way, read as the laser being available or not. If operations confirm capability, the row belongs beside the site rather than the night. |
-
-## Not doing yet
-
-Each is open; none is scheduled. Anything built here needs a reason recorded beside it.
-
-- **A visible "List" as a third view toggle.** The block table already exists as the accessible reading of
-  every chart, so exposing it is nearly free - but it adds a mode.
-- **A retry affordance on the load-error banner**, which is message-only.
-- **A components table on the night view.** If it returns it should answer a question `/components` cannot.
-- **"Jump to current month"** in the calendar, when the viewed semester holds today.
-
 ## Commands
 
 **`README.md` is the command reference** - every script, the two-terminal mock setup, codegen, the
@@ -194,9 +132,8 @@ first-time `playwright install chromium`, and why `dev` shows the failure banner
 
 `mock-server/data/*.json` **is** the schedule source: nine semesters (GS 2024B-2026A, GN 2024B-2026B),
 parsed once out of the operations workbook export (`mock-server/fixtures/telescope_schedules.xlsx`, kept
-as provenance), which supersedes the published web overview sheets where they disagreed. **The reader is
-not in this package** - it lives on the `resource/workbook-importer` branch. Revive that branch if an
-Excel import is ever needed; edit the JSON if the mock's data has to change.
+as provenance), which supersedes the published web overview sheets where they disagreed. Edit the JSON
+if the mock's data has to change.
 
 Four reading decisions that the JSON cannot show you, each of which was a judgment call:
 
@@ -296,9 +233,8 @@ changing the schema. What follows is the half that is this app's, plus the rules
 
 - **Never put a `date` on a block.** Intervals only. The moment a `LocalDate` becomes a field, partial
   nights turn into a retrofit. (Referred to across the code as **the partial-night non-negotiable**.)
-- **A gap means "not recorded", never "unavailable"** (invariant **I4**). Empty port cells must not render
-  as closed, and **empty calendar squares stay empty**. Do not decorate a gap to make a month look
-  finished.
+- **A gap means "not recorded", never "unavailable"** (invariant **I4**, stated in PRODUCT.md;
+  how gaps may render is DESIGN.md's).
 - **`toLocation` in `domain/adapters.ts` is the only place the app re-checks the `place`/`port` pairing**,
   and a contradictory record reads as off-port/`UNKNOWN` with a dev-mode warning, never an error, because
   one bad record must not empty a night. Do not build a location literal at a call site, and do not push
@@ -309,7 +245,7 @@ changing the schema. What follows is the half that is this app's, plus the rules
     with any port the records name, so a quiet port keeps its blank row (blank says "nothing recorded"; a
     missing row would say the port does not exist) and a record on an unexpected port still draws.
 - **A block has no `id`**; row keys are the adapters'. `InstrumentComponent` keeps its id, being real
-  hardware. The cache lock that enforces this is under "Gotchas" below.
+  hardware. The cache lock that enforces this is under "Gotchas" above.
 - **No new schema type without a requirement behind it**: a column in the workbook, a line in the
   scheduler contract, or a request from Bryan or Andrew.
 - **One capability per commit**, with its tests.
@@ -340,14 +276,12 @@ mount against the mock via `src/test/renderApp.tsx` and drive real interactions 
 - Prefer tests driven by configuration (e.g. `SIDEBAR_MENU_SECTIONS`) over hard-coded lists.
 - Don't assert on internal React structure; don't over-mock.
 
-## Tailwind & PrimeReact conventions
+## Styling mechanics
 
-**The chrome is Explore's theme, measured from explore-dev.lucuma.xyz** and held as tokens in `global.css`
-`@theme`: the black-to-raised surface ladder, the white-opacity text ladder, the GPP action green
-(`--color-gpp`), the brand light green (`--color-gpp-accent` - the DEVELOPMENT badge and identity accents, never
-an action), and Explore's info blue / secondary slate. Extend from these tokens, never from a hex in a component;
-`shell.css` wires them into PrimeReact. Red stays closed/unavailable, amber unknown/warning. Use PrimeReact first
-for controls, Tailwind for layout and small adjustments.
+What the theme looks like - tokens, palette, density, type, component treatments - is
+DESIGN.md's alone. The tokens themselves live in `src/styles/global.css` (`@theme`) and are
+wired into PrimeReact by `shell.css`. What follows is only the mechanics of making a style
+land.
 
 **When a Tailwind utility loses to a PrimeReact control, the winner is `lucuma-ui-css`, not PrimeReact.**
 PrimeReact's own classes are wrapped in `@layer primereact` and set almost nothing (`.p-tag` gets three
@@ -364,17 +298,6 @@ it - today that is `.p-tag { font-size: 0.75rem }`, the reason every `!` in this
 
 Prefer Tailwind utilities over CSS files except where Tailwind can't express it (complex selectors,
 keyframes, third-party overrides).
-
-**Density is one number.** The root font size is 13px (`shell.css`), matched against Explore at both widths;
-everything is sized in rem. Settled - re-measure against Explore before changing it.
-
-**The masthead has a measured width budget.** Check it before adding an item to the bar:
-
-| Width             | What happens                                                                                                                                        |
-| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **831px**         | The bar stops fitting: 133.7 wordmark + 137.2 badge + 503.1 right group + 31.2 gaps + 26 padding. Nothing wraps; the items' contents break instead. |
-| **848px (53rem)** | The three control captions are visually hidden, buying 112.3px back. A media query's rem is the initial 16px, not the 13px root.                    |
-| **~693px**        | The floor, where the menu button starts clipping. The shell is `overflow-x: hidden`, so nothing past it is reachable.                               |
 
 ## Architecture docs
 

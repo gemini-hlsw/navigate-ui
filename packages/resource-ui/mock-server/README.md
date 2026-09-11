@@ -84,8 +84,7 @@ so the payload here is the payload the Scala service will send.
   schema over a fresh store; `server.ts` is the yoga dev server; `time.ts` does observing-night
   interval math (14:00 to 14:00 site-local, via `Intl`, correct across DST at Gemini South).
 - `data/` and `fixtures/` - the imported JSON, and the workbook export it was parsed from, kept
-  beside it as provenance. The reader itself is no longer in this package; it lives on the
-  `resource/workbook-importer` branch. See [../CLAUDE.md](../CLAUDE.md).
+  beside it as provenance. Edit the JSON if the data has to change. See [../CLAUDE.md](../CLAUDE.md).
 
 ## One schema, one file
 
