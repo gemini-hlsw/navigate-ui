@@ -204,8 +204,8 @@ importers:
         specifier: 0.245.0
         version: 0.245.0
       '@gemini-hlsw/lucuma-odb-schemas':
-        specifier: 0.95.2-156.83d0820
-        version: 0.95.2-156.83d0820
+        specifier: 0.96.0-cd9b16f
+        version: 0.96.0-cd9b16f
       '@gemini-hlsw/lucuma-ui-css':
         specifier: 0.176.0
         version: 0.176.0
@@ -433,8 +433,8 @@ importers:
         specifier: 0.245.0
         version: 0.245.0
       '@gemini-hlsw/lucuma-odb-schemas':
-        specifier: 0.95.2-156.83d0820
-        version: 0.95.2-156.83d0820
+        specifier: 0.96.0-cd9b16f
+        version: 0.96.0-cd9b16f
       '@prisma/adapter-pg':
         specifier: 7.10.0
         version: 7.10.0
@@ -594,8 +594,8 @@ importers:
         specifier: 10.0.1
         version: 10.0.1(eslint@10.10.0(jiti@2.7.0)(supports-color@10.2.2))
       '@gemini-hlsw/lucuma-odb-schemas':
-        specifier: 0.95.2-156.83d0820
-        version: 0.95.2-156.83d0820
+        specifier: 0.96.0-cd9b16f
+        version: 0.96.0-cd9b16f
       '@graphql-codegen/cli':
         specifier: 7.4.0
         version: 7.4.0(@parcel/watcher@2.6.0)(@types/node@26.4.1)(@typescript/typescript6@6.0.2)(graphql@16.14.2)(supports-color@10.2.2)
@@ -729,8 +729,8 @@ importers:
         specifier: 0.245.0
         version: 0.245.0
       '@gemini-hlsw/lucuma-odb-schemas':
-        specifier: 0.95.2-156.83d0820
-        version: 0.95.2-156.83d0820
+        specifier: 0.96.0-cd9b16f
+        version: 0.96.0-cd9b16f
       '@gemini-hlsw/lucuma-ui-css':
         specifier: 0.176.0
         version: 0.176.0
@@ -1142,8 +1142,8 @@ packages:
   '@gemini-hlsw/lucuma-core@0.245.0':
     resolution: {integrity: sha512-ML406qEoMbDe9CohpzHY6ghlwaks/EvizV8Vb1/32HiAmqdK4nLTpcRCH/gWi03l3WS0UrD9tzJp2E/9EkJI3w==}
 
-  '@gemini-hlsw/lucuma-odb-schemas@0.95.2-156.83d0820':
-    resolution: {integrity: sha512-m6lJLHvQ5HoR50wy+BTTIGZgq3YoH1XS0GNEJ2k3JZ3oN2GsthA9mQr8NZ7LELf28d6C4Xo6PvynW7sABgNhKw==}
+  '@gemini-hlsw/lucuma-odb-schemas@0.96.0-cd9b16f':
+    resolution: {integrity: sha512-6cJyUe5VaoT3s3hu8sXnnrnAwA8zcvv01B5ZHqWCtHnIPEVdmTMc1ahpizNo5HB7XroubFlfd46rwRzBhBTYLw==}
 
   '@gemini-hlsw/lucuma-ui-css@0.176.0':
     resolution: {integrity: sha512-S9VAeheNz082WNPARYDdJQWY0KxPMG2zYosgKemFOTWGRGr5bGcX///IU0VzZO1+X8DOtS8J7EXFF/WNoYMl6g==}
@@ -6115,7 +6115,7 @@ snapshots:
 
   '@gemini-hlsw/lucuma-core@0.245.0': {}
 
-  '@gemini-hlsw/lucuma-odb-schemas@0.95.2-156.83d0820': {}
+  '@gemini-hlsw/lucuma-odb-schemas@0.96.0-cd9b16f': {}
 
   '@gemini-hlsw/lucuma-ui-css@0.176.0': {}
 
